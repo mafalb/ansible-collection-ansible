@@ -1,0 +1,23 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  tasks:
+  - name: Example assertion
+    assert:
+      that: true
+
+  - name: molecule is present
+    changed_when: false
+    command: /tmp/molecule_test/bin/molecule --version
+    register: _molecule_version
+  - debug:
+      var: _molecule_version.stdout
+
+  - name: ansible is present
+    changed_when: false
+    command: /tmp/molecule_test/bin/ansible --version
+    register: _ansible_version
+  - debug:
+      var: _ansible_version.stdout

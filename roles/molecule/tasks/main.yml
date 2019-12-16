@@ -1,0 +1,46 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+- name: epel is present
+  package:
+    name: epel-release
+
+- name: molecules dependencies are present
+  package:
+    name:
+      - gcc
+      - python2-pip
+      - python-devel
+      - openssl-devel
+      - libselinux-python
+      - python2-sh
+      - python-virtualenv
+      - yamllint
+      - python2-tree-format
+      - python2-bcrypt
+      - python2-future
+      - python2-binaryornot
+      - python2-pathspec
+      - python2-pytest-runner
+
+- name: get current working dir
+  changed_when: false
+  check_mode: false
+  command: pwd
+  register: _pwd
+- debug:
+    var: _pwd.stdout
+
+# use absolute path to virtualenv
+# https://github.com/ansible/ansible/issues/22967
+#
+- name: molecule is installed
+  pip:
+    name:
+    - ansible
+    - molecule
+    - "molecule[docker]"
+    virtualenv: /tmp/molecule_test
+    virtualenv_site_packages: true
+
+...
