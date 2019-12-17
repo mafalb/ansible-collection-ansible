@@ -5,9 +5,6 @@ driver:
   name: docker
 lint:
   name: yamllint
-  options:
-    config-data:
-      ignore: test_molecule_manual
 platforms:
   - name: instance
     image: centos:7
@@ -15,8 +12,8 @@ provisioner:
   name: ansible
   lint:
     name: ansible-lint
-  #env:
-  #  ANSIBLE_COLLECTION_PATHS: "/home/mafalb/Documents/ansible_collections"
+  env:
+    ANSIBLE_COLLECTIONS_PATHS: "../../../../.."
 verifier:
   name: ansible
   lint:
