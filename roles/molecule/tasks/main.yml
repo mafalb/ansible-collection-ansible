@@ -40,7 +40,7 @@
     - ansible
     - molecule
     - "molecule[docker]"
-    virtualenv: /tmp/molecule_test
+    virtualenv: ~/molecule_test
     virtualenv_site_packages: true
 
 ...
