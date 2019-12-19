@@ -1,0 +1,9 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+# use absolute path to virtualenv
+# https://github.com/ansible/ansible/issues/22967
+#
+molecule_virtualenv: ~/.virtualenvs/molecule
+
+...

@@ -1,5 +1,12 @@
+# vim: set ft=yaml ts=2 expandtab:
 ---
+
 - name: Converge
   hosts: all
   roles:
     - role: mafalb.ansible.molecule
+    - role: mafalb.ansible.molecule
+      molecule_ansible_version: "{{ lookup('env','ANSIBLE_VERSION')|default(false) }}"
+      molecule_virtualenv: ~/.virtualenvs/molecule-28
+
+...

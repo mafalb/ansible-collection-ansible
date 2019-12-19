@@ -1,23 +1,49 @@
+# vim: set ft=yaml ts=2 expandtab:
 ---
-# This is an example playbook to execute Ansible tests.
 
 - name: Verify
   hosts: all
   tasks:
-  - name: Example assertion
-    assert:
-      that: true
 
-  - name: molecule is present
+  - name: molecule is present in ~/.virtualenvs/molecule
     changed_when: false
-    command: ~/molecule_test/bin/molecule --version
+    command: ~/.virtualenvs/molecule/bin/molecule --version
     register: _molecule_version
-  - debug:
-      var: _molecule_version.stdout
+
+  - name: molecule is present ~/.virtualenvs/molecule-28
+    changed_when: false
+    command: ~/.virtualenvs/molecule-28/bin/molecule --version
+    register: _molecule_version_28
+
+  - name: molecule version
+    loop:
+    - _molecule_version.stdout
+    - _molecule_version_28.stdout
+    debug:
+      var: "{{ item }}"
+
 
   - name: ansible is present
     changed_when: false
-    command: ~/molecule_test/bin/ansible --version
-    register: _ansible_version
-  - debug:
-      var: _ansible_version.stdout
+    command: ~/.virtualenvs/molecule/bin/ansible --version
+    register: _ansibles_version
+
+  - name: ansible is present
+    changed_when: false
+    command: ~/.virtualenvs/molecule-28/bin/ansible --version
+    register: _ansibles_version_28
+
+  - name: ansible version
+    loop:
+    - _ansibles_version.stdout
+    - _ansibles_version_28.stdout
+    debug:
+      var: "{{ item }}"
+
+  - name: assertions
+    assert:
+      that:
+      - _ansibles_version.stdout is match('ansible')
+      - _ansibles_version_28.stdout is match('ansible 2.8.*')
+
+...

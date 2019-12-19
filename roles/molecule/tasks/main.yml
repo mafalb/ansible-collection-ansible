@@ -1,35 +1,53 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
+- name: get OS specific variables
+  with_first_found:
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+  include_vars:
+    file: "{{ item }}"
+
+- name: molecule_ansible_version
+  debug:
+    var: molecule_ansible_version
+  tags:
+  - never
+  - debug
+
+- name: molecule_ansible_version
+  debug:
+    var: molecule_ansible_version|bool
+  tags:
+  - never
+  - debug
+
+- name: molecule_ansible_version
+  debug:
+    msg: "{{ not molecule_ansible_version }}"
+  tags:
+  - never
+  - debug
+
 - name: epel is present
+  when:
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution != 'Fedora'
   package:
     name: epel-release
 
 - name: molecules dependencies are present
   package:
-    name:
-      - gcc
-      - python2-pip
-      - python-devel
-      - openssl-devel
-      - libselinux-python
-      - python2-sh
-      - python-virtualenv
-      - yamllint
-      - python2-tree-format
-      - python2-bcrypt
-      - python2-future
-      - python2-binaryornot
-      - python2-pathspec
-      - python2-pytest-runner
+    name: "{{ molecule_system_dependencies + molecule_python_packages }}"
 
-- name: get current working dir
-  changed_when: false
-  check_mode: false
-  command: pwd
-  register: _pwd
-- debug:
-    var: _pwd.stdout
+- name: specific ansible version is installed
+  when:
+  - molecule_ansible_version is defined
+  pip:
+    name:
+    - ansible=={{ molecule_ansible_version }}.*
+    virtualenv: "{{ molecule_virtualenv }}"
+    virtualenv_site_packages: true
 
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
@@ -40,7 +58,29 @@
     - ansible
     - molecule
     - "molecule[docker]"
-    virtualenv: ~/molecule_test
+    virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_site_packages: true
+
+# _ansible_version does not work
+# reserved variable ?
+#
+- name: get ansible version
+  changed_when: false
+  command: "{{ molecule_virtualenv }}/bin/ansible --version"
+  register: _ansibles_version
+
+- name: ansible version
+  debug:
+    var: _ansibles_version.stdout
+  tags:
+  - never
+  - debug
+
+- name: assertions
+  when:
+  - molecule_ansible_version is defined
+  assert:
+    that:
+    - _ansibles_version.stdout is match('ansible {{ molecule_ansible_version }}.*')
 
 ...
