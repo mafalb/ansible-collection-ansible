@@ -4,9 +4,9 @@
 molecule_system_dependencies:
 - gcc
 - python-dev
-- openssl-dev
 - libssl-dev
 - python-selinux
+- python-virtualenv
 
 molecule_python_packages:
 - python-six

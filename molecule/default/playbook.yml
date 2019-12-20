@@ -8,10 +8,13 @@
     - name: install molecule with default settings
       role: mafalb.ansible.molecule
 
-    - name: install molecule with a specific version of ansible
-      role: mafalb.ansible.molecule
-      when: lookup('env','ANSIBLE_VERSION')
-      molecule_ansible_version: "{{ lookup('env','ANSIBLE_VERSION') }}"
-      molecule_virtualenv: ~/.virtualenvs/molecule-{{ lookup('env','ANSIBLE_VERSION') }}
+- name: Converge with a specific version of ansible
+  hosts: all
+  vars:
+    ansibles_version: 2.8
+  roles:
+    - role: mafalb.ansible.molecule
+      molecule_ansible_version: "{{ ansibles_version }}"
+      molecule_virtualenv: ~/.virtualenvs/molecule-{{ ansibles_version }}
 
 ...

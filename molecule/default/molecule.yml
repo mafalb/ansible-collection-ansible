@@ -1,4 +1,6 @@
+# vim: set ft=yaml ts=2 expandtab:
 ---
+
 dependency:
   name: galaxy
 driver:
@@ -8,8 +10,13 @@ lint:
 platforms:
   - name: centos7
     image: centos:7
+  - name: ubuntu1804
+    image: ubuntu:bionic     
 provisioner:
   name: ansible
+  ansible_args:
+    - --tags=all,debug
+    - --diff
   lint:
     name: ansible-lint
   env:
