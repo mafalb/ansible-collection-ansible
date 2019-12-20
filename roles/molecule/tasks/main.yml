@@ -64,11 +64,13 @@
 # reserved variable ?
 #
 - name: get ansible version
+  when: false
   changed_when: false
   command: "{{ molecule_virtualenv }}/bin/ansible --version"
   register: _ansibles_version
 
 - name: ansible version
+  when: false
   debug:
     var: _ansibles_version.stdout
   tags:
@@ -77,6 +79,7 @@
 
 - name: assertions
   when:
+  - false
   - molecule_ansible_version is defined
   assert:
     that:

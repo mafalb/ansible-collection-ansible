@@ -22,20 +22,18 @@
     debug:
       var: "{{ item }}"
 
-
   - name: ansible is present
     changed_when: false
-    command: ~/.virtualenvs/molecule/bin/ansible --version
+    environment:
+      PATH: " ~/.virtualenvs/molecule:$PATH"
+    command: ansible --version
     register: _ansibles_version
 
   - name: ansible 2.8 is present
     changed_when: false
-    command: ~/.virtualenvs/molecule-2.8/bin/ansible --version
-    register: _ansibles_version_28
-
-  - name: ansible 2.8 is present
-    changed_when: false
-    command: ~/.virtualenvs/molecule-2.8-env/bin/ansible --version
+    environment:
+      PATH: " ~/.virtualenvs/molecule-2.8:$PATH"
+    command: ansible --version
     register: _ansibles_version_28_env
 
   - name: ansible version
