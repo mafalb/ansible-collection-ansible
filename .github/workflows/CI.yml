@@ -10,7 +10,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     steps:
 
@@ -21,11 +21,6 @@ jobs:
       
       - name: install molecule
         run: ansible-playbook -D bootstrap.yml
-
-      - name: pip list
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          pip list
 
       - name: run molecule
         run: |
