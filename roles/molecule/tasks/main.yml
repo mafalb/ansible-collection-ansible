@@ -58,7 +58,7 @@
 
 - command: ls -laR $HOME
   register: _ls
-- debug: var=ls
+- debug: var=_ls
 
 # _ansible_version does not work
 # reserved variable ?
