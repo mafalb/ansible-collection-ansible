@@ -52,6 +52,15 @@
     name:
     - ansible
     - molecule
+    virtualenv: "{{ molecule_virtualenv }}"
+    virtualenv_site_packages: true
+
+# use absolute path to virtualenv
+# https://github.com/ansible/ansible/issues/22967
+#
+- name: molecule[docker] is installed
+  pip:
+    name:
     - molecule[docker]
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_site_packages: true
