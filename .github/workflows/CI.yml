@@ -25,6 +25,6 @@ jobs:
       - name: run molecule
         run: |
           source ~/.virtualenvs/molecule/bin/activate 
-          molecule test
+          PY_COLOR=1 molecule test
 
 ...
