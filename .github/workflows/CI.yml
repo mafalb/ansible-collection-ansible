@@ -16,7 +16,14 @@ jobs:
 
       - name: checkout collection ansible
         uses: actions/checkout@v1
+        with:
+          repository: mafalb.ansible
+          path: ansible_collections
       
+      - name: change directory
+        run:
+          cd ansible_collections
+
       - name: install molecule
         run:
           ansible-playbook -D bootstrap.yml
