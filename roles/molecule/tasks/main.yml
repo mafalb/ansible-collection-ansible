@@ -56,6 +56,10 @@
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_site_packages: true
 
+- command: ls -laR $HOME
+  register: _ls
+- debug: var=ls
+
 # _ansible_version does not work
 # reserved variable ?
 #
