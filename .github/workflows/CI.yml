@@ -1,0 +1,32 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+name: CI
+
+on: 
+  - push
+  - pull_request  
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: checkout our github project
+        uses: actions/checkout@v1
+      
+      - name: install requirements
+        run:
+          ansible-playbook -D bootstrap.yml 
+
+      - name: enter the virtualenv
+        run:
+          source ~/.virtualenvs/molecule/bin/activate 
+          molecule --version
+
+      - name: execute molecule
+        run: molecule --version
+
+...
