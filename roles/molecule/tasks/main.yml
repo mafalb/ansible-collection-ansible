@@ -52,13 +52,9 @@
     name:
     - ansible
     - molecule
-    - "molecule[docker]"
+    - molecule[docker]
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_site_packages: true
-
-- command: ls -laR $HOME
-  register: _ls
-- debug: var=_ls
 
 # _ansible_version does not work
 # reserved variable ?
