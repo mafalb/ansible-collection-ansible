@@ -19,10 +19,6 @@ jobs:
         with:
           path: ansible_collections/mafalb/ansible
       
-      - name: change directory
-        run:
-          cd ansible_collections
-
       - name: install molecule
         run:
           ansible-playbook -D bootstrap.yml
