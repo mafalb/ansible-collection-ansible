@@ -24,7 +24,7 @@ jobs:
           ansible-playbook -D bootstrap.yml
 
       - name: run molecule
-        run:
+        run: |
           source ~/.virtualenvs/molecule/bin/activate 
           molecule --version
 
