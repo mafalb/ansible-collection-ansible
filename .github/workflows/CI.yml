@@ -17,8 +17,7 @@ jobs:
       - name: checkout collection ansible
         uses: actions/checkout@v1
         with:
-          repository: mafalb.ansible
-          path: ansible_collections
+          path: ansible_collections/mafalb/ansible
       
       - name: change directory
         run:
