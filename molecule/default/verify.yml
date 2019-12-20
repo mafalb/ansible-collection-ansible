@@ -22,19 +22,15 @@
     debug:
       var: "{{ item }}"
 
-  - name: ansible is present
+  - name: ansible is present in .virtualenvs/molecule
     changed_when: false
-    environment:
-      PATH: " ~/.virtualenvs/molecule:$PATH"
-    command: ansible --version
+    command: ~/.virtualenvs/molecule/bin/ansible --version
     register: _ansibles_version
 
   - name: ansible 2.8 is present
     changed_when: false
-    environment:
-      PATH: " ~/.virtualenvs/molecule-2.8:$PATH"
-    command: ansible --version
-    register: _ansibles_version_28_env
+    command: ~/.virtualenvs/molecule-2.8/bin/ansible --version
+    register: _ansibles_version_28
 
   - name: ansible version
     loop:
@@ -48,6 +44,5 @@
       that:
       - _ansibles_version.stdout is match('ansible')
       - _ansibles_version_28.stdout is match('ansible 2.8.*')
-      - _ansibles_version_28_env.stdout is match('ansible 2.8.*')
 
 ...
