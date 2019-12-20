@@ -20,15 +20,11 @@ jobs:
           path: ansible_collections/mafalb/ansible
       
       - name: install molecule
-        run:
-          ansible-playbook -D bootstrap.yml
+        run: ansible-playbook -D bootstrap.yml
 
       - name: run molecule
         run: |
           source ~/.virtualenvs/molecule/bin/activate 
-          molecule --version
-
-      - name: execute molecule
-        run: molecule --version
+          molecule test
 
 ...
