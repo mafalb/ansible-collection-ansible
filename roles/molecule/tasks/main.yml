@@ -33,7 +33,7 @@
 - name: molecules dependencies are present
   become: true
   package:
-    name: "{{ molecule_system_dependencies + molecule_python_packages }}"
+    name: "{{ molecule_system_dependencies }}"
 
 - name: specific ansible version is installed
   when:
@@ -42,7 +42,6 @@
     name:
     - ansible=={{ molecule_ansible_version }}.*
     virtualenv: "{{ molecule_virtualenv }}"
-    virtualenv_site_packages: true
 
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
@@ -53,7 +52,6 @@
     - ansible
     - molecule
     virtualenv: "{{ molecule_virtualenv }}"
-    virtualenv_site_packages: true
 
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
@@ -63,7 +61,6 @@
     name:
     - molecule[docker]
     virtualenv: "{{ molecule_virtualenv }}"
-    virtualenv_site_packages: true
 
 # _ansible_version does not work
 # reserved variable ?
