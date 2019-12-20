@@ -4,9 +4,14 @@
 - name: Converge
   hosts: all
   roles:
-    - role: mafalb.ansible.molecule
-    - role: mafalb.ansible.molecule
-      molecule_ansible_version: "{{ lookup('env','ANSIBLE_VERSION')|default(false) }}"
-      molecule_virtualenv: ~/.virtualenvs/molecule-28
+
+    - name: install molecule with default settings
+      role: mafalb.ansible.molecule
+
+    - name: install molecule with a specific version of ansible
+      role: mafalb.ansible.molecule
+      when: lookup('env','ANSIBLE_VERSION')
+      molecule_ansible_version: "{{ lookup('env','ANSIBLE_VERSION') }}"
+      molecule_virtualenv: ~/.virtualenvs/molecule-{{ lookup('env','ANSIBLE_VERSION') }}
 
 ...

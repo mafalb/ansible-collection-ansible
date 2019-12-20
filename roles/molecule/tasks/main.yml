@@ -22,21 +22,16 @@
   - never
   - debug
 
-- name: molecule_ansible_version
-  debug:
-    msg: "{{ not molecule_ansible_version }}"
-  tags:
-  - never
-  - debug
-
 - name: epel is present
   when:
     - ansible_os_family == 'RedHat'
     - ansible_distribution != 'Fedora'
+  become: true
   package:
     name: epel-release
 
 - name: molecules dependencies are present
+  become: true
   package:
     name: "{{ molecule_system_dependencies + molecule_python_packages }}"
 

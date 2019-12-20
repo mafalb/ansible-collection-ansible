@@ -14,14 +14,14 @@ jobs:
 
     steps:
 
-      - name: checkout our github project
+      - name: checkout collection ansible
         uses: actions/checkout@v1
       
-      - name: install requirements
+      - name: install molecule
         run:
-          ansible-playbook -D bootstrap.yml 
+          ansible-playbook -D bootstrap.yml
 
-      - name: enter the virtualenv
+      - name: run molecule
         run:
           source ~/.virtualenvs/molecule/bin/activate 
           molecule --version
