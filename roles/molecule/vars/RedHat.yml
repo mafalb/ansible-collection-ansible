@@ -9,13 +9,4 @@ molecule_system_dependencies:
 - yamllint
 - python-virtualenv
 
-molecule_python_packages:
-- python2-tree-format
-- python2-bcrypt
-- python2-future
-- python2-binaryornot
-- python2-pathspec
-- python2-pytest-runner
-- python2-sh
-
 ...

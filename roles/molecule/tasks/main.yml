@@ -15,13 +15,6 @@
   - never
   - debug
 
-- name: molecule_ansible_version
-  debug:
-    var: molecule_ansible_version|bool
-  tags:
-  - never
-  - debug
-
 - name: epel is present
   when:
     - ansible_os_family == 'RedHat'
@@ -35,6 +28,12 @@
   package:
     name: "{{ molecule_system_dependencies }}"
 
+# use absolute path to virtualenv
+# https://github.com/ansible/ansible/issues/22967
+#
+# and do not use site packages
+# https://github.com/ansible/molecule/issues/1888
+#
 - name: specific ansible version is installed
   when:
   - molecule_ansible_version is defined
@@ -46,6 +45,9 @@
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
 #
+# and do not use site packages
+# https://github.com/ansible/molecule/issues/1888
+#
 - name: molecule is installed
   pip:
     name:
@@ -56,23 +58,27 @@
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
 #
+# and do not use site packages
+# https://github.com/ansible/molecule/issues/1888
+#
+# for some reason i had to split it out to a separate task
+# molecule and molecule[docker] in the same pip task did not work
+#
 - name: molecule[docker] is installed
   pip:
     name:
     - molecule[docker]
     virtualenv: "{{ molecule_virtualenv }}"
 
-# _ansible_version does not work
+# _ansible_version does not work, i use _ansibles_version
 # reserved variable ?
 #
 - name: get ansible version
-  when: false
   changed_when: false
   command: "{{ molecule_virtualenv }}/bin/ansible --version"
   register: _ansibles_version
 
 - name: ansible version
-  when: false
   debug:
     var: _ansibles_version.stdout
   tags:
@@ -81,7 +87,6 @@
 
 - name: assertions
   when:
-  - false
   - molecule_ansible_version is defined
   assert:
     that:
