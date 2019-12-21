@@ -4,9 +4,9 @@ A collection for ansible related things. Available roles:
 
 ## role: mafalb.ansible.molecule
 
-Role for installing molecule. Molecule helps with testing ansible roles or collections. Use it local or with CI.
+Role for installing Molecule. Molecule helps with testing ansible roles or collections. Use it local or with CI.
 
-Molecule installs into a virtualenv without site packages, so there are minimal changes necessary on your system.
+Molecule installs via pip into a virtualenv without site packages.
 
 ### Basic Usage
 
