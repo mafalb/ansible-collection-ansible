@@ -20,7 +20,7 @@ provisioner:
   lint:
     name: ansible-lint
   env:
-    ANSIBLE_COLLECTIONS_PATHS: "../../../../.."
+    ANSIBLE_COLLECTIONS_PATHS: "../../../../..:~/.ansible/collections"
 verifier:
   name: ansible
   lint:
