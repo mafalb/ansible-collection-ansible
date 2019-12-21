@@ -6,6 +6,8 @@ A collection for ansible related things. Available roles:
 
 Role for installing molecule. Molecule helps with testing ansible roles or collections. Use it local or with CI.
 
+Molecule installs into a virtualenv without site packages, so there are minimal changes necessary on your system.
+
 ### Basic Usage
 
 ```ansible
