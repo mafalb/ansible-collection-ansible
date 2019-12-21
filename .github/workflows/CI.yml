@@ -21,6 +21,13 @@ jobs:
         with:
           path: ansible_collections/mafalb/ansible
       
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
       - name: install molecule
         run: ansible-playbook -D bootstrap.yml
 
