@@ -25,8 +25,8 @@ jobs:
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
       - name: install molecule
         run: ansible-playbook -D bootstrap.yml
