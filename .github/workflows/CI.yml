@@ -21,14 +21,16 @@ jobs:
         with:
           path: ansible_collections/mafalb/ansible
       
-      - uses: actions/cache@v1
+      - name: cache pip cache
+        uses: actions/cache@v1
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - uses: actions/cache@v1
+      - name: cache virtualenv
+        uses: actions/cache@v1
         with:
           path: ~/.virtualenvs/molecule
           key: ${{ runner.os }}-virtualenv-${{ hashFiles('**/requirements.txt') }}
@@ -38,7 +40,7 @@ jobs:
       - name: install molecule
         run: ansible-playbook -D bootstrap.yml
 
-      - name: run molecule
+      - name: run molecule tests
         run: |
           source ~/.virtualenvs/molecule/bin/activate 
           PY_COLORS=1 molecule test
