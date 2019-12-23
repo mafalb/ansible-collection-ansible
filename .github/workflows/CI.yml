@@ -28,6 +28,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
+      - uses: actions/cache@v1
+        with:
+          path: ~/.virtualenvs/molecule
+          key: ${{ runner.os }}-virtualenv-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-virtualenv-
+
       - name: install molecule
         run: ansible-playbook -D bootstrap.yml
 
