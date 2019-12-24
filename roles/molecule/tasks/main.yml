@@ -54,6 +54,7 @@
     - ansible
     - molecule
     virtualenv: "{{ molecule_virtualenv }}"
+    state: "{{ molecule_upgrade|default('present') }}"
 
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
