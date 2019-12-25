@@ -35,8 +35,6 @@
 # https://github.com/ansible/molecule/issues/1888
 #
 - name: specific ansible version is installed
-  when:
-  - molecule_ansible_version is defined
   pip:
     name:
     - ansible=={{ molecule_ansible_version }}.*
