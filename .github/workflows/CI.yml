@@ -12,10 +12,13 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-18.04
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
+        os:
+        - ubuntu-18.04
+        - ubuntu-16.04
         ansible_version:
         - 2.9
         - 2.8
