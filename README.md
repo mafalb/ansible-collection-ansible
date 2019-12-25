@@ -19,6 +19,8 @@ Molecule installs via pip into a virtualenv without site packages.
 
 ### Variables
 
+```molecule_major_version: 2``` # set molecule version
+
 ```molecule_ansible_version: 2.8``` # set the ansible version you want to test against
 
 ```molecule_virtualenv: ~/.virtualenvs/testvenv``` # set the path to the virtualenv, default is ```~/.virtualenvs/molecule```

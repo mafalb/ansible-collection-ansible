@@ -52,9 +52,8 @@
   pip:
     name:
     - ansible
-    - molecule
+    - molecule=={{ molecule_major_version }}.*
     virtualenv: "{{ molecule_virtualenv }}"
-    state: "{{ molecule_upgrade|default('present') }}"
 
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967

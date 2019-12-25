@@ -6,4 +6,5 @@
 #
 molecule_virtualenv: ~/.virtualenvs/molecule
 
+molecule_major_version: 2
 ...

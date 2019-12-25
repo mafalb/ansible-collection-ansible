@@ -25,7 +25,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/molecule/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
@@ -33,7 +33,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.virtualenvs/molecule
-          key: ${{ runner.os }}-virtualenv-${{ hashFiles('**/requirements.txt') }}
+          key: ${{ runner.os }}-virtualenv-${{ hashFiles('**/molecule/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-virtualenv-
 
