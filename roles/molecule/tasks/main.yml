@@ -28,17 +28,30 @@
   package:
     name: "{{ molecule_system_dependencies }}"
 
+# we can not use the system wide tmp dir
+# https://github.com/ansible/ansible/issues/57436
+#
+- name: tmp directory is present
+  file:
+    path: "{{ molecule_virtualenv }}/../tmp"
+    state: directory
+
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
 #
 # and do not use site packages
 # https://github.com/ansible/molecule/issues/1888
 #
-- name: specific ansible version is installed
+# we can not use the system wide tmp dir
+# https://github.com/ansible/ansible/issues/57436
+#
+- name: ansible is installed
   pip:
     name:
     - ansible=={{ molecule_ansible_version }}.*
     virtualenv: "{{ molecule_virtualenv }}"
+  environment:
+    TMPDIR: "{{ molecule_virtualenv }}/../tmp"
 
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
@@ -49,7 +62,6 @@
 - name: molecule is installed
   pip:
     name:
-    - ansible
     - molecule=={{ molecule_major_version }}.*
     virtualenv: "{{ molecule_virtualenv }}"
 

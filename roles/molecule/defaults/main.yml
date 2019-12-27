@@ -4,7 +4,7 @@
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
 #
-molecule_virtualenv: ~/.virtualenvs/molecule
+molecule_virtualenv: "{{ lookup('env','HOME') }}/.virtualenvs/molecule"
 
 molecule_major_version: 2
 molecule_ansible_version: 2.9
