@@ -1,6 +1,6 @@
 # Ansible Collection - mafalb.ansible
 
-A collection for ansible related things. Available roles:
+A collection for ansible related things.
 
 ## role: mafalb.ansible.molecule
 
@@ -14,16 +14,18 @@ Molecule installs via pip into a virtualenv without site packages.
 - name: install molecule
   hosts: localhost
   roles:
-    - role: mafalb.ansible.molecule
+  - role: mafalb.ansible.molecule
 ```
 
 ### Variables
 
-```molecule_major_version: 2``` # set molecule version
+All these variables are optional. Only specify them if you want to override the defaults.
 
-```molecule_ansible_version: 2.8``` # set the ansible version you want to test against
+```molecule_major_version: 2``` # the molecule major version
 
-```molecule_virtualenv: ~/.virtualenvs/testvenv``` # set the path to the virtualenv, default is ```~/.virtualenvs/molecule```
+```molecule_ansible_version: 2.9``` # the ansible version you want to test against
+
+```molecule_virtualenv: "{{ ansible_user_dir }}/.virtualenvs/testvenv``` # the path to the virtualenv
 
 ## License
 
