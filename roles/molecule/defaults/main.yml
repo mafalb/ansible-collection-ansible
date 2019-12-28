@@ -4,6 +4,11 @@
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
 #
+# and use ansible_user_dir
+# https://github.com/ansible/ansible/issues/57436
+# (~/.virtualenvs/molecule does not work) for
+# setting TMPPATH environment variable for pip
+#
 molecule_virtualenv: "{{ ansible_user_dir }}/.virtualenvs/molecule"
 
 molecule_major_version: 2

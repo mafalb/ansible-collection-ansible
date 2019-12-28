@@ -44,6 +44,7 @@
 #
 # we can not use the system wide tmp dir
 # https://github.com/ansible/ansible/issues/57436
+# it is important to use ansible_user_dir, not ~
 #
 - name: ansible is installed
   pip:
