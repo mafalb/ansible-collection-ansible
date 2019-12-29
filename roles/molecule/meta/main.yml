@@ -25,7 +25,7 @@ galaxy_info:
   platforms:
     - name: Ubuntu
       versions:
-      - bionic 
+      - bionic
       - xenial
     - name: EL
       versions:
@@ -39,6 +39,6 @@ galaxy_info:
     # NOTE: A tag is limited to a single word comprised of alphanumeric characters.
     #       Maximum 20 tags per role.
     - ansible
-    - molecule  
+    - molecule
 
 dependencies: []
