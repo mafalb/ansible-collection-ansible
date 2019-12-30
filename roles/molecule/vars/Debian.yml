@@ -1,0 +1,26 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+molecule_system_dependencies:
+- gcc
+- python-dev
+- libssl-dev
+- python-selinux
+- python-virtualenv
+
+molecule_python_packages:
+- python-six
+- python-click
+- python-cookiecutter
+- python-pathlib2
+- python-jinja2
+- python-whichcraft
+- python-binaryornot
+- python-requests
+- python-future
+- python-jinja2-time
+- python-pytest
+- python-scandir
+- python-enum34
+
+...

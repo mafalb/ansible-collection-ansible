@@ -1,46 +1,106 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
+- name: get OS specific variables
+  with_first_found:
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+  include_vars:
+    file: "{{ item }}"
+
+- name: molecule_ansible_version
+  debug:
+    var: molecule_ansible_version
+  tags:
+  - never
+  - debug
+
 - name: epel is present
+  when:
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution != 'Fedora'
+  become: true
   package:
     name: epel-release
 
 - name: molecules dependencies are present
+  become: true
   package:
-    name:
-      - gcc
-      - python2-pip
-      - python-devel
-      - openssl-devel
-      - libselinux-python
-      - python2-sh
-      - python-virtualenv
-      - yamllint
-      - python2-tree-format
-      - python2-bcrypt
-      - python2-future
-      - python2-binaryornot
-      - python2-pathspec
-      - python2-pytest-runner
+    name: "{{ molecule_system_dependencies }}"
 
-- name: get current working dir
-  changed_when: false
-  check_mode: false
-  command: pwd
-  register: _pwd
-- debug:
-    var: _pwd.stdout
+# we can not use the system wide tmp dir
+# https://github.com/ansible/ansible/issues/57436
+#
+- name: tmp directory is present
+  file:
+    path: "{{ molecule_virtualenv }}/../tmp"
+    state: directory
 
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
 #
+# and do not use site packages
+# https://github.com/ansible/molecule/issues/1888
+#
+# we can not use the system wide tmp dir
+# https://github.com/ansible/ansible/issues/57436
+# it is important to use ansible_user_dir, not ~
+#
+- name: ansible is installed
+  pip:
+    name:
+    - ansible=={{ molecule_ansible_version }}.*
+    virtualenv: "{{ molecule_virtualenv }}"
+  environment:
+    TMPDIR: "{{ molecule_virtualenv }}/../tmp"
+
+# use absolute path to virtualenv
+# https://github.com/ansible/ansible/issues/22967
+#
+# and do not use site packages
+# https://github.com/ansible/molecule/issues/1888
+#
 - name: molecule is installed
   pip:
     name:
-    - ansible
-    - molecule
-    - "molecule[docker]"
-    virtualenv: /tmp/molecule_test
-    virtualenv_site_packages: true
+    - molecule=={{ molecule_major_version }}.*
+    virtualenv: "{{ molecule_virtualenv }}"
+
+# use absolute path to virtualenv
+# https://github.com/ansible/ansible/issues/22967
+#
+# and do not use site packages
+# https://github.com/ansible/molecule/issues/1888
+#
+# for some reason i had to split it out to a separate task
+# molecule and molecule[docker] in the same pip task did not work
+#
+- name: molecule[docker] is installed
+  pip:
+    name:
+    - molecule[docker]
+    virtualenv: "{{ molecule_virtualenv }}"
+
+# _ansible_version does not work, i use _ansibles_version
+# reserved variable ?
+#
+- name: get ansible version
+  changed_when: false
+  command: "{{ molecule_virtualenv }}/bin/ansible --version"
+  register: _ansibles_version
+
+- name: ansible version
+  debug:
+    var: _ansibles_version.stdout
+  tags:
+  - never
+  - debug
+
+- name: assertions
+  when:
+  - molecule_ansible_version is defined
+  assert:
+    that:
+    - _ansibles_version.stdout is match('ansible {{ molecule_ansible_version }}.*')
 
 ...

@@ -1,0 +1,19 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+# use absolute path to virtualenv
+# https://github.com/ansible/ansible/issues/22967
+#
+# and use ansible_user_dir
+# https://github.com/ansible/ansible/issues/57436
+# (~/.virtualenvs/molecule does not work) for
+# setting TMPPATH environment variable for pip
+#
+molecule_virtualenv: "{{ ansible_user_dir }}/.virtualenvs/molecule"
+
+# when modifying these versions, also change Documentation
+#
+molecule_major_version: 2
+molecule_ansible_version: 2.9
+
+...

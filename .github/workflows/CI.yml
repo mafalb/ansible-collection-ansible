@@ -1,0 +1,64 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+name: CI
+
+on: 
+  push:
+  pull_request:  
+  schedule:
+  - cron: '40 12 * * 6'
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os:
+        - ubuntu-18.04
+        - ubuntu-16.04
+        ansible_version:
+        - 2.9
+        - 2.8
+    env:
+      ANSIBLE_VERSION: ${{ matrix.ansible_version }}
+        
+    steps:
+
+      - name: checkout collection ansible
+        uses: actions/checkout@v1
+        with:
+          path: ansible_collections/mafalb/ansible
+      
+      - name: cache pip cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/molecule/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: cache virtualenv
+        uses: actions/cache@v1
+        with:
+          path: ~/.virtualenvs/molecule
+          key: ${{ runner.os }}-virtualenv-${{ hashFiles('**/molecule/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-virtualenv-
+
+      - name: install molecule
+        run: ansible-playbook -D bootstrap.yml -e molecule_ansible_version=${{ matrix.ansible_version }}
+
+      - name: build test images
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate 
+          PY_COLORS=1 molecule create
+
+      - name: run molecule tests
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate 
+          PY_COLORS=1 molecule test
+
+...

@@ -1,0 +1,12 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+molecule_system_dependencies:
+- gcc
+- python-devel
+- openssl-devel
+- libselinux-python
+- yamllint
+- python-virtualenv
+
+...
