@@ -50,7 +50,7 @@ dependencies: {}
 repository: https://github.com/mafalb/ansible-collection-ansible
 
 # The URL to any online docs
-documentation: https://github.com/mafalb/ansible-collection-ansible/README.md
+documentation: https://github.com/mafalb/ansible-collection-ansible
 
 # The URL to the homepage of the collection/project
 homepage: https://github.com/mafalb/ansible-collection-ansible
