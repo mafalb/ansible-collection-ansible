@@ -8,11 +8,11 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: centos7
+  - name: t_centos7
     image: centos:7
-  - name: ubuntu1804
+  - name: t_ubuntu1804
     image: ubuntu:bionic     
-  - name: ubuntu1604
+  - name: t_ubuntu1604
     image: ubuntu:xenial    
 provisioner:
   name: ansible

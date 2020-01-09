@@ -1,0 +1,9 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+ansible_node_dependencies:
+- python3-selinux
+- python3-cryptography
+
+...
+
