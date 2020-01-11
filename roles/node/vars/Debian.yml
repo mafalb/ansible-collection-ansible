@@ -4,6 +4,5 @@
 ansible_node_dependencies:
 - python3-selinux
 - python3-cryptography
-- python3-setuptools
 
 ...
