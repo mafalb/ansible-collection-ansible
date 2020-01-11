@@ -7,4 +7,3 @@ ansible_node_dependencies:
 - python3-cryptography
 
 ...
-
