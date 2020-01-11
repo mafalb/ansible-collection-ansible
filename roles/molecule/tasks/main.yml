@@ -114,11 +114,4 @@
   - never
   - debug
 
-- name: assertions
-  when:
-  - molecule_ansible_version is defined
-  assert:
-    that:
-    - _ansibles_version.stdout is match('ansible {{ molecule_ansible_version }}.*')
-
 ...
