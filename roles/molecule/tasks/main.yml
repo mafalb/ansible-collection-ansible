@@ -8,6 +8,21 @@
   include_vars:
     file: "{{ item }}"
 
+- debug:
+    var: ansible_python_version[0]|int
+
+- name: molecule_python_major_version
+  debug:
+    var: molecule_python_major_version
+  tags:
+  - never
+  - debug
+
+- name: assertions
+  assert:
+    that:
+    - ansible_python_version[0]|int == molecule_python_major_version
+
 - name: molecule_ansible_version
   debug:
     var: molecule_ansible_version
@@ -51,6 +66,7 @@
     name:
     - ansible=={{ molecule_ansible_version }}.*
     virtualenv: "{{ molecule_virtualenv }}"
+    virtualenv_command: "{{ omit if molecule_python_major_version == 2 else 'pyvenv' }}"
   environment:
     TMPDIR: "{{ molecule_virtualenv }}/../tmp"
 
@@ -65,6 +81,7 @@
     name:
     - molecule=={{ molecule_major_version }}.*
     virtualenv: "{{ molecule_virtualenv }}"
+    virtualenv_command: "{{ omit if molecule_python_major_version == 2 else 'pyvenv' }}"
 
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
@@ -80,6 +97,7 @@
     name:
     - molecule[docker]
     virtualenv: "{{ molecule_virtualenv }}"
+    virtualenv_command: "{{ omit if molecule_python_major_version == 2 else 'pyvenv' }}"
 
 # _ansible_version does not work, i use _ansibles_version
 # reserved variable ?
