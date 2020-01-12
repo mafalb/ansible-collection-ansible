@@ -3,10 +3,17 @@
 
 - name: get OS specific variables
   with_first_found:
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
+  - "{{ ansible_os_family }}-{{ ansible_distribution }}.yml"
+  - "{{ ansible_os_family }}-{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+  - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+  - "{{ ansible_os_family }}.yml"
   include_vars:
     file: "{{ item }}"
+
+- name: assertions
+  assert:
+    that:
+    - molecule_virtualenv is defined
 
 - debug:
     var: ansible_python_version[0]|int
@@ -28,6 +35,7 @@
 - name: epel is present
   when:
     - ansible_os_family == 'RedHat'
+    - ansible_distribution_major_version is version(8, '<')
     - ansible_distribution != 'Fedora'
   become: true
   package:
@@ -61,7 +69,7 @@
     name:
     - ansible=={{ molecule_ansible_version }}.*
     virtualenv: "{{ molecule_virtualenv }}"
-    virtualenv_command: "{{ omit if molecule_python_major_version == 2 else 'pyvenv' }}"
+    virtualenv_command: "{{ omit if molecule_python_major_version == 2 else molecule_virtualenv_command }}"
   environment:
     TMPDIR: "{{ molecule_virtualenv }}/../tmp"
 
@@ -76,7 +84,7 @@
     name:
     - molecule=={{ molecule_major_version }}.*
     virtualenv: "{{ molecule_virtualenv }}"
-    virtualenv_command: "{{ omit if molecule_python_major_version == 2 else 'pyvenv' }}"
+    virtualenv_command: "{{ omit if molecule_python_major_version == 2 else molecule_virtualenv_command }}"
 
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
@@ -92,7 +100,7 @@
     name:
     - molecule[docker]
     virtualenv: "{{ molecule_virtualenv }}"
-    virtualenv_command: "{{ omit if molecule_python_major_version == 2 else 'pyvenv' }}"
+    virtualenv_command: "{{ omit if molecule_python_major_version == 2 else molecule_virtualenv_command }}"
 
 # _ansible_version does not work, i use _ansibles_version
 # reserved variable ?
@@ -108,5 +116,12 @@
   tags:
   - never
   - debug
+
+- name: assertions
+  when:
+  - molecule_ansible_version is defined
+  assert:
+    that:
+    - _ansibles_version.stdout is match('ansible {{ molecule_ansible_version }}.*')
 
 ...
