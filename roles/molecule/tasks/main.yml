@@ -17,9 +17,11 @@
 
 - debug:
     var: ansible_python_version[0]|int
+  tags:
+  - never
+  - debug
 
-- name: molecule_python_major_version
-  debug:
+- debug:
     var: molecule_python_major_version
   tags:
   - never
