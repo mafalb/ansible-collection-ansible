@@ -26,5 +26,4 @@ galaxy_info:
     - ansible
     - molecule
 
-dependencies:
-- name: mafalb.ansible.node
+dependencies: []
