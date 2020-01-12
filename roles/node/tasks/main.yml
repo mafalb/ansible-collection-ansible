@@ -1,7 +1,7 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
-- name: OS dependent variables for Fedora
+- name: OS dependent variables
   with_first_found:
   - "{{ ansible_os_family }}-{{ ansible_distribution }}.yml"
   - "{{ ansible_os_family }}-{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
@@ -11,16 +11,9 @@
     file: "{{ item }}"
 
 - name: necessary packages are installed
+  become: true
   package:
     name: "{{ ansible_node_dependencies }}"
     state: present
-
-- name: pyOpenSSL is absent for RHEL 7
-  when:
-    - ansible_distribution != 'Fedora'
-    - ansible_distribution_major_version == '7'
-  package:
-    name: pyOpenSSL
-    state: absent
 
 ...
