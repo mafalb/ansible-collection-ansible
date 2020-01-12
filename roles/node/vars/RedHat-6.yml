@@ -1,6 +1,8 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
+# no virtualenv for RHEL6
+#
 ansible_node_dependencies:
 - libsemanage-python
 - policycoreutils-python
