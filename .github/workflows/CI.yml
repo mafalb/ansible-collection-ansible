@@ -40,16 +40,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: cache virtualenv
-        uses: actions/cache@v1
-        with:
-          path: ~/.virtualenvs/molecule
-          key: ${{ runner.os }}-virtualenv-${{ hashFiles('**/molecule/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-virtualenv-
-
       - name: install molecule
-        run: ansible-playbook -D bootstrap.yml -e molecule_ansible_version=${{ matrix.ansible_version }}
+        run: ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
 
       - name: build test images
         run: |

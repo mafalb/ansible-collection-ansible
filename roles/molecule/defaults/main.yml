@@ -16,4 +16,6 @@ molecule_virtualenv: "{{ ansible_user_dir }}/.virtualenvs/molecule"
 molecule_major_version: 2
 molecule_ansible_version: 2.9
 
+molecule_python_major_version: 3
+
 ...
