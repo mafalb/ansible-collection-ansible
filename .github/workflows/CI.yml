@@ -49,7 +49,7 @@ jobs:
             ${{ runner.os }}-virtualenv-
 
       - name: install python3-setuptools
-        run: apt-get install python3-setuptools
+        run: sudo apt-get install python3-setuptools
 
       - name: install molecule
         run: ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
