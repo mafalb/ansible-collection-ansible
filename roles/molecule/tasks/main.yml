@@ -69,7 +69,7 @@
     name:
     - ansible=={{ molecule_ansible_version }}.*
     virtualenv: "{{ molecule_virtualenv }}"
-    virtualenv_command: "{{ omit if molecule_python_major_version == 2 else molecule_virtualenv_command }}"
+    virtualenv_command: "{{ molecule_virtualenv_command }}"
   environment:
     TMPDIR: "{{ molecule_virtualenv }}/../tmp"
 
@@ -84,7 +84,7 @@
     name:
     - molecule=={{ molecule_major_version }}.*
     virtualenv: "{{ molecule_virtualenv }}"
-    virtualenv_command: "{{ omit if molecule_python_major_version == 2 else molecule_virtualenv_command }}"
+    virtualenv_command: "{{ molecule_virtualenv_command }}"
 
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
@@ -100,7 +100,7 @@
     name:
     - molecule[docker]
     virtualenv: "{{ molecule_virtualenv }}"
-    virtualenv_command: "{{ omit if molecule_python_major_version == 2 else molecule_virtualenv_command }}"
+    virtualenv_command: "{{ molecule_virtualenv_command }}"
 
 # _ansible_version does not work, i use _ansibles_version
 # reserved variable ?
