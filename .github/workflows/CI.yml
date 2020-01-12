@@ -18,6 +18,7 @@ jobs:
       matrix:
         os:
         - ubuntu-18.04
+        - ubuntu-16.04
         ansible_version:
         - 2.9
         - 2.8
@@ -47,8 +48,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-virtualenv-
 
+      - name: install python3-setuptools
+        run: apt-get install python3-setuptools
+
       - name: install molecule
-        run: ansible-playbook -D bootstrap.yml -e molecule_ansible_version=${{ matrix.ansible_version }}
+        run: ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
 
       - name: build test images
         run: |
