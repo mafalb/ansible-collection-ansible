@@ -20,6 +20,8 @@ platforms:
     image: fedora:30    
   - name: t_fedora31
     image: fedora:31    
+  - name: t_fedora_rawhide
+    image: fedora:rawhide   
 provisioner:
   name: ansible
   ansible_args:
