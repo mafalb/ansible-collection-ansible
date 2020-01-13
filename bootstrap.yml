@@ -4,5 +4,5 @@
 - hosts: localhost
   roles:
     - role: molecule
-       
+
 ...

@@ -2,32 +2,16 @@
 
 A collection for ansible related things.
 
-## role: mafalb.ansible.molecule
+We recommend to set [INTERPRETER_PYTHON](https://docs.ansible.com/ansible/latest/reference_appendices/config.html#interpreter-python) to auto to avoid confusion between python 2 and 3.
 
-Role for installing Molecule. Molecule helps with testing ansible roles or collections. Use it local or with CI.
+For reference here is the link to the source code for INTERPRETER_PYTHON_DISTRO_MAP [lib/ansible/config/base.yml](https://raw.githubusercontent.com/ansible/ansible/devel/lib/ansible/config/base.yml)
 
-Molecule installs via pip into a virtualenv without site packages.
+## Roles
 
-### Basic Usage
+### [mafalb.ansible.molecule](roles/molecule/README.md)
 
-```ansible
-- name: install molecule
-  hosts: localhost
-  roles:
-  - role: mafalb.ansible.molecule
-```
-
-### Variables
-
-All these variables are optional. Only specify them if you want to override the defaults.
-
-```molecule_major_version: 2``` # the molecule major version
-
-```molecule_ansible_version: 2.9``` # the ansible version you want to test against
-
-```molecule_virtualenv: "{{ ansible_user_dir }}/.virtualenvs/testvenv``` # the path to the virtualenv
+### [mafalb.ansible.node](roles/node/README.md)
 
 ## License
 
 GPLv3
-

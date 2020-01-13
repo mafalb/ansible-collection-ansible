@@ -45,7 +45,4 @@
       - _ansibles_version.stdout is match('ansible')
       - _ansibles_version_28.stdout is match('ansible 2.8.*')
 
-  - name: openssl_privatekey is working
-    openssl_privatekey:
-      path: /tmp/privatekey
 ...
