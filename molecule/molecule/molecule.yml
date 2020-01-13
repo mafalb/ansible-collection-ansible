@@ -16,6 +16,8 @@ platforms:
     image: ubuntu:xenial    
   - name: t_ubuntu1804
     image: ubuntu:bionic     
+  - name: t_ubuntu2004
+    image: ubuntu:focal
   - name: t_fedora30
     image: fedora:30    
   - name: t_fedora31
