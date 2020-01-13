@@ -12,10 +12,14 @@ platforms:
     image: centos:7
   - name: t_centos8
     image: centos:8
-  - name: t_ubuntu1804
-    image: ubuntu:bionic     
   - name: t_ubuntu1604
     image: ubuntu:xenial    
+  - name: t_ubuntu1804
+    image: ubuntu:bionic     
+  - name: t_fedora30
+    image: fedora:30    
+  - name: t_fedora31
+    image: fedora:31    
 provisioner:
   name: ansible
   ansible_args:
