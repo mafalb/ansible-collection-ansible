@@ -2,13 +2,16 @@
 
 A collection for ansible related things.
 
-## roles
+We recommend to set [INTERPRETER_PYTHON](https://docs.ansible.com/ansible/latest/reference_appendices/config.html#interpreter-python) to auto to avoid confusion between python 2 and 3.
 
-### role: [mafalb.ansible.molecule](roles/molecule/README.md)
+For reference here is the link to the source code for INTERPRETER_PYTHON_DISTRO_MAP [lib/ansible/config/base.yml](https://raw.githubusercontent.com/ansible/ansible/devel/lib/ansible/config/base.yml)
 
-### role: [mafalb.ansible.node](roles/node/README.md)
+## Roles
+
+### [mafalb.ansible.molecule](roles/molecule/README.md)
+
+### [mafalb.ansible.node](roles/node/README.md)
 
 ## License
 
 GPLv3
-
