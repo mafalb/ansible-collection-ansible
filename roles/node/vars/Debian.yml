@@ -8,5 +8,6 @@ ansible_node_dependencies:
 - python3-setuptools
 - python3-apt
 - python3-venv
+- python3-openssl
 
 ...
