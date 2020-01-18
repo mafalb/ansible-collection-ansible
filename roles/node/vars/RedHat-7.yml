@@ -4,7 +4,9 @@
 ansible_node_dependencies:
 - libsemanage-python
 - policycoreutils-python
+- openssl
 - python2-cryptography
+- pyOpenSSL
 - python-setuptools
 - python-virtualenv
 
