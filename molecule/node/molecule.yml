@@ -18,14 +18,14 @@ platforms:
     image: fedora:30
   - name: t_fedora31
     image: fedora:31
-  - name: t_fedorarawhide
-    image: fedora:rawhide
   - name: t_ubuntu16
     image: ubuntu:xenial
   - name: t_ubuntu18
     image: ubuntu:bionic
-  - name: t_ubuntu20
-    image: ubuntu:focal
+#  - name: t_fedorarawhide
+#    image: fedora:rawhide
+#  - name: t_ubuntu20
+#    image: ubuntu:focal
 provisioner:
   name: ansible
   ansible_args:
