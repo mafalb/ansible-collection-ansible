@@ -8,22 +8,9 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: t_centos7
-    image: centos:7
-  - name: t_centos8
-    image: centos:8
-  - name: t_ubuntu1604
-    image: ubuntu:xenial    
-  - name: t_ubuntu1804
-    image: ubuntu:bionic     
-  - name: t_fedora30
-    image: fedora:30    
-  - name: t_fedora31
-    image: fedora:31    
-#  - name: t_fedora_rawhide
-#    image: fedora:rawhide   
-#  - name: t_ubuntu2004
-#    image: ubuntu:focal
+  - name: t_${CI_CONTAINER_IMAGE:-centos}${CI_CONTAINER_TAG:-7}
+    image: ${CI_CONTAINER_IMAGE:-centos}:${CI_CONTAINER_TAG:-7}
+
 provisioner:
   name: ansible
   ansible_args:
