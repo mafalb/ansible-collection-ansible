@@ -85,18 +85,43 @@ jobs:
         - 2.9
         - 2.8
         include:
-        - distribution: centos
-          version: 7
-        - distribution: centos
+
+        - os: ubuntu-18.04
+          ansible_version: 2.9
+          distribution: centos
           version: 8
-        - distribution: ubuntu
+
+        - os: ubuntu-16.04
+          ansible_version: 2.9
+          distribution: centos
+          version: 8
+
+        - os: ubuntu-18.04
+          ansible_version: 2.8
+          distribution: centos
+          version: 8
+
+        - os: ubuntu-16.04
+          ansible_version: 2.8
+          distribution: centos
+          version: 8
+
+        - os: ubuntu-18.04
+          ansible_version: 2.9
+          distribution: ubuntu
           version: xenial
-        - distribution: ubuntu
-          version: bionic
-        - distribution: fedora
-          version: 30
-        - distribution: fedora
-          version: 31
+
+        - os: ubuntu-18.04
+          ansible_version: 2.9
+          distribution: ubuntu
+          version: xenial
+
+        #- distribution: ubuntu
+        #  version: bionic
+        #- distribution: fedora
+        #  version: 30
+        #- distribution: fedora
+        #  version: 31
                
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
