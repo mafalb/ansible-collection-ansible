@@ -23,17 +23,29 @@ jobs:
         - 2.9
         - 2.8
         include:
-        - distribution: centos
+
+        - os: ubuntu-18.04
+          distribution: centos
           version: 7
-        - distribution: centos
+
+        - os: ubuntu-18.04
+          distribution: centos
           version: 8
-        - distribution: ubuntu
+
+        - os: ubuntu-18.04
+          distribution: ubuntu
           version: xenial
-        - distribution: ubuntu
+
+        - os: ubuntu-18.04
+          distribution: ubuntu
           version: bionic
-        - distribution: fedora
+
+        - os: ubuntu-18.04
+          distribution: fedora
           version: 30
-        - distribution: fedora
+          
+        - os: ubuntu-18.04
+          distribution: fedora
           version: 31
 
     env:
