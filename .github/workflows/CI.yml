@@ -22,8 +22,24 @@ jobs:
         ansible_version:
         - 2.9
         - 2.8
+        include:
+        - distribution: centos
+          version: 7
+        - distribution: centos
+          version: 8
+        - distribution: ubuntu
+          version: xenial
+        - distribution: ubuntu
+          version: bionic
+        - distribution: fedora
+          version: 30
+        - distribution: fedora
+          version: 31
+
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
+      CI_CONTAINER_IMAGE: ${{ matrix.distribution }}:${{ matrix.version }}
+      CI_CONTAINER_TAG: ${{ matrix.version }}
         
     steps:
 
@@ -40,13 +56,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
+      - name: grep for forgotten no_log
+        run: '! grep -r "no_log: false" roles'
+
       - name: install molecule
         run: ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
 
-      - name: build test images
+      - name: manual lint
         run: |
-          source ~/.virtualenvs/molecule/bin/activate 
-          PY_COLORS=1 molecule create -s node
+          source ~/.virtualenvs/molecule/bin/activate
+          ansible-lint roles/*
 
       - name: run molecule tests
         run: |
@@ -65,9 +84,25 @@ jobs:
         ansible_version:
         - 2.9
         - 2.8
+        include:
+        - distribution: centos
+          version: 7
+        - distribution: centos
+          version: 8
+        - distribution: ubuntu
+          version: xenial
+        - distribution: ubuntu
+          version: bionic
+        - distribution: fedora
+          version: 30
+        - distribution: fedora
+          version: 31
+               
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
-        
+      CI_CONTAINER_IMAGE: ${{ matrix.distribution }}:${{ matrix.version }}
+      CI_CONTAINER_TAG: ${{ matrix.version }}
+
     steps:
 
       - name: checkout collection ansible
