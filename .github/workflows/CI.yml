@@ -18,6 +18,14 @@ jobs:
     strategy:
       matrix:
       
+        target:
+        - centos7
+        - centos8
+        - ubuntu-18.04
+        - ubuntu-16.04
+        - fedora30
+        - fedora31
+
         os:
         - ubuntu-18.04
 
@@ -92,6 +100,8 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
+      fail-fast: false
+
       matrix:
 
         target:
@@ -111,6 +121,16 @@ jobs:
 
         include:
 
+        - target: centos7
+        #  os: ubuntu-18.04
+        #  ansible_version: '2.9'
+          distribution: centos
+          version: 7
+
+        - target: centos8
+          distribution: centos
+          version: 8
+
         - target: ubuntu-18.04
           distribution: ubuntu
           version: bionic
@@ -118,14 +138,6 @@ jobs:
         - target: ubuntu-16.04
           distribution: ubuntu
           version: xenial
-
-        - target: centos7
-          distribution: centos
-          version: 7
-
-        - target: centos8
-          distribution: centos
-          version: 8
 
         - target: fedora30
           distribution: fedora
