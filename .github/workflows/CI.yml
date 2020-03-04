@@ -73,7 +73,7 @@ jobs:
       
       - name: cache pip cache
         uses: actions/cache@v1
-        run_if: false
+        if: false
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/molecule/requirements.txt') }}
@@ -155,7 +155,7 @@ jobs:
       
       - name: cache pip cache
         uses: actions/cache@v1
-        run_if: false
+        if: false
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/molecule/requirements.txt') }}
