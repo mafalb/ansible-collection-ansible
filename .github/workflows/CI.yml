@@ -89,7 +89,7 @@ jobs:
       - name: run molecule tests
         run: |
           source ~/.virtualenvs/molecule/bin/activate 
-          PY_COLORS=1 molecule test -s node
+          PY_COLORS=1 CI_CONTAINER_IMAGE: ${{ matrix.distribution }}:${{ matrix.version }} CI_CONTAINER_TAG: ${{ matrix.version }} molecule test -s node
 
   molecule:
 
@@ -168,6 +168,6 @@ jobs:
       - name: run molecule tests
         run: |
           source ~/.virtualenvs/molecule/bin/activate 
-          PY_COLORS=1 molecule test -s molecule
+          PY_COLORS=1 CI_CONTAINER_IMAGE: ${{ matrix.distribution }}:${{ matrix.version }} CI_CONTAINER_TAG: ${{ matrix.version }} molecule test -s molecule
 
 ...
