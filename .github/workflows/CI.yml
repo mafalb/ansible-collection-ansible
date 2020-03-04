@@ -72,6 +72,7 @@ jobs:
           path: ansible_collections/mafalb/ansible
       
       - name: cache pip cache
+        run_if: false
         uses: actions/cache@v1
         with:
           path: ~/.cache/pip
@@ -153,6 +154,7 @@ jobs:
           path: ansible_collections/mafalb/ansible
       
       - name: cache pip cache
+        run_if: false
         uses: actions/cache@v1
         with:
           path: ~/.cache/pip
