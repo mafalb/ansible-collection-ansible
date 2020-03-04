@@ -85,11 +85,6 @@ jobs:
       - name: install molecule
         run: ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
 
-      - name: manual lint
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          ansible-lint roles/*
-
       - name: run molecule tests
         run: |
           source ~/.virtualenvs/molecule/bin/activate 
@@ -122,8 +117,6 @@ jobs:
         include:
 
         - target: centos7
-        #  os: ubuntu-18.04
-        #  ansible_version: '2.9'
           distribution: centos
           version: 7
 
@@ -169,11 +162,6 @@ jobs:
 
       - name: install molecule
         run: ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
-
-      - name: build test images
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate 
-          PY_COLORS=1 molecule create -s molecule
 
       - name: run molecule tests
         run: |

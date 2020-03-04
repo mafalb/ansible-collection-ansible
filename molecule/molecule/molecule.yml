@@ -5,8 +5,11 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
+lint: |
+  set -e
+  yamllint .
+  ansible-lint -v
+
 platforms:
   - name: t_${CI_CONTAINER_IMAGE:-centos}${CI_CONTAINER_TAG:-7}
     image: ${CI_CONTAINER_IMAGE:-centos}:${CI_CONTAINER_TAG:-7}
