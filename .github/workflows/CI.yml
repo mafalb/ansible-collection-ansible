@@ -18,14 +18,6 @@ jobs:
     strategy:
       matrix:
       
-        target:
-        - centos7
-        - centos8
-        - ubuntu-18.04
-        - ubuntu-16.04
-        - fedora30
-        - fedora31
-
         os:
         - ubuntu-18.04
 
@@ -101,51 +93,48 @@ jobs:
 
     strategy:
       matrix:
-        os:
+
+        target:
+        - centos7
+        - centos8
         - ubuntu-18.04
         - ubuntu-16.04
+        - fedora30
+        - fedora31
+
+        os:
+        - ubuntu-18.04
+
         ansible_version:
         - 2.9
         - 2.8
+
         include:
 
-        - os: ubuntu-18.04
-          ansible_version: 2.9
-          distribution: centos
-          version: 8
+        - target: ubuntu-18.04
+          distribution: ubuntu
+          version: bionic
 
-        - os: ubuntu-16.04
-          ansible_version: 2.9
-          distribution: centos
-          version: 8
-
-        - os: ubuntu-18.04
-          ansible_version: 2.8
-          distribution: centos
-          version: 8
-
-        - os: ubuntu-16.04
-          ansible_version: 2.8
-          distribution: centos
-          version: 8
-
-        - os: ubuntu-18.04
-          ansible_version: 2.9
+        - target: ubuntu-16.04
           distribution: ubuntu
           version: xenial
 
-        - os: ubuntu-18.04
-          ansible_version: 2.9
-          distribution: ubuntu
-          version: xenial
+        - target: centos7
+          distribution: centos
+          version: 7
 
-        #- distribution: ubuntu
-        #  version: bionic
-        #- distribution: fedora
-        #  version: 30
-        #- distribution: fedora
-        #  version: 31
-               
+        - target: centos8
+          distribution: centos
+          version: 8
+
+        - target: fedora30
+          distribution: fedora
+          version: 30
+
+        - target: fedora31
+          distribution: fedora
+          version: 31
+
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
       CI_CONTAINER_IMAGE: ${{ matrix.distribution }}:${{ matrix.version }}
