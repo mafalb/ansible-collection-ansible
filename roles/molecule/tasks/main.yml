@@ -101,6 +101,14 @@
   pip:
     name:
     - molecule[docker]
+    - molecule[lint]
+    virtualenv: "{{ molecule_virtualenv }}"
+    virtualenv_command: "{{ molecule_virtualenv_command }}"
+
+- name: molecule[lint] is installed
+  pip:
+    name:
+    - molecule[lint]
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
 

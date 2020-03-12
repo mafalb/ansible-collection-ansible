@@ -17,13 +17,52 @@ jobs:
 
     strategy:
       matrix:
+      
+        target:
+        - centos7
+        - centos8
+        - ubuntu-18.04
+        - ubuntu-16.04
+        - fedora30
+        - fedora31
+
         os:
         - ubuntu-18.04
+
         ansible_version:
         - 2.9
         - 2.8
+
+        include:
+
+        - target: ubuntu-18.04
+          distribution: ubuntu
+          version: bionic
+
+        - target: ubuntu-16.04
+          distribution: ubuntu
+          version: xenial
+
+        - target: centos7
+          distribution: centos
+          version: 7
+
+        - target: centos8
+          distribution: centos
+          version: 8
+
+        - target: fedora30
+          distribution: fedora
+          version: 30
+
+        - target: fedora31
+          distribution: fedora
+          version: 31
+
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
+      CI_CONTAINER_IMAGE: ${{ matrix.distribution }}:${{ matrix.version }}
+      CI_CONTAINER_TAG: ${{ matrix.version }}
         
     steps:
 
@@ -34,40 +73,79 @@ jobs:
       
       - name: cache pip cache
         uses: actions/cache@v1
+        if: false
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/molecule/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
+      - name: grep for forgotten no_log
+        run: '! grep -r "no_log: false" roles'
+
       - name: install molecule
         run: ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
-
-      - name: build test images
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate 
-          PY_COLORS=1 molecule create -s node
 
       - name: run molecule tests
         run: |
           source ~/.virtualenvs/molecule/bin/activate 
-          PY_COLORS=1 molecule test -s node
+          PY_COLORS=1 CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test -s node
 
   molecule:
 
     runs-on: ${{ matrix.os }}
 
     strategy:
+      fail-fast: false
+
       matrix:
-        os:
+
+        target:
+        - centos7
+        - centos8
         - ubuntu-18.04
         - ubuntu-16.04
+        - fedora30
+        - fedora31
+
+        os:
+        - ubuntu-18.04
+
         ansible_version:
         - 2.9
         - 2.8
+
+        include:
+
+        - target: centos7
+          distribution: centos
+          version: 7
+
+        - target: centos8
+          distribution: centos
+          version: 8
+
+        - target: ubuntu-18.04
+          distribution: ubuntu
+          version: bionic
+
+        - target: ubuntu-16.04
+          distribution: ubuntu
+          version: xenial
+
+        - target: fedora30
+          distribution: fedora
+          version: 30
+
+        - target: fedora31
+          distribution: fedora
+          version: 31
+
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
-        
+      CI_CONTAINER_IMAGE: ${{ matrix.distribution }}:${{ matrix.version }}
+      CI_CONTAINER_TAG: ${{ matrix.version }}
+
     steps:
 
       - name: checkout collection ansible
@@ -77,6 +155,7 @@ jobs:
       
       - name: cache pip cache
         uses: actions/cache@v1
+        if: false
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/molecule/requirements.txt') }}
@@ -86,14 +165,9 @@ jobs:
       - name: install molecule
         run: ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
 
-      - name: build test images
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate 
-          PY_COLORS=1 molecule create -s molecule
-
       - name: run molecule tests
         run: |
           source ~/.virtualenvs/molecule/bin/activate 
-          PY_COLORS=1 molecule test -s molecule
+          PY_COLORS=1 CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test -s molecule
 
 ...
