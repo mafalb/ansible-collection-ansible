@@ -20,7 +20,7 @@ Variables are optional. Only specify them if you want to override the defaults.
 ```molecule_major_version``` There should be no need to specify this.
 
 ```yaml
-molecule_major_version: 2
+molecule_major_version: 3
 ```
 
 ```molecule_ansible_version``` set the ansible version you want to test against
