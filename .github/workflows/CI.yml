@@ -19,6 +19,7 @@ jobs:
       matrix:
       
         target:
+        - centos6
         - centos7
         - centos8
         - ubuntu-18.04
@@ -43,6 +44,10 @@ jobs:
           distribution: ubuntu
           version: xenial
 
+        - target: centos6
+          distribution: centos
+          version: 6
+
         - target: centos7
           distribution: centos
           version: 7
@@ -61,7 +66,7 @@ jobs:
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
-      CI_CONTAINER_IMAGE: ${{ matrix.distribution }}:${{ matrix.version }}
+      CI_CONTAINER_IMAGE: ${{ matrix.distribution }}
       CI_CONTAINER_TAG: ${{ matrix.version }}
         
     steps:
@@ -79,9 +84,6 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/molecule/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-
-      - name: grep for forgotten no_log
-        run: '! grep -r "no_log: false" roles'
 
       - name: install molecule
         run: ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
