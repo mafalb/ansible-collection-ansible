@@ -3,8 +3,9 @@
 
 - name: get OS specific variables
   with_first_found:
-  - "{{ ansible_os_family }}-{{ ansible_distribution }}.yml"
   - "{{ ansible_os_family }}-{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+  - "{{ ansible_os_family }}-{{ ansible_distribution }}.yml"
+  - "{{ ansible_os_family }}-{{ ansible_distribution_release }}.yml"
   - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
   - "{{ ansible_os_family }}.yml"
   include_vars:
@@ -101,6 +102,14 @@
   pip:
     name:
     - molecule[docker]
+    - molecule[lint]
+    virtualenv: "{{ molecule_virtualenv }}"
+    virtualenv_command: "{{ molecule_virtualenv_command }}"
+
+- name: molecule[lint] is installed
+  pip:
+    name:
+    - molecule[lint]
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
 

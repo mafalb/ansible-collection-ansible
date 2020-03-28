@@ -15,10 +15,16 @@
     command: ~/.virtualenvs/molecule-2.8/bin/molecule --version
     register: _molecule_version_28
 
+  - name: molecule is present ~/.virtualenvs/molecule2
+    changed_when: false
+    command: ~/.virtualenvs/molecule2/bin/molecule --version
+    register: _molecule_version_2
+
   - name: molecule version
     loop:
     - _molecule_version.stdout
     - _molecule_version_28.stdout
+    - _molecule_version_2.stdout
     debug:
       var: "{{ item }}"
 
@@ -32,10 +38,16 @@
     command: ~/.virtualenvs/molecule-2.8/bin/ansible --version
     register: _ansibles_version_28
 
+  - name: ansible 2.8 is present
+    changed_when: false
+    command: ~/.virtualenvs/molecule2/bin/ansible --version
+    register: _ansibles_version_2
+
   - name: ansible version
     loop:
     - _ansibles_version.stdout
     - _ansibles_version_28.stdout
+    - _ansibles_version_2.stdout
     debug:
       var: "{{ item }}"
 
@@ -44,5 +56,6 @@
       that:
       - _ansibles_version.stdout is match('ansible')
       - _ansibles_version_28.stdout is match('ansible 2.8.*')
+      - _ansibles_version_2.stdout is match('ansible 2.9.*')
 
 ...

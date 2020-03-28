@@ -5,27 +5,19 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
+
+lint: |
+  set -e
+  ! grep -r "no_log: false" .
+  yamllint .
+  ansible-lint -v
+  ansible-lint -v vars/*.yml
+  flake8 -v
+
 platforms:
-  - name: t_centos6
-    image: centos:6
-  - name: t_centos7
-    image: centos:7
-  - name: t_centos8
-    image: centos:8
-  - name: t_fedora30
-    image: fedora:30
-  - name: t_fedora31
-    image: fedora:31
-  - name: t_ubuntu16
-    image: ubuntu:xenial
-  - name: t_ubuntu18
-    image: ubuntu:bionic
-#  - name: t_fedorarawhide
-#    image: fedora:rawhide
-#  - name: t_ubuntu20
-#    image: ubuntu:focal
+  - name: t_${CI_CONTAINER_IMAGE:-centos}${CI_CONTAINER_TAG:-7}
+    image: ${CI_CONTAINER_IMAGE:-centos}:${CI_CONTAINER_TAG:-7}
+
 provisioner:
   name: ansible
   ansible_args:
