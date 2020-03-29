@@ -11,19 +11,21 @@ on:
 
 jobs:
 
-  node:
+  molecule:
 
     runs-on: ${{ matrix.os }}
 
     strategy:
+      fail-fast: false
+
       matrix:
-      
+
         target:
         - centos6
         - centos7
         - centos8
-        - ubuntu-18.04
         - ubuntu-16.04
+        - ubuntu-18.04
         - fedora30
         - fedora31
 
@@ -35,14 +37,6 @@ jobs:
         - 2.8
 
         include:
-
-        - target: ubuntu-18.04
-          distribution: ubuntu
-          version: bionic
-
-        - target: ubuntu-16.04
-          distribution: ubuntu
-          version: xenial
 
         - target: centos6
           distribution: centos
@@ -56,77 +50,6 @@ jobs:
           distribution: centos
           version: 8
 
-        - target: fedora30
-          distribution: fedora
-          version: 30
-
-        - target: fedora31
-          distribution: fedora
-          version: 31
-
-    env:
-      ANSIBLE_VERSION: ${{ matrix.ansible_version }}
-      CI_CONTAINER_IMAGE: ${{ matrix.distribution }}
-      CI_CONTAINER_TAG: ${{ matrix.version }}
-        
-    steps:
-
-      - name: checkout collection ansible
-        uses: actions/checkout@v1
-        with:
-          path: ansible_collections/mafalb/ansible
-      
-      - name: cache pip cache
-        uses: actions/cache@v1
-        if: false
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/molecule/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: install molecule
-        run: ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
-
-      - name: run molecule tests
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate 
-          PY_COLORS=1 CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test -s node
-
-  molecule:
-
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      fail-fast: false
-
-      matrix:
-
-        target:
-        - centos7
-        - centos8
-        - ubuntu-18.04
-        - ubuntu-16.04
-        - fedora30
-        - fedora31
-
-        os:
-        - ubuntu-18.04
-
-        ansible_version:
-        - 2.9
-        - 2.8
-
-        include:
-
-        - target: centos7
-          distribution: centos
-          version: 7
-
-        - target: centos8
-          distribution: centos
-          version: 8
-
         - target: ubuntu-18.04
           distribution: ubuntu
           version: bionic
@@ -155,21 +78,12 @@ jobs:
         with:
           path: ansible_collections/mafalb/ansible
       
-      - name: cache pip cache
-        uses: actions/cache@v1
-        if: false
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/molecule/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
       - name: install molecule
         run: ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
 
       - name: run molecule tests
         run: |
           source ~/.virtualenvs/molecule/bin/activate 
-          PY_COLORS=1 CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test -s molecule
+          PY_COLORS=1 CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test
 
 ...
