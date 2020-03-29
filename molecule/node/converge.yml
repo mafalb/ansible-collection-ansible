@@ -1,10 +1,9 @@
+# vim: set ft=yaml ts=2 expandtab:
 ---
+
 - name: Converge
   hosts: all
-  pre_tasks:
-  - name: fail
-    fail:
-      msg: fail to test status badge
-
   roles:
-    - role: mafalb.ansible.node
+  - role: mafalb.ansible.node
+
+...
