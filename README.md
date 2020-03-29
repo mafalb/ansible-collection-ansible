@@ -1,7 +1,12 @@
 # Ansible Collection - mafalb.ansible
 
-![](https://github.com/mafalb/ansible-collection-ansible/workflows/CI/badge.svg)
+master branch ![](https://github.com/mafalb/ansible-collection-ansible/workflows/CI/badge.svg)
 
+master branch ![master branch](https://github.com/mafalb/ansible-collection-ansible/workflows/CI/badge.svg?branch=master)
+
+dev branch ![dev branch](https://github.com/mafalb/ansible-collection-ansible/workflows/CI/badge.svg?branch=dev)
+
+t_badge branch ![t_badge branch](https://github.com/mafalb/ansible-collection-ansible/workflows/CI/badge.svg?branch=t_badge)
 
 A collection for ansible related things.
 
