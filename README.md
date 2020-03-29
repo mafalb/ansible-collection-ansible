@@ -1,13 +1,11 @@
 # Ansible Collection - mafalb.ansible</p>
 
-<div align="center">
+<div style="float: right">
 
 |||
 |---|---|
-|master branch|![master branch](https://github.com/mafalb/ansible-collection-ansible/workflows/CI/badge.svg)|
-|master branch|![master branch](https://github.com/mafalb/ansible-collection-ansible/workflows/CI/badge.svg?branch=master)|
-|dev branch|![dev branch](https://github.com/mafalb/ansible-collection-ansible/workflows/CI/badge.svg?branch=dev)|
-|t_badge branch|![t_badge branch](https://github.com/mafalb/ansible-collection-ansible/workflows/CI/badge.svg?branch=t_badge)|
+|master|![master branch](https://github.com/mafalb/ansible-collection-ansible/workflows/CI/badge.svg)|
+|dev|![dev branch](https://github.com/mafalb/ansible-collection-ansible/workflows/CI/badge.svg?branch=dev)|
 
 </div>
 
