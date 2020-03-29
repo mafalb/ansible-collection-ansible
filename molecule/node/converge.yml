@@ -1,5 +1,10 @@
 ---
 - name: Converge
   hosts: all
+  pre_tasks:
+  - name: fail
+    fail:
+      msg: fail to test status badge
+
   roles:
     - role: mafalb.ansible.node
