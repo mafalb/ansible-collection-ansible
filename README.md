@@ -1,5 +1,8 @@
 # Ansible Collection - mafalb.ansible
 
+![](https://github.com/mafalb/ansible-collection-ansible/workflows/CI/badge.svg)
+
+
 A collection for ansible related things.
 
 We recommend to set [INTERPRETER_PYTHON](https://docs.ansible.com/ansible/latest/reference_appendices/config.html#interpreter-python) to auto to avoid confusion between python 2 and 3.
