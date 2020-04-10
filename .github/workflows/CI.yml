@@ -85,6 +85,11 @@ jobs:
       - name: run molecule tests
         run: |
           source ~/.virtualenvs/molecule/bin/activate 
-          PY_COLORS=1 CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test
+          PY_COLORS=1 CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule converge
+
+      - name: run molecule tests
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate 
+          PY_COLORS=1 CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule converge
 
 ...
