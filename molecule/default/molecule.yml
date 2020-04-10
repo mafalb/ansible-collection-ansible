@@ -6,12 +6,16 @@ dependency:
 driver:
   name: docker
 
+# https://github.com/ansible/ansible-lint/issues/731
+# revert after it is fixed
+#
 lint: |
   set -e
   ! grep -r "no_log: false" .
   yamllint .
-  ansible-lint -v
-  ansible-lint -v vars/*.yml
+  #ansible-lint -v
+  ansible-lint -v roles/* molecule/default/converge.yml molecule/default/verify.yml bootstrap.yml
+  ansible-lint -v roles/*/vars/*.yml
   flake8 -v
 
 platforms:
