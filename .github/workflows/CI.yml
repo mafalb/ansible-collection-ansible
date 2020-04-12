@@ -11,7 +11,7 @@ on:
 
 jobs:
 
-  molecule:
+  CI:
 
     runs-on: ${{ matrix.os }}
 
