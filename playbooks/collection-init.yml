@@ -1,0 +1,28 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+- hosts: localhost
+  vars:
+    skeleton_path: "{{ playbook_dir }}/files/collection-skeleton"
+    namespace: "{{ collection.split('.')[0] }}"
+    collection_name: "{{ collection.split('.')[1] }}"
+
+  tasks:
+
+    - name: assertions
+      assert:
+        that:
+        - namespace is defined
+        - collection_name is defined
+
+    - name: create new collection
+      command: ansible-galaxy collection init --collection-skeleton {{ skeleton_path }} {{ collection }}
+      args:
+        chdir: "{{ lookup('env', 'PWD') }}"
+
+    - name: create galaxy metadata
+      template:
+        src: galaxy.yml.j2
+        dest: "{{ lookup('env', 'PWD') }}/{{ namespace }}/{{ collection_name }}/galaxy.yml"
+
+...

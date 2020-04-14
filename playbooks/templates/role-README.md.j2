@@ -1,0 +1,31 @@
+{% if collection|bool() %}
+# Ansible Role - {{ namespace + '.' + collection_name + '.' + role_name }}
+{% else %}
+# Ansible Role - {{ role_name }}
+
+|---|---|
+|master|![master branch](https://github.com/{{ namespace }}/ansible-role-{{ role_name }}/workflows/CI/badge.svg?branch=master)|
+|dev|![dev branch](https://github.com/{{ namespace }}/ansible-role-{{ role_name }}/workflows/CI/badge.svg?branch=dev)|
+{% endif %}
+
+bla
+
+## Basic Usage
+
+```yaml
+- name: install {{ role_name }}
+  hosts: localhost
+  roles:
+{% if collection|bool() %}
+  - role: {{ namespace + '.' + collection_name + '.' + role_name }}
+{% else %}
+  - role: {{ role_name }}
+{% endif %}
+```
+
+## Variables
+
+## License
+
+GPLv3
+

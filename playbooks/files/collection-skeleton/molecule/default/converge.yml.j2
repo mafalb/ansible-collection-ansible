@@ -1,0 +1,9 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+- name: Converge
+  hosts: all
+  role:
+    - role: "{{ namespace }} + '.' + {{ collection_name }} + '.' + install
+
+...
