@@ -1,0 +1,28 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+namespace: mafalb
+name: mariadb
+version: 0.0.1
+readme: README.md
+
+authors:
+- Markus Falb <markus.falb@mafalb.at>
+
+description: Ansible collection for mariadb
+
+license:
+- GPL-3.0-or-later
+
+tags:
+- mariadb
+- mysql
+
+dependencies: {}
+
+repository: https://github.com/mafalb/ansible-collection-mariadb
+documentation: https://github.com/mafalb/ansible-collection-mariadb
+homepage: https://github.com/mafalb/ansible-collection-mariadb
+issues: https://github.com/mafalb/ansible-collection-mariadb/issues
+
+...

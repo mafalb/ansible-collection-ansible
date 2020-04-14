@@ -1,0 +1,42 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+- hosts: localhost
+
+  vars:
+    skeleton_path: "{{ playbook_dir }}/files/role-skeleton"
+    min_ansible_version: 2.9
+    license: GPLv3
+    collection: true
+
+  tasks:
+
+    - name: assertions
+      assert:
+        that:
+        - collection_name is defined
+      when: collection|bool()
+
+    - name: assertions
+      assert:
+        that:
+        - author is defined
+        - namespace is defined
+        - role_name is defined
+
+    - name: create new role
+      command: ansible-galaxy role init --role-skeleton {{ skeleton_path }} {{ role_name }}
+      args:
+        chdir: "{{ lookup('env', 'PWD') }}"
+
+    - name: create meta information
+      template:
+        src: meta.yml.j2
+        dest: "{{ lookup('env', 'PWD') }}/{{ role_name }}/meta/main.yml"
+
+    - name: create README
+      template:
+        src: role-README.md.j2
+        dest: "{{ lookup('env', 'PWD') }}/{{ role_name }}/README.md"
+
+...
