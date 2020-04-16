@@ -4,6 +4,6 @@
 - name: Converge
   hosts: all
   role:
-    - role: "{{ namespace }} + '.' + {{ collection_name }} + '.' + install
+  - role: "{{ namespace }} + '.' + {{ collection_name }} + '.' + install
 
 ...
