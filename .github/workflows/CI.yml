@@ -23,11 +23,11 @@ jobs:
         target:
         - centos6
         - centos7
-#        - centos8
-#        - ubuntu-16.04
-#        - ubuntu-18.04
-#        - fedora30
-#        - fedora31
+        - centos8
+        - ubuntu-16.04
+        - ubuntu-18.04
+        - fedora30
+        - fedora31
 
         os:
         - ubuntu-18.04
@@ -46,25 +46,25 @@ jobs:
           distribution: centos
           version: 7
 
-#        - target: centos8
-#          distribution: centos
-#          version: 8
+        - target: centos8
+          distribution: centos
+          version: 8
 
-#        - target: ubuntu-18.04
-#          distribution: ubuntu
-#          version: bionic
+        - target: ubuntu-18.04
+          distribution: ubuntu
+          version: bionic
 
-#        - target: ubuntu-16.04
-#          distribution: ubuntu
-#          version: xenial
+        - target: ubuntu-16.04
+          distribution: ubuntu
+          version: xenial
 
-#        - target: fedora30
-#          distribution: fedora
-#          version: 30
+        - target: fedora30
+          distribution: fedora
+          version: 3
 
-#        - target: fedora31
-#          distribution: fedora
-#          version: 31
+        - target: fedora31
+          distribution: fedora
+          version: 31
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
