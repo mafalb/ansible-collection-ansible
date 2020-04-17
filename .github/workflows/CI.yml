@@ -26,6 +26,7 @@ jobs:
         - centos8
         - ubuntu-16.04
         - ubuntu-18.04
+        - ubuntu-20.04
         - fedora30
         - fedora31
 
@@ -50,13 +51,17 @@ jobs:
           distribution: centos
           version: 8
 
+        - target: ubuntu-16.04
+          distribution: ubuntu
+          version: xenial
+
         - target: ubuntu-18.04
           distribution: ubuntu
           version: bionic
 
-        - target: ubuntu-16.04
+        - target: ubuntu-20.04
           distribution: ubuntu
-          version: xenial
+          version: focal
 
         - target: fedora30
           distribution: fedora
