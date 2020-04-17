@@ -21,12 +21,16 @@
       set -o pipefail
       ~/.virtualenvs/molecule/bin/molecule --version|grep "python==3"
     changed_when: false
+    args:
+      executable: /bin/bash
 
   - name: python 3
     shell: |
       set -o pipefail
       ~/.virtualenvs/molecule/bin/pip --version|grep "python 3"
     changed_when: false
+    args:
+      executable: /bin/bash
 
   - name: molecule is present ~/.virtualenvs/molecule-2.8
     changed_when: false
@@ -38,12 +42,16 @@
       set -o pipefail
       ~/.virtualenvs/molecule-2.8/bin/molecule --version|grep "python==3"
     changed_when: false
+    args:
+      executable: /bin/bash
 
   - name: python 3
     shell: |
       set -o pipefail
       ~/.virtualenvs/molecule-2.8/bin/pip --version|grep "python 3"
     changed_when: false
+    args:
+      executable: /bin/bash
 
   - name: molecule is present ~/.virtualenvs/molecule2
     changed_when: false
@@ -55,6 +63,8 @@
       set -o pipefail
       ~/.virtualenvs/molecule2/bin/pip --version|grep "python 3"
     changed_when: false
+    args:
+      executable: /bin/bash
 
   - name: molecule version
     loop:
