@@ -7,9 +7,8 @@
   - name: install node dependencies
     role: mafalb.ansible.node
 
-
 - name: Converge molecule
-  hosts: all,!t_centos6
+  hosts: all,!t_centos6,!t_ubuntuxenial
 
   roles:
 
@@ -23,7 +22,7 @@
 
 
 - name: Converge molecule with a specific version of ansible
-  hosts: all,!t_centos6
+  hosts: all,!t_centos6,!t_ubuntuxenial
   vars:
     ansibles_version: 2.8
   roles:
