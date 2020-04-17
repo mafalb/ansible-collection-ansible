@@ -5,20 +5,41 @@
   hosts: all,!t_centos6
   tasks:
 
+  - name: get locale
+    changed_when: false
+    command: locale
+    register: _locale
+  - debug: var=_locale
+
   - name: molecule is present in ~/.virtualenvs/molecule
     changed_when: false
     command: ~/.virtualenvs/molecule/bin/molecule --version
     register: _molecule_version
+
+  - name: python 3
+    shell: ~/.virtualenvs/molecule/bin/molecule --version|grep "python==3"
+
+  - name: python 3
+    shell: ~/.virtualenvs/molecule/bin/pip --version|grep "python 3"
 
   - name: molecule is present ~/.virtualenvs/molecule-2.8
     changed_when: false
     command: ~/.virtualenvs/molecule-2.8/bin/molecule --version
     register: _molecule_version_28
 
+  - name: python 3.6 on RHEL 7
+    shell: ~/.virtualenvs/molecule-2.8/bin/molecule --version|grep "python==3"
+
+  - name: python 3
+    shell: ~/.virtualenvs/molecule-2.8/bin/pip --version|grep "python 3"
+
   - name: molecule is present ~/.virtualenvs/molecule2
     changed_when: false
     command: ~/.virtualenvs/molecule2/bin/molecule --version
     register: _molecule_version_2
+
+  - name: python 3
+    shell: ~/.virtualenvs/molecule2/bin/pip --version|grep "python 3"
 
   - name: molecule version
     loop:

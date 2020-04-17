@@ -37,12 +37,22 @@
 
 - name: epel is present
   when:
+    - false
     - ansible_os_family == 'RedHat'
     - ansible_distribution_major_version is version(8, '<')
     - ansible_distribution != 'Fedora'
   become: true
   package:
     name: epel-release
+
+- name: scl is present
+  package:
+    name: centos-release-scl-rh
+  when:
+  - ansible_os_family == 'RedHat'
+  - ansible_distribution == 'CentOS'
+  - ansible_distribution_major_version is version(7, '==')
+  become: true
 
 - name: molecules dependencies are present
   become: true
