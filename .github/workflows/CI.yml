@@ -31,7 +31,6 @@ jobs:
 
         os:
         - ubuntu-18.04
-        - ubuntu-16.04
 
         ansible_version:
         - 2.9
