@@ -60,7 +60,7 @@ jobs:
 
         - target: fedora30
           distribution: fedora
-          version: 3
+          version: 30
 
         - target: fedora31
           distribution: fedora
