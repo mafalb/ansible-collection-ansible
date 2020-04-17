@@ -2,7 +2,7 @@
 ---
 
 - name: Verify molecule
-  hosts: all,!t_centos6
+  hosts: all,!t_centos6,!t_ubuntuxenial
   tasks:
 
   - name: get locale
