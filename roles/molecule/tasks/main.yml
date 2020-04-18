@@ -41,9 +41,7 @@
   become: true
   package:
     name: "{{ molecule_system_dependencies }}"
-  module_defaults:
-    yum:
-      enablerepo: cr
+    enablerepo: "{{ molecule_enablerepo|default(omit) }}"
 
 # we can not use the system wide tmp dir
 # https://github.com/ansible/ansible/issues/57436

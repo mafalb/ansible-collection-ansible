@@ -3,15 +3,14 @@
 
 - name: Converge ansible.node
   hosts: all
+
   roles:
+
   - name: install node dependencies
     role: mafalb.ansible.node
 
 - name: Converge molecule
   hosts: all,!t_centos6,!t_ubuntuxenial
-  module_defaults:
-    yum:
-      enablerepo: cr
 
   roles:
 
@@ -26,13 +25,13 @@
 
 - name: Converge molecule with a specific version of ansible
   hosts: all,!t_centos6,!t_ubuntuxenial
-  module_defaults:
-    yum:
-      enablerepo: cr
   vars:
     ansibles_version: 2.8
+
   roles:
+
     - role: mafalb.ansible.node
+
     - role: mafalb.ansible.molecule
       molecule_ansible_version: "{{ ansibles_version }}"
       molecule_virtualenv: ~/.virtualenvs/molecule-{{ ansibles_version }}
