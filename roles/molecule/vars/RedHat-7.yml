@@ -1,7 +1,6 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
-molecule_python_major_version: 3
 molecule_enablerepo: cr
 molecule_system_dependencies:
 - gcc

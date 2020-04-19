@@ -22,12 +22,6 @@
   - never
   - debug
 
-- debug:
-    var: molecule_python_major_version
-  tags:
-  - never
-  - debug
-
 - name: molecule_ansible_version
   debug:
     var: molecule_ansible_version
