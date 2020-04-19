@@ -16,12 +16,6 @@
     that:
     - molecule_virtualenv is defined
 
-- debug:
-    var: ansible_python_version[0]|int
-  tags:
-  - never
-  - debug
-
 - name: molecule_ansible_version
   debug:
     var: molecule_ansible_version
