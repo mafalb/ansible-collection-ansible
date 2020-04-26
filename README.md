@@ -59,21 +59,23 @@ $ pwd
 $ ansible-playbook playbooks/role-init.yml -e namespace=mafalb -e collection=false -e role_name=testrole
 ```
 
-necessary variables:
+### Mandatory variables:
 
 ```role_name```
 
 ```author```
 
-```namespace```
+```collection``` the role will live inside that collection
 
-optional variables:
+```namespace``` creates a old school role not inside a collection 
+
+Define either collection or namespace, not both. One of them is mandatory.
+
+### Optional variables:
 
 ```skeleton_path: path to skeleton``` defaults to a skeleton shipped with this collection
 
 ```license: GPLv3``` specify the license, defaults to GPLv3
-
-```collection: false``` set this to false if you want an old school role (not inside a collection)
 
 ## License
 

@@ -14,14 +14,13 @@
     - name: assertions
       assert:
         that:
-        - collection_name is defined
-      when: collection|bool()
+        - collection|default(namespace) is defined
+        - not (collection is defined and namespace is defined)
 
     - name: assertions
       assert:
         that:
         - author is defined
-        - namespace is defined
         - role_name is defined
 
     - name: create new role

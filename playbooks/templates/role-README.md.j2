@@ -1,26 +1,22 @@
-{% if collection|bool() %}
-# Ansible Role - {{ namespace + '.' + collection_name + '.' + role_name }}
+{% if collection is defined %}
+# Ansible Role - {{ collection|default(namespace) + '.' + role_name }}
 {% else %}
 # Ansible Role - {{ role_name }}
 
 |---|---|
-|master|![master branch](https://github.com/{{ namespace }}/ansible-role-{{ role_name }}/workflows/CI/badge.svg?branch=master)|
-|dev|![dev branch](https://github.com/{{ namespace }}/ansible-role-{{ role_name }}/workflows/CI/badge.svg?branch=dev)|
+|master|![master branch](https://github.com/{{ namespace|default(collection.split('.')[0]) }}/ansible-role-{{ role_name }}/workflows/CI/badge.svg?branch=master)|
+|dev|![dev branch](https://github.com/{{ namespace|default(collection.split('.')[0]) }}/ansible-role-{{ role_name }}/workflows/CI/badge.svg?branch=dev)|
 {% endif %}
 
-bla
+Ansible role {{ collection|default(namespace) }}. {{ role_name }}
 
 ## Basic Usage
 
 ```yaml
-- name: install {{ role_name }}
+- name: install {{ collection|default(namespace) }}.{{ role_name }}
   hosts: localhost
   roles:
-{% if collection|bool() %}
-  - role: {{ namespace + '.' + collection_name + '.' + role_name }}
-{% else %}
-  - role: {{ role_name }}
-{% endif %}
+  - role: {{ collection|default(namespace) }}.{{ role_name }}
 ```
 
 ## Variables

@@ -19,7 +19,7 @@ lint: |
 # the network molecule-internal
 # it is hardcoded in create.yml
 platforms:
-- name: t_${CI_CONTAINER_NAME:-centos}${CI_CONTAINER_TAG:-7}
+- name: t_${CI_CONTAINER_IMAGE:-centos}${CI_CONTAINER_TAG:-7}
   image: ${CI_CONTAINER_IMAGE:-centos}:${CI_CONTAINER_TAG:-7}
   networks:
   - name: molecule-internal
