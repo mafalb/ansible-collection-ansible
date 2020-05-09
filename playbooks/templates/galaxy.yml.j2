@@ -1,14 +1,14 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
-namespace: {{ namespace }}
+namespace: {{ galaxy_namespace }}
 name: {{ collection_name }}
 version: 0.0.1
 readme: README.md
 
 authors: []
 
-description: Ansible collection for {{ collection_name }}
+description: Ansible collection {{ collection }}
 
 license:
 - GPL-3.0-or-later
@@ -18,9 +18,9 @@ tags:
 
 dependencies: {}
 
-repository: https://github.com/{{ namespace }}/ansible-collection-{{ collection_name }}
-documentation: https://github.com/{{ namespace }}/ansible-collection-{{ collection_name }}
-homepage: https://github.com/{{ namespace }}/ansible-collection-{{ collection_name }}
-issues: https://github.com/{{ namespace }}/ansible-collection-{{ collection_name }}/issues
+repository: https://github.com/{{ galaxy_namespace }}/ansible-collection-{{ collection_name }}
+documentation: https://github.com/{{ galaxy_namespace }}/ansible-collection-{{ collection_name }}
+homepage: https://github.com/{{ galaxy_namespace }}/ansible-collection-{{ collection_name }}
+issues: https://github.com/{{ galaxy_namespace }}/ansible-collection-{{ collection_name }}/issues
 
 ...

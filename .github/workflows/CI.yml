@@ -89,6 +89,7 @@ jobs:
       - name: test playbooks
         run: |
           source ~/.virtualenvs/molecule/bin/activate
+          ansible-playbook tests/variables.yml
           tests/collection-init.sh
           tests/role-init.sh
 

@@ -7,6 +7,6 @@ ansible-playbook $OLDPWD/../../mafalb/ansible/playbooks/collection-init.yml -e c
 cd -
 
 cd /tmp/tests/testcollection/roles
-ansible-playbook $OLDPWD/playbooks/role-init.yml -e namespace=tests -e collection_name=testcollection -e role_name=testrole -e "author='bla <blubb@example.com>'"
+ansible-playbook $OLDPWD/playbooks/role-init.yml -e role=tests.testcollection.testrole -e "author='bla <blubb@example.com>'"
 cd -
 

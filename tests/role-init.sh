@@ -3,6 +3,6 @@
 . ~/.virtualenvs/molecule/bin/activate
 
 cd /tmp
-ansible-playbook $OLDPWD/playbooks/role-init.yml -e namespace=tests -e collection=false -e role_name=testrole -e "author='bla <blubb@example.com>'"
+ansible-playbook $OLDPWD/playbooks/role-init.yml -e role=tests.testrole -e "author='bla <blubb@example.com>'"
 cd -
 

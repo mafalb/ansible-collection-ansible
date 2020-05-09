@@ -1,22 +1,20 @@
-{% if collection is defined %}
-# Ansible Role - {{ collection|default(namespace) + '.' + role_name }}
-{% else %}
-# Ansible Role - {{ role_name }}
+# Ansible Role {{ role }}
+{% if role.split('.')|length == 2 %}
 
 |---|---|
-|master|![master branch](https://github.com/{{ namespace|default(collection.split('.')[0]) }}/ansible-role-{{ role_name }}/workflows/CI/badge.svg?branch=master)|
-|dev|![dev branch](https://github.com/{{ namespace|default(collection.split('.')[0]) }}/ansible-role-{{ role_name }}/workflows/CI/badge.svg?branch=dev)|
+|master|![master branch](https://github.com/{{ galaxy_namespace }}/ansible-role-{{ role_name }}/workflows/CI/badge.svg?branch=master)|
+|dev|![dev branch](https://github.com/{{ galaxy_namespace }}/ansible-role-{{ role_name }}/workflows/CI/badge.svg?branch=dev)|
 {% endif %}
 
-Ansible role {{ collection|default(namespace) }}. {{ role_name }}
+Ansible role {{ role }}
 
 ## Basic Usage
 
 ```yaml
-- name: install {{ collection|default(namespace) }}.{{ role_name }}
+- name: install {{ role }}
   hosts: localhost
   roles:
-  - role: {{ collection|default(namespace) }}.{{ role_name }}
+  - role: {{ role }}
 ```
 
 ## Variables

@@ -48,7 +48,7 @@ Initialize a new role inside a collection
 ```sh
 $ pwd
 .../ansible_collections/mafalb/squid/roles
-$ ansible-playbook playbooks/role-init.yml -e namespace=mafalb -e collection_name=squid -e role_name=testrole
+$ ansible-playbook playbooks/role-init.yml -e role=mafalb.squid.testrole
 ```
 
 Initialize a new role outside a collection
@@ -56,20 +56,20 @@ Initialize a new role outside a collection
 ```sh
 $ pwd
 .../anywhere/outside/a/collection
-$ ansible-playbook playbooks/role-init.yml -e namespace=mafalb -e collection=false -e role_name=testrole
+$ ansible-playbook playbooks/role-init.yml -e role=mafalb.testrole
 ```
 
 ### Mandatory variables:
 
-```role_name```
+```role``` can take two formats
+
+```mafalb.collection_name.role_name``` for initializing inside a collection
+
+```mafalb.role_name``` for initializing a classic standalone role
+
+---
 
 ```author```
-
-```collection``` the role will live inside that collection
-
-```namespace``` creates a old school role not inside a collection 
-
-Define either collection or namespace, not both. One of them is mandatory.
 
 ### Optional variables:
 
