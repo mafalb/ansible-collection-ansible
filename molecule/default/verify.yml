@@ -11,6 +11,10 @@
     register: _locale
   - debug: var=_locale
 
+  - name: tox is present in ~/.virtualenvs/molecule
+    command: ~/.virtualenvs/molecule/bin/tox --version
+    changed_when: false
+
   - name: molecule is present in ~/.virtualenvs/molecule
     changed_when: false
     command: ~/.virtualenvs/molecule/bin/molecule --version
@@ -32,6 +36,10 @@
     args:
       executable: /bin/bash
 
+  - name: tox is present ~/.virtualenvs/molecule-2.8
+    command: ~/.virtualenvs/molecule-2.8/bin/tox --version
+    changed_when: false
+
   - name: molecule is present ~/.virtualenvs/molecule-2.8
     changed_when: false
     command: ~/.virtualenvs/molecule-2.8/bin/molecule --version
@@ -52,6 +60,10 @@
     changed_when: false
     args:
       executable: /bin/bash
+
+  - name: tox is present ~/.virtualenvs/molecule2
+    command: ~/.virtualenvs/molecule2/bin/tox --version
+    changed_when: false
 
   - name: molecule is present ~/.virtualenvs/molecule2
     changed_when: false
