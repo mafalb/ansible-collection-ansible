@@ -24,7 +24,7 @@
         - collection_name is defined
 
     - name: create new collection
-      command: ansible-galaxy collection init --collection-skeleton {{ skeleton_path }} {{ collection }}
+      command: ansible-galaxy collection init --collection-skeleton {{ skeleton_path }} {{ collection }} # noqa 301
       args:
         chdir: "{{ lookup('env', 'PWD') }}"
 

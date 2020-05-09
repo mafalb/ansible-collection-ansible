@@ -26,7 +26,7 @@
         - role_name is defined
 
     - name: create new role inside a collection
-      command: ansible-galaxy role init --role-skeleton {{ skeleton_path }} {{ role_name if role.split('.')|length == 3 else role }}
+      command: ansible-galaxy role init --role-skeleton {{ skeleton_path }} {{ role_name if role.split('.')|length == 3 else role }} # noqa 301
       args:
         chdir: "{{ lookup('env', 'PWD') }}"
 
