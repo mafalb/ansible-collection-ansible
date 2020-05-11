@@ -4,9 +4,12 @@
 # no virtualenv for RHEL6
 #
 ansible_node_dependencies:
-- libsemanage-python
-- policycoreutils-python
-- pyOpenSSL
-- python-setuptools
+  selinux:
+  - libsemanage-python
+  - policycoreutils-python
+  crypto:
+  - pyOpenSSL
+  pip:
+  - python-setuptools
 
 ...

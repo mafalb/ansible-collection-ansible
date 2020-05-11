@@ -2,12 +2,16 @@
 ---
 
 ansible_node_dependencies:
-- python3-selinux
-- openssl
-- python3-cryptography
-- python3-setuptools
-- python3-apt
-- python3-venv
-- python3-openssl
+  selinux:
+  - python3-selinux
+  crypto:
+  - openssl
+  - python3-openssl
+  - python3-cryptography
+  - python3-setuptools
+  pip:
+  - python3-venv
+  pkg_mgr:
+  - python3-apt
 
 ...

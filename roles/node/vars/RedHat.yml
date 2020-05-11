@@ -2,11 +2,14 @@
 ---
 
 ansible_node_dependencies:
-- python3-libsemanage
-- python3-policycoreutils
-- openssl
-- python3-cryptography
-- python3-pyOpenSSL
-- python3-setuptools
+  selinux:
+  - python3-libsemanage
+  - python3-policycoreutils
+  crypto:
+  - openssl
+  - python3-cryptography
+  - python3-pyOpenSSL
+  pip:
+  - python3-setuptools
 
 ...
