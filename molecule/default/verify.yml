@@ -2,23 +2,81 @@
 ---
 
 - name: Verify molecule
-  hosts: all,!t_centos6
+  hosts: all,!t_centos6,!t_ubuntuxenial
   tasks:
+
+  - name: get locale
+    changed_when: false
+    command: locale
+    register: _locale
+  - debug: var=_locale
+
+  - name: tox is present in ~/.virtualenvs/molecule
+    command: ~/.virtualenvs/molecule/bin/tox --version
+    changed_when: false
 
   - name: molecule is present in ~/.virtualenvs/molecule
     changed_when: false
     command: ~/.virtualenvs/molecule/bin/molecule --version
     register: _molecule_version
 
+  - name: python 3
+    shell: |
+      set -o pipefail
+      ~/.virtualenvs/molecule/bin/molecule --version|grep "python==3"
+    changed_when: false
+    args:
+      executable: /bin/bash
+
+  - name: python 3
+    shell: |
+      set -o pipefail
+      ~/.virtualenvs/molecule/bin/pip --version|grep "python 3"
+    changed_when: false
+    args:
+      executable: /bin/bash
+
+  - name: tox is present ~/.virtualenvs/molecule-2.8
+    command: ~/.virtualenvs/molecule-2.8/bin/tox --version
+    changed_when: false
+
   - name: molecule is present ~/.virtualenvs/molecule-2.8
     changed_when: false
     command: ~/.virtualenvs/molecule-2.8/bin/molecule --version
     register: _molecule_version_28
 
+  - name: python 3.6 on RHEL 7
+    shell: |
+      set -o pipefail
+      ~/.virtualenvs/molecule-2.8/bin/molecule --version|grep "python==3"
+    changed_when: false
+    args:
+      executable: /bin/bash
+
+  - name: python 3
+    shell: |
+      set -o pipefail
+      ~/.virtualenvs/molecule-2.8/bin/pip --version|grep "python 3"
+    changed_when: false
+    args:
+      executable: /bin/bash
+
+  - name: tox is present ~/.virtualenvs/molecule2
+    command: ~/.virtualenvs/molecule2/bin/tox --version
+    changed_when: false
+
   - name: molecule is present ~/.virtualenvs/molecule2
     changed_when: false
     command: ~/.virtualenvs/molecule2/bin/molecule --version
     register: _molecule_version_2
+
+  - name: python 3
+    shell: |
+      set -o pipefail
+      ~/.virtualenvs/molecule2/bin/pip --version|grep "python 3"
+    changed_when: false
+    args:
+      executable: /bin/bash
 
   - name: molecule version
     loop:
@@ -58,6 +116,7 @@
       - _ansibles_version_28.stdout is match('ansible 2.8.*')
       - _ansibles_version_2.stdout is match('ansible 2.9.*')
 
+
 - name: Verify node
   hosts: all
   tasks:
@@ -65,6 +124,13 @@
   - name: openssl_privatekey is working
     openssl_privatekey:
       path: /tmp/privatekey
+
+  - name: selinux is working
+    copy:
+      content: bla
+      dest: /tmp/bla.txt
+      setype: ssh_home_t
+
 
 - name: verify pip
   hosts: t_centos8
@@ -74,6 +140,7 @@
       name: six
       virtualenv: "{{ ansible_user_dir }}/.virtualenvs/six"
       virtualenv_command: /usr/bin/python3 -m venv
+
 
 # no virtualenv for RHEL6, only RHEL7
 #
@@ -93,6 +160,7 @@
       name: six
       virtualenv: "{{ ansible_user_dir }}/.virtualenvs/six"
       virtualenv_command: /usr/bin/python3 -m venv
+
 
 - name: install python 2.7
   hosts: all,!t_centos8

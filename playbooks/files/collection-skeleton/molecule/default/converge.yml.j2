@@ -1,0 +1,14 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+- name: Set up proxy
+  hosts: t_proxy
+  roles:
+  - name: mafalb.squid.server
+
+- name: Converge
+  hosts: all,!t_proxy
+  role:
+  - role: "{{ collection }}.install"
+
+...

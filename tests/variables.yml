@@ -1,0 +1,16 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+- hosts: localhost
+  tasks:
+  - name: assert that we do not use reserved variable names
+    assert:
+      that:
+      - collection is not defined
+      - role is not defined
+      - galaxy_namespace is not defined
+      - author is not defined
+      - skeleton_path is not defined
+      - license is not defined
+
+...

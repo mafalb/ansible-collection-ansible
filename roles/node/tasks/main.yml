@@ -1,6 +1,11 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
+- name: Assertions
+  assert:
+    that:
+    - ansible_node_features|type_debug == 'list'
+
 - name: OS dependent variables
   with_first_found:
   - "{{ ansible_os_family }}-{{ ansible_distribution }}.yml"
@@ -10,10 +15,33 @@
   include_vars:
     file: "{{ item }}"
 
-- name: necessary packages are installed
+- name: necessary packages for package manager are installed
   become: true
   package:
-    name: "{{ ansible_node_dependencies }}"
+    name: "{{ ansible_node_dependencies['pkg_mgr'] }}"
     state: present
+  when: ansible_os_family == 'Debian'
+
+- name: necessary packages for selinux are installed
+  become: true
+  package:
+    name: "{{ ansible_node_dependencies['selinux'] }}"
+    state: present
+  when: "'selinux' in ansible_node_features"
+
+- name: necessary packages for crypto are installed
+  become: true
+  package:
+    name: "{{ ansible_node_dependencies['crypto'] }}"
+    state: present
+  when: "'crypto' in ansible_node_features"
+
+- name: necessary packages for pip are installed
+  become: true
+  package:
+    name: "{{ ansible_node_dependencies['pip'] }}"
+    state: present
+  when: "'pip' in ansible_node_features"
+
 
 ...

@@ -1,16 +1,16 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
+
 galaxy_info:
   author: Markus Falb
   description: Ansible role for molecule, ansible testing
   license: GPLv3
-  min_ansible_version: 2.8
+  min_ansible_version: 2.9
 
   platforms:
     - name: Ubuntu
       versions:
       - bionic
-      - xenial
     - name: EL
       versions:
       - 7
@@ -19,6 +19,7 @@ galaxy_info:
       versions:
       - 30
       - 31
+      - 32
 
   galaxy_tags:
     # List tags for your role here, one per line. A tag is a keyword that describes
@@ -30,4 +31,9 @@ galaxy_info:
     - ansible
     - molecule
 
-dependencies: []
+dependencies:
+- role: mafalb.ansible.node
+  ansible_node_features:
+  - pip
+
+...

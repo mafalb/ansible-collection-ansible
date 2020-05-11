@@ -1,0 +1,75 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+name: CI
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '40 11 * * 6'
+
+jobs:
+
+  CI:
+
+    runs-on: ubuntu-18.04
+
+    strategy:
+
+      fail-fast: false
+
+      matrix:
+
+        target:
+        - centos7
+        - centos8
+
+        include:
+
+        - target: centos7
+          image: centos
+          tag: 7
+
+        - target: centos8
+          image: centos
+          tag: 8
+
+    env:
+      CI_CONTAINER_IMAGE: ${{ matrix.image }}
+      CI_CONTAINER_TAG: ${{ matrix.tag }}
+      CI_CONTAINER_PRIVILEGED: true
+
+    steps:
+
+      - name: checkout collection
+        uses: actions/checkout@v1
+        with:
+          path: ansible_collections/mafalb/{{ collection_name }}
+
+      - name: checkout collection
+        if: false
+        uses: actions/checkout@v2
+        with:
+          path: ansible_collections/mafalb/ansible
+          repository: mafalb/ansible-collection-ansible
+          ref: dev
+
+      - name: mv ansible
+        if: false
+        run: |
+          mkdir -p ~/.ansible/collections/ansible_collections/mafalb
+          mv ansible_collections/mafalb/ansible ~/.ansible/collections/ansible_collections/mafalb/
+
+      - name: install dependencies
+        run: ansible-galaxy collection install -r molecule/requirements.yml
+
+      - name: install molecule
+        run: ansible-playbook -D molecule/install_molecule.yml
+
+      - name: run molecule tests
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          PY_COLORS=1 CI_CONTAINER_PRIVILEGED=true CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test
+
+...

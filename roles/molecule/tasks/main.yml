@@ -16,18 +16,6 @@
     that:
     - molecule_virtualenv is defined
 
-- debug:
-    var: ansible_python_version[0]|int
-  tags:
-  - never
-  - debug
-
-- debug:
-    var: molecule_python_major_version
-  tags:
-  - never
-  - debug
-
 - name: molecule_ansible_version
   debug:
     var: molecule_ansible_version
@@ -35,19 +23,13 @@
   - never
   - debug
 
-- name: epel is present
-  when:
-    - ansible_os_family == 'RedHat'
-    - ansible_distribution_major_version is version(8, '<')
-    - ansible_distribution != 'Fedora'
-  become: true
-  package:
-    name: epel-release
-
+# disable cr repo again when CentOS 7.8 is released
+#
 - name: molecules dependencies are present
   become: true
   package:
     name: "{{ molecule_system_dependencies }}"
+    enablerepo: "{{ molecule_enablerepo|default(omit) }}"
 
 # we can not use the system wide tmp dir
 # https://github.com/ansible/ansible/issues/57436
@@ -56,6 +38,18 @@
   file:
     path: "{{ molecule_virtualenv }}/../tmp"
     state: directory
+
+- name: get installed version of setuptools
+  command: "{{ molecule_virtualenv }}/bin/pip list"
+  changed_when: false
+  failed_when: false
+  register: _pip_list
+
+- debug:
+    var: _pip_list
+  tags:
+  - never
+  - debug
 
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
@@ -76,6 +70,17 @@
   environment:
     TMPDIR: "{{ molecule_virtualenv }}/../tmp"
 
+- name: get installed version of setuptools
+  command: "{{ molecule_virtualenv }}/bin/pip list"
+  changed_when: false
+  register: _pip_list
+
+- debug:
+    var: _pip_list
+  tags:
+  - never
+  - debug
+
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
 #
@@ -86,8 +91,20 @@
   pip:
     name:
     - molecule=={{ molecule_major_version }}.*
+    - tox
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
+
+- name: get installed version of setuptools
+  command: "{{ molecule_virtualenv }}/bin/pip list"
+  changed_when: false
+  register: _pip_list
+
+- debug:
+    var: _pip_list
+  tags:
+  - never
+  - debug
 
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967

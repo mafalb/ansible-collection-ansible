@@ -1,0 +1,6 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+ansible_node_features: []
+
+...

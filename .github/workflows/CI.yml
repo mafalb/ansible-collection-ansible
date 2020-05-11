@@ -26,12 +26,13 @@ jobs:
         - centos8
         - ubuntu-16.04
         - ubuntu-18.04
+        - ubuntu-20.04
         - fedora30
         - fedora31
+        - fedora32
 
         os:
         - ubuntu-18.04
-        - ubuntu-16.04
 
         ansible_version:
         - 2.9
@@ -51,13 +52,17 @@ jobs:
           distribution: centos
           version: 8
 
+        - target: ubuntu-16.04
+          distribution: ubuntu
+          version: xenial
+
         - target: ubuntu-18.04
           distribution: ubuntu
           version: bionic
 
-        - target: ubuntu-16.04
+        - target: ubuntu-20.04
           distribution: ubuntu
-          version: xenial
+          version: focal
 
         - target: fedora30
           distribution: fedora
@@ -66,6 +71,10 @@ jobs:
         - target: fedora31
           distribution: fedora
           version: 31
+
+        - target: fedora32
+          distribution: fedora
+          version: 32
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
@@ -81,15 +90,19 @@ jobs:
       
       - name: install molecule
         run: ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: '../../..'
+
+      - name: test playbooks
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          ansible-playbook tests/variables.yml
+          tests/role-init.sh
+          tests/collection-init.sh
 
       - name: run molecule tests
         run: |
           source ~/.virtualenvs/molecule/bin/activate 
-          PY_COLORS=1 CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule converge
-
-      - name: run molecule tests
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate 
-          PY_COLORS=1 CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule converge
+          PY_COLORS=1 CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test
 
 ...

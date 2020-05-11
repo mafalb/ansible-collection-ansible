@@ -1,9 +1,16 @@
-# Molecule managed
 
 {% if item.registry is defined %}
 FROM {{ item.registry.url }}/{{ item.image }}
 {% else %}
 FROM {{ item.image }}
+{% endif %}
+
+{% if item.image == 'centos:7' %}
+ENV LANG en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+{% else %}
+ENV LC_ALL C.UTF-8
+ENV LC_ALL C.UTF-8
 {% endif %}
 
 {% if item.env is defined %}
@@ -21,5 +28,3 @@ RUN if [ $(command -v apt-get) ]; then apt-get update && apt-get install -y pyth
     elif [ $(command -v apk) ]; then apk update && apk add --no-cache python sudo bash ca-certificates; \
     elif [ $(command -v xbps-install) ]; then xbps-install -Syu && xbps-install -y python sudo bash ca-certificates iproute2 && xbps-remove -O; fi
 
-ENV LC_ALL C.UTF-8
-ENV LANG C.UTF-8

@@ -1,14 +1,11 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
-molecule_virtualenv_command: /usr/bin/virtualenv
-molecule_python_major_version: 2
+#molecule_enablerepo: cr
 molecule_system_dependencies:
 - gcc
-- python-devel
+- python3-devel
 - openssl-devel
-- libselinux-python
-- yamllint
-- python-virtualenv
+- libselinux-python3
 
 ...
