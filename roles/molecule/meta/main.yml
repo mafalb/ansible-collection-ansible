@@ -31,9 +31,6 @@ galaxy_info:
     - ansible
     - molecule
 
-dependencies:
-- role: mafalb.ansible.node
-  ansible_node_features:
-  - pip
+dependencies: []
 
 ...
