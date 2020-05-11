@@ -1,8 +1,12 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
+# you may want to set ANSIBLE_COLLECTIONS_PATHS
+# e.g.
+# ANSIBLE_COLLECTIONS_PATHS=../../..
+#
 - hosts: localhost
   roles:
-    - role: molecule
+    - role: mafalb.ansible.molecule
 
 ...
