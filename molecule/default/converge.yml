@@ -39,5 +39,6 @@
     - role: mafalb.ansible.node
       ansible_node_features:
       - crypto
+      - pip
 
 ...
