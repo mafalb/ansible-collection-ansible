@@ -27,7 +27,6 @@ jobs:
         - ubuntu-16.04
         - ubuntu-18.04
         - ubuntu-20.04
-        - fedora30
         - fedora31
         - fedora32
 
