@@ -139,6 +139,13 @@
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
 
+- name: molecule[test] is installed
+  pip:
+    name:
+    - molecule[test]
+    virtualenv: "{{ molecule_virtualenv }}"
+    virtualenv_command: "{{ molecule_virtualenv_command }}"
+
 # _ansible_version does not work, i use _ansibles_version
 # reserved variable ?
 #

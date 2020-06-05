@@ -20,6 +20,10 @@
     command: ~/.virtualenvs/molecule/bin/molecule --version
     register: _molecule_version
 
+  - name: testinfra is present in ~/.virtualenvs/molecule
+    changed_when: false
+    command: ~/.virtualenvs/molecule/bin/py.test --version
+
   - name: python 3
     shell: |
       set -o pipefail
@@ -45,6 +49,10 @@
     command: ~/.virtualenvs/molecule-2.8/bin/molecule --version
     register: _molecule_version_28
 
+  - name: testinfra is present in ~/.virtualenvs/molecule-2.8
+    changed_when: false
+    command: ~/.virtualenvs/molecule-2.8/bin/py.test --version
+
   - name: python 3.6 on RHEL 7
     shell: |
       set -o pipefail
@@ -69,6 +77,10 @@
     changed_when: false
     command: ~/.virtualenvs/molecule2/bin/molecule --version
     register: _molecule_version_2
+
+  - name: testinfra is present in ~/.virtualenvs/molecule2
+    changed_when: false
+    command: ~/.virtualenvs/molecule2/bin/py.test --version
 
   - name: python 3
     shell: |

@@ -1,7 +1,7 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
-- hosts: localhost
+- hosts: "{{ hosts|default('localhost') }}"
 
   vars:
     skeleton_path: "{{ playbook_dir }}/files/role-skeleton"

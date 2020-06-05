@@ -93,16 +93,15 @@ jobs:
         env:
           ANSIBLE_COLLECTIONS_PATHS: '../../..'
 
-      - name: test playbooks
+      - name: test playbooks via simple shell scripts
         run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          ansible-playbook tests/variables.yml
           tests/role-init.sh
           tests/collection-init.sh
 
       - name: run molecule tests
         run: |
-          source ~/.virtualenvs/molecule/bin/activate 
+          source ~/.virtualenvs/molecule/bin/activate
+          CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test -s playbooks
           PY_COLORS=1 CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test
 
 ...
