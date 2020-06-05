@@ -32,6 +32,7 @@ jobs:
 
         os:
         - ubuntu-18.04
+        - ubuntu-20.04
 
         ansible_version:
         - 2.9
