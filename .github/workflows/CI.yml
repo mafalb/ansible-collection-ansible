@@ -31,6 +31,7 @@ jobs:
         - fedora32
 
         os:
+        - ubuntu-20.04
         - ubuntu-18.04
 
         ansible_version:
@@ -62,10 +63,6 @@ jobs:
         - target: ubuntu-20.04
           distribution: ubuntu
           version: focal
-
-        - target: fedora30
-          distribution: fedora
-          version: 30
 
         - target: fedora31
           distribution: fedora
