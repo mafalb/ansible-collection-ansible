@@ -85,7 +85,7 @@ jobs:
           path: ansible_collections/mafalb/ansible
       
       - name: install molecule
-        run: ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
+        run: ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }} -e molecule_major_version='3.0.4'
         env:
           ANSIBLE_COLLECTIONS_PATHS: '../../..'
 
