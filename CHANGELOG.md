@@ -5,7 +5,6 @@
 ### Added
 
 - molecule: install testinfra along with molecule
-- mafalb.ansible.lint experimental role
 - CHANGELOG
 
 ### Changed
