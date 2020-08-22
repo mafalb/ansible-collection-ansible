@@ -5,6 +5,7 @@
 ### Added
 
 - molecule: install testinfra along with molecule
+- CHANGELOG
 
 ### Changed
 
