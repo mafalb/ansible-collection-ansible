@@ -1,0 +1,8 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+- name: Converge molecule with default settings
+  hosts: localhost
+  tasks: []
+
+...

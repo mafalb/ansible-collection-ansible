@@ -27,11 +27,11 @@ jobs:
         - ubuntu-16.04
         - ubuntu-18.04
         - ubuntu-20.04
-        - fedora30
         - fedora31
         - fedora32
 
         os:
+        - ubuntu-20.04
         - ubuntu-18.04
 
         ansible_version:
@@ -64,10 +64,6 @@ jobs:
           distribution: ubuntu
           version: focal
 
-        - target: fedora30
-          distribution: fedora
-          version: 30
-
         - target: fedora31
           distribution: fedora
           version: 31
@@ -89,20 +85,19 @@ jobs:
           path: ansible_collections/mafalb/ansible
       
       - name: install molecule
-        run: ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
+        run: ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }} -e molecule_major_version='3.0.4'
         env:
           ANSIBLE_COLLECTIONS_PATHS: '../../..'
 
-      - name: test playbooks
+      - name: test playbooks via simple shell scripts
         run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          ansible-playbook tests/variables.yml
           tests/role-init.sh
           tests/collection-init.sh
 
       - name: run molecule tests
         run: |
-          source ~/.virtualenvs/molecule/bin/activate 
+          source ~/.virtualenvs/molecule/bin/activate
+          CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test -s playbooks
           PY_COLORS=1 CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test
 
 ...

@@ -1,7 +1,7 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
-- hosts: localhost
+- hosts: "{{ hosts|default('localhost') }}"
 
   vars:
     skeleton_path: "{{ playbook_dir }}/files/role-skeleton"
@@ -34,10 +34,12 @@
       template:
         src: meta.yml.j2
         dest: "{{ lookup('env', 'PWD') }}/{{ role_name if role.split('.')|length == 3 else role }}/meta/main.yml"
+        mode: 0644
 
     - name: create README
       template:
         src: role-README.md.j2
         dest: "{{ lookup('env', 'PWD') }}/{{ role_name if role.split('.')|length == 3 else role }}/README.md"
+        mode: 0644
 
 ...

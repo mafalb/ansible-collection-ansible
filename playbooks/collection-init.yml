@@ -1,7 +1,7 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
-- hosts: localhost
+- hosts: "{{ hosts|default('localhost') }}"
   vars:
     skeleton_path: "{{ playbook_dir }}/files/collection-skeleton"
 
@@ -32,5 +32,6 @@
       template:
         src: galaxy.yml.j2
         dest: "{{ lookup('env', 'PWD') }}/{{ galaxy_namespace }}/{{ collection_name }}/galaxy.yml"
+        mode: 0644
 
 ...
