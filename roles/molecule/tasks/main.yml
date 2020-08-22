@@ -48,6 +48,7 @@
   file:
     path: "{{ molecule_virtualenv }}/../tmp"
     state: directory
+    mode: 01777
 
 - name: get installed version of setuptools
   command: "{{ molecule_virtualenv }}/bin/pip list"

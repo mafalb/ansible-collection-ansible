@@ -32,5 +32,6 @@
       template:
         src: galaxy.yml.j2
         dest: "{{ lookup('env', 'PWD') }}/{{ galaxy_namespace }}/{{ collection_name }}/galaxy.yml"
+        mode: 0644
 
 ...

@@ -142,6 +142,7 @@
       content: bla
       dest: /tmp/bla.txt
       setype: ssh_home_t
+      mode: 0644
 
 
 - name: verify pip
