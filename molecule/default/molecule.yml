@@ -8,6 +8,7 @@ driver:
 
 lint: |
   set -e
+  PATH=${PATH}
   ! grep -r "no_log: false" .
   yamllint .
   ansible-lint -v
