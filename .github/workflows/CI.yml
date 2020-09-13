@@ -88,13 +88,6 @@ jobs:
         with:
           path: ansible_collections/mafalb/ansible
       
-      - name: check playbook and working dir
-        run: |
-          pwd
-          ls -l
-          ls -l ansible_collections/mafalb
-          ls -l bootstrap.yml
-
       - name: check ansible-playbook
         run: ansible-playbook --version
         
