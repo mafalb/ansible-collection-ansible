@@ -84,7 +84,7 @@ jobs:
         with:
           path: ansible_collections/mafalb/ansible
       
-      - name: check playbook
+      - name: check playbook and working dir
         run: |
           pwd
           ls -l
