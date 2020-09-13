@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.1.2 XXXX-XX-XX
+
+### Changes to CI
+
+- use actions/checkout@v2
+- use default working-dir
+- do not pin molecule version to 3.0.4 anymore
+
+
 ## v0.1.1 2020-08-22
 
 ### Added
