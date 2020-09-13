@@ -77,6 +77,10 @@ jobs:
       CI_CONTAINER_IMAGE: ${{ matrix.distribution }}
       CI_CONTAINER_TAG: ${{ matrix.version }}
 
+    defaults:
+      run:
+        working-directory: ansible_collections/mafalb/ansible
+
     steps:
 
       - name: checkout collection ansible
@@ -88,6 +92,7 @@ jobs:
         run: |
           pwd
           ls -l
+          ls -l ansible_collections/mafalb
           ls -l bootstrap.yml
 
       - name: check ansible-playbook
