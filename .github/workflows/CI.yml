@@ -77,15 +77,19 @@ jobs:
       CI_CONTAINER_IMAGE: ${{ matrix.distribution }}
       CI_CONTAINER_TAG: ${{ matrix.version }}
 
+    defaults:
+      run:
+        working-directory: ansible_collections/mafalb/ansible
+
     steps:
 
       - name: checkout collection ansible
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
         with:
           path: ansible_collections/mafalb/ansible
       
       - name: install molecule
-        run: ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }} -e molecule_major_version='3.0.4'
+        run: ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
         env:
           ANSIBLE_COLLECTIONS_PATHS: '../../..'
 
