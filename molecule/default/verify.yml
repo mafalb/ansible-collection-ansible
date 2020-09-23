@@ -125,6 +125,7 @@
     assert:
       that:
       - _ansibles_version.stdout is match('ansible')
+      - _ansibles_version.stdout is match('ansible 2.10.*')
       - _ansibles_version_29.stdout is match('ansible 2.9.*')
       - _ansibles_version_2.stdout is match('ansible 2.10.*')
 
