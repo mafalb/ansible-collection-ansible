@@ -35,8 +35,7 @@ jobs:
         - ubuntu-18.04
 
         ansible_version:
-        - 2.9
-        - 2.8
+        - '2.10'
 
         include:
 
