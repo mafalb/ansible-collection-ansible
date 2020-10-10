@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.1.3 XXXX-XX-XX
+
+### Changes to CI
+
+- check ansible versions
+
 ## v0.1.2 2020-10-10
 
 ### Changes
