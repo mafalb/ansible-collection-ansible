@@ -1,6 +1,11 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
+- name: log ansible version
+  hosts: all
+  tasks:
+  - shell: echo {{ ansible_version.major }}.{{ ansible_version.minor }} >>/tmp/ci_ansible_versions.log
+
 - name: Converge molecule with default settings
   hosts: all,!t_centos6,!t_ubuntuxenial
 

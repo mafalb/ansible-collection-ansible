@@ -107,4 +107,10 @@ jobs:
           CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test -s playbooks
           PY_COLORS=1 CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test
 
+      - name: check ansible versions
+        run: |
+          cat /tmp/ci_ansible_versions.log
+          grep '2.9' /tmp/ci_ansible_versions.log
+          grep '2.10' /tmp/ci_ansible_versions.log
+          wc -l /tmp/ci_ansible_versions.log | grep ^2
 ...
