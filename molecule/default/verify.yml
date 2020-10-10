@@ -40,23 +40,23 @@
     args:
       executable: /bin/bash
 
-  - name: tox is present ~/.virtualenvs/molecule-2.8
-    command: ~/.virtualenvs/molecule-2.8/bin/tox --version
+  - name: tox is present ~/.virtualenvs/molecule-2.9
+    command: ~/.virtualenvs/molecule-2.9/bin/tox --version
     changed_when: false
 
-  - name: molecule is present ~/.virtualenvs/molecule-2.8
+  - name: molecule is present ~/.virtualenvs/molecule-2.9
     changed_when: false
-    command: ~/.virtualenvs/molecule-2.8/bin/molecule --version
-    register: _molecule_version_28
+    command: ~/.virtualenvs/molecule-2.9/bin/molecule --version
+    register: _molecule_version_29
 
-  - name: testinfra is present in ~/.virtualenvs/molecule-2.8
+  - name: testinfra is present in ~/.virtualenvs/molecule-2.9
     changed_when: false
-    command: ~/.virtualenvs/molecule-2.8/bin/py.test --version
+    command: ~/.virtualenvs/molecule-2.9/bin/py.test --version
 
   - name: python 3.6 on RHEL 7
     shell: |
       set -o pipefail
-      ~/.virtualenvs/molecule-2.8/bin/molecule --version|grep "python==3"
+      ~/.virtualenvs/molecule-2.9/bin/molecule --version|grep "python==3"
     changed_when: false
     args:
       executable: /bin/bash
@@ -64,7 +64,7 @@
   - name: python 3
     shell: |
       set -o pipefail
-      ~/.virtualenvs/molecule-2.8/bin/pip --version|grep "python 3"
+      ~/.virtualenvs/molecule-2.9/bin/pip --version|grep "python 3"
     changed_when: false
     args:
       executable: /bin/bash
@@ -93,7 +93,7 @@
   - name: molecule version
     loop:
     - _molecule_version.stdout
-    - _molecule_version_28.stdout
+    - _molecule_version_29.stdout
     - _molecule_version_2.stdout
     debug:
       var: "{{ item }}"
@@ -103,12 +103,12 @@
     command: ~/.virtualenvs/molecule/bin/ansible --version
     register: _ansibles_version
 
-  - name: ansible 2.8 is present
+  - name: ansible 2.9 is present
     changed_when: false
-    command: ~/.virtualenvs/molecule-2.8/bin/ansible --version
-    register: _ansibles_version_28
+    command: ~/.virtualenvs/molecule-2.9/bin/ansible --version
+    register: _ansibles_version_29
 
-  - name: ansible 2.8 is present
+  - name: ansible 2.9 is present
     changed_when: false
     command: ~/.virtualenvs/molecule2/bin/ansible --version
     register: _ansibles_version_2
@@ -116,7 +116,7 @@
   - name: ansible version
     loop:
     - _ansibles_version.stdout
-    - _ansibles_version_28.stdout
+    - _ansibles_version_29.stdout
     - _ansibles_version_2.stdout
     debug:
       var: "{{ item }}"
@@ -125,8 +125,9 @@
     assert:
       that:
       - _ansibles_version.stdout is match('ansible')
-      - _ansibles_version_28.stdout is match('ansible 2.8.*')
-      - _ansibles_version_2.stdout is match('ansible 2.9.*')
+      - _ansibles_version.stdout is match('ansible 2.10.*')
+      - _ansibles_version_29.stdout is match('ansible 2.9.*')
+      - _ansibles_version_2.stdout is match('ansible 2.10.*')
 
 
 - name: Verify node
