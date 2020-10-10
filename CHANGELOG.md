@@ -1,6 +1,10 @@
 # Changelog
 
-## v0.1.2 XXXX-XX-XX
+## v0.1.2 2020-10-10
+
+### Changes
+
+- use ansible 2.10 by default
 
 ### Changes to CI
 
