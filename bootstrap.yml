@@ -8,5 +8,6 @@
 - hosts: localhost
   roles:
     - role: mafalb.ansible.molecule
+      molecule_ansible_version: '2.10'
 
 ...

@@ -35,8 +35,8 @@ jobs:
         - ubuntu-18.04
 
         ansible_version:
-        - 2.9
-        - 2.8
+        - '2.10'
+        - '2.9'
 
         include:
 
@@ -88,11 +88,10 @@ jobs:
         with:
           path: ansible_collections/mafalb/ansible
       
-      - name: check ansible-playbook
-        run: ansible-playbook --version
-        
       - name: install molecule
-        run: ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
+        run: |
+          sudo apt-get update
+          ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
         env:
           ANSIBLE_COLLECTIONS_PATHS: '../../..'
 
