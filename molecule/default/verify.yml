@@ -189,7 +189,7 @@
       path: /tmp/privatekey
 
 - name: log ansible version
-  hosts: all
+  hosts: localhost
   tasks:
   - name: log ansible version # noqa 301
     shell: echo {{ ansible_version.major }}.{{ ansible_version.minor }} >>/tmp/ci_ansible_versions.log
