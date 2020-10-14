@@ -76,6 +76,8 @@ jobs:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
       CI_CONTAINER_IMAGE: ${{ matrix.distribution }}
       CI_CONTAINER_TAG: ${{ matrix.version }}
+      PY_COLORS: 1
+      ANSIBLE_FORCE_COLOR: 1
 
     defaults:
       run:
@@ -107,10 +109,14 @@ jobs:
           tests/role-init.sh
           tests/collection-init.sh
 
-      - name: run molecule tests
+      - name: molecule tests for playbooks
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test -s playbooks
-          PY_COLORS=1 CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test
+
+      - name: molecule tests
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test
 
 ...

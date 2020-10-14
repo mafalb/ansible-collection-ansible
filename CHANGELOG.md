@@ -5,6 +5,7 @@
 ### Changes to CI
 
 - check ansible versions
+- colored output for molecule runs
 
 ## v0.1.2 2020-10-10
 
