@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.1.3 XXXX-XX-XX
+## v0.1.3 2010-10-17
 
 ### Changes to CI
 
