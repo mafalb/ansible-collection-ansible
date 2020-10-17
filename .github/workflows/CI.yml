@@ -5,7 +5,6 @@ name: CI
 
 on: 
   push:
-  pull_request:  
   schedule:
   - cron: '40 12 * * 6'
 
@@ -76,6 +75,8 @@ jobs:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
       CI_CONTAINER_IMAGE: ${{ matrix.distribution }}
       CI_CONTAINER_TAG: ${{ matrix.version }}
+      PY_COLORS: 1
+      ANSIBLE_FORCE_COLOR: 1
 
     defaults:
       run:
@@ -88,22 +89,33 @@ jobs:
         with:
           path: ansible_collections/mafalb/ansible
       
+      - name: update apt cache
+        run: sudo apt-get update
+
       - name: install molecule
         run: |
-          sudo apt-get update
           ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
         env:
           ANSIBLE_COLLECTIONS_PATHS: '../../..'
+
+      - name: check ansible version
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          ansible --version | grep "^ansible ${{ matrix.ansible_version }}"
 
       - name: test playbooks via simple shell scripts
         run: |
           tests/role-init.sh
           tests/collection-init.sh
 
-      - name: run molecule tests
+      - name: molecule tests for playbooks
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test -s playbooks
-          PY_COLORS=1 CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test
+
+      - name: molecule tests
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test
 
 ...
