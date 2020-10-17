@@ -17,7 +17,7 @@
 
   - name: molecule is present in ~/.virtualenvs/molecule
     changed_when: false
-    command: ~/.virtualenvs/molecule/bin/molecule --version
+    shell: . ~/.virtualenvs/molecule/bin/activate; molecule --version
     register: _molecule_version
 
   - name: testinfra is present in ~/.virtualenvs/molecule
@@ -27,7 +27,8 @@
   - name: python 3
     shell: |
       set -o pipefail
-      ~/.virtualenvs/molecule/bin/molecule --version|grep "python==3"
+      . ~/.virtualenvs/molecule/bin/activate
+      molecule --version|grep "python==3"
     changed_when: false
     args:
       executable: /bin/bash
@@ -46,7 +47,9 @@
 
   - name: molecule is present ~/.virtualenvs/molecule-2.9
     changed_when: false
-    command: ~/.virtualenvs/molecule-2.9/bin/molecule --version
+    shell: |
+      . ~/.virtualenvs/molecule-2.9/bin/activate
+      molecule --version
     register: _molecule_version_29
 
   - name: testinfra is present in ~/.virtualenvs/molecule-2.9
@@ -56,7 +59,8 @@
   - name: python 3.6 on RHEL 7
     shell: |
       set -o pipefail
-      ~/.virtualenvs/molecule-2.9/bin/molecule --version|grep "python==3"
+      . ~/.virtualenvs/molecule-2.9/bin/activate
+      molecule --version|grep "python==3"
     changed_when: false
     args:
       executable: /bin/bash
