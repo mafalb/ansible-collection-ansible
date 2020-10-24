@@ -14,12 +14,6 @@
   hosts: all,!t_centos6,!t_ubuntuxenial
   roles:
 
-  - name: install previous version of molecule
-    role: mafalb.ansible.molecule
-    molecule_major_version: 2
-    molecule_virtualenv: ~/.virtualenvs/molecule2
-
-
 - name: Converge molecule with a specific version of ansible
   hosts: all,!t_centos6,!t_ubuntuxenial
   vars:
