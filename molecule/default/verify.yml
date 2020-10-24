@@ -24,6 +24,8 @@
     changed_when: false
     command: ~/.virtualenvs/molecule/bin/py.test --version
 
+  # the output format of molecule --version changed in molecule 3.1.4
+  #
   - name: python 3
     shell: |
       set -o pipefail
@@ -56,6 +58,8 @@
     changed_when: false
     command: ~/.virtualenvs/molecule-2.9/bin/py.test --version
 
+  # the output format of molecule --version changed in molecule 3.1.4
+  #
   - name: python 3.6 on RHEL 7
     shell: |
       set -o pipefail

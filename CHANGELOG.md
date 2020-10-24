@@ -1,6 +1,12 @@
 # Changelog
 
-## v0.1.3 XXXX-XX-XX
+## v0.2.0 XXXX-XX-XX
+
+### CHANGES
+
+- remove support for molecule 2
+
+## v0.1.3 2010-10-17
 
 ### Changes to CI
 
