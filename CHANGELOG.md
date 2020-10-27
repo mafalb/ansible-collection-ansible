@@ -5,6 +5,7 @@
 ### CHANGES
 
 - remove support for molecule 2
+- added variables for updating molecule and ansible
 
 ## v0.1.3 2010-10-17
 
