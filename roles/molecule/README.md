@@ -32,10 +32,22 @@ Variables are optional. Only specify them if you want to override the defaults.
 molecule_major_version: 3
 ```
 
+```molecule_update``` Set if you want to update an existent installation of molecule
+
+```yaml
+molecule_update: true
+```
+
 ```molecule_ansible_version``` set the ansible version you want to test against
 
 ```yaml
 molecule_ansible_version: 2.9
+```
+
+```molecule_update_ansible``` if you want to update ansible
+
+```yaml
+molecule_update_ansible: true
 ```
 
 ```molecule_virtualenv``` set the path to the virtualenv. Specify a absolute path. ```~/something``` will not work.
