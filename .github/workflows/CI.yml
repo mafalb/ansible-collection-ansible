@@ -1,7 +1,7 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
-name: ansible
+name: CI
 
 on: 
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
 
-  ansible:
+  CI:
 
     runs-on: ${{ matrix.os }}
 
@@ -20,10 +20,8 @@ jobs:
       matrix:
 
         target:
-        - centos6
         - centos7
         - centos8
-        - ubuntu-16.04
         - ubuntu-18.04
         - ubuntu-20.04
         - fedora31
@@ -39,10 +37,6 @@ jobs:
 
         include:
 
-        - target: centos6
-          distribution: centos
-          version: 6
-
         - target: centos7
           distribution: centos
           version: 7
@@ -50,10 +44,6 @@ jobs:
         - target: centos8
           distribution: centos
           version: 8
-
-        - target: ubuntu-16.04
-          distribution: ubuntu
-          version: xenial
 
         - target: ubuntu-18.04
           distribution: ubuntu
@@ -117,5 +107,10 @@ jobs:
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           molecule test -s node
+
+      - name: molecule tests for molecule
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule test
 
 ...

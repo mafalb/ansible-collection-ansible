@@ -1,7 +1,7 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
-name: molecule
+name: node-only
 
 on: 
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
 
-  molecule:
+  node-only:
 
     runs-on: ${{ matrix.os }}
 
@@ -20,12 +20,8 @@ jobs:
       matrix:
 
         target:
-        - centos7
-        - centos8
-        - ubuntu-18.04
-        - ubuntu-20.04
-        - fedora31
-        - fedora32
+        - centos6
+        - ubuntu-16.04
 
         os:
         - ubuntu-20.04
@@ -37,6 +33,10 @@ jobs:
 
         include:
 
+        - target: centos6
+          distribution: centos
+          version: 6
+
         - target: centos7
           distribution: centos
           version: 7
@@ -44,6 +44,10 @@ jobs:
         - target: centos8
           distribution: centos
           version: 8
+
+        - target: ubuntu-16.04
+          distribution: ubuntu
+          version: xenial
 
         - target: ubuntu-18.04
           distribution: ubuntu
@@ -93,9 +97,19 @@ jobs:
           source ~/.virtualenvs/molecule/bin/activate
           ansible --version | grep "^ansible ${{ matrix.ansible_version }}"
 
-      - name: molecule tests for molecule
+      - name: test playbooks via simple shell scripts
+        run: |
+          tests/role-init.sh
+          tests/collection-init.sh
+
+      - name: molecule tests for playbooks
         run: |
           source ~/.virtualenvs/molecule/bin/activate
-          molecule test
+          molecule test -s playbooks
+
+      - name: molecule tests for ansible node
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule test -s node
 
 ...
