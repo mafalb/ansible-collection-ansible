@@ -37,33 +37,9 @@ jobs:
           distribution: centos
           version: 6
 
-        - target: centos7
-          distribution: centos
-          version: 7
-
-        - target: centos8
-          distribution: centos
-          version: 8
-
         - target: ubuntu-16.04
           distribution: ubuntu
           version: xenial
-
-        - target: ubuntu-18.04
-          distribution: ubuntu
-          version: bionic
-
-        - target: ubuntu-20.04
-          distribution: ubuntu
-          version: focal
-
-        - target: fedora31
-          distribution: fedora
-          version: 31
-
-        - target: fedora32
-          distribution: fedora
-          version: 32
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
