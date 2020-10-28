@@ -1,7 +1,7 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
-name: node-only
+name: node
 
 on: 
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
 
-  node-only:
+  node:
 
     runs-on: ${{ matrix.os }}
 
