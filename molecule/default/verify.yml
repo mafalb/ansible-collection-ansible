@@ -2,7 +2,7 @@
 ---
 
 - name: Verify molecule
-  hosts: all,!t_centos6,!t_ubuntuxenial
+  hosts: all
   tasks:
 
   - name: get locale
@@ -109,21 +109,6 @@
       - _ansibles_version_29.stdout is match('ansible 2.9.*')
 
 
-- name: Verify node
-  hosts: all
-  tasks:
-
-  - name: openssl_privatekey is working
-    openssl_privatekey:
-      path: /tmp/privatekey
-
-  - name: selinux is working
-    copy:
-      content: bla
-      dest: /tmp/bla.txt
-      setype: ssh_home_t
-      mode: 0644
-
 
 - name: verify pip
   hosts: t_centos8
@@ -153,18 +138,5 @@
       name: six
       virtualenv: "{{ ansible_user_dir }}/.virtualenvs/six"
       virtualenv_command: /usr/bin/python3 -m venv
-
-
-- name: install python 2.7
-  hosts: all,!t_centos8
-  tasks:
-  - name: python 2.7 is installed
-    package:
-      name:
-      - python
-
-  - name: openssl_privatekey is working
-    openssl_privatekey:
-      path: /tmp/privatekey
 
 ...
