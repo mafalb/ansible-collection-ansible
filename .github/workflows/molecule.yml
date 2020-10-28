@@ -1,0 +1,101 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+name: molecule
+
+on: 
+  push:
+  schedule:
+  - cron: '40 12 * * 6'
+
+jobs:
+
+  molecule:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+
+        target:
+        - centos7
+        - centos8
+        - ubuntu-18.04
+        - ubuntu-20.04
+        - fedora31
+        - fedora32
+
+        os:
+        - ubuntu-20.04
+        - ubuntu-18.04
+
+        ansible_version:
+        - '2.10'
+        - '2.9'
+
+        include:
+
+        - target: centos7
+          distribution: centos
+          version: 7
+
+        - target: centos8
+          distribution: centos
+          version: 8
+
+        - target: ubuntu-18.04
+          distribution: ubuntu
+          version: bionic
+
+        - target: ubuntu-20.04
+          distribution: ubuntu
+          version: focal
+
+        - target: fedora31
+          distribution: fedora
+          version: 31
+
+        - target: fedora32
+          distribution: fedora
+          version: 32
+
+    env:
+      ANSIBLE_VERSION: ${{ matrix.ansible_version }}
+      CI_CONTAINER_IMAGE: ${{ matrix.distribution }}
+      CI_CONTAINER_TAG: ${{ matrix.version }}
+      PY_COLORS: 1
+      ANSIBLE_FORCE_COLOR: 1
+
+    defaults:
+      run:
+        working-directory: ansible_collections/mafalb/ansible
+
+    steps:
+
+      - name: checkout collection ansible
+        uses: actions/checkout@v2
+        with:
+          path: ansible_collections/mafalb/ansible
+      
+      - name: update apt cache
+        run: sudo apt-get update
+
+      - name: install molecule
+        run: |
+          ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: '../../..'
+
+      - name: check ansible version
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          ansible --version | grep "^ansible ${{ matrix.ansible_version }}"
+
+      - name: molecule tests for molecule
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule test
+
+...
