@@ -10,6 +10,11 @@
       - '2.9.9'
       - '2.9'
 
+  module_defaults:
+    shell:
+      args:
+        executable: /bin/bash
+
   tasks:
 
   - name: get locale
