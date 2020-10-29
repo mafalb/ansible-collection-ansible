@@ -19,7 +19,7 @@
 
   - debug: var=_locale
 
-  - name: ansible is present
+  - name: ansible is present - molecule{{ item }}
     shell: |
       set -o pipefail
       . ~/.virtualenvs/molecule{{ item }}/bin/activate
@@ -28,7 +28,7 @@
     loop: "{{ ansible.versions }}"
     register: _ansibles_version
 
-  - name: molecule is present
+  - name: molecule is present - molecule{{ item }}
     shell: |
       set -o pipefail
       . ~/.virtualenvs/molecule{{ item }}/bin/activate
@@ -44,16 +44,14 @@
     loop_control:
       loop_var: _ansibleversion
 
-  - debug: var=_ansibles_version
-
   - name: assertions
     assert:
       that:
-      - _ansibles_version.results[0].stdout is match('ansible')
-      - _ansibles_version.results[0].stdout is match('ansible 2.10.*')
-      - _ansibles_version.results[1].stdout is match('ansible 2.9.9')
-      - _ansibles_version.results[2].stdout is match('ansible 2.9.*')
-      - _ansibles_version.results[2].stdout is version(ansibles_version.results[1].stdout, '>')
-      - _ansibles_version.results[2].stdout is version(2.10, '<')
+      - _ansibles_version.results[0].stdout_lines[0] is match('ansible')
+      - _ansibles_version.results[0].stdout_lines[0] is match('ansible 2.10.*')
+      - _ansibles_version.results[1].stdout_lines[0] is match('ansible 2.9.9')
+      - _ansibles_version.results[2].stdout_lines[0] is match('ansible 2.9.*')
+      - _ansibles_version.results[2].stdout_lines[0].split()[1] is version(_ansibles_version.results[1].stdout_lines[0].split()[1], '>')
+      - _ansibles_version.results[2].stdout_lines[0].split()[1] is version('2.10', '<')
 
 ...
