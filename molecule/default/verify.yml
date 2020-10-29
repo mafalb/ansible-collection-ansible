@@ -3,140 +3,55 @@
 
 - name: Verify molecule
   hosts: all
+  vars:
+    ansible:
+      versions:
+      - ''
+      - '2.9'
+      - '2.9.9'
+
   tasks:
 
   - name: get locale
     changed_when: false
     command: locale
     register: _locale
+
   - debug: var=_locale
 
-  - name: tox is present in ~/.virtualenvs/molecule
-    command: ~/.virtualenvs/molecule/bin/tox --version
-    changed_when: false
-
-  - name: molecule is present in ~/.virtualenvs/molecule
-    changed_when: false
-    shell: . ~/.virtualenvs/molecule/bin/activate; molecule --version
-    register: _molecule_version
-
-  - name: testinfra is present in ~/.virtualenvs/molecule
-    changed_when: false
-    command: ~/.virtualenvs/molecule/bin/py.test --version
-
-  # the output format of molecule --version changed in molecule 3.1.4
-  #
-  - name: python 3
+  - name: ansible is present
     shell: |
       set -o pipefail
-      . ~/.virtualenvs/molecule/bin/activate
-      molecule --version|grep -E "python(==|:)3"
+      . ~/.virtualenvs/molecule{{ item }}/bin/activate
+      ansible --version
     changed_when: false
-    args:
-      executable: /bin/bash
-
-  - name: python 3
-    shell: |
-      set -o pipefail
-      ~/.virtualenvs/molecule/bin/pip --version|grep "python 3"
-    changed_when: false
-    args:
-      executable: /bin/bash
-
-  - name: tox is present ~/.virtualenvs/molecule-2.9
-    command: ~/.virtualenvs/molecule-2.9/bin/tox --version
-    changed_when: false
-
-  - name: molecule is present ~/.virtualenvs/molecule-2.9
-    changed_when: false
-    shell: |
-      . ~/.virtualenvs/molecule-2.9/bin/activate
-      molecule --version
-    register: _molecule_version_29
-
-  - name: testinfra is present in ~/.virtualenvs/molecule-2.9
-    changed_when: false
-    command: ~/.virtualenvs/molecule-2.9/bin/py.test --version
-
-  # the output format of molecule --version changed in molecule 3.1.4
-  #
-  - name: python 3.6 on RHEL 7
-    shell: |
-      set -o pipefail
-      . ~/.virtualenvs/molecule-2.9/bin/activate
-      molecule --version|grep -E "python(==|:)3"
-    changed_when: false
-    args:
-      executable: /bin/bash
-
-  - name: python 3
-    shell: |
-      set -o pipefail
-      ~/.virtualenvs/molecule-2.9/bin/pip --version|grep "python 3"
-    changed_when: false
-    args:
-      executable: /bin/bash
-
-  - name: molecule version
-    loop:
-    - _molecule_version.stdout
-    - _molecule_version_29.stdout
-    debug:
-      var: "{{ item }}"
-
-  - name: ansible is present in .virtualenvs/molecule
-    changed_when: false
-    command: ~/.virtualenvs/molecule/bin/ansible --version
+    loop: "{{ ansible.versions }}"
     register: _ansibles_version
 
-  - name: ansible 2.9 is present
+  - name: molecule is present
+    shell: |
+      set -o pipefail
+      . ~/.virtualenvs/molecule{{ item }}/bin/activate
+      molecule --version
     changed_when: false
-    command: ~/.virtualenvs/molecule-2.9/bin/ansible --version
-    register: _ansibles_version_29
+    loop: "{{ ansible.versions }}"
+    register: _molecules_ansible_version
 
-  - name: ansible version
-    loop:
-    - _ansibles_version.stdout
-    - _ansibles_version_29.stdout
-    debug:
-      var: "{{ item }}"
+  - name: verify molecule installation
+    include_tasks:
+      file: verify_molecule.yml
+    loop: "{{ ansible.versions }}"
+    loop_control:
+      loop_var: _ansibleversion
+
+  - debug: var=_ansibles_version
 
   - name: assertions
     assert:
       that:
-      - _ansibles_version.stdout is match('ansible')
-      - _ansibles_version.stdout is match('ansible 2.10.*')
-      - _ansibles_version_29.stdout is match('ansible 2.9.*')
-
-
-
-- name: verify pip
-  hosts: t_centos8
-  tasks:
-  - name: pip with virtualenv_command is working
-    pip:
-      name: six
-      virtualenv: "{{ ansible_user_dir }}/.virtualenvs/six"
-      virtualenv_command: /usr/bin/python3 -m venv
-
-
-# no virtualenv for RHEL6, only RHEL7
-#
-- name: verify pip
-  hosts: t_centos7
-  tasks:
-  - name: pip with virtualenv_command is working
-    pip:
-      name: six
-      virtualenv: "{{ ansible_user_dir }}/.virtualenvs/six"
-
-- name: verify pip
-  hosts: all,!t_centos7,!t_centos6
-  tasks:
-  - name: pip with virtualenv_command is working
-    pip:
-      name: six
-      virtualenv: "{{ ansible_user_dir }}/.virtualenvs/six"
-      virtualenv_command: /usr/bin/python3 -m venv
+      - _ansibles_version.results[0].stdout is match('ansible')
+      - _ansibles_version.results[0].stdout is match('ansible 2.10.*')
+      - _ansibles_version.results[1].stdout is match('ansible 2.9.*')
+      - _ansibles_version.results[2].stdout is match('ansible 2.9.9')
 
 ...

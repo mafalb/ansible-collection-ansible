@@ -9,16 +9,12 @@
   - name: install molecule with default settings
     role: mafalb.ansible.molecule
 
+  - role: mafalb.ansible.molecule
+    molecule_ansible_version: '2.9'
+    molecule_virtualenv: ~/.virtualenvs/molecule2.9
 
-- name: Converge molecule with a specific version of ansible
-  hosts: all
-  vars:
-    ansibles_version: '2.9'
-
-  roles:
-
-    - role: mafalb.ansible.molecule
-      molecule_ansible_version: "{{ ansibles_version }}"
-      molecule_virtualenv: ~/.virtualenvs/molecule-{{ ansibles_version }}
+  - role: mafalb.ansible.molecule
+    molecule_ansible_version: '2.9.9'
+    molecule_virtualenv: ~/.virtualenvs/molecule2.9.9
 
 ...
