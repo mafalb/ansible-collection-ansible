@@ -7,6 +7,10 @@
 - remove support for molecule 2
 - added variables for updating molecule and ansible
 
+### CI
+
+- test on Fedora 33
+
 ## v0.1.3 2010-10-17
 
 ### Changes to CI
