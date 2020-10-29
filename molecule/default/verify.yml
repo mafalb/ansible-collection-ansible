@@ -7,8 +7,8 @@
     ansible:
       versions:
       - ''
-      - '2.9'
       - '2.9.9'
+      - '2.9'
 
   tasks:
 
@@ -51,7 +51,9 @@
       that:
       - _ansibles_version.results[0].stdout is match('ansible')
       - _ansibles_version.results[0].stdout is match('ansible 2.10.*')
-      - _ansibles_version.results[1].stdout is match('ansible 2.9.*')
-      - _ansibles_version.results[2].stdout is match('ansible 2.9.9')
+      - _ansibles_version.results[1].stdout is match('ansible 2.9.9')
+      - _ansibles_version.results[2].stdout is match('ansible 2.9.*')
+      - _ansibles_version.results[2].stdout is version(ansibles_version.results[1].stdout, '>')
+      - _ansibles_version.results[2].stdout is version(2.10, '<')
 
 ...
