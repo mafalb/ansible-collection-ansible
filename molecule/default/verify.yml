@@ -7,8 +7,8 @@
     ansible:
       versions:
       - ''
-      - '2.9.9'
-      - '2.9'
+      - 'ansible2.9.9'
+      - 'ansible2.9'
 
   module_defaults:
     shell:
@@ -54,5 +54,37 @@
       - _ansibles_version.results[2].stdout_lines[0] is match('ansible 2.9.*')
       - _ansibles_version.results[2].stdout_lines[0].split()[1] is version(_ansibles_version.results[1].stdout_lines[0].split()[1], '>')
       - _ansibles_version.results[2].stdout_lines[0].split()[1] is version('2.10', '<')
+
+
+
+- name: Verify side effects
+  hosts: all
+  vars:
+    ansible:
+      versions:
+      - ''
+      - 'ansible2.9.9'
+      - 'ansible2.9'
+    files:
+    - tests/testcollection/galaxy.yml
+    - tests/testcollection/roles/testrole/README.md
+    - tests.testrole/README.md
+
+  tasks:
+
+  - name: assert that we do not use reserved variable names
+    assert:
+      that:
+      - collection is not defined
+      - role is not defined
+      - galaxy_namespace is not defined
+      - author is not defined
+      - skeleton_path is not defined
+      - license is not defined
+
+  - name: special files in collection and roles are present
+    file:
+      path: "/tmp/molecule{{ item[0] }}/{{ item[1] }}"
+    loop: "{{ ansible.versions | product(files) }}"
 
 ...

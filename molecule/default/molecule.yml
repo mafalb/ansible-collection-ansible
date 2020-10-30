@@ -21,6 +21,8 @@ platforms:
 
 provisioner:
   name: ansible
+  playbooks:
+    side_effect: side_effect.yml
   ansible_args:
     - --tags=all,debug
     - --diff
