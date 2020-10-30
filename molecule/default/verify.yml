@@ -12,8 +12,7 @@
 
   module_defaults:
     shell:
-      args:
-        executable: /bin/bash
+      executable: /bin/bash
 
   tasks:
 
@@ -24,18 +23,16 @@
 
   - debug: var=_locale
 
-  - name: ansible is present - molecule{{ item }}
+  - name: ansible is present - molecule
     shell: |
-      set -o pipefail
       . ~/.virtualenvs/molecule{{ item }}/bin/activate
       ansible --version
     changed_when: false
     loop: "{{ ansible.versions }}"
     register: _ansibles_version
 
-  - name: molecule is present - molecule{{ item }}
+  - name: molecule is present - molecule
     shell: |
-      set -o pipefail
       . ~/.virtualenvs/molecule{{ item }}/bin/activate
       molecule --version
     changed_when: false
@@ -43,8 +40,7 @@
     register: _molecules_ansible_version
 
   - name: verify molecule installation
-    include_tasks:
-      file: verify_molecule.yml
+    include_tasks: verify_molecule.yml
     loop: "{{ ansible.versions }}"
     loop_control:
       loop_var: _ansibleversion
