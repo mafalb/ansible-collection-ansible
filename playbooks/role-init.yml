@@ -33,6 +33,7 @@
     - name: get directory listing
       command: find . -ls
       register: _listing
+      changed_when: false
 
     - debug: var=_listing
 
