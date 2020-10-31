@@ -82,9 +82,11 @@
       - skeleton_path is not defined
       - license is not defined
 
+  # cast loop argument to a list to make ansible 2.9 happy
+  #
   - name: special files in collection and roles are present
     file:
       path: "/tmp/molecule{{ item[0] }}/{{ item[1] }}"
-    loop: "{{ ansible.versions | product(files) }}"
+    loop: "{{ ansible.versions | product(files) | list }}"
 
 ...
