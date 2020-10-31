@@ -2,7 +2,7 @@
 ---
 
 - name: Converge molecule with default settings
-  hosts: all
+  hosts: all,!t_centos6,!t_ubuntuxenial
 
   roles:
 

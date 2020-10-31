@@ -2,7 +2,7 @@
 ---
 
 - name: Verify molecule
-  hosts: all
+  hosts: all,!t_centos6,!t_ubuntuxenial
   vars:
     ansible:
       versions:
@@ -58,7 +58,7 @@
 
 
 - name: Verify side effects
-  hosts: all
+  hosts: all,!t_centos6,!t_ubuntuxenial
   vars:
     ansible:
       versions:

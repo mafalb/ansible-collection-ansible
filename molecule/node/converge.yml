@@ -2,7 +2,7 @@
 ---
 
 - name: Converge ansible node features
-  hosts: all
+  hosts: t_centos6, t_ubuntuxenial
   roles:
 
     - role: mafalb.ansible.node

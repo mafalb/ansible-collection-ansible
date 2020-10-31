@@ -20,8 +20,10 @@ jobs:
       matrix:
 
         target:
+        - centos6
         - centos7
         - centos8
+        - ubuntu-16.04
         - ubuntu-18.04
         - ubuntu-20.04
         - fedora31
@@ -38,33 +40,50 @@ jobs:
 
         include:
 
+        - target: centos6
+          distribution: centos
+          version: 6
+          test_molecule: false
+
         - target: centos7
           distribution: centos
           version: 7
+          test_molecule: true
 
         - target: centos8
           distribution: centos
           version: 8
+          test_molecule: true
+
+        - target: ubuntu-16.04
+          distribution: ubuntu
+          version: xenial
+          test_molecule: false
 
         - target: ubuntu-18.04
           distribution: ubuntu
           version: bionic
+          test_molecule: true
 
         - target: ubuntu-20.04
           distribution: ubuntu
           version: focal
+          test_molecule: true
 
         - target: fedora31
           distribution: fedora
           version: 31
+          test_molecule: true
 
         - target: fedora32
           distribution: fedora
           version: 32
+          test_molecule: true
 
         - target: fedora33
           distribution: fedora
           version: 33
+          test_molecule: true
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
@@ -98,14 +117,15 @@ jobs:
           source ~/.virtualenvs/molecule/bin/activate
           ansible --version | grep "^ansible ${{ matrix.ansible_version }}"
 
+      - name: molecule tests for molecule
+        if: matrix.test_molecule == true
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule test
+
       - name: molecule tests for ansible node
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           molecule test -s node
-
-      - name: molecule tests for molecule
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          molecule test
 
 ...
