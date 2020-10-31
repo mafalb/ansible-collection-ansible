@@ -31,7 +31,7 @@
         chdir: "{{ lookup('env', 'PWD') }}"
 
     - name: get directory listing
-      command: find . -ls
+      command: find /tmp/molecule -ls
       register: _listing
       changed_when: false
 
