@@ -11,6 +11,7 @@
 - name: a test role is initialized (collection role) # noqa 301
   shell: |
     . ~/.virtualenvs/molecule{{ _ansibleversion }}/bin/activate
+    mkdir /tmp/molecule{{ _ansibleversion }}/tests/testcollection/roles
     cd /tmp/molecule{{ _ansibleversion }}/tests/testcollection/roles
     ansible-playbook /tmp/role-init.yml -e role=tests.testcollection.testrole -e "author='bla <blubb@example.com>'"
 
