@@ -30,13 +30,6 @@
       args:
         chdir: "{{ lookup('env', 'PWD') }}"
 
-    - name: get directory listing
-      command: find /tmp/molecule -ls
-      register: _listing
-      changed_when: false
-
-    - debug: var=_listing
-
     - name: create meta information
       template:
         src: meta.yml.j2
