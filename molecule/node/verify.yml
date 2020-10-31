@@ -2,7 +2,7 @@
 ---
 
 - name: Verify node
-  hosts: t_centos6, t_ubuntuxenial
+  hosts: all
   tasks:
 
   - name: openssl_privatekey is working
