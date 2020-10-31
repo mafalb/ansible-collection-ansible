@@ -15,8 +15,8 @@
 
   tasks:
 
-    - debug: var=collection
-    - debug: var=namespace
+    - debug: var=role_name
+    - debug: var=galaxy_namespace
 
     - name: assertions
       assert:
@@ -29,6 +29,12 @@
       command: ansible-galaxy role init --role-skeleton {{ skeleton_path }} {{ role_name if role.split('.')|length == 3 else role }} # noqa 301
       args:
         chdir: "{{ lookup('env', 'PWD') }}"
+
+    - name: get directory listing
+      command: find . -ls
+      register: _listing
+
+    - debug: var=_listing
 
     - name: create meta information
       template:
