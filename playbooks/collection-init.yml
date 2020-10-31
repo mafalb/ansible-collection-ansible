@@ -26,12 +26,12 @@
     - name: create new collection
       command: ansible-galaxy collection init --collection-skeleton {{ skeleton_path }} {{ collection }} # noqa 301
       args:
-        chdir: "{{ lookup('env', 'PWD') }}"
+        chdir: "{{ dest|default(lookup('env', 'PWD')) }}"
 
     - name: create galaxy metadata
       template:
         src: galaxy.yml.j2
-        dest: "{{ lookup('env', 'PWD') }}/{{ galaxy_namespace }}/{{ collection_name }}/galaxy.yml"
+        dest: "{{ dest|default(lookup('env', 'PWD')) }}/{{ galaxy_namespace }}/{{ collection_name }}/galaxy.yml"
         mode: 0644
 
 ...
