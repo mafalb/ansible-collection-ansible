@@ -5,7 +5,6 @@ name: CI
 
 on:
   push:
-  pull_request:
   schedule:
     - cron: '40 11 * * 6'
 
@@ -13,7 +12,7 @@ jobs:
 
   CI:
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     strategy:
 
@@ -24,52 +23,93 @@ jobs:
         target:
         - centos7
         - centos8
+        - ubuntu-16.04
+        - ubuntu-18.04
+        - ubuntu-20.04
+        - fedora31
+        - fedora32
+        - fedora33
+        - debian9
+        - debian10
+
+        ansible_version:
+        - '2.9'
+        - '2.10'
 
         include:
 
         - target: centos7
-          image: centos
-          tag: 7
+          distribution: centos
+          version: 7
 
         - target: centos8
-          image: centos
-          tag: 8
+          distribution: centos
+          version: 8
+
+        - target: ubuntu-16.04
+          distribution: ubuntu
+          version: xenial
+
+        - target: ubuntu-18.04
+          distribution: ubuntu
+          version: bionic
+
+        - target: ubuntu-20.04
+          distribution: ubuntu
+          version: focal
+
+        - target: fedora31
+          distribution: fedora
+          version: 31
+
+        - target: fedora32
+          distribution: fedora
+          version: 32
+
+        - target: fedora33
+          distribution: fedora
+          version: 33
+
+        - target: debian9
+          distribution: debian
+          version: stretch
+
+        - target: debian10
+          distribution: debian
+          version: buster
 
     env:
-      CI_CONTAINER_IMAGE: ${{ matrix.image }}
-      CI_CONTAINER_TAG: ${{ matrix.tag }}
-      CI_CONTAINER_PRIVILEGED: true
+      ANSIBLE_VERSION: ${{ matrix.ansible_version }}
+      CI_CONTAINER_IMAGE: ${{ matrix.distribution }}
+      CI_CONTAINER_TAG: ${{ matrix.version }}
+      PY_COLORS: 1
+      ANSIBLE_FORCE_COLOR: 1
+
+    defaults:
+      run:
+        working-directory: ansible_collections/mafalb/{{ collection_name }}
 
     steps:
 
-      - name: checkout collection
-        uses: actions/checkout@v1
-        with:
-          path: ansible_collections/mafalb/{{ collection_name }}
+    - name: checkout collection ansible
+      uses: actions/checkout@v2
+      with:
+        path: ansible_collections/mafalb/{{ collection_name }}
 
-      - name: checkout collection
-        if: false
-        uses: actions/checkout@v2
-        with:
-          path: ansible_collections/mafalb/ansible
-          repository: mafalb/ansible-collection-ansible
-          ref: dev
+    - name: install molecule
+      run: ansible-playbook -D molecule/install_molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }}
 
-      - name: mv ansible
-        if: false
-        run: |
-          mkdir -p ~/.ansible/collections/ansible_collections/mafalb
-          mv ansible_collections/mafalb/ansible ~/.ansible/collections/ansible_collections/mafalb/
+    - name: install dependencies
+      run: ansible-galaxy collection install -r molecule/requirements.yml
 
-      - name: install dependencies
-        run: ansible-galaxy collection install -r molecule/requirements.yml
+    - name: check ansible version
+      run: |
+        source ~/.virtualenvs/molecule/bin/activate
+        ansible --version | grep "^ansible ${{ matrix.ansible_version }}"
 
-      - name: install molecule
-        run: ansible-playbook -D molecule/install_molecule.yml
-
-      - name: run molecule tests
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          PY_COLORS=1 CI_CONTAINER_PRIVILEGED=true CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test
+    - name: molecule tests
+      run: |
+        source ~/.virtualenvs/molecule/bin/activate
+        molecule test
 
 ...

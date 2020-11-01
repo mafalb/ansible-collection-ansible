@@ -2,12 +2,12 @@
 ---
 
 - name: Set up proxy
-  hosts: t_proxy
+  hosts: proxy_group
   roles:
   - name: mafalb.squid.server
 
 - name: Converge
-  hosts: all,!t_proxy
+  hosts: all,!infrastructure_group
   tasks: []
 
 ...
