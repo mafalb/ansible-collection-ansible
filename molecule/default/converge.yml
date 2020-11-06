@@ -9,36 +9,12 @@
   - name: install molecule with default settings
     role: mafalb.ansible.molecule
 
+  - role: mafalb.ansible.molecule
+    molecule_ansible_version: '2.9'
+    molecule_virtualenv: ~/.virtualenvs/moleculeansible2.9
 
-- name: Converge molecule 2
-  hosts: all,!t_centos6,!t_ubuntuxenial
-  roles:
-
-  - name: install previous version of molecule
-    role: mafalb.ansible.molecule
-    molecule_major_version: 2
-    molecule_virtualenv: ~/.virtualenvs/molecule2
-
-
-- name: Converge molecule with a specific version of ansible
-  hosts: all,!t_centos6,!t_ubuntuxenial
-  vars:
-    ansibles_version: '2.9'
-
-  roles:
-
-    - role: mafalb.ansible.molecule
-      molecule_ansible_version: "{{ ansibles_version }}"
-      molecule_virtualenv: ~/.virtualenvs/molecule-{{ ansibles_version }}
-
-
-- name: Converge other ansible node features
-  hosts: all
-  roles:
-
-    - role: mafalb.ansible.node
-      ansible_node_features:
-      - crypto
-      - pip
+  - role: mafalb.ansible.molecule
+    molecule_ansible_version: '2.9.9'
+    molecule_virtualenv: ~/.virtualenvs/moleculeansible2.9.9
 
 ...

@@ -2,7 +2,7 @@
 ---
 
 - name: Verify
-  hosts: all
+  hosts: all,!infrastructure_group
   tasks:
   - name: Example assertion
     assert:

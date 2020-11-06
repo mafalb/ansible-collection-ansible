@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.2.0 2020-11-06
+
+### Changes
+
+- remove support for molecule 2
+- added variables for updating molecule and ansible
+
+### Changes to CI
+
+- test on Fedora 33
+
 ## v0.1.3 2010-10-17
 
 ### Changes to CI

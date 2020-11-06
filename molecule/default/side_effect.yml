@@ -1,0 +1,33 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+- name: test collection and role creation
+  hosts: all,!t_centos6,!t_ubuntuxenial
+  vars:
+    ansible:
+      versions:
+      - ''
+      - 'ansible2.9.9'
+      - 'ansible2.9'
+
+  tasks:
+
+  # kind of quirky
+  #
+  - name: the playbooks and supporting files are present # noqa 208
+    copy:
+      src: ../../playbooks/{{ item }}
+      dest: /tmp/
+    loop:
+    - collection-init.yml
+    - role-init.yml
+    - files
+    - templates
+
+  - name: test collection and role creation
+    include_tasks: test_playbooks.yml
+    loop: "{{ ansible.versions }}"
+    loop_control:
+      loop_var: _ansibleversion
+
+...

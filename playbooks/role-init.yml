@@ -15,8 +15,8 @@
 
   tasks:
 
-    - debug: var=collection
-    - debug: var=namespace
+    - debug: var=role_name
+    - debug: var=galaxy_namespace
 
     - name: assertions
       assert:
