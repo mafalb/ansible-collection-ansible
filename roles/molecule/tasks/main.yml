@@ -70,13 +70,16 @@
   environment:
     TMPDIR: "{{ molecule_virtualenv }}/../tmp"
 
-- name: get installed version of setuptools
-  command: "{{ molecule_virtualenv }}/bin/pip list"
-  changed_when: false
-  register: _pip_list
+- block:
 
-- debug:
-    var: _pip_list
+  - name: get installed version of setuptools
+    command: "{{ molecule_virtualenv }}/bin/pip list --format=columns"
+    changed_when: false
+    register: _pip_list
+
+  - debug:
+      var: _pip_list
+
   tags:
   - never
   - debug
@@ -96,13 +99,16 @@
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
 
-- name: get installed version of setuptools
-  command: "{{ molecule_virtualenv }}/bin/pip list"
-  changed_when: false
-  register: _pip_list
+- block:
 
-- debug:
-    var: _pip_list
+  - name: get installed version of setuptools
+    command: "{{ molecule_virtualenv }}/bin/pip list --format=columns"
+    changed_when: false
+    register: _pip_list
+
+  - debug:
+      var: _pip_list
+
   tags:
   - never
   - debug
@@ -137,17 +143,20 @@
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
 
-# _ansible_version does not work, i use _ansibles_version
-# reserved variable ?
-#
-- name: get ansible version
-  changed_when: false
-  command: "{{ molecule_virtualenv }}/bin/ansible --version"
-  register: _ansibles_version
+- block:
 
-- name: ansible version
-  debug:
-    var: _ansibles_version.stdout
+  # _ansible_version does not work, i use _ansibles_version
+  # reserved variable ?
+  #
+  - name: get ansible version
+    changed_when: false
+    command: "{{ molecule_virtualenv }}/bin/ansible --version"
+    register: _ansibles_version
+
+  - name: ansible version
+    debug:
+      var: _ansibles_version.stdout
+
   tags:
   - never
   - debug
