@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.1 XXXX-XX-XX
+
+### Changes
+
+### Changes to CI
+
 ## v0.2.0 2020-11-06
 
 ### Changes
