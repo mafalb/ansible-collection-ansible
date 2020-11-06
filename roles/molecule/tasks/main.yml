@@ -50,18 +50,6 @@
     state: directory
     mode: 01777
 
-- name: get installed version of setuptools
-  command: "{{ molecule_virtualenv }}/bin/pip list"
-  changed_when: false
-  failed_when: false
-  register: _pip_list
-
-- debug:
-    var: _pip_list
-  tags:
-  - never
-  - debug
-
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
 #
