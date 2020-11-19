@@ -23,6 +23,11 @@
 
   - debug: var=_locale
 
+  - name: jmespath is present
+    command: ~/.virtualenvs/molecule{{ item }}/bin/jp.py -h
+    changed_when: false
+    loop: "{{ ansible.versions }}"
+
   - name: ansible is present - molecule
     shell: |
       . ~/.virtualenvs/molecule{{ item }}/bin/activate
