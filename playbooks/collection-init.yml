@@ -28,10 +28,16 @@
       args:
         chdir: "{{ dest|default(lookup('env', 'PWD')) }}"
 
+    - name: create workflow for github actions
+      template:
+        src: github-actions-CI.yml.j2
+        dest: "{{ dest|default(lookup('env', 'PWD')) }}/{{ galaxy_namespace }}/{{ collection_name }}/.github/workflows/CI.yml"
+        mode: 00644
+
     - name: create galaxy metadata
       template:
         src: galaxy.yml.j2
         dest: "{{ dest|default(lookup('env', 'PWD')) }}/{{ galaxy_namespace }}/{{ collection_name }}/galaxy.yml"
-        mode: 0644
+        mode: 00644
 
 ...

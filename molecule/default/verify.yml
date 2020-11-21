@@ -94,4 +94,11 @@
       path: "/tmp/molecule{{ item[0] }}/{{ item[1] }}"
     loop: "{{ ansible.versions | product(files) | list }}"
 
+  - name: all jinja2 variables are interpolated
+    shell: grep -r [^$]\{\{ /tmp/molecule{{ item }}/tests/testcollection/.github/workflows
+    loop: "{{ ansible.versions }}"
+    register: _interpolated
+    failed_when: _interpolated.rc == 0
+    changed_when: false
+
 ...
