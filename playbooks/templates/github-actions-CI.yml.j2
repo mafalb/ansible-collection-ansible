@@ -4,7 +4,13 @@
 name: CI
 
 on:
+
   push:
+    branches:
+    - '**'
+    tags-ignore:
+    - '*'
+
   schedule:
     - cron: '40 11 * * 6'
 
@@ -98,11 +104,12 @@ jobs:
       with:
         path: ansible_collections/mafalb/{{ collection_name }}
 
+    - name: install dependencies
+      run: ansible-galaxy collection install -r molecule/requirements.yml
+
     - name: install molecule
       run: ansible-playbook -D molecule/install_molecule.yml -e molecule_ansible_version={% raw %}${{ matrix.ansible_version }}{% endraw %}
 
-    - name: install dependencies
-      run: ansible-galaxy collection install -r molecule/requirements.yml
 
     - name: check ansible version
       run: |
