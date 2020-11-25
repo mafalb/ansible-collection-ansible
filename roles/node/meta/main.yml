@@ -1,3 +1,4 @@
+# vim: ft=yaml ts=2 expandtab:
 ---
 galaxy_info:
   author: Markus Falb
@@ -23,14 +24,15 @@ galaxy_info:
   # https://galaxy.ansible.com/api/v1/platforms/
   #
   platforms:
+
     - name: EL
       versions:
       - 6
       - 7
       - 8
+
     - name: Fedora
       versions:
-      - 31
       - 32
       - 33
 
@@ -38,6 +40,11 @@ galaxy_info:
       versions:
       - bionic
       - xenial
+
+    - name: Debian
+      versions:
+      - stretch
+      - buster
 
   galaxy_tags:
     # List tags for your role here, one per line. A tag is a keyword that describes
@@ -47,6 +54,8 @@ galaxy_info:
     # NOTE: A tag is limited to a single word comprised of alphanumeric characters.
     #       Maximum 20 tags per role.
     - ansible
-    - molecule
+    - ansiblenode
 
 dependencies: []
+
+...
