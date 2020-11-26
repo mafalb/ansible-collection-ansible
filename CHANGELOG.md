@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.2 XXXX-XX-XX
+
+### Changes
+
+- _ansibles_version was referenced although it might not be set
+
 ## v0.2.1 2020-11-26
 
 ### Changes
