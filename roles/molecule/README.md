@@ -56,6 +56,12 @@ molecule_update_ansible: true
 molecule_virtualenv: "{{ ansible_user_dir }}/.virtualenvs/testvenv
 ```
 
+```molecule_enablerepo``` enable additional package repositories
+
+```yaml
+molecule_enablerepo: cr
+```
+
 ## License
 
 GPLv3

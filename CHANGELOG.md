@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.2.1 2020-11-26
+
+### Changes
+
+- improvements to collection_skeleton
+- default to molecule version 3.1, not the latest, there are some problems with 3.2
+
 ## v0.2.0 2020-11-06
 
 ### Changes

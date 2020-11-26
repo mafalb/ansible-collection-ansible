@@ -4,7 +4,13 @@
 name: CI
 
 on: 
+
   push:
+    branches:
+    - '**'
+    tags-ignore:
+    - '*'
+
   schedule:
   - cron: '40 12 * * 6'
 
@@ -26,9 +32,10 @@ jobs:
         - ubuntu-16.04
         - ubuntu-18.04
         - ubuntu-20.04
-        - fedora31
         - fedora32
         - fedora33
+        - debian9
+        - debian10
 
         os:
         - ubuntu-20.04
@@ -70,11 +77,6 @@ jobs:
           version: focal
           test_molecule: true
 
-        - target: fedora31
-          distribution: fedora
-          version: 31
-          test_molecule: true
-
         - target: fedora32
           distribution: fedora
           version: 32
@@ -84,6 +86,17 @@ jobs:
           distribution: fedora
           version: 33
           test_molecule: true
+
+        - target: debian9
+          distribution: debian
+          version: stretch
+          test_molecule: false
+
+        - target: debian10
+          distribution: debian
+          version: buster
+          test_molecule: false
+
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}

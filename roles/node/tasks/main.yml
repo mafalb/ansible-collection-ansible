@@ -43,5 +43,4 @@
     state: present
   when: "'pip' in ansible_node_features"
 
-
 ...
