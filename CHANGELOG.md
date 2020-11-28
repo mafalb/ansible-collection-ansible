@@ -6,6 +6,10 @@
 
 - _ansibles_version was referenced although it might not be set
 
+### Changes to CI
+
+- do not set ANSIBLE_COLLECTIONS_PATH
+
 ## v0.2.1 2020-11-26
 
 ### Changes
