@@ -5,6 +5,7 @@
 ### Changes
 
 - _ansibles_version was referenced although it might not be set
+- default to latest version of molecule
 
 ### Changes to CI
 
