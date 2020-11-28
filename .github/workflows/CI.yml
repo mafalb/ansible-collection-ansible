@@ -121,7 +121,9 @@ jobs:
 
       - name: install molecule
         run: |
-          ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }} -e molecule_version='3.2'
+          ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: '../../..'
 
       - name: check ansible version
         run: |
