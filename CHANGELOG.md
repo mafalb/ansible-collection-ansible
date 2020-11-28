@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.2.2 2020-11-28
+
+### Changes
+
+- _ansibles_version was referenced although it might not be set
+- default to latest version of molecule
+
+### Changes to CI
+
+- do not set ANSIBLE_COLLECTIONS_PATH
+
 ## v0.2.1 2020-11-26
 
 ### Changes

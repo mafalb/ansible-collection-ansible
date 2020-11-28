@@ -28,8 +28,8 @@ provisioner:
     - --diff
   lint:
     name: ansible-lint
-  env:
-    ANSIBLE_COLLECTIONS_PATHS: "../../../../..:~/.ansible/collections"
+#  env:
+#    ANSIBLE_COLLECTIONS_PATHS: "../../../../..:~/.ansible/collections"
   config_options:
     defaults:
       interpreter_python: auto

@@ -103,7 +103,7 @@ jobs:
       run: ansible-galaxy collection install -r molecule/requirements.yml
 
     - name: install molecule
-      run: ansible-playbook -D molecule/install_molecule.yml -e molecule_ansible_version={% raw %}${{ matrix.ansible_version }}{% endraw %}
+      run: ansible-playbook -D molecule/install_molecule.yml -e molecule_ansible_version={% raw %}${{ matrix.ansible_version }}{% endraw %} -t all,debug
 
 
     - name: check ansible version

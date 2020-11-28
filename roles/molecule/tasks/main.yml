@@ -157,16 +157,15 @@
   - name: ansible version
     debug:
       var: _ansibles_version.stdout
+    tags:
+    - never
+    - debug
 
-  tags:
-  - never
-  - debug
+  - name: assertions
+    assert:
+      that:
+      - _ansibles_version.stdout is match('ansible {{ molecule_ansible_version }}.*')
 
-- name: assertions
-  when:
-  - molecule_ansible_version is defined
-  assert:
-    that:
-    - _ansibles_version.stdout is match('ansible {{ molecule_ansible_version }}.*')
+  when: molecule_ansible_version is defined
 
 ...
