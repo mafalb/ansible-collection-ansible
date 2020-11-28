@@ -16,7 +16,7 @@
   shell: |
     set -o pipefail
     . ~/.virtualenvs/molecule{{ _ansibleversion }}/bin/activate
-    NO_COLOR=1 molecule --version|grep -E "python(==|:)3"
+    NO_COLOR=1 molecule --version|grep -E "python( |==|:)3"
   changed_when: false
 
 - name: python 3 - molecule{{ _ansibleversion }}
