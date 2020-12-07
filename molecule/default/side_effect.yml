@@ -3,16 +3,14 @@
 
 - name: test collection and role creation
   hosts: all,!t_centos6,!t_ubuntuxenial
-  vars:
-    ansible:
-      versions:
-      - ''
-      - 'ansible2.9.9'
-      - 'ansible2.9'
 
   tasks:
 
+  - name: include list of virtualenvs
+    include_vars: vars/virtualenvs.yml
+
   # kind of quirky
+  # copy src files to CI node
   #
   - name: the playbooks and supporting files are present # noqa 208
     copy:
@@ -26,7 +24,7 @@
 
   - name: test collection and role creation
     include_tasks: test_playbooks.yml
-    loop: "{{ ansible.versions }}"
+    loop: "{{ virtualenvs|map(attribute='virtualenv') }}"
     loop_control:
       loop_var: _ansibleversion
 

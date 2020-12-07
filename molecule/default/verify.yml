@@ -1,18 +1,23 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
+- name: CI for custom filters
+  hosts: localhost
+  tasks:
+  - debug: msg="{{ '2.9'|semver }}"
+
 - name: Verify molecule
   hosts: all,!t_centos6,!t_ubuntuxenial
-  vars:
-    ansible:
-      versions:
-      - ''
-      - 'ansible2.9.9'
-      - 'ansible2.9'
 
   module_defaults:
     shell:
       executable: /bin/bash
+
+  vars:
+    files:
+    - tests/testcollection/galaxy.yml
+    - tests/testcollection/roles/testrole/README.md
+    - tests.testrole/README.md
 
   tasks:
 
@@ -23,59 +28,74 @@
 
   - debug: var=_locale
 
-  - name: jmespath is present
-    command: ~/.virtualenvs/molecule{{ item }}/bin/jp.py -h
-    changed_when: false
-    loop: "{{ ansible.versions }}"
+  - name: include list of virtualenvs
+    include_vars: vars/virtualenvs.yml
 
   - name: ansible is present - molecule
     shell: |
-      . ~/.virtualenvs/molecule{{ item }}/bin/activate
+      . ~/.virtualenvs/{{ item.virtualenv }}/bin/activate
       ansible --version
     changed_when: false
-    loop: "{{ ansible.versions }}"
+    loop: "{{ virtualenvs }}"
     register: _ansibles_version
 
   - name: molecule is present - molecule
     shell: |
-      . ~/.virtualenvs/molecule{{ item }}/bin/activate
+      . ~/.virtualenvs/{{ item.virtualenv }}/bin/activate
       molecule --version
     changed_when: false
-    loop: "{{ ansible.versions }}"
-    register: _molecules_ansible_version
+    loop: "{{ virtualenvs }}"
+    register: _molecules_version
+
+  - debug: var=_ansibles_version
+  - debug: var=_molecules_version
+  - debug: var=_ansibles_version.results[3].stdout_lines[0]
+
+  - name: correct version of ansible/molecule is installed
+    assert:
+      fail_msg: wrong version - {{ _molecules_version.results[0].stdout_lines[0] }} / {{ _ansibles_version.results[0].stdout_lines[0] }}
+      that:
+      - _ansibles_version.results[0].stdout_lines[0] is match('ansible 2.10.*')
+      - _ansibles_version.results[0].stdout_lines[0].split()[1] is version('2.10.0', '>')
+      - _molecules_version.results[0].stdout_lines[0].split()[1] is version('3.1.5','>')
+
+      - _ansibles_version.results[1].stdout_lines[0] is match('ansible 2.9.10')
+      - _molecules_version.results[1].stdout_lines[0].split()[1] is version('3.1.4','=')
+
+      - _ansibles_version.results[2].stdout_lines[0] is match('ansible 2.9.10')
+      - _molecules_version.results[2].stdout_lines[0].split()[1] is version('3.1.4','=')
+
+      - _ansibles_version.results[3].stdout_lines[0] is match('ansible 2.10')
+      - _ansibles_version.results[3].stdout_lines[0].split()[1] is version('2.10.1', '=')
+      - _molecules_version.results[3].stdout_lines[0].split()[1] is version('3.1.4','=')
+
+      - _ansibles_version.results[4].stdout_lines[0] is match('ansible 2.10')
+      - _ansibles_version.results[4].stdout_lines[0].split()[1] is version('2.10.1', '=')
+      - _molecules_version.results[4].stdout_lines[0].split()[1] is version('3.1.4','=')
+
+      - _ansibles_version.results[5].stdout_lines[0] is match('ansible 2.9.10')
+      - _ansibles_version.results[5].stdout_lines[0].split()[1] is version('2.9.10', '=')
+      - _molecules_version.results[5].stdout_lines[0].split()[1] is version('3.1.4','=')
+
+      - _ansibles_version.results[6].stdout_lines[0] is match('ansible 2.9.10')
+      - _ansibles_version.results[6].stdout_lines[0].split()[1] is version('2.9.10', '=')
+      - _molecules_version.results[6].stdout_lines[0].split()[1] is version('3.1.4','=')
+
+      - _ansibles_version.results[7].stdout_lines[0] is match('ansible 2.10')
+      - _ansibles_version.results[7].stdout_lines[0].split()[1] is version('2.10.1', '=')
+      - _molecules_version.results[7].stdout_lines[0].split()[1] is version('3.1.4','=')
+
+      - _ansibles_version.results[8].stdout_lines[0] is match('ansible 2.10')
+      - _ansibles_version.results[8].stdout_lines[0].split()[1] is version('2.10.1', '=')
+      - _molecules_version.results[8].stdout_lines[0].split()[1] is version('3.1.4','=')
 
   - name: verify molecule installation
-    include_tasks: verify_molecule.yml
-    loop: "{{ ansible.versions }}"
-    loop_control:
-      loop_var: _ansibleversion
+    include_role:
+      name: verify_molecule
+    vars:
+      virtualenv: "{{ item.virtualenv }}"
+    loop: "{{ virtualenvs }}"
 
-  - name: assertions
-    assert:
-      that:
-      - _ansibles_version.results[0].stdout_lines[0] is match('ansible')
-      - _ansibles_version.results[0].stdout_lines[0] is match('ansible 2.10.*')
-      - _ansibles_version.results[1].stdout_lines[0] is match('ansible 2.9.9')
-      - _ansibles_version.results[2].stdout_lines[0] is match('ansible 2.9.*')
-      - _ansibles_version.results[2].stdout_lines[0].split()[1] is version(_ansibles_version.results[1].stdout_lines[0].split()[1], '>')
-      - _ansibles_version.results[2].stdout_lines[0].split()[1] is version('2.10', '<')
-
-
-
-- name: Verify side effects
-  hosts: all,!t_centos6,!t_ubuntuxenial
-  vars:
-    ansible:
-      versions:
-      - ''
-      - 'ansible2.9.9'
-      - 'ansible2.9'
-    files:
-    - tests/testcollection/galaxy.yml
-    - tests/testcollection/roles/testrole/README.md
-    - tests.testrole/README.md
-
-  tasks:
 
   - name: assert that we do not use reserved variable names
     assert:
@@ -87,16 +107,18 @@
       - skeleton_path is not defined
       - license is not defined
 
+  - debug: msg="{{ virtualenvs|map(attribute='virtualenv')|product(files)|list }}"
+
   # cast loop argument to a list to make ansible 2.9 happy
   #
   - name: special files in collection and roles are present
     file:
-      path: "/tmp/molecule{{ item[0] }}/{{ item[1] }}"
-    loop: "{{ ansible.versions | product(files) | list }}"
+      path: "/tmp/molecule-{{ item[0] }}/{{ item[1] }}"
+    loop: "{{ virtualenvs|map(attribute='virtualenv')|product(files)|list }}"
 
   - name: all jinja2 variables are interpolated
-    shell: grep -r [^$]\{\{ /tmp/molecule{{ item }}/tests/testcollection/.github/workflows
-    loop: "{{ ansible.versions }}"
+    shell: grep -r [^$]\{\{ /tmp/molecule-{{ item.virtualenv }}/tests/testcollection/.github/workflows
+    loop: "{{ virtualenvs }}"
     register: _interpolated
     failed_when: _interpolated.rc == 0
     changed_when: false

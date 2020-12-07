@@ -18,7 +18,7 @@ Molecule installs via pip into a virtualenv without site packages.
   hosts: localhost
   roles:
   - role: mafalb.ansible.molecule
-    molecule_major_version: 2
+    molecule_version: 2
     molecule_virtualenv: "~/.virtualenvs/molecule2"
 ```
 
@@ -26,10 +26,14 @@ Molecule installs via pip into a virtualenv without site packages.
 
 Variables are optional. Only specify them if you want to override the defaults.
 
-```molecule_major_version``` There should be no need to specify this.
+```molecule_version``` To pin to a specific version.
 
 ```yaml
-molecule_major_version: 3
+molecule_version: 3
+```
+
+```yaml
+molecule_version: 3.1
 ```
 
 ```molecule_update``` Set if you want to update an existent installation of molecule

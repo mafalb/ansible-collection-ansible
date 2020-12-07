@@ -13,7 +13,9 @@
   - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
   - "{{ ansible_os_family }}.yml"
   include_vars:
-    file: "{{ item }}"
+    file: "{{ file }}"
+  loop_control:
+    loop_var: file
 
 - name: necessary packages for package manager are installed
   become: true

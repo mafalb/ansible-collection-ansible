@@ -1,0 +1,32 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+- name: jmespath is present - {{ virtualenv }}
+  command: ~/.virtualenvs/{{ virtualenv }}/bin/jp.py -h
+  changed_when: false
+
+- name: tox is present - {{ virtualenv }}
+  command: ~/.virtualenvs/{{ virtualenv }}/bin/tox --version
+  changed_when: false
+
+- name: testinfra is present - {{ virtualenv }}
+  command: ~/.virtualenvs/{{ virtualenv }}/bin/py.test --version
+  changed_when: false
+
+# that that python3 is used
+# the output format of molecule --version changed in molecule 3.1.4
+#
+- name: python 3 - {{ virtualenv }}
+  shell: |
+    set -o pipefail
+    . ~/.virtualenvs/{{ virtualenv }}/bin/activate
+    NO_COLOR=1 molecule --version|grep -E "python( |==|:)3"
+  changed_when: false
+
+- name: python 3 - {{ virtualenv }}
+  shell: |
+    set -o pipefail
+    ~/.virtualenvs/{{ virtualenv }}/bin/pip --version|grep "python 3"
+  changed_when: false
+
+...
