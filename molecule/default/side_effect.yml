@@ -24,7 +24,7 @@
 
   - name: test collection and role creation
     include_tasks: test_playbooks.yml
-    loop: "{{ virtualenvs|map(attribute='virtualenv') }}"
+    loop: "{{ virtualenvs|map(attribute='virtualenv')|list }}"
     loop_control:
       loop_var: _ansibleversion
 
