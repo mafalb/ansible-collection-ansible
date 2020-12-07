@@ -10,7 +10,7 @@
 
 - name: Converge installed
   hosts: all,!t_centos6,!t_ubuntuxenial
-  
+
   roles:
   - role: mafalb.ansible.molecule
 
