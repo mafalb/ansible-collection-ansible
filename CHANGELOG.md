@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.3.0 XXXX-XX-XX
+## v0.3.0 2020-12-07
 
 ### Changes
 
