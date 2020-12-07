@@ -8,8 +8,11 @@
 # 6: update molecule 3.1.4 -> 3.2
 # 7: update ansible 2.10 to latest
 
-- name: Converge
+- name: Converge installed
   hosts: all,!t_centos6,!t_ubuntuxenial
+  
+  roles:
+  - role: mafalb.ansible.molecule
 
   tasks:
 
@@ -81,9 +84,5 @@
       molecule_version: '3.1.4'
       molecule_ansible_version: '2.10.1'
       molecule_virtualenv: ~/.virtualenvs/installed8
-
-  roles:
-
-  - role: mafalb.ansible.molecule
 
 ...

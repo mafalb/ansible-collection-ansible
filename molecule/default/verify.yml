@@ -114,11 +114,11 @@
   - name: special files in collection and roles are present
     file:
       path: "/tmp/molecule-{{ item[0] }}/{{ item[1] }}"
-    loop: "{{ virtualenvs|map(attribute='virtualenv')|product(files)|list }}"
+    loop: "{{ virtualenvs[:2]|map(attribute='virtualenv')|product(files)|list }}"
 
   - name: all jinja2 variables are interpolated
     shell: grep -r [^$]\{\{ /tmp/molecule-{{ item.virtualenv }}/tests/testcollection/.github/workflows
-    loop: "{{ virtualenvs }}"
+    loop: "{{ virtualenvs[:2] }}"
     register: _interpolated
     failed_when: _interpolated.rc == 0
     changed_when: false
