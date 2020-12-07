@@ -1,28 +1,28 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
-- name: tox is present - molecule{{ _ansibleversion }}
-  command: ~/.virtualenvs/molecule{{ _ansibleversion }}/bin/tox --version
+- name: "tox is present - {{ item[1] }}{{ item[0] }}"
+  command: ~/.virtualenvs/{{ item[1] }}{{ item[0] }}/bin/tox --version
   changed_when: false
 
-- name: testinfra is present - molecule{{ _ansibleversion }}
-  command: ~/.virtualenvs/molecule{{ _ansibleversion }}/bin/py.test --version
+- name: testinfra is present - {{ item[1] }}{{ item[0] }}
+  command: ~/.virtualenvs/{{ item[1] }}{{ item[0] }}/bin/py.test --version
   changed_when: false
 
 # that that python3 is used
 # the output format of molecule --version changed in molecule 3.1.4
 #
-- name: python 3 - molecule{{ _ansibleversion }}
+- name: python 3 - {{ item[1] }}{{ item[0] }}
   shell: |
     set -o pipefail
-    . ~/.virtualenvs/molecule{{ _ansibleversion }}/bin/activate
+    . ~/.virtualenvs/{{ item[1] }}{{ item[0] }}/bin/activate
     NO_COLOR=1 molecule --version|grep -E "python( |==|:)3"
   changed_when: false
 
-- name: python 3 - molecule{{ _ansibleversion }}
+- name: python 3 - {{ item[1] }}{{ item[0] }}
   shell: |
     set -o pipefail
-    ~/.virtualenvs/molecule{{ _ansibleversion }}/bin/pip --version|grep "python 3"
+    ~/.virtualenvs/{{ item[1] }}{{ item[0] }}/bin/pip --version|grep "python 3"
   changed_when: false
 
 ...

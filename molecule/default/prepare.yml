@@ -1,0 +1,87 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+# 1: update ansible 2.9.10 -> 2.9.latest (specify 2.9)
+# 2: update ansible 2.9.10 -> 2.9.latest (specify 2.9.*)
+# 3: update molecule 3.1.4 -> 3.1.latest (specify 3.1)
+# 4: update molecule 3.1.4 -> 3.1.latest (specify 3.1.*)
+# 5: update molecule 3.1.4 -> 3
+# 6: update molecule 3.1.4 -> 3.2
+# 7: update ansible 2.10 to latest
+
+- name: Prepare upgraded
+  hosts: all,!t_centos6,!t_ubuntuxenial
+
+  tasks:
+
+  # change the equivalent install task in
+  # converge.install.yml and
+  # converge.upgrade.yml too
+  # when changing tasks
+  #
+
+  - name: prepare upgraded1 - 3.1.4 / 2.9.10
+    include_role:
+      name: mafalb.ansible.molecule
+    vars:
+      molecule_version: '3.1.4'
+      molecule_ansible_version: '2.9.10'
+      molecule_virtualenv: ~/.virtualenvs/upgraded1
+
+  - name: prepare upgraded2 - 3.1.4 / 2.9.10
+    include_role:
+      name: mafalb.ansible.molecule
+    vars:
+      molecule_version: '3.1.4'
+      molecule_ansible_version: '2.9.10'
+      molecule_virtualenv: ~/.virtualenvs/upgraded2
+
+  - name: prepare upgraded3 - 3.1.4 / 2.10.1
+    include_role:
+      name: mafalb.ansible.molecule
+    vars:
+      molecule_version: '3.1.4'
+      molecule_ansible_version: '2.10.1'
+      molecule_virtualenv: ~/.virtualenvs/upgraded3
+
+  - name: prepare upgraded4 - 3.1.4 / 2.10.1
+    include_role:
+      name: mafalb.ansible.molecule
+    vars:
+      molecule_version: '3.1.4'
+      molecule_ansible_version: '2.10.1'
+      molecule_virtualenv: ~/.virtualenvs/upgraded4
+
+  - name: prepare upgraded5 - 3.1.4 / 2.9.10
+    include_role:
+      name: mafalb.ansible.molecule
+    vars:
+      molecule_version: '3.1.4'
+      molecule_ansible_version: '2.9.10'
+      molecule_virtualenv: ~/.virtualenvs/upgraded5
+
+  - name: prepare upgraded6 - 3.1.4 / 2.9.10
+    include_role:
+      name: mafalb.ansible.molecule
+    vars:
+      molecule_version: '3.1.4'
+      molecule_ansible_version: '2.9.10'
+      molecule_virtualenv: ~/.virtualenvs/upgraded6
+
+  - name: prepare upgraded7 - 3.1.4 / 2.10.1
+    include_role:
+      name: mafalb.ansible.molecule
+    vars:
+      molecule_version: '3.1.4'
+      molecule_ansible_version: '2.10.1'
+      molecule_virtualenv: ~/.virtualenvs/upgraded7
+
+  - name: prepare upgraded8 - 3.1.4 / 2.10.1
+    include_role:
+      name: mafalb.ansible.molecule
+    vars:
+      molecule_version: '3.1.4'
+      molecule_ansible_version: '2.10.1'
+      molecule_virtualenv: ~/.virtualenvs/upgraded8
+
+...

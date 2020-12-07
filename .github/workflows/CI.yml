@@ -26,7 +26,6 @@ jobs:
       matrix:
 
         target:
-        - centos6
         - centos7
         - centos8
         - ubuntu-16.04
@@ -46,11 +45,6 @@ jobs:
         - '2.9'
 
         include:
-
-        - target: centos6
-          distribution: centos
-          version: 6
-          test_molecule: false
 
         - target: centos7
           distribution: centos

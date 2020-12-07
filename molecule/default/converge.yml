@@ -1,20 +1,7 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
-- name: Converge molecule with default settings
-  hosts: all,!t_centos6,!t_ubuntuxenial
-
-  roles:
-
-  - name: install molecule with default settings
-    role: mafalb.ansible.molecule
-
-  - role: mafalb.ansible.molecule
-    molecule_ansible_version: '2.9'
-    molecule_virtualenv: ~/.virtualenvs/moleculeansible2.9
-
-  - role: mafalb.ansible.molecule
-    molecule_ansible_version: '2.9.9'
-    molecule_virtualenv: ~/.virtualenvs/moleculeansible2.9.9
+- import_playbook: converge.upgrade.yml
+- import_playbook: converge.install.yml
 
 ...

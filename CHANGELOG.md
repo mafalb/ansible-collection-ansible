@@ -1,15 +1,19 @@
 # Changelog
 
-## v0.2.2 2020-11-28
+## v0.3.0 2020-12-07
 
 ### Changes
 
 - _ansibles_version was referenced although it might not be set
 - default to latest version of molecule
+- rename molecule_major_version to molecule_version.
+- make updating work
 
 ### Changes to CI
 
 - do not set ANSIBLE_COLLECTIONS_PATH
+- refactored tests
+- test molecule_update and molecule_update_ansible
 
 ## v0.2.1 2020-11-26
 
