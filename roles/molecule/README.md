@@ -48,12 +48,6 @@ molecule_update: true
 molecule_ansible_version: 2.9
 ```
 
-```molecule_update_ansible``` if you want to update ansible
-
-```yaml
-molecule_update_ansible: true
-```
-
 ```molecule_virtualenv``` set the path to the virtualenv. Specify a absolute path. ```~/something``` will not work.
 
 ```yaml

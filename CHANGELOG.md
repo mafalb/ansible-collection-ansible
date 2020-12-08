@@ -7,6 +7,7 @@
 - _ansibles_version was referenced although it might not be set
 - default to latest version of molecule
 - rename molecule_major_version to molecule_version.
+- remove molecule_update_ansible variable
 - make updating work
 
 ### Changes to CI
