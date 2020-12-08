@@ -21,15 +21,11 @@ platforms:
 
 provisioner:
   name: ansible
-  playbooks:
-    side_effect: side_effect.yml
   ansible_args:
     - --tags=all,debug
     - --diff
   lint:
     name: ansible-lint
-#  env:
-#    ANSIBLE_COLLECTIONS_PATHS: "../../../../..:~/.ansible/collections"
   config_options:
     defaults:
       interpreter_python: auto

@@ -84,7 +84,9 @@
     virtualenv_command: "{{ molecule_virtualenv_command }}"
   environment:
     TMPDIR: "{{ molecule_virtualenv }}/../tmp"
-  when: molecule_ansible_version|mafalb.ansible.semver is version('2.10.0', '<')
+  when:
+  - molecule_ansible_version|mafalb.ansible.semver is version('2.10.0', '<')
+  - false
 
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
@@ -107,7 +109,9 @@
     virtualenv_command: "{{ molecule_virtualenv_command }}"
   environment:
     TMPDIR: "{{ molecule_virtualenv }}/../tmp"
-  when: molecule_ansible_version|mafalb.ansible.semver is version('2.10.0', '>=')
+  when:
+  - molecule_ansible_version|mafalb.ansible.semver is version('2.10.0', '>=')
+  - false
 
 - block:
 
@@ -115,9 +119,11 @@
     command: "{{ molecule_virtualenv }}/bin/pip list --format=columns"
     changed_when: false
     register: _pip_list
+    when: false
 
   - debug:
       var: _pip_list.stdout_lines
+    when: false
 
   tags:
   - never
@@ -137,7 +143,10 @@
   pip:
     name:
     - molecule[lint,docker,test]=={{ molecule_version|mafalb.ansible.pipver }}
+    - ansible=={{ molecule_ansible_version|mafalb.ansible.pipver }}
     - tox
+    - jmespath
+    extra_args: "{{ '-U eager' if molecule_update is defined else omit }}"
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
   when: molecule_ansible_version|mafalb.ansible.semver is version('2.10.0', '<')
@@ -150,7 +159,10 @@
     name:
     - molecule[lint,docker,test]=={{ molecule_version|mafalb.ansible.pipver }}
     - ansible-base=={{ molecule_ansible_version|mafalb.ansible.pipver }}
+    - ansible=={{ molecule_ansible_version|mafalb.ansible.pipver }}
     - tox
+    - jmespath
+    extra_args: "{{ '-U eager' if molecule_update is defined else omit }}"
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
   when: molecule_ansible_version|mafalb.ansible.semver is version('2.10.0', '>=')
