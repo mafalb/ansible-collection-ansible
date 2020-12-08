@@ -1,22 +1,6 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
-- name: CI for custom filters
-  hosts: localhost
-  tasks:
-  - debug: msg="{{ '2.9'|semver }}"
-  - name: assertions for custom filters
-    assert:
-      that:
-      - "'3.1.4'|pipver == '3.1.4'"
-      - "'3.1'|pipver == '3.1.*'"
-      - "'3'|pipver == '3.*'"
-      - "3|pipver == '3.*'"
-      - "3|semver == '3.0.0'"
-      - "'3'|semver == '3.0.0'"
-      - "'3.1'|semver == '3.1.0'"
-      - "'3.1.4'|semver == '3.1.4'"
-
 - name: Verify molecule
   hosts: all,!t_centos6,!t_ubuntuxenial
 
@@ -71,7 +55,7 @@
   - name: correct version of ansible/molecule is installed
     assert:
       that:
-      
+
       - _ansibles_version.results[1].stdout_lines[0] is match('ansible 2.9.')
       - _ansibles_version.results[1].stdout_lines[0].split()[1] is version('2.9.10','>')
       - _molecules_version.results[1].stdout_lines[0].split()[1] is version('3.1.5','=')
@@ -104,5 +88,5 @@
     vars:
       virtualenv: "{{ item.virtualenv }}"
     loop: "{{ virtualenvs }}"
-  
+
 ...
