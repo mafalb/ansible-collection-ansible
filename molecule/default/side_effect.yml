@@ -4,10 +4,18 @@
 - name: test collection and role creation
   hosts: all,!t_centos6,!t_ubuntuxenial
 
-  tasks:
+  vars:
+    virtualenvs:
+    - { index: 0, virtualenv: molecule }
+    - { index: 1, virtualenv: default1 }
+    - { index: 2, virtualenv: default2 }
+    - { index: 3, virtualenv: default3 }
+    - { index: 4, virtualenv: default4 }
+    - { index: 5, virtualenv: default5 }
+    - { index: 6, virtualenv: default6 }
+    - { index: 7, virtualenv: default7 }
 
-  - name: include list of virtualenvs
-    include_vars: vars/virtualenvs.yml
+  tasks:
 
   # kind of quirky
   # copy src files to CI node

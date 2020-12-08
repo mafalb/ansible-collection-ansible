@@ -1,0 +1,92 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+- name: Verify molecule
+  hosts: all,!t_centos6,!t_ubuntuxenial
+
+  module_defaults:
+    shell:
+      executable: /bin/bash
+
+  vars:
+    files:
+    - tests/testcollection/galaxy.yml
+    - tests/testcollection/roles/testrole/README.md
+    - tests.testrole/README.md
+    virtualenvs:
+    - { index: 0, virtualenv: molecule }
+    - { index: 1, virtualenv: default1 }
+    - { index: 2, virtualenv: default2 }
+    - { index: 3, virtualenv: default3 }
+    - { index: 4, virtualenv: default4 }
+    - { index: 5, virtualenv: default5 }
+    - { index: 6, virtualenv: default6 }
+    - { index: 7, virtualenv: default7 }
+
+  tasks:
+
+  - name: get locale
+    changed_when: false
+    command: locale
+    register: _locale
+
+  - debug: var=_locale
+
+  - name: ansible is present - molecule
+    shell: |
+      . ~/.virtualenvs/{{ item.virtualenv }}/bin/activate
+      ansible --version
+    changed_when: false
+    loop: "{{ virtualenvs }}"
+    register: _ansibles_version
+
+  - name: molecule is present - molecule
+    shell: |
+      . ~/.virtualenvs/{{ item.virtualenv }}/bin/activate
+      molecule --version
+    changed_when: false
+    loop: "{{ virtualenvs }}"
+    register: _molecules_version
+
+  - debug: var=_ansibles_version
+  - debug: var=_molecules_version
+  - debug: var=_ansibles_version.results[3].stdout_lines[0]
+
+  - name: correct version of ansible/molecule is installed
+    assert:
+      that:
+
+      - _ansibles_version.results[1].stdout_lines[0] is match('ansible 2.9.')
+      - _ansibles_version.results[1].stdout_lines[0].split()[1] is version('2.9.10','>')
+      - _molecules_version.results[1].stdout_lines[0].split()[1] is version('3.1.5','=')
+
+      - _ansibles_version.results[2].stdout_lines[0] is match('ansible 2.9')
+      - _molecules_version.results[2].stdout_lines[0].split()[1] is version('3.2.0','>=')
+
+      - _ansibles_version.results[3].stdout_lines[0] is match('ansible 2.10.')
+      - _ansibles_version.results[3].stdout_lines[0].split()[1] is version('2.10.1', '>')
+      - _molecules_version.results[3].stdout_lines[0].split()[1] is version('3.1.5','=')
+
+      - _ansibles_version.results[4].stdout_lines[0] is match('ansible 2.10.')
+      - _ansibles_version.results[4].stdout_lines[0].split()[1] is version('2.10.1', '>')
+      - _molecules_version.results[4].stdout_lines[0].split()[1] is version('3.1.5','>')
+
+      - _ansibles_version.results[5].stdout_lines[0] is match('ansible 2.9.')
+      - _ansibles_version.results[5].stdout_lines[0].split()[1] is version('2.9.10', '=')
+      - _molecules_version.results[5].stdout_lines[0].split()[1] is version('3.1.5','>')
+
+      - _ansibles_version.results[6].stdout_lines[0] is match('ansible 2.9.')
+      - _molecules_version.results[6].stdout_lines[0].split()[1] is version('3.1.5','>')
+
+      - _ansibles_version.results[7].stdout_lines[0] is match('ansible 2.10.')
+      - _ansibles_version.results[7].stdout_lines[0].split()[1] is version('2.10.1', '>')
+      - _molecules_version.results[7].stdout_lines[0].split()[1] is version('3.2.0','>=')
+
+  - name: verify molecule installation
+    include_role:
+      name: verify_molecule
+    vars:
+      virtualenv: "{{ item.virtualenv }}"
+    loop: "{{ virtualenvs }}"
+
+...

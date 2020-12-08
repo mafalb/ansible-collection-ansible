@@ -4,6 +4,8 @@
 
 ### Changes
 
+- molecule and ansible are installed in one single task
+- remove molecule_update_ansible variable
 - _ansibles_version was referenced although it might not be set
 - default to latest version of molecule
 - rename molecule_major_version to molecule_version.

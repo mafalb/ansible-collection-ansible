@@ -5,6 +5,17 @@
   hosts: localhost
   tasks:
   - debug: msg="{{ '2.9'|semver }}"
+  - name: assertions for custom filters
+    assert:
+      that:
+      - "'3.1.4'|pipver == '3.1.4'"
+      - "'3.1'|pipver == '3.1.*'"
+      - "'3'|pipver == '3.*'"
+      - "3|pipver == '3.*'"
+      - "3|semver == '3.0.0'"
+      - "'3'|semver == '3.0.0'"
+      - "'3.1'|semver == '3.1.0'"
+      - "'3.1.4'|semver == '3.1.4'"
 
 - name: Verify molecule
   hosts: all,!t_centos6,!t_ubuntuxenial
@@ -18,6 +29,15 @@
     - tests/testcollection/galaxy.yml
     - tests/testcollection/roles/testrole/README.md
     - tests.testrole/README.md
+    virtualenvs:
+    - { index: 0, virtualenv: molecule }
+    - { index: 1, virtualenv: default1 }
+    - { index: 2, virtualenv: default2 }
+    - { index: 3, virtualenv: default3 }
+    - { index: 4, virtualenv: default4 }
+    - { index: 5, virtualenv: default5 }
+    - { index: 6, virtualenv: default6 }
+    - { index: 7, virtualenv: default7 }
 
   tasks:
 
@@ -27,9 +47,6 @@
     register: _locale
 
   - debug: var=_locale
-
-  - name: include list of virtualenvs
-    include_vars: vars/virtualenvs.yml
 
   - name: ansible is present - molecule
     shell: |
@@ -53,41 +70,35 @@
 
   - name: correct version of ansible/molecule is installed
     assert:
-      fail_msg: wrong version - {{ _molecules_version.results[0].stdout_lines[0] }} / {{ _ansibles_version.results[0].stdout_lines[0] }}
       that:
-      - _ansibles_version.results[0].stdout_lines[0] is match('ansible 2.10.*')
-      - _ansibles_version.results[0].stdout_lines[0].split()[1] is version('2.10.0', '>')
-      - _molecules_version.results[0].stdout_lines[0].split()[1] is version('3.1.5','>')
+      - _ansibles_version.results[0].stdout_lines[0] is match('ansible 2.10')
+      - _molecules_version.results[0].stdout_lines[0].split()[1] is match('3.2')
 
       - _ansibles_version.results[1].stdout_lines[0] is match('ansible 2.9.10')
       - _molecules_version.results[1].stdout_lines[0].split()[1] is version('3.1.4','=')
 
-      - _ansibles_version.results[2].stdout_lines[0] is match('ansible 2.9.10')
-      - _molecules_version.results[2].stdout_lines[0].split()[1] is version('3.1.4','=')
+      - _ansibles_version.results[2].stdout_lines[0] is match('ansible 2.9')
+      - _molecules_version.results[2].stdout_lines[0].split()[1] is version('3.1.5','=')
 
       - _ansibles_version.results[3].stdout_lines[0] is match('ansible 2.10')
       - _ansibles_version.results[3].stdout_lines[0].split()[1] is version('2.10.1', '=')
       - _molecules_version.results[3].stdout_lines[0].split()[1] is version('3.1.4','=')
 
       - _ansibles_version.results[4].stdout_lines[0] is match('ansible 2.10')
-      - _ansibles_version.results[4].stdout_lines[0].split()[1] is version('2.10.1', '=')
-      - _molecules_version.results[4].stdout_lines[0].split()[1] is version('3.1.4','=')
+      - _ansibles_version.results[4].stdout_lines[0].split()[1] is version('2.10.0', '>=')
+      - _molecules_version.results[4].stdout_lines[0].split()[1] is version('3.1.5','=')
 
       - _ansibles_version.results[5].stdout_lines[0] is match('ansible 2.9.10')
       - _ansibles_version.results[5].stdout_lines[0].split()[1] is version('2.9.10', '=')
-      - _molecules_version.results[5].stdout_lines[0].split()[1] is version('3.1.4','=')
+      - _molecules_version.results[5].stdout_lines[0].split()[1] is version('3.2.0','=')
 
-      - _ansibles_version.results[6].stdout_lines[0] is match('ansible 2.9.10')
-      - _ansibles_version.results[6].stdout_lines[0].split()[1] is version('2.9.10', '=')
-      - _molecules_version.results[6].stdout_lines[0].split()[1] is version('3.1.4','=')
+      - _ansibles_version.results[6].stdout_lines[0] is match('ansible 2.9.')
+      - _ansibles_version.results[6].stdout_lines[0].split()[1] is version('2.9.0', '>=')
+      - _molecules_version.results[6].stdout_lines[0].split()[1] is version('3.2.0','>=')
 
-      - _ansibles_version.results[7].stdout_lines[0] is match('ansible 2.10')
+      - _ansibles_version.results[7].stdout_lines[0] is match('ansible 2.10.1')
       - _ansibles_version.results[7].stdout_lines[0].split()[1] is version('2.10.1', '=')
-      - _molecules_version.results[7].stdout_lines[0].split()[1] is version('3.1.4','=')
-
-      - _ansibles_version.results[8].stdout_lines[0] is match('ansible 2.10')
-      - _ansibles_version.results[8].stdout_lines[0].split()[1] is version('2.10.1', '=')
-      - _molecules_version.results[8].stdout_lines[0].split()[1] is version('3.1.4','=')
+      - _molecules_version.results[7].stdout_lines[0].split()[1] is version('3.2.0','=')
 
   - name: verify molecule installation
     include_role:

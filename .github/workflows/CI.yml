@@ -128,7 +128,8 @@ jobs:
         if: matrix.test_molecule == true
         run: |
           source ~/.virtualenvs/molecule/bin/activate
-          molecule test
+          molecule test --destroy never
+          molecule test --destroy never -s update
 
       - name: molecule tests for ansible node
         run: |

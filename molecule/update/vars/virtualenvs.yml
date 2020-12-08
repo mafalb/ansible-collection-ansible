@@ -1,0 +1,23 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+virtualenvs:
+- { index: 0, virtualenv: molecule }
+- { index: 1, virtualenv: installed1 }
+- { index: 2, virtualenv: installed2 }
+- { index: 3, virtualenv: installed3 }
+- { index: 4, virtualenv: installed4 }
+- { index: 5, virtualenv: installed5 }
+- { index: 6, virtualenv: installed6 }
+- { index: 7, virtualenv: installed7 }
+- { index: 8, virtualenv: installed8 }
+- { index: 9, virtualenv: upgraded1 }
+- { index: 10, virtualenv: upgraded2 }
+- { index: 11, virtualenv: upgraded3 }
+- { index: 12, virtualenv: upgraded4 }
+- { index: 13, virtualenv: upgraded5 }
+- { index: 14, virtualenv: upgraded6 }
+- { index: 15, virtualenv: upgraded7 }
+- { index: 16, virtualenv: upgraded8 }
+
+...
