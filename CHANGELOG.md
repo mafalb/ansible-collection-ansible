@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.3.1 2020-12-11
+
+- force chardet <0.3.1 for molecule installs
+- better CI efficiency (get ansible version out of molecules version)
+
 ## v0.3.0 2020-12-07
 
 ### Changes

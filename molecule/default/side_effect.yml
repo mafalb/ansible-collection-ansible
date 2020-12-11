@@ -24,6 +24,7 @@
     copy:
       src: ../../playbooks/{{ item }}
       dest: /tmp/
+      mode: 00400
     loop:
     - collection-init.yml
     - role-init.yml
