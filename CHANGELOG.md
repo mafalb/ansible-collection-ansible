@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.2 2020-12-19
+
+- pin rich<9.5.0, fix for [issue 3](https://github.com/mafalb/ansible-collection-ansible/issues/3)
+
 ## v0.3.1 2020-12-11
 
 - force chardet <0.3.1 for molecule installs
