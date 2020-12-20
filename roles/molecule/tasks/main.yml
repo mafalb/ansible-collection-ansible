@@ -72,7 +72,6 @@
 - name: molecule is installed (ansible before 2.10)
   pip:
     name:
-    - chardet<3.1.0
     - molecule[lint,docker,test]=={{ molecule_version|mafalb.ansible.pipver }}
     - ansible=={{ molecule_ansible_version|mafalb.ansible.pipver }}
     - tox
@@ -88,7 +87,6 @@
 - name: molecule is installed (ansible 2.10 or later)
   pip:
     name:
-    - chardet<3.1.0
     - molecule[lint,docker,test]=={{ molecule_version|mafalb.ansible.pipver }}
     - ansible-base=={{ molecule_ansible_base_version|default(molecule_ansible_version)|mafalb.ansible.pipver }}
     - ansible=={{ molecule_ansible_version|mafalb.ansible.pipver }}

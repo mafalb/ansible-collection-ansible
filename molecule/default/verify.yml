@@ -18,7 +18,7 @@
       - "'3.1.4'|semver == '3.1.4'"
 
 - name: Verify molecule
-  hosts: all,!t_centos6,!t_ubuntuxenial
+  hosts: all,!ci-centos6,!ci-ubuntuxenial
 
   module_defaults:
     shell:

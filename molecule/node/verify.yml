@@ -18,7 +18,7 @@
 
 
 - name: verify pip
-  hosts: t_centos8
+  hosts: ci-centos8
   tasks:
   - name: pip with virtualenv_command is working
     pip:
@@ -30,7 +30,7 @@
 # no virtualenv for RHEL6, only RHEL7
 #
 - name: verify pip
-  hosts: t_centos7
+  hosts: ci-centos7
   tasks:
   - name: pip with virtualenv_command is working
     pip:
@@ -38,7 +38,7 @@
       virtualenv: "{{ ansible_user_dir }}/.virtualenvs/six"
 
 - name: verify pip
-  hosts: all,!t_centos7,!t_centos6
+  hosts: all,!ci-centos7,!ci-centos6
   tasks:
   - name: pip with virtualenv_command is working
     pip:
@@ -48,7 +48,7 @@
 
 
 - name: install python 2.7
-  hosts: all,!t_centos8
+  hosts: all,!ci-centos8
   tasks:
   - name: python 2.7 is installed
     package:

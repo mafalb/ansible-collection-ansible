@@ -3,6 +3,8 @@
 ## v0.3.3 2020-12-20
 
 - revert pin of rich
+- revert pin of chardet
+- improvements to CI
 
 ## v0.3.2 2020-12-19
 

@@ -11,7 +11,7 @@
 # default7 - 3.2.0 / 2.10.1
 
 - name: Install different variants of molecule
-  hosts: all,!t_centos6,!t_ubuntuxenial
+  hosts: all,!ci-centos6,!ci-ubuntuxenial
 
   roles:
   - role: mafalb.ansible.molecule
