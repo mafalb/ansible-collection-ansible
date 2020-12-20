@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.3 2020-12-20
+
+- revert pin of rich
+
 ## v0.3.2 2020-12-19
 
 - pin rich<9.5.0, fix for [issue 3](https://github.com/mafalb/ansible-collection-ansible/issues/3)
