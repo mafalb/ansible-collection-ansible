@@ -2,7 +2,7 @@
 ---
 
 - name: test collection and role creation
-  hosts: all,!t_centos6,!t_ubuntuxenial
+  hosts: all,!ci-centos6,!ci-ubuntuxenial
 
   vars:
     virtualenvs:
