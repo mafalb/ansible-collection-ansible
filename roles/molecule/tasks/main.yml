@@ -73,7 +73,6 @@
   pip:
     name:
     - chardet<3.1.0
-    - rich<9.5.0
     - molecule[lint,docker,test]=={{ molecule_version|mafalb.ansible.pipver }}
     - ansible=={{ molecule_ansible_version|mafalb.ansible.pipver }}
     - tox
@@ -90,7 +89,6 @@
   pip:
     name:
     - chardet<3.1.0
-    - rich<9.5.0
     - molecule[lint,docker,test]=={{ molecule_version|mafalb.ansible.pipver }}
     - ansible-base=={{ molecule_ansible_base_version|default(molecule_ansible_version)|mafalb.ansible.pipver }}
     - ansible=={{ molecule_ansible_version|mafalb.ansible.pipver }}
