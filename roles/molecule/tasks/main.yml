@@ -76,6 +76,8 @@
     - ansible=={{ molecule_ansible_version|mafalb.ansible.pipver }}
     - tox
     - jmespath
+    - pylint
+    - rstcheck
     extra_args: "{{ '-U eager' if molecule_update is defined else omit }}"
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
@@ -92,6 +94,8 @@
     - ansible=={{ molecule_ansible_version|mafalb.ansible.pipver }}
     - tox
     - jmespath
+    - pylint
+    - rstcheck
     extra_args: "{{ '-U eager' if molecule_update is defined else omit }}"
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
