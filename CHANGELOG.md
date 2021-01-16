@@ -1,9 +1,10 @@
 # Changelog
 
-## v1.0.0 XXXX-XX-XX
+## v1.0.0 2021-01-16
 
 - remove the scripts for role and collection creation, use cookiecutters-ansible [1] project instead
 - CI: install pylint and rstcheck, make ansible-test happy
+- relicense to BSD-3-Clause
 
 [1] [https://github.com/mafalb/cookiecutters-ansible](https://github.com/mafalb/cookiecutters-ansible)
 

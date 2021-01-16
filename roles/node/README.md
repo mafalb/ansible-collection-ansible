@@ -26,4 +26,6 @@ The following features are defined
 
 ## License
 
-GPLv3
+Copyright (c) 2020,2021 Markus Falb <markus.falb@mafalb.at>
+
+BSD-3-Clause
