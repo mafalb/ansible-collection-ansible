@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.0.0 XXXX-XX-XX
+
+- remove the scripts for role and collection creation, use cookiecutters-ansible project instead
+- install pylint and rstcheck, make ansible-test happy
+
 ## v0.3.3 2020-12-20
 
 - revert pin of rich

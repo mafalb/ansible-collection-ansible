@@ -131,9 +131,4 @@ jobs:
           molecule test --destroy never
           molecule test --destroy never -s update
 
-      - name: molecule tests for ansible node
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          molecule test -s node
-
 ...

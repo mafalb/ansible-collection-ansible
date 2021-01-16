@@ -13,6 +13,14 @@
   command: ~/.virtualenvs/{{ virtualenv }}/bin/py.test --version
   changed_when: false
 
+- name: pylint is present - {{ virtualenv }}
+  command: ~/.virtualenvs/{{ virtualenv }}/bin/pylint --version
+  changed_when: false
+
+- name: rstcheck is present - {{ virtualenv }}
+  command: ~/.virtualenvs/{{ virtualenv }}/bin/rstcheck --version
+  changed_when: false
+
 # that that python3 is used
 # the output format of molecule --version changed in molecule 3.1.4
 #
