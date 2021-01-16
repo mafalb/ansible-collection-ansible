@@ -13,6 +13,7 @@ lint: |
   ansible-lint -v
   ansible-lint -v roles/*/vars/*.yml
   flake8 -v
+  ansible-test sanity
 
 platforms:
   - name: ci-${CI_CONTAINER_IMAGE:-centos}${CI_CONTAINER_TAG:-7}
@@ -21,8 +22,6 @@ platforms:
 
 provisioner:
   name: ansible
-  playbooks:
-    side_effect: side_effect.yml
   ansible_args:
     - --tags=all,debug
     - --diff

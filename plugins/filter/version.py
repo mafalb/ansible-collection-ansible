@@ -1,6 +1,7 @@
 # vim: set ts=4 expandtab:
 
 from __future__ import (absolute_import, division, print_function)
+from ansible.module_utils.six import raise_from
 from ansible.errors import AnsibleError
 from ansible.module_utils._text import to_native
 __metaclass__ = type
@@ -18,8 +19,8 @@ def filter_pipver(version):
         else:
             raise AnsibleError('Bad version number: %s' % version)
     except Exception as e:
-        raise AnsibleError('Error in filter_pipver, ',
-                           'this was original exception: %s' % to_native(e))
+        raise_from(AnsibleError('Error in filter_pipver, ',
+                   'this was original exception: %s' % to_native(e)), e)
 
 
 def filter_semver(version):
@@ -34,8 +35,8 @@ def filter_semver(version):
         else:
             raise AnsibleError('Wrong version number: %s' % version)
     except Exception as e:
-        raise AnsibleError('Error in filter_semver, ',
-                           'this was original exception: %s' % to_native(e))
+        raise_from(AnsibleError('Error in filter_semver, ',
+                   'this was original exception: %s' % to_native(e)), e)
 
 
 class FilterModule(object):

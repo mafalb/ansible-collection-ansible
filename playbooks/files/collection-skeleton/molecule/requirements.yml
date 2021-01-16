@@ -1,7 +1,0 @@
-# vim: set ft=yaml ts=2 expandtab:
----
-
-collections:
-- name: mafalb.ansible
-
-...
