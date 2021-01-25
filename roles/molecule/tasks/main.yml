@@ -96,6 +96,7 @@
     - jmespath
     - pylint
     - rstcheck
+    - Jinja2<2.11
     extra_args: "{{ '-U eager' if molecule_update is defined else omit }}"
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
@@ -114,6 +115,7 @@
     - jmespath
     - pylint
     - rstcheck
+    - Jinja2<2.11
     extra_args: "{{ '-U eager' if molecule_update is defined else omit }}"
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
