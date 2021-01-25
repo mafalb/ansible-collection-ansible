@@ -21,4 +21,4 @@ For reference here is the link to the source code for INTERPRETER_PYTHON_DISTRO_
 
 Copyright (c) 2020,2021 Markus Falb <markus.falb@mafalb.at>
 
-BSD-3-Clause
+GPL-3.0-or-later

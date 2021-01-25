@@ -3,7 +3,7 @@
 galaxy_info:
   author: Markus Falb
   description: Ansible role for ansible node dependencies
-  license: BSD-3-Clause
+  license: GPL-3.0-or-later
   min_ansible_version: 2.9
 
   # If this a Container Enabled role, provide the minimum Ansible Container version.

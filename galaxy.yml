@@ -9,7 +9,7 @@ namespace: mafalb
 name: ansible
 
 # The version of the collection. Must be compatible with semantic versioning
-version: 1.0.0
+version: 2.0.0
 
 # The path to the Markdown (.md) readme file. This path is relative to the root of the collection
 readme: README.md
@@ -28,7 +28,7 @@ description: collection for ansible things like host requirements or CI
 # Either a single license or a list of licenses for content inside of a collection. Ansible Galaxy currently only
 # accepts L(SPDX,https://spdx.org/licenses/) licenses. This key is mutually exclusive with 'license_file'
 license:
-- BSD-3-Clause
+- GPL-3.0-or-later
 
 # The path to the license file for the collection. This path is relative to the root of the collection. This key is
 # mutually exclusive with 'license'

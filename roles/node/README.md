@@ -28,4 +28,4 @@ The following features are defined
 
 Copyright (c) 2020,2021 Markus Falb <markus.falb@mafalb.at>
 
-BSD-3-Clause
+GPL-3.0-or-later
