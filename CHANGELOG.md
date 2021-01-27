@@ -3,7 +3,7 @@
 ## v2.0.0 2021-01-24
 
 - relicense to GPL-3.0-or-later
-- use jinja2 < 2.11 to catch errors with missing true test
+- use jinja2 < 2.11 to catch errors with missing true test. this could cause incompatibilities.
 
 ## v1.0.0 2021-01-16
 
