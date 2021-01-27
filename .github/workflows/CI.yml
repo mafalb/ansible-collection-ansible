@@ -50,6 +50,7 @@ jobs:
           distribution: centos
           version: 7
           test_molecule: true
+          test_controlnode: true
 
         - target: centos8
           distribution: centos
@@ -130,5 +131,11 @@ jobs:
           source ~/.virtualenvs/molecule/bin/activate
           molecule test --destroy never
           molecule test --destroy never -s update
+
+      - name: molecule tests for ansible
+        if: matrix.test_controlnode == true
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule test -s controlnode
 
 ...
