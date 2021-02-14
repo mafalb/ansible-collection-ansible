@@ -20,9 +20,6 @@
 ---
 
 molecule_system_dependencies:
-- gcc
-- python3-devel
-- openssl-devel
 - python3-libselinux
 
 ...

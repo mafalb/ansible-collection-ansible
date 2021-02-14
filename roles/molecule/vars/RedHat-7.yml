@@ -21,9 +21,6 @@
 
 #molecule_enablerepo: cr
 molecule_system_dependencies:
-- gcc
-- python3-devel
-- openssl-devel
 - libselinux-python3
 
 ...
