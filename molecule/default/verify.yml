@@ -92,7 +92,7 @@
       - _molecules_version.results[2].stdout_lines[0].split()[1] is version('3.1.5','=')
 
       - _molecules_version.results[3].stdout_lines[1] is match('    ansible:2.10.')
-      - _molecules_version.results[3].stdout_lines[1].split()[0].split(":")[1] is version('2.10.1', '=')
+      - _molecules_version.results[3].stdout_lines[1].split()[0].split(":")[1] is version('2.10.2', '=')
       - _molecules_version.results[3].stdout_lines[0].split()[1] is version('3.1.4','=')
 
       - _molecules_version.results[4].stdout_lines[1] is match('    ansible:2.10.')
@@ -106,8 +106,8 @@
       - _molecules_version.results[6].stdout_lines[1].split()[0].split(":")[1] is version('2.9.0', '>=')
       - _molecules_version.results[6].stdout_lines[0].split()[1] is version('3.2.0','>=')
 
-      - _molecules_version.results[7].stdout_lines[1] is match('    ansible:2.10.1')
-      - _molecules_version.results[7].stdout_lines[1].split()[0].split(":")[1] is version('2.10.1', '=')
+      - _molecules_version.results[7].stdout_lines[1] is match('    ansible:2.10.2')
+      - _molecules_version.results[7].stdout_lines[1].split()[0].split(":")[1] is version('2.10.2', '=')
       - _molecules_version.results[7].stdout_lines[0].split()[1] is version('3.2.0','=')
 
   - name: verify molecule installation
