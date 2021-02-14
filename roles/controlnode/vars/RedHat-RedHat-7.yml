@@ -19,22 +19,6 @@
 
 ---
 
-- name: get OS specific variables
-  include_vars:
-    file: "{{ file }}"
-  loop_control:
-    loop_var: file
-  with_first_found:
-  - "{{ ansible_os_family }}-{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
-  - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
-
-- name: ansibles dependencies are present
-  package:
-    name: "{{ ansible_dependencies }}"
-  when: ansible_dependencies is defined
-
-- name: ansible is present
-  package:
-    name: "{{ ansible_package }}"
+ansible_package: ansible
 
 ...

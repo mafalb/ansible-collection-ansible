@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.0.1 XXXX-XX-XX
+
+- added role for controlnode on RHEL 7 and clones
+- added role for ansible-lint on RHEL 7 and clones
+
 ## v2.0.0 2021-01-24
 
 - relicense to GPL-3.0-or-later
