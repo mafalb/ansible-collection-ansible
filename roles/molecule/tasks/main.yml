@@ -110,7 +110,7 @@
 - name: molecule is installed (ansible before 2.10)
   pip:
     name:
-    - molecule[test,lint,docker]=={{ molecule_version|mafalb.ansible.pipver }}
+    - molecule[lint,docker]=={{ molecule_version|mafalb.ansible.pipver }}
     - ansible=={{ molecule_ansible_version|mafalb.ansible.pipver }}
     - tox
     - jmespath
@@ -128,7 +128,7 @@
 - name: molecule is installed (ansible 2.10 or later)
   pip:
     name:
-    - molecule[test,lint,docker]=={{ molecule_version|mafalb.ansible.pipver }}
+    - molecule[lint,docker]=={{ molecule_version|mafalb.ansible.pipver }}
     - ansible-base=={{ molecule_ansible_base_version|default(molecule_ansible_version)|mafalb.ansible.pipver }}
     - ansible=={{ molecule_ansible_version|mafalb.ansible.pipver }}
     - tox
@@ -140,6 +140,17 @@
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
   when: molecule_ansible_version|mafalb.ansible.semver is version('2.10.0', '>=')
+
+# molecule[test] has less stringent dependency
+# on ansible-lint than molecule[lint]
+# at this point we should already have a good enough ansible-lint
+#
+- name: molecule test is installed
+  pip:
+    name:
+    - molecule[test]=={{ molecule_version|mafalb.ansible.pipver }}
+    virtualenv: "{{ molecule_virtualenv }}"
+    virtualenv_command: "{{ molecule_virtualenv_command }}"
 
 - block:
   - name: get installed version of setuptools after molecule is installed
