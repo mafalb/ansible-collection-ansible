@@ -31,6 +31,7 @@ lint: |
   ansible-lint -v
   ansible-lint -v roles/*/vars/*.yml
   flake8 -v
+  ansible-test sanity
 
 platforms:
   - name: ci-${CI_CONTAINER_IMAGE:-centos}${CI_CONTAINER_TAG:-7}
@@ -52,3 +53,5 @@ verifier:
   name: ansible
   lint:
     name: ansible-lint
+
+...

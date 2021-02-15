@@ -137,26 +137,18 @@ jobs:
         if: matrix.test_molecule == true
         run: |
           source ~/.virtualenvs/molecule/bin/activate
-          echo $CI_REGISTRY
           molecule test --destroy never
-          echo $CI_REGISTRY
 
       - name: molecule update scenario
         if: matrix.test_molecule == true
         run: |
           source ~/.virtualenvs/molecule/bin/activate
-          echo $CI_REGISTRY
           molecule test --destroy never -s update
-          echo $CI_REGISTRY
-          molecule destroy
-          echo $CI_REGISTRY
-          docker ps
 
       - name: molecule controlnode scenario
         if: matrix.test_controlnode == true
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           molecule test -s controlnode
-          docker ps
 
 ...
