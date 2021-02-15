@@ -60,7 +60,7 @@ jobs:
 
         - target: centosstream8
           distribution: centos
-          registry: quay.io/centos/
+          registry: "quay.io/centos/"
           version: stream8
           test_molecule: true
 
