@@ -28,6 +28,7 @@ jobs:
         target:
         - centos7
         - centos8
+        - centosstream8
         - ubuntu-16.04
         - ubuntu-18.04
         - ubuntu-20.04
@@ -55,6 +56,12 @@ jobs:
         - target: centos8
           distribution: centos
           version: 8
+          test_molecule: true
+
+        - target: centosstream8
+          distribution: centos
+          registry: quay.io/centos/
+          version: stream8
           test_molecule: true
 
         - target: ubuntu-16.04
@@ -95,6 +102,7 @@ jobs:
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
+      CI_REGISTRY: ${{ matrix.registry }}
       CI_CONTAINER_IMAGE: ${{ matrix.distribution }}
       CI_CONTAINER_TAG: ${{ matrix.version }}
       PY_COLORS: 1
@@ -131,6 +139,7 @@ jobs:
           source ~/.virtualenvs/molecule/bin/activate
           molecule test --destroy never
           molecule test --destroy never -s update
+          molecule destroy
 
       - name: molecule tests for ansible
         if: matrix.test_controlnode == true
