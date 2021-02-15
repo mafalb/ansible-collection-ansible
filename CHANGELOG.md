@@ -1,9 +1,14 @@
 # Changelog
 
-## v2.0.1 XXXX-XX-XX
+## v2.1.0 XXXX-XX-XX
 
 - added role for controlnode on RHEL 7 and clones
 - added role for ansible-lint on RHEL 7 and clones
+- CI Tests for CentOS Stream 8
+
+## v2.0.1 2021-02-14
+
+- just internal work for CI, induced by new cryptographys dependency on rust
 
 ## v2.0.0 2021-01-24
 
