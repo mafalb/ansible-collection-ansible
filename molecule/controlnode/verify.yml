@@ -32,4 +32,16 @@
     command: ansible --version
     changed_when: false
 
+  - name: ansible-lint is present
+    shell: |
+      . ~/.virtualenvs/ansible_lint/bin/activate
+      ansible-lint --version
+    changed_when: false
+    when: ansible_os_family == 'RedHat'
+
+  - name: ansible-lint is present
+    command: ansible-lint --version
+    changed_when: false
+    when: ansible_os_family != 'RedHat'
+
 ...

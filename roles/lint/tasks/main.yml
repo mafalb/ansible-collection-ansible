@@ -26,58 +26,63 @@
     loop_var: file
   with_first_found:
   - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
-
-- name: virtualenv package is present
-  package:
-    name: "{{ virtualenv_package }}"
-
-# ansible-base is explicitly mentioned, otherwise it is upgraded to the latest
-# possibly causing a mismatch between ansible and ansible-base
-#
-- name: virtualenv is present
-  pip:
-    name: pip
-    extra_args: "{{ '-U eager' if ansible_lint_update is defined else omit }}"
-    virtualenv: "{{ ansible_lint_virtualenv }}"
-    virtualenv_command: "{{ virtualenv_command }}"
-    virtualenv_site_packages: true
-
-- name: get pip package info
-  when: false
-  pip_package_info:
-    clients: "{{ ansible_lint_virtualenv }}/bin/pip"
-
-- name: get pip package info
-  command: "{{ ansible_lint_virtualenv }}/bin/pip show ansible"
-  changed_when: false
-  register: _pip_package
-
-- debug: var=_pip_package
-  tags:
-  - never
-  - debug
-
-- name: assert that ansible is present
-  assert:
-    that:
-    - "'Location: /usr/' in _pip_package.stdout"
+  - "{{ ansible_os_family }}-{{ ansible_distribution }}.yml"
+  - "{{ ansible_os_family }}.yml"
 
 - name: ansible-lint is present
-  block:
+  package:
+    name: "{{ ansible_lint_package }}"
+  when: ansible_lint_package is defined
 
-  - name: dependencies for ansible-lint are present
+- block:
+
+  - name: virtualenv package is present
     package:
       name: "{{ virtualenv_package }}"
-
+    when: virtualenv_package is defined
+  
   # ansible-base is explicitly mentioned, otherwise it is upgraded to the latest
   # possibly causing a mismatch between ansible and ansible-base
   #
-  - name: ansible-lint is installed
+  - name: virtualenv is present
     pip:
-      name: ansible-lint
-      extra_args: "{{ '-U eager' if ansible_lint_update is defined else omit }}"
+      name:
+      - pip>=19.1
+      - setuptools>41
+      - wheel
       virtualenv: "{{ ansible_lint_virtualenv }}"
       virtualenv_command: "{{ virtualenv_command }}"
       virtualenv_site_packages: true
+  
+  - name: get pip package info
+    command: "{{ ansible_lint_virtualenv }}/bin/pip show ansible"
+    changed_when: false
+    register: _pip_package
+  
+  - debug: var=_pip_package
+    tags:
+    - never
+    - debug
+  
+  - name: assert that ansible is present
+    assert:
+      that:
+      - "'Location: /usr/' in _pip_package.stdout"
+  
+  - name: ansible-lint is present
+    block:
+  
+    # ansible-base is explicitly mentioned, otherwise it is upgraded to the latest
+    # possibly causing a mismatch between ansible and ansible-base
+    #
+    - name: ansible-lint is installed
+      pip:
+        name: ansible-lint<5
+        extra_args: "{{ '-U eager' if ansible_lint_update is defined else omit }}"
+        virtualenv: "{{ ansible_lint_virtualenv }}"
+        virtualenv_command: "{{ virtualenv_command }}"
+        virtualenv_site_packages: true
+
+  when: virtualenv_command is defined
 
 ...

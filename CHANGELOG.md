@@ -2,8 +2,8 @@
 
 ## v2.1.0 XXXX-XX-XX
 
-- added role for controlnode on RHEL 7 and clones
-- added role for ansible-lint on RHEL 7 and clones
+- added role for controlnode
+- added role for ansible-lint
 - CI Tests for CentOS Stream 8
 
 ## v2.0.1 2021-02-14

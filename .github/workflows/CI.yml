@@ -57,12 +57,14 @@ jobs:
           distribution: centos
           version: 8
           test_molecule: true
+          test_controlnode: true
 
         - target: centosstream8
           distribution: centos
           registry: "quay.io/centos/"
           version: stream8
           test_molecule: true
+          test_controlnode: true
 
         - target: ubuntu-16.04
           distribution: ubuntu
@@ -78,16 +80,19 @@ jobs:
           distribution: ubuntu
           version: focal
           test_molecule: true
+          test_controlnode: true
 
         - target: fedora32
           distribution: fedora
           version: 32
           test_molecule: true
+          test_controlnode: true
 
         - target: fedora33
           distribution: fedora
           version: 33
           test_molecule: true
+          test_controlnode: true
 
         - target: debian9
           distribution: debian
