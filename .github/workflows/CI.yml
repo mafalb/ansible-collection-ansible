@@ -133,15 +133,20 @@ jobs:
           source ~/.virtualenvs/molecule/bin/activate
           ansible --version | grep "^ansible ${{ matrix.ansible_version }}"
 
-      - name: molecule tests for molecule
+      - name: molecule default scenario
         if: matrix.test_molecule == true
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           molecule test --destroy never
+
+      - name: molecule update scenario
+        if: matrix.test_molecule == true
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
           molecule test --destroy never -s update
           molecule destroy
 
-      - name: molecule tests for ansible
+      - name: molecule controlnode scenario
         if: matrix.test_controlnode == true
         run: |
           source ~/.virtualenvs/molecule/bin/activate
