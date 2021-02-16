@@ -1,6 +1,14 @@
 # Ansible Role - mafalb.ansible.controlnode
 
 A Role for installing ansible.
+It's currently tested on
+
+- CentOS 7
+- CentOS 8
+- CentOS Stream
+- Fedora 32
+- Fedora 33
+- Ubuntu 20.04 (focal)
 
 ## Basic Usage
 
