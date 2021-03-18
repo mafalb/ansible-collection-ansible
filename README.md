@@ -13,6 +13,10 @@ For reference here is the link to the source code for INTERPRETER_PYTHON_DISTRO_
 
 ## Roles
 
+### [mafalb.ansible.controlnode](roles/controlnode/README.md)
+
+### [mafalb.ansible.lint](roles/lint/README.md)
+
 ### [mafalb.ansible.molecule](roles/molecule/README.md)
 
 ### [mafalb.ansible.node](roles/node/README.md)
