@@ -113,6 +113,7 @@
     - molecule[lint,docker]=={{ molecule_version|mafalb.ansible.pipver }}
     - ansible=={{ molecule_ansible_version|mafalb.ansible.pipver }}
     - ansible-lint<5
+    - yamllint
     - tox
     - jmespath
     - pylint
@@ -133,6 +134,7 @@
     - ansible-base=={{ molecule_ansible_base_version|default(molecule_ansible_version)|mafalb.ansible.pipver }}
     - ansible=={{ molecule_ansible_version|mafalb.ansible.pipver }}
     - ansible-lint<5
+    - yamllint
     - tox
     - jmespath
     - pylint
