@@ -62,6 +62,7 @@ jobs:
 
         - target: alma8
           distribution: almalinux
+          registry: "docker.io/almalinux/"
           version: 8
           test_molecule: true
           test_controlnode: true
