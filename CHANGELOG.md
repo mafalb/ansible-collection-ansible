@@ -1,10 +1,12 @@
 # Changelog
 
-## v2.1.0 XXXX-XX-XX
+## v2.1.0 2021-03-19
 
+- bugfixes related to ansible-lint 5
 - added role for controlnode
 - added role for ansible-lint
 - CI Tests for CentOS Stream 8
+- CI Tests for Alma 8
 
 ## v2.0.1 2021-02-14
 
