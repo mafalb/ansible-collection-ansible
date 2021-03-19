@@ -1,0 +1,32 @@
+# vim: set ft=yaml ts=2 expandtab:
+
+# This file is part of Ansible Collection mafalb.ansible
+# Copyright (c) 2019-2021 Markus Falb <markus.falb@mafalb.at>
+#
+# Ansible collection mafalb.ansible is free software: you can redistribute it 
+# and/or modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# Ansible collection mafalb.ansible is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Ansible collection mafalb.ansible.
+# If not, see <https://www.gnu.org/licenses/>.
+
+---
+
+# use absolute path to virtualenv
+# https://github.com/ansible/ansible/issues/22967
+#
+# and use ansible_user_dir
+# https://github.com/ansible/ansible/issues/57436
+# (~/.virtualenvs/ansible-lint does not work) for
+# setting TMPPATH environment variable for pip
+#
+ansible_lint_virtualenv: "{{ ansible_user_dir }}/.virtualenvs/ansible_lint"
+
+...

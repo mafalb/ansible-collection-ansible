@@ -51,6 +51,7 @@ jobs:
           distribution: centos
           version: 7
           test_molecule: true
+          test_controlnode: true
 
         - target: centos8
           distribution: centos
