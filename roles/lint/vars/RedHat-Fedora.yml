@@ -19,36 +19,6 @@
 
 ---
 
-dependency:
-  name: galaxy
-driver:
-  name: docker
+virtualenv_command: '/usr/bin/python3 -m venv'
 
-lint: |
-  set -e
-  ! grep -r "no_log: false" .
-  yamllint .
-  ansible-lint -v
-  ansible-lint -v roles/*/vars/*.yml
-  flake8 -v
-
-platforms:
-  - name: ci-${CI_CONTAINER_IMAGE:-centos}${CI_CONTAINER_TAG:-7}
-    image: ${CI_REGISTRY}${CI_CONTAINER_IMAGE:-centos}:${CI_CONTAINER_TAG:-7}
-    dockerfile: ../resources/Dockerfile.j2
-
-provisioner:
-  name: ansible
-  ansible_args:
-    - --tags=all,debug
-    - --diff
-  lint:
-    name: ansible-lint
-  config_options:
-    defaults:
-      interpreter_python: auto
-
-verifier:
-  name: ansible
-  lint:
-    name: ansible-lint
+...

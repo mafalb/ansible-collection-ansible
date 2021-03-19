@@ -19,36 +19,29 @@
 
 ---
 
-dependency:
-  name: galaxy
-driver:
-  name: docker
+- name: Verify ansible
+  hosts: all
 
-lint: |
-  set -e
-  ! grep -r "no_log: false" .
-  yamllint .
-  ansible-lint -v
-  ansible-lint -v roles/*/vars/*.yml
-  flake8 -v
+  module_defaults:
+    shell:
+      executable: /bin/bash
 
-platforms:
-  - name: ci-${CI_CONTAINER_IMAGE:-centos}${CI_CONTAINER_TAG:-7}
-    image: ${CI_REGISTRY}${CI_CONTAINER_IMAGE:-centos}:${CI_CONTAINER_TAG:-7}
-    dockerfile: ../resources/Dockerfile.j2
+  tasks:
 
-provisioner:
-  name: ansible
-  ansible_args:
-    - --tags=all,debug
-    - --diff
-  lint:
-    name: ansible-lint
-  config_options:
-    defaults:
-      interpreter_python: auto
+  - name: ansible is in the path
+    command: ansible --version
+    changed_when: false
 
-verifier:
-  name: ansible
-  lint:
-    name: ansible-lint
+  - name: ansible-lint is present
+    shell: |
+      . ~/.virtualenvs/ansible_lint/bin/activate
+      ansible-lint --version
+    changed_when: false
+    when: ansible_os_family == 'RedHat'
+
+  - name: ansible-lint is present
+    command: ansible-lint --version
+    changed_when: false
+    when: ansible_os_family != 'RedHat'
+
+...

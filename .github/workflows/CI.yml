@@ -28,6 +28,8 @@ jobs:
         target:
         - centos7
         - centos8
+        - alma8
+        - centosstream8
         - ubuntu-16.04
         - ubuntu-18.04
         - ubuntu-20.04
@@ -38,7 +40,6 @@ jobs:
 
         os:
         - ubuntu-20.04
-        - ubuntu-18.04
 
         ansible_version:
         - '2.10'
@@ -55,6 +56,21 @@ jobs:
           distribution: centos
           version: 8
           test_molecule: true
+          test_controlnode: true
+
+        - target: alma8
+          distribution: almalinux
+          registry: "docker.io/almalinux/"
+          version: 8
+          test_molecule: true
+          test_controlnode: true
+
+        - target: centosstream8
+          distribution: centos
+          registry: "quay.io/centos/"
+          version: stream8
+          test_molecule: true
+          test_controlnode: true
 
         - target: ubuntu-16.04
           distribution: ubuntu
@@ -70,16 +86,19 @@ jobs:
           distribution: ubuntu
           version: focal
           test_molecule: true
+          test_controlnode: true
 
         - target: fedora32
           distribution: fedora
           version: 32
           test_molecule: true
+          test_controlnode: true
 
         - target: fedora33
           distribution: fedora
           version: 33
           test_molecule: true
+          test_controlnode: true
 
         - target: debian9
           distribution: debian
@@ -94,6 +113,7 @@ jobs:
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
+      CI_REGISTRY: ${{ matrix.registry }}
       CI_CONTAINER_IMAGE: ${{ matrix.distribution }}
       CI_CONTAINER_TAG: ${{ matrix.version }}
       PY_COLORS: 1
@@ -124,11 +144,22 @@ jobs:
           source ~/.virtualenvs/molecule/bin/activate
           ansible --version | grep "^ansible ${{ matrix.ansible_version }}"
 
-      - name: molecule tests for molecule
+      - name: molecule default scenario
         if: matrix.test_molecule == true
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           molecule test --destroy never
+
+      - name: molecule update scenario
+        if: matrix.test_molecule == true
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
           molecule test --destroy never -s update
+
+      - name: molecule controlnode scenario
+        if: matrix.test_controlnode == true
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule test -s controlnode
 
 ...

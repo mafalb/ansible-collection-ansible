@@ -19,36 +19,22 @@
 
 ---
 
-dependency:
-  name: galaxy
-driver:
-  name: docker
+- name: get OS specific variables
+  include_vars:
+    file: "{{ file }}"
+  loop_control:
+    loop_var: file
+  with_first_found:
+  - "{{ ansible_os_family }}-{{ ansible_distribution }}.yml" # for Fedora
+  - "{{ ansible_os_family }}.yml" # for all others
 
-lint: |
-  set -e
-  ! grep -r "no_log: false" .
-  yamllint .
-  ansible-lint -v
-  ansible-lint -v roles/*/vars/*.yml
-  flake8 -v
+- name: ansibles dependencies are present
+  package:
+    name: "{{ ansible_dependencies }}"
+  when: ansible_dependencies is defined
 
-platforms:
-  - name: ci-${CI_CONTAINER_IMAGE:-centos}${CI_CONTAINER_TAG:-7}
-    image: ${CI_REGISTRY}${CI_CONTAINER_IMAGE:-centos}:${CI_CONTAINER_TAG:-7}
-    dockerfile: ../resources/Dockerfile.j2
+- name: ansible is present
+  package:
+    name: "{{ ansible_package }}"
 
-provisioner:
-  name: ansible
-  ansible_args:
-    - --tags=all,debug
-    - --diff
-  lint:
-    name: ansible-lint
-  config_options:
-    defaults:
-      interpreter_python: auto
-
-verifier:
-  name: ansible
-  lint:
-    name: ansible-lint
+...
