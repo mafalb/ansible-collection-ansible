@@ -21,6 +21,7 @@
 
 ansible_node_dependencies:
   selinux:
+  - libselinux-python
   - libsemanage-python
   - policycoreutils-python
   crypto:
