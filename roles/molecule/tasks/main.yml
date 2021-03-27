@@ -91,7 +91,8 @@
     command: "{{ molecule_virtualenv }}/bin/pip list --format=columns"
     changed_when: false
     register: _pip_list
-  - debug:
+  - name: debug
+    debug:
       var: _pip_list.stdout_lines
   tags:
   - never
@@ -150,7 +151,8 @@
     command: "{{ molecule_virtualenv }}/bin/pip list --format=columns"
     changed_when: false
     register: _pip_list
-  - debug:
+  - name: debug _pip_list
+    debug:
       var: _pip_list.stdout_lines
   tags:
   - never
@@ -172,7 +174,8 @@
     command: "{{ molecule_virtualenv }}/bin/pip list --format=columns"
     changed_when: false
     register: _pip_list
-  - debug:
+  - name: debug
+    debug:
       var: _pip_list.stdout_lines
   tags:
   - never

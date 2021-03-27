@@ -22,7 +22,8 @@
 - name: CI for custom filters
   hosts: localhost
   tasks:
-  - debug: msg="{{ '2.9'|semver }}"
+  - name: debug
+    debug: msg="{{ '2.9'|semver }}"
   - name: assertions for custom filters
     assert:
       that:
@@ -64,7 +65,8 @@
     command: locale
     register: _locale
 
-  - debug: var=_locale
+  - name: debug
+    debug: var=_locale
 
   - name: molecule is present - molecule
     shell: |
@@ -74,8 +76,10 @@
     loop: "{{ virtualenvs }}"
     register: _molecules_version
 
-  - debug: var=_molecules_version
-  - debug: var=_molecules_version.results[4].stdout_lines[1].split()[0].split(':')[1]
+  - name: debug
+    debug: var=_molecules_version
+  - name: debug
+    debug: var=_molecules_version.results[4].stdout_lines[1].split()[0].split(':')[1]
     when: false
 
   - name: correct version of ansible/molecule is installed
@@ -128,6 +132,7 @@
       - skeleton_path is not defined
       - license is not defined
 
-  - debug: msg="{{ virtualenvs|map(attribute='virtualenv')|product(files)|list }}"
+  - name: debug
+    debug: msg="{{ virtualenvs|map(attribute='virtualenv')|product(files)|list }}"
 
 ...

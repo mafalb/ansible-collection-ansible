@@ -48,7 +48,8 @@
     command: locale
     register: _locale
 
-  - debug: var=_locale
+  - name: debug _locale
+    debug: var=_locale
 
   - name: molecule is present - molecule
     shell: |
@@ -58,7 +59,8 @@
     loop: "{{ virtualenvs }}"
     register: _molecules_version
 
-  - debug: var=_molecules_version
+  - name: debug molecules version
+    debug: var=_molecules_version
 
   - name: correct version of ansible/molecule is installed
     assert:

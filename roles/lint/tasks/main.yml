@@ -59,7 +59,8 @@
     changed_when: false
     register: _pip_package
 
-  - debug: var=_pip_package
+  - name: debug
+    debug: var=_pip_package
     tags:
     - never
     - debug
