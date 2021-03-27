@@ -72,12 +72,14 @@
   - name: ansible-lint is present
     block:
 
-    # ansible-base is explicitly mentioned, otherwise it is upgraded to the latest
-    # possibly causing a mismatch between ansible and ansible-base
+    # the check for virtualenv is meant as a check for python2
+    # ruamel.yaml drops support for python2 in version 17
     #
     - name: ansible-lint is installed
       pip:
-        name: ansible-lint<5
+        name:
+        - ansible-lint<5
+        - ruamel.yaml{{ '<0.17' if virtualenv_command == 'virtualenv' }}
         extra_args: "{{ '-U eager' if ansible_lint_update is defined else omit }}"
         virtualenv: "{{ ansible_lint_virtualenv }}"
         virtualenv_command: "{{ virtualenv_command }}"
