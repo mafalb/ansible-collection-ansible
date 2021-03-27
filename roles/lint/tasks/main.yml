@@ -79,7 +79,7 @@
       pip:
         name:
         - ansible-lint<5
-        - ruamel.yaml{{ '<0.17' if virtualenv_command == 'virtualenv' }}
+        - ruamel.yaml{{ '<0.17' if virtualenv_command == 'virtualenv' else '' }}
         extra_args: "{{ '-U eager' if ansible_lint_update is defined else omit }}"
         virtualenv: "{{ ansible_lint_virtualenv }}"
         virtualenv_command: "{{ virtualenv_command }}"
