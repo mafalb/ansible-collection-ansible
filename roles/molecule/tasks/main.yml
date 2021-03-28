@@ -110,7 +110,7 @@
 - name: molecule is installed (ansible before 2.10)
   pip:
     name:
-    - molecule[lint,docker]=={{ molecule_version|mafalb.ansible.pipver }}
+    - molecule[lint,docker]=={{ molecule_version|mafalb.ansible.pipver }},<{{ '3.3'|mafalb.ansible.pipver }}
     - ansible=={{ molecule_ansible_version|mafalb.ansible.pipver }}
     - ansible-lint<5
     - yamllint
@@ -130,7 +130,7 @@
 - name: molecule is installed (ansible 2.10 or later)
   pip:
     name:
-    - molecule[lint,docker]=={{ molecule_version|mafalb.ansible.pipver }}
+    - molecule[lint,docker]=={{ molecule_version|mafalb.ansible.pipver }},<{{ '3.3'|mafalb.ansible.pipver }}
     - ansible-base=={{ molecule_ansible_base_version|default(molecule_ansible_version)|mafalb.ansible.pipver }}
     - ansible=={{ molecule_ansible_version|mafalb.ansible.pipver }}
     - ansible-lint<5
@@ -163,7 +163,7 @@
 - name: molecule test is installed
   pip:
     name:
-    - molecule[test]=={{ molecule_version|mafalb.ansible.pipver }}
+    - molecule[test]=={{ molecule_version|mafalb.ansible.pipver }},<{{ '3.3'|mafalb.ansible.pipver }}
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
 
