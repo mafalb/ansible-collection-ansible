@@ -30,6 +30,7 @@ molecule_ansible_pip_packages: "{{ [molecule_ansible_pip_package] }} + {{ [molec
 
 molecule_pip_packages:
 - molecule[lint,docker,test]=={{ molecule_version|mafalb.ansible.pipver }}
+- ansible-lint>=5
 - jmespath
 - tox
 - pylint
