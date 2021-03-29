@@ -79,6 +79,8 @@
   - name: debug
     debug: var=_molecules_version
 
+  # _ansible_lint_version does not work!
+  #
   - name: ansible-lint is present
     shell: |
       . ~/.virtualenvs/{{ item.virtualenv }}/bin/activate
