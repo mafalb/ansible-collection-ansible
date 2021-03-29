@@ -87,7 +87,7 @@
       that:
 
       - _molecules_version.results[0].stdout_lines[1] is match('    ansible:2.10.')
-      - _molecules_version.results[0].stdout_lines[0].split()[1] is match('3.2')
+      - _molecules_version.results[0].stdout_lines[0].split()[1] is match('3.3')
 
       - _molecules_version.results[1].stdout_lines[1] is match('    ansible:2.9.10')
       - _molecules_version.results[1].stdout_lines[0].split()[1] is version('3.1.4','=')

@@ -21,4 +21,19 @@
 
 molecule_virtualenv_command: '/usr/bin/python3 -m venv'
 
+# ansible-base is explicitly mentioned, otherwise it is upgraded to the latest
+# possibly causing a mismatch between ansible and ansible-base
+#
+molecule_ansible_base_pip_package: ansible-base=={{ molecule_ansible_base_version|default(molecule_ansible_version)|mafalb.ansible.pipver }}
+molecule_ansible_pip_package: ansible=={{ molecule_ansible_version|mafalb.ansible.pipver }}
+molecule_ansible_pip_packages: "{{ [molecule_ansible_pip_package] }} + {{ [molecule_ansible_base_pip_package] if molecule_ansible_version|mafalb.ansible.semver is version('2.10.0', '>=') else [] }}"
+
+molecule_pip_packages:
+- molecule[lint,docker,test]=={{ molecule_version|mafalb.ansible.pipver }}
+- jmespath
+- tox
+- pylint
+- rstcheck
+- Jinja2<2.11
+
 ...
