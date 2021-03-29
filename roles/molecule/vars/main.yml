@@ -28,9 +28,10 @@ molecule_ansible_base_pip_package: ansible-base=={{ molecule_ansible_base_versio
 molecule_ansible_pip_package: ansible=={{ molecule_ansible_version|mafalb.ansible.pipver }}
 molecule_ansible_pip_packages: "{{ [molecule_ansible_pip_package] }} + {{ [molecule_ansible_base_pip_package] if molecule_ansible_version|mafalb.ansible.semver is version('2.10.0', '>=') else [] }}"
 
+ansible_lint_version: "{{ '<5' if molecule_version|mafalb.ansible.pipver is regex('^3.[012]') else '>=5' }}"
 molecule_pip_packages:
 - molecule[lint,docker,test]=={{ molecule_version|mafalb.ansible.pipver }}
-- ansible-lint{{ '<5' if molecule_version|mafalb.ansible.semver is version('3.3.0', '<') else '>=5' }}"
+- ansible-lint{{ ansible_lint_version }}
 - jmespath
 - tox
 - pylint

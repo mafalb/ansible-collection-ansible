@@ -19,13 +19,13 @@
 
 ---
 
-# molecule - 3.2.* / 2.10.*
+# molecule - 3.3.* / 2.10.*
 # default1 - 3.1.4 / 2.9.10
 # default2 - 3.1.5 / 2.9.*
 # default3 - 3.1.4 / 2.10.1
 # default4 - 3.1.5 / 2.10.*
 # default5 - 3.2.0 / 2.9.10
-# default6 - 3.2.* / 2.9.*
+# default6 - 3.3.* / 2.9.*
 # default7 - 3.2.0 / 2.10.1
 
 - name: Install different variants of molecule
@@ -77,7 +77,7 @@
       molecule_ansible_version: '2.9.10'
       molecule_virtualenv: ~/.virtualenvs/default5
 
-  - name: prepare default6 - 3.2 / 2.9
+  - name: prepare default6 - 3.3 / 2.9
     include_role:
       name: mafalb.ansible.molecule
     vars:

@@ -98,6 +98,11 @@
   - never
   - debug
 
+- name: debug
+  debug: var=molecule_version|mafalb.ansible.pipver
+- name: debug
+  debug: var=ansible_lint_version
+
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
 #
