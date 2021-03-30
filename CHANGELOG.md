@@ -1,8 +1,12 @@
 # Changelog
 
+## v3.0.0 2021-03-30
+
+- update for molecule==3.3 and ansible-lint 5. this can lead to lint errors with your existing code!
+
 ## v2.1.1 2021-03-28
 
-- restrict to molecule==3.3, this makes it possible to stay on ansible-lint 4
+- restrict to molecule==3.2, this makes it possible to stay on ansible-lint 4
 - restrict to ruamel.yaml<0.17 (only for python2)
 
 ## v2.1.0 2021-03-19

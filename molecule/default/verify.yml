@@ -22,7 +22,8 @@
 - name: CI for custom filters
   hosts: localhost
   tasks:
-  - debug: msg="{{ '2.9'|semver }}"
+  - name: debug
+    debug: msg="{{ '2.9'|semver }}"
   - name: assertions for custom filters
     assert:
       that:
@@ -64,7 +65,8 @@
     command: locale
     register: _locale
 
-  - debug: var=_locale
+  - name: debug
+    debug: var=_locale
 
   - name: molecule is present - molecule
     shell: |
@@ -74,41 +76,61 @@
     loop: "{{ virtualenvs }}"
     register: _molecules_version
 
-  - debug: var=_molecules_version
-  - debug: var=_molecules_version.results[4].stdout_lines[1].split()[0].split(':')[1]
-    when: false
+  - name: debug
+    debug: var=_molecules_version
+
+  # _ansible_lint_version does not work!
+  #
+  - name: ansible-lint is present
+    shell: |
+      . ~/.virtualenvs/{{ item.virtualenv }}/bin/activate
+      ansible-lint --version
+    changed_when: false
+    loop: "{{ virtualenvs }}"
+    register: _lint_version
+
+  - name: debug _lint_version
+    debug: var=_lint_version
 
   - name: correct version of ansible/molecule is installed
     assert:
       that:
 
       - _molecules_version.results[0].stdout_lines[1] is match('    ansible:2.10.')
-      - _molecules_version.results[0].stdout_lines[0].split()[1] is match('3.2')
+      - _molecules_version.results[0].stdout_lines[0].split()[1] is match('3.3')
+      - _lint_version.results[0].stdout_lines[0].split()[1] is version('5','>=')
 
       - _molecules_version.results[1].stdout_lines[1] is match('    ansible:2.9.10')
       - _molecules_version.results[1].stdout_lines[0].split()[1] is version('3.1.4','=')
+      - _lint_version.results[1].stdout_lines[0].split()[1] is version('5','<')
 
       - _molecules_version.results[2].stdout_lines[1] is match('    ansible:2.9.')
       - _molecules_version.results[2].stdout_lines[0].split()[1] is version('3.1.5','=')
+      - _lint_version.results[2].stdout_lines[0].split()[1] is version('5','<')
 
       - _molecules_version.results[3].stdout_lines[1] is match('    ansible:2.10.')
       - _molecules_version.results[3].stdout_lines[1].split()[0].split(":")[1] is version('2.10.2', '=')
       - _molecules_version.results[3].stdout_lines[0].split()[1] is version('3.1.4','=')
+      - _lint_version.results[3].stdout_lines[0].split()[1] is version('5','<')
 
       - _molecules_version.results[4].stdout_lines[1] is match('    ansible:2.10.')
       - _molecules_version.results[4].stdout_lines[1].split()[0].split(":")[1] is version('2.10.0', '>=')
       - _molecules_version.results[4].stdout_lines[0].split()[1] is version('3.1.5','=')
+      - _lint_version.results[4].stdout_lines[0].split()[1] is version('5','<')
 
       - _molecules_version.results[5].stdout_lines[1] is match('    ansible:2.9.10')
       - _molecules_version.results[5].stdout_lines[0].split()[1] is version('3.2.0','=')
+      - _lint_version.results[5].stdout_lines[0].split()[1] is version('5','<')
 
       - _molecules_version.results[6].stdout_lines[1] is match('    ansible:2.9.')
       - _molecules_version.results[6].stdout_lines[1].split()[0].split(":")[1] is version('2.9.0', '>=')
-      - _molecules_version.results[6].stdout_lines[0].split()[1] is version('3.2.0','>=')
+      - _molecules_version.results[6].stdout_lines[0].split()[1] is version('3.3.0','>=')
+      - _lint_version.results[6].stdout_lines[0].split()[1] is version('5','>=')
 
       - _molecules_version.results[7].stdout_lines[1] is match('    ansible:2.10.2')
       - _molecules_version.results[7].stdout_lines[1].split()[0].split(":")[1] is version('2.10.2', '=')
       - _molecules_version.results[7].stdout_lines[0].split()[1] is version('3.2.0','=')
+      - _lint_version.results[7].stdout_lines[0].split()[1] is version('5','<')
 
   - name: verify molecule installation
     include_role:
@@ -128,6 +150,7 @@
       - skeleton_path is not defined
       - license is not defined
 
-  - debug: msg="{{ virtualenvs|map(attribute='virtualenv')|product(files)|list }}"
+  - name: debug
+    debug: msg="{{ virtualenvs|map(attribute='virtualenv')|product(files)|list }}"
 
 ...

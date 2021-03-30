@@ -4,6 +4,11 @@ A Role for installing Molecule. Molecule helps with testing ansible roles or col
 
 Molecule installs via pip into a virtualenv without site packages.
 
+molecule version 3.3.0 introduced a dependency for ansible-lint 5 which for me gave me incompatibilities. Therefore I bumped the major version of this collection.
+
+mafalb.ansible up to 2.1.1 -> ansible-lint <5
+mafalb.ansible > 3.0.0 -> ansible-lint >5
+
 ## Basic Usage
 
 ```yaml
@@ -11,15 +16,6 @@ Molecule installs via pip into a virtualenv without site packages.
   hosts: localhost
   roles:
   - role: mafalb.ansible.molecule
-```
-
-```yaml
-- name: install version 2 of molecule
-  hosts: localhost
-  roles:
-  - role: mafalb.ansible.molecule
-    molecule_version: 2
-    molecule_virtualenv: "~/.virtualenvs/molecule2"
 ```
 
 ## Variables

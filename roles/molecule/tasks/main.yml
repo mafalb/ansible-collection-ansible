@@ -91,11 +91,17 @@
     command: "{{ molecule_virtualenv }}/bin/pip list --format=columns"
     changed_when: false
     register: _pip_list
-  - debug:
+  - name: debug
+    debug:
       var: _pip_list.stdout_lines
   tags:
   - never
   - debug
+
+- name: debug
+  debug: var=molecule_version|mafalb.ansible.pipver
+- name: debug
+  debug: var=ansible_lint_version
 
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
@@ -107,72 +113,32 @@
 # https://github.com/ansible/ansible/issues/57436
 # it is important to use ansible_user_dir, not ~
 #
-- name: molecule is installed (ansible before 2.10)
+- name: molecule is installed
   pip:
-    name:
-    - molecule[lint,docker]=={{ molecule_version|mafalb.ansible.pipver }},<{{ '3.3'|mafalb.ansible.pipver }}
-    - ansible=={{ molecule_ansible_version|mafalb.ansible.pipver }}
-    - ansible-lint<5
-    - yamllint
-    - tox
-    - jmespath
-    - pylint
-    - rstcheck
-    - Jinja2<2.11
+    name: "{{ molecule_ansible_pip_packages + molecule_pip_packages }}"
     extra_args: "{{ '-U eager' if molecule_update is defined else omit }}"
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
-  when: molecule_ansible_version|mafalb.ansible.semver is version('2.10.0', '<')
-
-# ansible-base is explicitly mentioned, otherwise it is upgraded to the latest
-# possibly causing a mismatch between ansible and ansible-base
-#
-- name: molecule is installed (ansible 2.10 or later)
-  pip:
-    name:
-    - molecule[lint,docker]=={{ molecule_version|mafalb.ansible.pipver }},<{{ '3.3'|mafalb.ansible.pipver }}
-    - ansible-base=={{ molecule_ansible_base_version|default(molecule_ansible_version)|mafalb.ansible.pipver }}
-    - ansible=={{ molecule_ansible_version|mafalb.ansible.pipver }}
-    - ansible-lint<5
-    - yamllint
-    - tox
-    - jmespath
-    - pylint
-    - rstcheck
-    - Jinja2<2.11
-    extra_args: "{{ '-U eager' if molecule_update is defined else omit }}"
-    virtualenv: "{{ molecule_virtualenv }}"
-    virtualenv_command: "{{ molecule_virtualenv_command }}"
-  when: molecule_ansible_version|mafalb.ansible.semver is version('2.10.0', '>=')
 
 - block:
   - name: get installed version of setuptools after molecule is installed
     command: "{{ molecule_virtualenv }}/bin/pip list --format=columns"
     changed_when: false
     register: _pip_list
-  - debug:
+  - name: debug _pip_list
+    debug:
       var: _pip_list.stdout_lines
   tags:
   - never
   - debug
-
-# molecule[test] has less stringent dependency
-# on ansible-lint than molecule[lint]
-# at this point we should already have a good enough ansible-lint
-#
-- name: molecule test is installed
-  pip:
-    name:
-    - molecule[test]=={{ molecule_version|mafalb.ansible.pipver }},<{{ '3.3'|mafalb.ansible.pipver }}
-    virtualenv: "{{ molecule_virtualenv }}"
-    virtualenv_command: "{{ molecule_virtualenv_command }}"
 
 - block:
   - name: get installed version of setuptools after molecule test is installed
     command: "{{ molecule_virtualenv }}/bin/pip list --format=columns"
     changed_when: false
     register: _pip_list
-  - debug:
+  - name: debug
+    debug:
       var: _pip_list.stdout_lines
   tags:
   - never
