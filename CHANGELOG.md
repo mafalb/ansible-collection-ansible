@@ -1,6 +1,6 @@
 # Changelog
 
-## v3.0.0 2021-03-29
+## v3.0.0 2021-03-30
 
 - update for molecule==3.3 and ansible-lint 5. this can lead to lint errors with your existing code!
 
