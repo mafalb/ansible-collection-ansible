@@ -132,7 +132,7 @@ jobs:
           path: ansible_collections/mafalb/ansible
       
       - name: install system ansible
-        run: sudo apt install ansible
+        run: sudo apt-get install ansible
 
       # note: this uses ansible-playbook from system ansible
       #
