@@ -134,7 +134,7 @@ jobs:
       - name: install molecule
         run: |
           sudo apt install ansible
-          /usr/bin/ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
+          /usr/bin/ansible-playbook -D playbooks/molecule.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
         env:
           ANSIBLE_COLLECTIONS_PATHS: '../../..'
 
