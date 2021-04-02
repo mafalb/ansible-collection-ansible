@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.2 2021-04-02
+
+- use system ansible to install molecule, not the preinstalled from github actions
+
 ## v2.1.1 2021-03-28
 
 - restrict to molecule==3.3, this makes it possible to stay on ansible-lint 4
