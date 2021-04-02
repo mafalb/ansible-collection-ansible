@@ -1,10 +1,9 @@
 # Changelog
 
-## v3.0.1 2021-XX-XX
-
-## v3.0.0 2021-03-30
+## v3.0.0 2021-04-02
 
 - update for molecule==3.3 and ansible-lint 5. this can lead to lint errors with your existing code!
+- use system ansible to install molecule, not the preinstalled from github actions
 
 ## v2.1.1 2021-03-28
 
