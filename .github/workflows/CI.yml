@@ -131,14 +131,13 @@ jobs:
         with:
           path: ansible_collections/mafalb/ansible
       
-      - name: update apt cache
-        run: sudo apt-get update
+      - name: install system ansible
+        run: sudo apt install ansible
 
+      # note: this uses ansible-playbook from system ansible
+      #
       - name: install molecule
-        run: |
-          ansible-playbook -D bootstrap.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
-        env:
-          ANSIBLE_COLLECTIONS_PATHS: '../../..'
+        run: /usr/bin/ansible-playbook -D playbooks/molecule.yml -e molecule_ansible_version=$ANSIBLE_VERSION -t all,debug
 
       - name: check ansible version
         run: |
