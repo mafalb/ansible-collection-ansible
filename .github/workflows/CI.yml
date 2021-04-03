@@ -138,6 +138,8 @@ jobs:
       #
       - name: install molecule
         run: /usr/bin/ansible-playbook -D playbooks/molecule.yml -e molecule_ansible_version=$ANSIBLE_VERSION -t all,debug
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: '../../..'
 
       - name: check ansible version
         run: |
