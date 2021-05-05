@@ -132,12 +132,12 @@ jobs:
           path: ansible_collections/mafalb/ansible
       
       - name: install system ansible
-        run: sudo apt install ansible
+        run: sudo apt-get install ansible
 
       # note: this uses ansible-playbook from system ansible
       #
       - name: install molecule
-        run: /usr/bin/ansible-playbook -D playbooks/molecule.yml -e molecule_ansible_version=$ANSIBLE_VERSION -t all,debug
+        run: /usr/bin/ansible-playbook -D playbooks/molecule.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
         env:
           ANSIBLE_COLLECTIONS_PATHS: '../../..'
 
