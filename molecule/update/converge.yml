@@ -64,6 +64,7 @@
     vars:
       molecule_version: 3
       molecule_update: true
+      molecule_ansible_version: '2.10'
       molecule_virtualenv: ~/.virtualenvs/default4
 
   - name: prepare default5 - 3.2.0 / 2.9.10 to 3.3 / 2.9
@@ -88,6 +89,7 @@
       name: mafalb.ansible.molecule
     vars:
       molecule_update: true
+      molecule_ansible_version: '2.10'
       molecule_virtualenv: ~/.virtualenvs/default7
 
 ...

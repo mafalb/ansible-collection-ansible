@@ -42,6 +42,7 @@ jobs:
         - ubuntu-20.04
 
         ansible_version:
+        - '2.11'
         - '2.10'
         - '2.9'
 
@@ -89,9 +90,9 @@ jobs:
           test_molecule: true
           test_controlnode: true
 
-        - target: fedora32
+        - target: fedora34
           distribution: fedora
-          version: 32
+          version: 34
           test_molecule: true
           test_controlnode: true
 

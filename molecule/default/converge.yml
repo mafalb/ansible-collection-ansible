@@ -57,8 +57,8 @@
       name: mafalb.ansible.molecule
     vars:
       molecule_version: '3.1.4'
-      molecule_ansible_version: '2.10.1'
-      molecule_ansible_base_version: '2.10.2'
+      molecule_ansible_version: '2.10.2'
+      molecule_ansible_community_version: '2.10.1'
       molecule_virtualenv: ~/.virtualenvs/default3
 
   - name: prepare default4 - 3.1 / 2.10
@@ -90,8 +90,8 @@
       name: mafalb.ansible.molecule
     vars:
       molecule_version: '3.2.0'
-      molecule_ansible_version: '2.10.1'
-      molecule_ansible_base_version: '2.10.2'
+      molecule_ansible_version: '2.10.3'
+      molecule_ansible_community_version: '2.10.2'
       molecule_virtualenv: ~/.virtualenvs/default7
 
 ...

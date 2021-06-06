@@ -179,7 +179,7 @@
   - name: assertions
     assert:
       that:
-      - _ansibles_version.stdout is match('ansible {{ molecule_ansible_base_version|default(molecule_ansible_version) }}')
+      - _ansibles_version.stdout is match('ansible .*{{ molecule_ansible_version|default(molecule_ansible_version) }}')
       - _molecules_version.stdout is match('molecule {{ molecule_version }}')
 
 
