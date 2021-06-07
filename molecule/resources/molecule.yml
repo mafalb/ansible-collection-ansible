@@ -47,7 +47,11 @@ provisioner:
     name: ansible-lint
   config_options:
     defaults:
+      gathering: smart
       interpreter_python: auto
+      stdout_callback: yaml
+      bin_ansible_callbacks: true
+
 
 verifier:
   name: ansible
