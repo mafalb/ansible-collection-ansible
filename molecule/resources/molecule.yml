@@ -30,7 +30,7 @@ lint: |
   yamllint .
   ansible-lint -vv
   ansible-lint -v roles/*/vars/*.yml
-  flake8 -v
+  flake8 -v --exclude tests/output
   ansible-test sanity
 
 platforms:
