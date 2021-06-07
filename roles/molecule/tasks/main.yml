@@ -123,7 +123,8 @@
   failed_when: false
   changed_when: false
 
-- debug: var=_ansibles_community_version
+- name: debug _ansibles_community_version
+  debug: var=_ansibles_community_version
 
 # upgrade from ansible 2.9
 #

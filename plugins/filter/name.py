@@ -37,9 +37,11 @@ def filter_pipname_core(version):
             else:
                 return 'ansible-core'
         else:
-            raise ValueError("I can not handle the ansible majorversion %s" % version)
+            raise ValueError("I can not handle the ansible majorversion %s"
+                             % version)
     except Exception as e:
-        raise_from(AnsibleError('Error in filter_pipname_core, ', 'this was original exception: %s' % to_native(e)), e)
+        raise_from(AnsibleError('Error in filter_pipname_core, ',
+                   'this was original exception: %s' % to_native(e)), e)
 
 
 class FilterModule(object):
