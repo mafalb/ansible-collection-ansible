@@ -2,8 +2,8 @@
 
 ## v4.0.0 2021-06-08
 
+- default ansible version is now 2.11 (for mafalb.ansible.molecule)
 - introduced the variable molecule_ansible_community_version
-- changed the semantic of the variable molecule_ansible_version
 - support for ansible-core 2.11
 - support for ansible 3.0.0
 - support for ansible 4.0.0
