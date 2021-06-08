@@ -1,6 +1,6 @@
 # Changelog
 
-## v4.0.0 2021-06-XX
+## v4.0.0 2021-06-08
 
 - introduced the variable molecule_ansible_community_version
 - changed the semantic of the variable molecule_ansible_version
