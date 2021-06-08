@@ -18,7 +18,7 @@ jobs:
 
   CI:
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-20.04
 
     strategy:
       fail-fast: false
@@ -26,26 +26,43 @@ jobs:
       matrix:
 
         target:
+        - fedora33
+        - fedora34
+        - centosstream8
         - centos7
         - centos8
         - alma8
-        - centosstream8
+        - debian9
+        - debian10
         - ubuntu-16.04
         - ubuntu-18.04
         - ubuntu-20.04
-        - fedora32
-        - fedora33
-        - debian9
-        - debian10
-
-        os:
-        - ubuntu-20.04
 
         ansible_version:
+        - '2.11'
         - '2.10'
         - '2.9'
 
         include:
+
+        - target: fedora33
+          distribution: fedora
+          version: 33
+          test_molecule: true
+          test_controlnode: true
+
+        - target: fedora34
+          distribution: fedora
+          version: 34
+          test_molecule: true
+          test_controlnode: true
+
+        - target: centosstream8
+          distribution: centos
+          registry: "quay.io/centos/"
+          version: stream8
+          test_molecule: true
+          test_controlnode: true
 
         - target: centos7
           distribution: centos
@@ -66,12 +83,15 @@ jobs:
           test_molecule: true
           test_controlnode: true
 
-        - target: centosstream8
-          distribution: centos
-          registry: "quay.io/centos/"
-          version: stream8
-          test_molecule: true
-          test_controlnode: true
+        - target: debian9
+          distribution: debian
+          version: stretch
+          test_molecule: false
+
+        - target: debian10
+          distribution: debian
+          version: buster
+          test_molecule: false
 
         - target: ubuntu-16.04
           distribution: ubuntu
@@ -88,28 +108,6 @@ jobs:
           version: focal
           test_molecule: true
           test_controlnode: true
-
-        - target: fedora32
-          distribution: fedora
-          version: 32
-          test_molecule: true
-          test_controlnode: true
-
-        - target: fedora33
-          distribution: fedora
-          version: 33
-          test_molecule: true
-          test_controlnode: true
-
-        - target: debian9
-          distribution: debian
-          version: stretch
-          test_molecule: false
-
-        - target: debian10
-          distribution: debian
-          version: buster
-          test_molecule: false
 
 
     env:
@@ -144,7 +142,7 @@ jobs:
       - name: check ansible version
         run: |
           source ~/.virtualenvs/molecule/bin/activate
-          ansible --version | grep "^ansible ${{ matrix.ansible_version }}"
+          ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
 
       - name: molecule default scenario
         if: matrix.test_molecule == true

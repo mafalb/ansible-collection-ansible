@@ -40,8 +40,16 @@ molecule_update: true
 
 ```molecule_ansible_version``` set the ansible version you want to test against
 
+this is the version of the ansible-core (or ansible-base) package, not the version of the ansible package
+
 ```yaml
-molecule_ansible_version: 2.9
+molecule_ansible_version: 2.11
+```
+
+```molecule_ansible_community_version``` the version of ansible community, i.e. the ansible package
+
+```yaml
+molecule_ansible_community_version: 4.0.0
 ```
 
 ```molecule_virtualenv``` set the path to the virtualenv. Specify a absolute path. ```~/something``` will not work.

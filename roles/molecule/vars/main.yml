@@ -21,12 +21,46 @@
 
 molecule_virtualenv_command: '/usr/bin/python3 -m venv'
 
+# ansible community has the following dependencies on ansible base/core
+#
+# 4.0.0 -> ansible-core<2.12,>=2.11.0
+# 3.4.0 -> ansible-base<2.11,>=2.10.9
+# 3.3.0 -> ansible-base<2.11,>=2.10.8
+# 3.2.0 -> ansible-base<2.11,>=2.10.7
+# 3.1.0 -> ansible-base<2.11,>=2.10.5
+# 3.0.0 -> ansible-base<2.11,>=2.10.5
+# 2.10.7 -> ansible-base<2.11,>=2.10.5
+# 2.10.6 ->ansible-base<2.11,>=2.10.5
+# 2.10.5 ->ansible-base<2.11,>=2.10.4
+# 2.10.4 ->ansible-base<2.11,>=2.10.3
+# 2.10.3 ->ansible-base<2.11,>=2.10.3
+# 2.10.2 ->ansible-base<2.11,>=2.10.3
+# 2.10.1 ->ansible-base<2.11,>=2.10.2
+# 2.10.0 ->ansible-base<2.11,>=2.10.1
+#
+# i reverse that and get
+#
+ansible_core_deps:
+  '2.10.1': 'ansible<2.10.1'
+  '2.10.2': 'ansible<2.10.2'
+  '2.10.3': 'ansible<2.10.5'
+  '2.10.4': 'ansible<2.10.6'
+  '2.10.5': 'ansible<3.2.0'
+  '2.10.6': 'ansible<3.2.0'
+  '2.10.7': 'ansible<3.3.0'
+  '2.10.8': 'ansible<3.4.0'
+  '2.10.9': 'ansible<4.0.0'
+  '2.10.*': 'ansible<4.0.0'
+  '2.11.0': 'ansible<5.0.0'
+
 # ansible-base is explicitly mentioned, otherwise it is upgraded to the latest
 # possibly causing a mismatch between ansible and ansible-base
 #
-molecule_ansible_base_pip_package: ansible-base=={{ molecule_ansible_base_version|default(molecule_ansible_version)|mafalb.ansible.pipver }}
-molecule_ansible_pip_package: ansible=={{ molecule_ansible_version|mafalb.ansible.pipver }}
-molecule_ansible_pip_packages: "{{ [molecule_ansible_pip_package] }} + {{ [molecule_ansible_base_pip_package] if molecule_ansible_version|mafalb.ansible.semver is version('2.10.0', '>=') else [] }}"
+molecule_ansible_community_pip_package: "{{ ansible_core_deps[molecule_ansible_version|mafalb.ansible.pipver]|default('ansible') }}{{ ',==' + molecule_ansible_community_version|mafalb.ansible.pipver if molecule_ansible_community_version is defined else '' }}"
+
+molecule_ansible_core_pip_package: "{{ molecule_ansible_version|mafalb.ansible.semver|mafalb.ansible.pipname_core }}=={{ molecule_ansible_version|mafalb.ansible.pipver }}"
+
+molecule_ansible_pip_packages: "{{ [molecule_ansible_core_pip_package] }} + {{ [molecule_ansible_community_pip_package] if molecule_ansible_version|mafalb.ansible.semver is version('2.10.0', '>=') else [] }}"
 
 ansible_lint_version: "{{ '<5' if molecule_version|mafalb.ansible.pipver is regex('^3.[012]') else '>=5.0.7' }}"
 molecule_pip_packages:

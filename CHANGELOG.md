@@ -1,5 +1,13 @@
 # Changelog
 
+## v4.0.0 2021-06-08
+
+- introduced the variable molecule_ansible_community_version
+- changed the semantic of the variable molecule_ansible_version
+- support for ansible-core 2.11
+- support for ansible 3.0.0
+- support for ansible 4.0.0
+
 ## v3.0.1 2021-05-05
 
 - if using ansible-lint 5 (newer molecules) than require ansible-lint >5.0.7
