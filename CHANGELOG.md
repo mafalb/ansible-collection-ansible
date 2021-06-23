@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.0.1 2021-XX-XX
+
+- CI for rocky linux 8
+
 ## v4.0.0 2021-06-08
 
 - default ansible version is now 2.11 (for mafalb.ansible.molecule)
