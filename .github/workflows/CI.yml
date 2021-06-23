@@ -31,6 +31,7 @@ jobs:
         - centosstream8
         - centos7
         - centos8
+        - rocky8
         - alma8
         - debian9
         - debian10
@@ -75,6 +76,11 @@ jobs:
           version: 8
           test_molecule: true
           test_controlnode: true
+
+        - target: rocky8
+          distribution: rockylinux
+          registry: "docker.io/rockylinux/"
+          tag: '8'
 
         - target: alma8
           distribution: almalinux
