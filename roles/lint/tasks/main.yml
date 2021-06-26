@@ -75,12 +75,14 @@
 
     # the check for virtualenv is meant as a check for python2
     # ruamel.yaml drops support for python2 in version 17
+    # ruamel.yaml.clib dropped support for python2 in version 0.2.3
     #
     - name: ansible-lint is installed
       pip:
         name:
         - ansible-lint<5
         - ruamel.yaml{{ '<0.17' if virtualenv_command == 'virtualenv' else '' }}
+        - ruamel.yaml.clib{{ '<0.2.3' if virtualenv_command == 'virtualenv' else '' }}
         extra_args: "{{ '-U eager' if ansible_lint_update is defined else omit }}"
         virtualenv: "{{ ansible_lint_virtualenv }}"
         virtualenv_command: "{{ virtualenv_command }}"

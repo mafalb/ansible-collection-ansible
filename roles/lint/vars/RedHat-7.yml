@@ -19,8 +19,6 @@
 
 ---
 
-ansible_dependencies:
-- epel-release
 virtualenv_package: python-virtualenv
 virtualenv_command: 'virtualenv'
 

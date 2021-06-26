@@ -19,8 +19,6 @@
 
 ---
 
-ansible_dependencies:
-- epel-release
 virtualenv_command: '/usr/bin/python3 -m venv'
 
 ...
