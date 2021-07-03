@@ -41,6 +41,16 @@
       name: "{{ virtualenv_package }}"
     when: virtualenv_package is defined
 
+  - name: epel is present
+    include_role:
+      name: mafalb.epel.release
+    when: ansible_lint_needs_epel|default(false)|bool
+   
+  - name: dependency packages are present
+    package:
+      name: "{{ ansible_lint_dependency_packages }}"
+    when: ansible_lint_dependency_packages is defined
+
   # ansible-base is explicitly mentioned, otherwise it is upgraded to the latest
   # possibly causing a mismatch between ansible and ansible-base
   #

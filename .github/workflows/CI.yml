@@ -81,6 +81,8 @@ jobs:
           distribution: rockylinux
           registry: "docker.io/rockylinux/"
           tag: '8'
+          test_molecule: true
+          test_controlnode: true
 
         - target: alma8
           distribution: almalinux
@@ -92,17 +94,14 @@ jobs:
         - target: debian9
           distribution: debian
           version: stretch
-          test_molecule: false
 
         - target: debian10
           distribution: debian
           version: buster
-          test_molecule: false
 
         - target: ubuntu-16.04
           distribution: ubuntu
           version: xenial
-          test_molecule: false
 
         - target: ubuntu-18.04
           distribution: ubuntu
