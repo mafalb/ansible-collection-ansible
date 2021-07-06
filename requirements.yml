@@ -3,6 +3,9 @@
 
 collections:
 - name: mafalb.epel
-  version: '>=0.1.0'
+#  version: '>=0.1.0'
+  version: dev
+  source: https://github.com/mafalb/ansible-collection-epel.git
+  type: git
 
 ...

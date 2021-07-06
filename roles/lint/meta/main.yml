@@ -36,7 +36,8 @@ galaxy_info:
 
 dependencies:
 - role: mafalb.epel.release
-  when: ansible_lint_needs_epel|default(None)
+  when:
+  - ansible_lint_needs_epel|default(false)
 
 - mafalb.ansible.controlnode
 
