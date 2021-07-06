@@ -44,7 +44,9 @@
   - name: epel is present
     include_role:
       name: mafalb.epel.release
-    when: ansible_lint_needs_epel|default(false)|bool
+    when:
+    - ansible_lint_needs_epel|default(false)|bool
+    - false
    
   - name: dependency packages are present
     package:
