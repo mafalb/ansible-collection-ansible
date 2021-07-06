@@ -10,7 +10,7 @@ Some ansible modules depends on external libraries. This Ansible role is meant t
   roles:
   - role: mafalb.ansible.node
     ansible_node_features:
-    - tls
+    - crypto
     - selinux
 ```
 
@@ -20,7 +20,7 @@ Some ansible modules depends on external libraries. This Ansible role is meant t
 
 The following features are defined
 
-* tls - dependencies for crypto
+* crypto - dependencies for crypto
 * selinux - dependencies for selinux
 * pip - dependencies for pip
 

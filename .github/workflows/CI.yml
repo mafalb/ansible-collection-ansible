@@ -149,6 +149,11 @@ jobs:
           source ~/.virtualenvs/molecule/bin/activate
           ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
 
+      - name: molecule node scenario
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule test -s node
+
       - name: molecule default scenario
         if: matrix.test_molecule == true
         run: |
