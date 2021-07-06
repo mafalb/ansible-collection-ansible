@@ -6,5 +6,6 @@ collections:
 #  version: '>=0.1.0'
 - version: dev
   name: https://github.com/mafalb/ansible-collection-epel.git
+  type: git
 
 ...
