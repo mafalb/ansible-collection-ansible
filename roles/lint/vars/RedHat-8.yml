@@ -19,6 +19,13 @@
 
 ---
 
+ansible_lint_needs_epel: true
+ansible_lint_dependency_packages:
+- python3-ruamel-yaml
+- python3-colorama
+- python3-typing-extensions
+- python3-CommonMark
+- python3-dataclasses
 virtualenv_command: '/usr/bin/python3 -m venv'
 
 ...

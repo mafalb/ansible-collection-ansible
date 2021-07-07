@@ -71,5 +71,6 @@ molecule_pip_packages:
 - pylint
 - rstcheck
 - Jinja2<2.11
+- voluptuous==0.12.1
 
 ...

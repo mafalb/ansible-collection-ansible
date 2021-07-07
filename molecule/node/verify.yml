@@ -19,6 +19,13 @@
 
 ---
 
-virtualenv_command: '/usr/bin/python3 -m venv'
+- name: Verify ansible
+  hosts: all
+
+  module_defaults:
+    shell:
+      executable: /bin/bash
+
+  tasks: []
 
 ...

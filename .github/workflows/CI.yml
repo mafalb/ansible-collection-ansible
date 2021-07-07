@@ -80,7 +80,9 @@ jobs:
         - target: rocky8
           distribution: rockylinux
           registry: "docker.io/rockylinux/"
-          tag: '8'
+          version: '8'
+          test_molecule: true
+          test_controlnode: true
 
         - target: alma8
           distribution: almalinux
@@ -92,17 +94,14 @@ jobs:
         - target: debian9
           distribution: debian
           version: stretch
-          test_molecule: false
 
         - target: debian10
           distribution: debian
           version: buster
-          test_molecule: false
 
         - target: ubuntu-16.04
           distribution: ubuntu
           version: xenial
-          test_molecule: false
 
         - target: ubuntu-18.04
           distribution: ubuntu
@@ -149,6 +148,11 @@ jobs:
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
+
+      - name: molecule node scenario
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule test -s node
 
       - name: molecule default scenario
         if: matrix.test_molecule == true

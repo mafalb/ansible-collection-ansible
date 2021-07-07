@@ -1,3 +1,5 @@
+# vim: set ft=yaml ts=2 expandtab:
+
 ### REQUIRED
 
 # The namespace of the collection. This can be a company/brand/organization or product namespace under which all
@@ -44,7 +46,8 @@ tags:
 # collection label 'namespace.name'. The value is a version range
 # L(specifiers,https://python-semanticversion.readthedocs.io/en/latest/#requirement-specification). Multiple version
 # range specifiers can be set and are separated by ','
-dependencies: {}
+dependencies:
+  'mafalb.epel': '>=0.1.0'
 
 # The URL of the originating SCM repository
 repository: https://github.com/mafalb/ansible-collection-ansible
