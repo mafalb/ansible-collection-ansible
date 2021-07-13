@@ -1,8 +1,12 @@
 # Changelog
 
-## v4.0.1 2021-XX-XX
+## v4.1.0 2021-XX-XX
 
-- CI for rocky linux 8
+- support for ansible-core 2.11.1 and ansible 4.1.0 and 4.2.0
+
+## v4.0.1 2021-07-07
+
+- support for rocky linux 8
 
 ## v4.0.0 2021-06-08
 

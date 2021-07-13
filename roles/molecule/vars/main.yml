@@ -23,6 +23,8 @@ molecule_virtualenv_command: '/usr/bin/python3 -m venv'
 
 # ansible community has the following dependencies on ansible base/core
 #
+# 4.2.0 -> ansible-core<2.12,>=2.11.2
+# 4.1.0 -> ansible-core<2.12,>=2.11.1
 # 4.0.0 -> ansible-core<2.12,>=2.11.0
 # 3.4.0 -> ansible-base<2.11,>=2.10.9
 # 3.3.0 -> ansible-base<2.11,>=2.10.8
@@ -51,7 +53,9 @@ ansible_core_deps:
   '2.10.8': 'ansible<3.4.0'
   '2.10.9': 'ansible<4.0.0'
   '2.10.*': 'ansible<4.0.0'
-  '2.11.0': 'ansible<5.0.0'
+  '2.11.0': 'ansible<4.1.0'
+  '2.11.1': 'ansible<4.2.0'
+  '2.11.*': 'ansible<5.0.0'
 
 # ansible-base is explicitly mentioned, otherwise it is upgraded to the latest
 # possibly causing a mismatch between ansible and ansible-base

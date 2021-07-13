@@ -5,7 +5,7 @@ FROM {{ item.registry.url }}/{{ item.image }}
 FROM {{ item.image }}
 {% endif %}
 
-{% if item.image == 'centos:7' %}
+{% if item.image.endswith('centos:7') %}
 ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 {% else %}
