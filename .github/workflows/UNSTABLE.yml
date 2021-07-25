@@ -38,6 +38,9 @@ jobs:
 
         include:
 
+        # for now only with installed gcc and libffi-devel
+        # waiting for python 3.10 wheel for cffi
+        #
         - target: fedora35
           image: quay.io/fedora/fedora:35-x86_64
           test_molecule: true
