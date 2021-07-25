@@ -38,6 +38,7 @@ jobs:
         - ubuntu16
         - ubuntu18
         - ubuntu20
+        - ubuntu2104
 
         ansible_version:
         - '2.11'
@@ -99,6 +100,11 @@ jobs:
           test_molecule: true
           test_controlnode: true
 
+        - target: ubuntu2104
+          image: docker.io/ubuntu:hirsute
+          test_molecule: true
+          test_controlnode: true
+
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
       CI_IMAGE: ${{ matrix.image }}
@@ -117,13 +123,8 @@ jobs:
         with:
           path: ansible_collections/mafalb/ansible
       
-      - name: install system ansible
-        run: sudo apt-get install ansible
-
-      # note: this uses ansible-playbook from system ansible
-      #
       - name: install molecule
-        run: /usr/bin/ansible-playbook -D playbooks/molecule.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
+        run: ansible-playbook -e ansible_python_interpreter=python3 -D playbooks/molecule.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
         env:
           ANSIBLE_COLLECTIONS_PATHS: '../../..'
 

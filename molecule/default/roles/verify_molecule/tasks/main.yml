@@ -28,8 +28,18 @@
   changed_when: false
 
 - name: testinfra is present - {{ virtualenv }}
-  command: ~/.virtualenvs/{{ virtualenv }}/bin/py.test --version
+  shell: |
+    set -o pipefail
+    mkdir /tmp/pytestdir
+    cd /tmp/pytestdir
+    ~/.virtualenvs/{{ virtualenv }}/bin/pytest|grep "^plugins: .*testinfra-.*"
   changed_when: false
+  # fail when no tests where collected (5)
+  #
+  register: _testinfra
+  failed_when: _testinfra.rc != 5
+  args:
+    executable: /bin/bash
 
 - name: pylint is present - {{ virtualenv }}
   command: ~/.virtualenvs/{{ virtualenv }}/bin/pylint --version
