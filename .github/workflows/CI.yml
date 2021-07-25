@@ -38,6 +38,7 @@ jobs:
         - ubuntu16
         - ubuntu18
         - ubuntu20
+        - ubuntu2104
 
         ansible_version:
         - '2.11'
@@ -96,6 +97,11 @@ jobs:
 
         - target: ubuntu20
           image: docker.io/ubuntu:focal
+          test_molecule: true
+          test_controlnode: true
+
+        - target: ubuntu2104
+          image: docker.io/ubuntu:hirsute
           test_molecule: true
           test_controlnode: true
 

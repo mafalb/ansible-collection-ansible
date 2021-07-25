@@ -29,7 +29,6 @@ jobs:
         - fedora35
         - c9s
         - debian11
-        - ubuntu2104
         - ubuntu2110
 
         ansible_version:
@@ -51,11 +50,6 @@ jobs:
 
         - target: debian11
           image: docker.io/debian:bullseye
-          test_molecule: true
-          test_controlnode: true
-
-        - target: ubuntu2104
-          image: docker.io/ubuntu:hirsute
           test_molecule: true
           test_controlnode: true
 
