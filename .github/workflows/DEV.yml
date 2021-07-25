@@ -1,0 +1,123 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+name: CI
+
+on: 
+
+  push:
+    branches:
+    - '**'
+    tags-ignore:
+    - '*'
+
+  schedule:
+  - cron: '40 12 * * 6'
+
+jobs:
+
+  CI:
+
+    runs-on: ubuntu-20.04
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+
+        target:
+        - fedora35
+        - c9s
+        - debian11
+        - ubuntu2104
+        - ubuntu2110
+
+        ansible_version:
+        - '2.9'
+        - '2.10'
+        - '2.11'
+
+        include:
+
+        - target: fedora35
+          image: quay.io/fedora/fedora:35-x86_64
+          test_molecule: true
+          test_controlnode: true
+
+        - target: c9s
+          image: quay.io/centos/centos:stream9-development
+          test_molecule: true
+          test_controlnode: true
+
+        - target: debian11
+          image: docker.io/debian:bullseye
+          test_molecule: true
+          test_controlnode: true
+
+        - target: ubuntu2104
+          image: docker.io/ubuntu:hirsute
+          test_molecule: true
+          test_controlnode: true
+
+        - target: ubuntu2110
+          image: docker.io/ubuntu:impish
+          test_molecule: true
+          test_controlnode: true
+
+    env:
+      ANSIBLE_VERSION: ${{ matrix.ansible_version }}
+      CI_IMAGE: ${{ matrix.image }}
+      CI_HOSTNAME: ci-${{ matrix.target }}
+      PY_COLORS: 1
+      ANSIBLE_FORCE_COLOR: 1
+
+    defaults:
+      run:
+        working-directory: ansible_collections/mafalb/ansible
+
+    steps:
+
+      - name: checkout collection ansible
+        uses: actions/checkout@v2
+        with:
+          path: ansible_collections/mafalb/ansible
+      
+      - name: install system ansible
+        run: sudo apt-get install ansible
+
+      # note: this uses ansible-playbook from system ansible
+      #
+      - name: install molecule
+        run: /usr/bin/ansible-playbook -D playbooks/molecule.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: '../../..'
+
+      - name: check ansible version
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
+
+      - name: molecule node scenario
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule test -s node
+
+      - name: molecule default scenario
+        if: matrix.test_molecule == true
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule test --destroy never
+
+      - name: molecule update scenario
+        if: matrix.test_molecule == true
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule test --destroy never -s update
+
+      - name: molecule controlnode scenario
+        if: matrix.test_controlnode == true
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule test -s controlnode
+
+...
