@@ -1,7 +1,7 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
-name: CI
+name: DEV
 
 on: 
 
@@ -16,7 +16,7 @@ on:
 
 jobs:
 
-  CI:
+  DEV:
 
     runs-on: ubuntu-20.04
 
