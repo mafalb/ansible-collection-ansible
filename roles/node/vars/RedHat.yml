@@ -27,7 +27,6 @@ ansible_node_dependencies:
   crypto:
   - openssl
   - python3-cryptography
-  - python3-pyOpenSSL
   pip:
   - python3-setuptools
 
