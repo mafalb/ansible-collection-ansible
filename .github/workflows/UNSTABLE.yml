@@ -49,7 +49,7 @@ jobs:
         - target: c9s
           image: quay.io/centos/centos:stream9-development
           test_molecule: true
-          test_controlnode: true
+          test_controlnode: false
 
         - target: debian11
           image: docker.io/debian:bullseye
