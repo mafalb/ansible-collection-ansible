@@ -24,6 +24,6 @@ ansible_lint_dependency_packages:
 - python3-ruamel-yaml-clib
 - python3-colorama
 - python3-rich
-virtualenv_command: '/usr/bin/python3 -m venv'
+virtualenv_command: "{{ ansible_python.executable }} -m venv"
 
 ...

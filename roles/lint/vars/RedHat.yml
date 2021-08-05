@@ -19,6 +19,6 @@
 
 ---
 
-virtualenv_command: '/usr/bin/python3 -m venv'
+virtualenv_command: "{{ ansible_python.executable }} -m venv"
 
 ...
