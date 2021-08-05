@@ -46,6 +46,8 @@ jobs:
           test_molecule: true
           test_controlnode: true
 
+        # no controlnode because of missing epel
+        #
         - target: c9s
           image: quay.io/centos/centos:stream9-development
           test_molecule: true
