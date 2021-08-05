@@ -27,7 +27,7 @@ __metaclass__ = type
 def filter_pipname_core(version):
     version = str(version)
     try:
-        majorversion = int(version.split('.')[0])
+        majorversion = int(version.split('.', 1)[0])
         minorversion = int(version.split('.')[1])
         if majorversion == 2:
             if minorversion <= 9:
