@@ -44,6 +44,7 @@
   loop:
   - "{{ molecule_version }}"
   - "{{ molecule_ansible_version }}"
+  - "{{ ansible_lint_version }}"
   loop_control:
     loop_var: version
   tags:
@@ -71,7 +72,7 @@
 - name: virtualenv is present
   pip:
     name:
-    - pip>=19.1,<21.1
+    - pip>=20.3,<21.1
     - setuptools>41
     - wheel
     virtualenv: "{{ molecule_virtualenv }}"

@@ -19,7 +19,7 @@
 
 ---
 
-molecule_virtualenv_command: '/usr/bin/python3 -m venv'
+molecule_virtualenv_command: "{{ ansible_python.executable }} -m venv"
 
 # https://github.com/ansible-community/ansible-build-data
 #

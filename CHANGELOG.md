@@ -1,5 +1,11 @@
 # Changelog
 
+## v4.1.2 2021-08-06
+
+- bump pip version to >=20.3 (handle molecule 3.4, but do not install it)
+- do not hardcode virtualenv command in most cases -> allow testing against various pythons
+- do not install pyOpenSSL on RedHat (handled by cryptography instead)
+
 ## v4.1.1 2021-07-XX
 
 - support for ansible-core 2.11.3 and ansible 4.3.0

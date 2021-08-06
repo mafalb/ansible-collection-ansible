@@ -26,6 +26,6 @@ ansible_lint_dependency_packages:
 - python3-typing-extensions
 - python3-CommonMark
 - python3-dataclasses
-virtualenv_command: '/usr/bin/python3 -m venv'
+virtualenv_command: "{{ ansible_python.executable }} -m venv"
 
 ...
