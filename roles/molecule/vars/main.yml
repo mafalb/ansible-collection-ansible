@@ -64,13 +64,13 @@ ansible_core_deps:
 # ansible-base is explicitly mentioned, otherwise it is upgraded to the latest
 # possibly causing a mismatch between ansible and ansible-base
 #
-molecule_ansible_community_pip_package: "{{ ansible_core_deps[molecule_ansible_version|mafalb.ansible.pipver]|default('ansible') }}{{ ',==' + molecule_ansible_community_version|mafalb.ansible.pipver if molecule_ansible_community_version is defined else '' }}"
+molecule_ansible_community_pip_package: "{{ ansible_core_deps[molecule_ansible_version|mafalb.ansible.pipver]|default('ansible') }}{{ ',==' + molecule_ansible_community_version|mafalb.ansible.pipver if molecule_ansible_community_version is defined else '' }}"    # noqa E204
 
-molecule_ansible_core_pip_package: "{{ molecule_ansible_version|mafalb.ansible.semver|mafalb.ansible.pipname_core }}=={{ molecule_ansible_version|mafalb.ansible.pipver }}"
+molecule_ansible_core_pip_package: "{{ molecule_ansible_version|mafalb.ansible.semver|mafalb.ansible.pipname_core }}=={{ molecule_ansible_version|mafalb.ansible.pipver }}"  # noqa E204
 
-molecule_ansible_pip_packages: "{{ [molecule_ansible_core_pip_package] }} + {{ [molecule_ansible_community_pip_package] if molecule_ansible_version|mafalb.ansible.semver is version('2.10.0', '>=') else [] }}"
+molecule_ansible_pip_packages: "{{ [molecule_ansible_core_pip_package] }} + {{ [molecule_ansible_community_pip_package] if molecule_ansible_version|mafalb.ansible.semver is version('2.10.0', '>=') else [] }}"    # noqa E204
 
-ansible_lint_version: "{{ '<5' if molecule_version|mafalb.ansible.pipver is regex('^3.[012]') else '>=5.0.7' }}"
+ansible_lint_version: "{{ '<5' if molecule_version|mafalb.ansible.pipver is regex('^3.[012]') else '>=5.0.7' }}"    # noqa E204
 molecule_pip_packages:
 - molecule[lint,docker,test]=={{ molecule_version|mafalb.ansible.pipver }}
 - ansible-lint{{ ansible_lint_version }}

@@ -50,6 +50,8 @@ yamllint -s .
 
 echo "ansible-lint..."
 ansible-lint -v
+
+echo "ansible-lint of variables..."
 ansible-lint -v roles/*/vars/*.yml
 
 echo "flake8..."
