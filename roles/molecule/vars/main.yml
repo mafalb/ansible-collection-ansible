@@ -82,7 +82,7 @@ molecule_ansible_pip_packages: >
   if molecule_ansible_version|mafalb.ansible.semver is version('2.10.0', '>=')
   else [] }}
 
-ansible_lint_version: "{{ '<5' if molecule_version|mafalb.ansible.pipver is regex('^3.[012]') else '>=5.0.7' }}"    # noqa E204
+ansible_lint_version: "{{ '<5' if molecule_version|mafalb.ansible.pipver is regex('^3.[012]') else '>=5.0.7' }}"
 molecule_pip_packages:
 - molecule[lint,docker,test]=={{ molecule_version|mafalb.ansible.pipver }}
 - ansible-lint{{ ansible_lint_version }}
