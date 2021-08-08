@@ -1,7 +1,7 @@
-# vim: set ft=yaml ts=2 expandtab:
+#!/bin/bash -eu
 
 # This file is part of Ansible Collection mafalb.ansible
-# Copyright (c) 2019-2021 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
 #
 # Ansible collection mafalb.ansible is free software: you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -17,19 +17,44 @@
 # along with Ansible collection mafalb.ansible.
 # If not, see <https://www.gnu.org/licenses/>.
 
----
+set -e
 
-ansible_node_dependencies:
-  selinux:
-  - python3-selinux
-  crypto:
-  - openssl
-  - python3-openssl
-  - python3-cryptography
-  - python3-setuptools
-  pip:
-  - python3-venv
-  pkg_mgr:
-  - python3-apt
+args=()
 
-...
+if test "$#" -gt 0
+then
+
+        if test "$1" == 'requirements'
+        then
+        	args[0]=--requirements
+		shift
+        fi
+fi
+
+
+if test "$#" -gt 0
+then
+        if test -n "$1"
+        then
+        	args+=(--python)
+        	args+=("$1")
+		shift
+        fi
+fi
+
+echo "Checking for forgotten no_log..."
+grep -qr "no_log: false\s*$" . && exit 1
+
+echo "yamllint..."
+yamllint -s .
+
+echo "ansible-lint..."
+ansible-lint -v
+ansible-lint -v roles/*/vars/*.yml
+
+echo "flake8..."
+flake8 -v
+
+echo "ansible-test sanity..."
+# shellcheck disable=SC2068
+ansible-test sanity ${args[@]}

@@ -3,7 +3,7 @@
 # This file is part of Ansible Collection mafalb.ansible
 # Copyright (c) 2019-2021 Markus Falb <markus.falb@mafalb.at>
 #
-# Ansible collection mafalb.ansible is free software: you can redistribute it 
+# Ansible collection mafalb.ansible is free software: you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
 # published by the Free Software Foundation, either version 3 of the
 # License, or (at your option) any later version.
@@ -25,22 +25,13 @@ dependency:
 #    role-file: idontexist.yml   # avoid warning while running molecule
     requirements-file: requirements.yml
 
-
 driver:
   name: docker
 
-lint: |
-  set -e
-  ! grep -r "no_log: false" .
-  yamllint .
-  ansible-lint -vv
-  ansible-lint -v roles/*/vars/*.yml
-  flake8 -v --exclude tests/output
-  ansible-test sanity
-
 platforms:
-- name: ${CI_HOSTNAME-"ci-centos7"}
+- name: ${CI_HOSTNAME:-"ci-centos7"}
   image: ${CI_IMAGE:-"quay.io/centos/centos:7"}
+  #dockerfile: ../resources/${CI_HOSTNAME:-"ci-centos7"}.j2
   dockerfile: ../resources/Dockerfile.j2
 
 provisioner:
