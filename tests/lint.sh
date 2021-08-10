@@ -17,6 +17,12 @@
 # along with Ansible collection mafalb.ansible.
 # If not, see <https://www.gnu.org/licenses/>.
 
+# run this script with
+# $ bash tests/lint.sh
+# or source it
+# . tests/lint.sh
+#
+
 set -e
 
 args=()
