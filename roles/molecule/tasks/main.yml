@@ -150,7 +150,7 @@
     virtualenv_command: "{{ molecule_virtualenv_command }}"
   when:
   - molecule_ansible_version|mafalb.ansible.pipver is not match('2.9')
-  - _ansibles_community_version.stdout is match('ansible 2.9')
+  - _ansibles_version.stdout is match('ansible 2.9')
 
 # upgrade to ansible 2.11
 #
