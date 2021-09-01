@@ -31,6 +31,26 @@
   loop_control:
     loop_var: file
 
+- name: debug ansible_packages
+  debug: var=ansible_packages[molecule_ansible_version]
+- name: debug ansible_packages
+  debug: msg={{ molecule_ansible_version.split('.')[0:2]|join('.') }}
+
+- name: debug
+  debug: var=molecule_version|mafalb.ansible.pipver
+- name: debug
+  debug: var=ansible_lint_version
+- name: debug molecule_ansible_version
+  debug: var=molecule_ansible_version
+- name: debug molecule_ansible_version|mafalb.ansible.semver
+  debug: var=molecule_ansible_version|mafalb.ansible.semver
+- name: debug mafalb.ansible.pipver
+  debug: var=molecule_ansible_version|mafalb.ansible.pipver
+- name: debug molecule_ansible_pip_packages
+  debug: var=molecule_ansible_pip_packages
+- name: debug molecule_pip_packages
+  debug: var=molecule_pip_packages
+
 - name: assertions
   assert:
     that:
@@ -107,20 +127,6 @@
   - never
   - debug
 
-- name: debug
-  debug: var=molecule_version|mafalb.ansible.pipver
-- name: debug
-  debug: var=ansible_lint_version
-- name: debug molecule_ansible_version
-  debug: var=molecule_ansible_version
-- name: debug molecule_ansible_version|mafalb.ansible.semver
-  debug: var=molecule_ansible_version|mafalb.ansible.semver
-- name: debug mafalb.ansible.pipver
-  debug: var=molecule_ansible_version|mafalb.ansible.pipver
-- name: debug molecule_ansible_pip_packages
-  debug: var=molecule_ansible_pip_packages
-- name: debug molecule_pip_packages
-  debug: var=molecule_pip_packages
 
 - name: get ansible version
   command: "{{ molecule_virtualenv }}/bin/pip show ansible"
