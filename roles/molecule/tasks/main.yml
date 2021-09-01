@@ -158,6 +158,14 @@
 #  - _ansibles_version.packages[{{ molecule_virtualenv }}/bin/pip }}]['ansible'][0].version.split('.')
 #  - "'ansible-base' in _ansibles_version.packages[{{ molecule_virtualenv }}/bin/pip }}]"
 
+- name: debug
+  debug:
+    var: role_path
+
+- name: debug
+  debug:
+    var: role_path|list
+
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
 #
