@@ -21,5 +21,6 @@
 
 molecule_system_dependencies:
 - python3-libselinux
+- python3-cryptography
 
 ...

@@ -31,12 +31,33 @@
   loop_control:
     loop_var: file
 
+- name: debug ansible_packages
+  debug: var=ansible_packages[molecule_ansible_version]
+- name: debug ansible_packages
+  debug: msg={{ molecule_ansible_version.split('.')[0:2]|join('.') }}
+
+- name: debug
+  debug: var=molecule_version|mafalb.ansible.pipver
+- name: debug
+  debug: var=ansible_lint_version
+- name: debug molecule_ansible_version
+  debug: var=molecule_ansible_version
+- name: debug molecule_ansible_version|mafalb.ansible.semver
+  debug: var=molecule_ansible_version|mafalb.ansible.semver
+- name: debug mafalb.ansible.pipver
+  debug: var=molecule_ansible_version|mafalb.ansible.pipver
+- name: debug molecule_ansible_pip_packages
+  debug: var=molecule_ansible_pip_packages
+- name: debug molecule_pip_packages
+  debug: var=molecule_pip_packages
+
 - name: assertions
   assert:
     that:
     - molecule_virtualenv is defined
     - molecule_version is defined
     - molecule_ansible_version is defined
+    - molecule_ansible_pip_packages|type_debug == 'list'
 
 - name: versions
   debug:
@@ -78,6 +99,13 @@
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
 
+- name: constraints file is present
+  copy:
+    src: files/constraints/ansible_test-2.11.4.txt
+    dest: "{{ molecule_virtualenv }}/.ansible-test.constraints.txt"
+    backup: true
+    mode: '0644'
+
 # we can not use the system wide tmp dir
 # https://github.com/ansible/ansible/issues/57436
 #
@@ -99,33 +127,15 @@
   - never
   - debug
 
-- name: debug
-  debug: var=molecule_version|mafalb.ansible.pipver
-- name: debug
-  debug: var=ansible_lint_version
-- name: debug molecule_ansible_version
-  debug: var=molecule_ansible_version
-- name: debug molecule_ansible_version|mafalb.ansible.semver
-  debug: var=molecule_ansible_version|mafalb.ansible.semver
-- name: debug mafalb.ansible.pipver
-  debug: var=molecule_ansible_version|mafalb.ansible.pipver
-- name: debug molecule_ansible_community_pip_package
-  debug: var=molecule_ansible_community_pip_package
-- name: debug molecule_ansible_core_pip_package
-  debug: var=molecule_ansible_core_pip_package
-- name: debug molecule_ansible_pip_packages
-  debug: var=molecule_ansible_pip_packages
-- name: debug molecule_pip_packages
-  debug: var=molecule_pip_packages
 
 - name: get ansible version
-  command: "{{ molecule_virtualenv }}/bin/pip show ansible"
-  register: _ansibles_community_version
+  command: "{{ molecule_virtualenv }}/bin/ansible --version"
   failed_when: false
   changed_when: false
+  register: _ansibles_version
 
-- name: debug _ansibles_community_version
-  debug: var=_ansibles_community_version
+- name: debug _ansibles_version
+  debug: var=_ansibles_version
 
 # upgrade from ansible 2.9
 #
@@ -139,10 +149,10 @@
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
   when:
-  - molecule_ansible_core_pip_package is match('ansible-')
-  - _ansibles_community_version.stdout is match('ansible 2.9')
+  - molecule_ansible_version|mafalb.ansible.pipver is not match('2.9')
+  - _ansibles_version.stdout|default('') is match('ansible 2.9')
 
-# upgrade from ansible 2.10
+# upgrade to ansible 2.11
 #
 - name: uninstall ansible and ansible-core
   pip:
@@ -154,8 +164,8 @@
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
   when:
-  - molecule_ansible_core_pip_package is match('ansible-core')
-  - _ansibles_community_version.stdout is match('ansible 2.10')
+  - molecule_ansible_version|mafalb.ansible.pipver is match('2.11')
+  - _ansibles_version.stdout|default('') is not match('ansible \[core 2.11')
 
 #  - "'ansible' in _ansibles_version.packages[{{ molecule_virtualenv }}/bin/pip }}]"
 #  - _ansibles_version.packages[{{ molecule_virtualenv }}/bin/pip }}]['ansible'][0].version.split('.')
@@ -173,8 +183,8 @@
 #
 - name: molecule is installed
   pip:
-    name: "{{ molecule_ansible_pip_packages + molecule_pip_packages }}"
-    extra_args: "{{ '-U eager' if molecule_update is defined else omit }}"
+    name: "{{ molecule_ansible_pip_packages + molecule_pip_packages + ansible_test_packages }}"
+    extra_args: "{{ '-U eager' if molecule_update is defined else '' }} -c {{ molecule_virtualenv }}/.ansible-test.constraints.txt"
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
 
