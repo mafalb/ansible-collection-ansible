@@ -1,8 +1,9 @@
 # Changelog
 
-## v4.1.3 2021-09-01
+## v4.2.0 2021-09-01
 
 - support for ansible-core 2.11.3
+- support for debian 11 bullseye
 
 ## v4.1.2 2021-08-06
 

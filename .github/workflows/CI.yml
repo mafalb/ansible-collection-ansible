@@ -175,6 +175,7 @@ jobs:
         - alma8
         - debian9
         - debian10
+        - debian11
         - ubuntu16
         - ubuntu18
         - ubuntu20
@@ -227,6 +228,11 @@ jobs:
 
         - target: debian10
           image: docker.io/debian:buster
+
+        - target: debian11
+          image: docker.io/debian:bullseye
+          test_molecule: true
+          test_controlnode: true
 
         - target: ubuntu16
           image: docker.io/ubuntu:xenial
