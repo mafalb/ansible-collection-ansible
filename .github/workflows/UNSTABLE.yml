@@ -28,7 +28,6 @@ jobs:
         target:
         - fedora35
         - c9s
-        - debian11
         - ubuntu2110
 
         ansible_version:
@@ -52,11 +51,6 @@ jobs:
           image: quay.io/centos/centos:stream9-development
           test_molecule: true
           test_controlnode: false
-
-        - target: debian11
-          image: docker.io/debian:bullseye
-          test_molecule: true
-          test_controlnode: true
 
         - target: ubuntu2110
           image: docker.io/ubuntu:impish
