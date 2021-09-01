@@ -129,13 +129,13 @@
 
 
 - name: get ansible version
-  command: "{{ molecule_virtualenv }}/bin/pip show ansible"
-  register: _ansibles_community_version
+  command: "{{ molecule_virtualenv }}/bin/ansible --version"
   failed_when: false
   changed_when: false
+  register: _ansibles_version
 
-- name: debug _ansibles_community_version
-  debug: var=_ansibles_community_version
+- name: debug _ansibles_version
+  debug: var=_ansibles_version
 
 # upgrade from ansible 2.9
 #
@@ -165,7 +165,7 @@
     virtualenv_command: "{{ molecule_virtualenv_command }}"
   when:
   - molecule_ansible_version|mafalb.ansible.pipver is match('2.11')
-  - _ansibles_community_version.stdout is not match('ansible \[core 2.11')
+  - _ansibles_version.stdout is not match('ansible \[core 2.11')
 
 #  - "'ansible' in _ansibles_version.packages[{{ molecule_virtualenv }}/bin/pip }}]"
 #  - _ansibles_version.packages[{{ molecule_virtualenv }}/bin/pip }}]['ansible'][0].version.split('.')
