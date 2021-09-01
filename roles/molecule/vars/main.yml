@@ -93,7 +93,10 @@ ansible_packages:
   '2.11.*': 'ansible-core>2.11.3,ansible>=4.5.0,<5.0.0'
 
 molecule_ansible_pip_packages: >
-  {{ [ansible_packages[molecule_ansible_version|mafalb.ansible.pipver]] if ansible_packages[molecule_ansible_version] is defined else [ansible_packages[molecule_ansible_version.split('.')[0:2]|join('.')|mafalb.ansible.pipver]] }}
+  {{ [ansible_packages[molecule_ansible_version|mafalb.ansible.pipver]] if
+     ansible_packages[molecule_ansible_version] is defined else
+     [ansible_packages[molecule_ansible_version.split('.')[0:2]|join('.')|
+       mafalb.ansible.pipver]] }}
 
 ansible_lint_version: "{{ '<5' if molecule_version|mafalb.ansible.pipver is regex('^3.[012]') else '>=5.0.7' }}"
 molecule_pip_packages:
