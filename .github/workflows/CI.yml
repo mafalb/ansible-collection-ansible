@@ -279,6 +279,9 @@ jobs:
           source ~/.virtualenvs/molecule/bin/activate
           ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
 
+      - name: debug
+        run: ls -l /home/runner/work/ansible-collection-ansible/ansible-collection-ansible/ansible_collections/mafalb/ansible/roles/molecule/files/constraints/ansible_test-2.11.4.txt
+
       - name: molecule node scenario
         run: |
           source ~/.virtualenvs/molecule/bin/activate
