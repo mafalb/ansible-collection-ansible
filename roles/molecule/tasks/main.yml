@@ -178,7 +178,7 @@
 - name: molecule is installed
   pip:
     name: "{{ molecule_ansible_pip_packages + molecule_pip_packages + ansible_test_packages }}"
-    extra_args: "{{ '-U eager' if molecule_update is defined else '' }} -c {{ molecule_virtualenv }}/ansible-test.constraints.txt"
+    extra_args: "{{ '-U eager' if molecule_update is defined else '' }} -c {{ molecule_virtualenv }}/.ansible-test.constraints.txt"
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
 
