@@ -25,6 +25,7 @@ molecule_virtualenv_command: "{{ ansible_python.executable }} -m venv"
 #
 # ansible community has the following dependencies on ansible base/core
 #
+# 4.5.0 -> ansible-core<2.12,>=2.11.4
 # 4.4.0 -> ansible-core<2.12,>=2.11.3
 # 4.3.0 -> ansible-core<2.12,>=2.11.3
 # 4.2.0 -> ansible-core<2.12,>=2.11.2
@@ -60,6 +61,7 @@ ansible_core_deps:
   '2.11.0': 'ansible<4.1.0'
   '2.11.1': 'ansible<4.2.0'
   '2.11.2': 'ansible<4.3.0'
+  '2.11.3': 'ansible<4.5.0'
   '2.11.*': 'ansible<5.0.0'
 
 # ansible-base is explicitly mentioned, otherwise it is upgraded to the latest
