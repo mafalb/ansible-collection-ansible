@@ -37,6 +37,7 @@
     - molecule_virtualenv is defined
     - molecule_version is defined
     - molecule_ansible_version is defined
+    - molecule_ansible_pip_packages|type_debug == 'list'
 
 - name: versions
   debug:
@@ -109,10 +110,6 @@
   debug: var=molecule_ansible_version|mafalb.ansible.semver
 - name: debug mafalb.ansible.pipver
   debug: var=molecule_ansible_version|mafalb.ansible.pipver
-- name: debug molecule_ansible_community_pip_package
-  debug: var=molecule_ansible_community_pip_package
-- name: debug molecule_ansible_core_pip_package
-  debug: var=molecule_ansible_core_pip_package
 - name: debug molecule_ansible_pip_packages
   debug: var=molecule_ansible_pip_packages
 - name: debug molecule_pip_packages
@@ -139,10 +136,10 @@
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
   when:
-  - molecule_ansible_core_pip_package is match('ansible-')
+  - molecule_ansible_version|mafalb.ansible.pipver is not match('2.9')
   - _ansibles_community_version.stdout is match('ansible 2.9')
 
-# upgrade from ansible 2.10
+# upgrade to ansible 2.11
 #
 - name: uninstall ansible and ansible-core
   pip:
@@ -154,8 +151,8 @@
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
   when:
-  - molecule_ansible_core_pip_package is match('ansible-core')
-  - _ansibles_community_version.stdout is match('ansible 2.10')
+  - molecule_ansible_version|mafalb.ansible.pipver is match('2.11')
+  - _ansibles_community_version.stdout is not match('ansible \[core 2.11')
 
 #  - "'ansible' in _ansibles_version.packages[{{ molecule_virtualenv }}/bin/pip }}]"
 #  - _ansibles_version.packages[{{ molecule_virtualenv }}/bin/pip }}]['ansible'][0].version.split('.')
@@ -173,8 +170,8 @@
 #
 - name: molecule is installed
   pip:
-    name: "{{ molecule_ansible_pip_packages + molecule_pip_packages }}"
-    extra_args: "{{ '-U eager' if molecule_update is defined else omit }}"
+    name: "{{ molecule_ansible_pip_packages + molecule_pip_packages + ansible_test_packages }}"
+    extra_args: "{{ '-U eager' if molecule_update is defined else omit }} -c {{ role_path }}/files/constraints/ansible_test-2.11.4.txt"
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
 
