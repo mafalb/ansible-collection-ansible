@@ -79,6 +79,12 @@
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
 
+- name: constraints file is present
+  copy:
+    src: files/constraints/ansible_test-2.11.4.txt
+    dest: "{{ molecule_virtualenv }}/.ansible-test.constraints.txt"
+    backup: true
+
 # we can not use the system wide tmp dir
 # https://github.com/ansible/ansible/issues/57436
 #
@@ -158,14 +164,6 @@
 #  - _ansibles_version.packages[{{ molecule_virtualenv }}/bin/pip }}]['ansible'][0].version.split('.')
 #  - "'ansible-base' in _ansibles_version.packages[{{ molecule_virtualenv }}/bin/pip }}]"
 
-- name: debug
-  debug:
-    var: role_path
-
-- name: debug
-  debug:
-    var: role_path|list
-
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
 #
@@ -179,7 +177,7 @@
 - name: molecule is installed
   pip:
     name: "{{ molecule_ansible_pip_packages + molecule_pip_packages + ansible_test_packages }}"
-    extra_args: "{{ '-U eager' if molecule_update is defined else '' }} -c {{ role_path }}/files/constraints/ansible_test-2.11.4.txt"
+    extra_args: "{{ '-U eager' if molecule_update is defined else '' }} -c {{ molecule_virtualenv }}/ansible-test.constraints.txt"
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
 
