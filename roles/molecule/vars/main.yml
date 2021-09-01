@@ -77,21 +77,21 @@ molecule_pip_packages:
 - tox
 
 ansible_test_packages:
-  - antsibull-changelog
-  - resolvelib
-  - pycodestyle
-  - yamllint
-  - pylint
-  - astroid
-  - isort
-  - lazy-object-proxy
-  - mccabe
-  - toml
-  - typed-ast
-  - wrapt
-  - voluptuous
-  - pathspec
-  - packaging
-  - rstcheck
+- antsibull-changelog
+- resolvelib
+- pycodestyle
+- yamllint
+- pylint
+- astroid
+- isort
+- lazy-object-proxy
+- mccabe
+- toml
+- typed-ast
+- wrapt
+- voluptuous
+- pathspec
+- packaging
+- rstcheck
 
 ...
