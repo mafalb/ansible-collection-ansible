@@ -99,8 +99,6 @@
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
 
-- debug: var=molecule_ansible_major_minor_version
-
 - name: constraints file is present
   copy:
     src: "{{ item }}"
