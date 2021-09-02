@@ -158,6 +158,10 @@
       - skeleton_path is not defined
       - license is not defined
 
+  - name: diff is present
+    package:
+      name: diffutils
+
   - name: ansible-test --requirements did not change anything  # noqa command-instead-of-shell 305
     shell: diff -u ~/{{ item.virtualenv }}.before.txt ~/{{ item.virtualenv }}.after.txt
     register: _diff
