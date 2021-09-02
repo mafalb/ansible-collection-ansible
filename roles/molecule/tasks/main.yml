@@ -101,8 +101,8 @@
 
 - name: constraints file is present
   copy:
-    src: files/constraints/ansible_test-2.11.4.txt
-    dest: "{{ molecule_virtualenv }}/.ansible-test.constraints.txt"
+    src: files/constraints/v{{ molecule_ansible_version }}.txt
+    dest: "{{ molecule_virtualenv }}/.ansible.constraints.txt"
     backup: true
     mode: '0644'
 
@@ -184,7 +184,7 @@
 - name: molecule is installed
   pip:
     name: "{{ molecule_ansible_pip_packages + molecule_pip_packages + ansible_test_packages }}"
-    extra_args: "{{ '-U eager' if molecule_update is defined else '' }} -c {{ molecule_virtualenv }}/.ansible-test.constraints.txt"
+    extra_args: "{{ '-U eager' if molecule_update is defined else '' }} -c {{ molecule_virtualenv }}/.ansible.constraints.txt"
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
 

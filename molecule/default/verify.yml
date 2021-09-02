@@ -158,6 +158,16 @@
       - skeleton_path is not defined
       - license is not defined
 
+  - name: ansible-test --requirements did not change anything
+    shell: diff -u ~/{{ item.virtualenv }}.before.txt ~/{{ item.virtualenv }}.after.txt
+    register: _diff
+    failed_when: false
+    loop: "{{ virtualenvs }}"
+    
+  - name: debug
+    debug:
+      var: _diff
+
   - name: debug
     debug: msg="{{ virtualenvs|map(attribute='virtualenv')|product(files)|list }}"
 

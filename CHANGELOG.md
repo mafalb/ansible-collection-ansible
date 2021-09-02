@@ -4,6 +4,8 @@
 
 - support for ansible-core 2.11.3
 - support for debian 11 bullseye
+- support for ansible 4.4.0
+- support for ansible-core 2.11.4
 
 ## v4.1.2 2021-08-06
 

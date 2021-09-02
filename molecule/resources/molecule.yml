@@ -33,6 +33,8 @@ platforms:
   image: ${CI_IMAGE:-"quay.io/centos/centos:7"}
   #dockerfile: ../resources/${CI_HOSTNAME:-"ci-centos7"}.j2
   dockerfile: ../resources/Dockerfile.j2
+  volumes:
+  - "${PWD}/../../:/ansible_collections:Z"
 
 provisioner:
   name: ansible
