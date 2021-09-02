@@ -166,7 +166,14 @@
     
   - name: debug
     debug:
-      var: _diff
+      var: "{{ item.stdout }}"
+    loop: "{{ _diff.results }}"
+    when: item.rc != 0
+
+  - name: ansible-test --requirements did not change anything
+    shell: diff -u ~/{{ item.virtualenv }}.before.txt ~/{{ item.virtualenv }}.after.txt
+    register: _diff
+    loop: "{{ virtualenvs }}"
 
   - name: debug
     debug: msg="{{ virtualenvs|map(attribute='virtualenv')|product(files)|list }}"
