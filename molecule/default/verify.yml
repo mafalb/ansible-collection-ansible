@@ -158,7 +158,7 @@
       - skeleton_path is not defined
       - license is not defined
 
-  - name: ansible-test --requirements did not change anything  # noqa: command-instead-of-shell
+  - name: ansible-test --requirements did not change anything  # noqa command-instead-of-shell 305
     shell: diff -u ~/{{ item.virtualenv }}.before.txt ~/{{ item.virtualenv }}.after.txt
     register: _diff
     changed_when: false
@@ -170,7 +170,7 @@
     loop: "{{ _diff.results }}"
     when: item.rc != 0
 
-  - name: ansible-test --requirements did not change anything  # noqa: command-instead-of-shell no-changed-when
+  - name: ansible-test --requirements did not change anything  # noqa command-instead-of-shell 305 no-changed-when 301
     shell: diff -u ~/{{ item.virtualenv }}.before.txt ~/{{ item.virtualenv }}.after.txt
     register: _diff
     loop: "{{ virtualenvs }}"
