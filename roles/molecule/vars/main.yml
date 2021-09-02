@@ -107,6 +107,7 @@ molecule_pip_packages:
 - jmespath
 - tox
 - yamllint
+- Jinja2<2.11
 
 ansible_test_packages:
 - antsibull-changelog
