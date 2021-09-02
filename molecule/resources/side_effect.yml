@@ -44,7 +44,7 @@
 
   tasks:
 
-  - name: run ansible-test
+  - name: run ansible-test  # noqa: no-changed-when
     shell: |
       . ~/.virtualenvs/{{ item.virtualenv }}/bin/activate
       pip freeze >~/{{ item.virtualenv }}.before.txt
