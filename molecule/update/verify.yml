@@ -3,7 +3,7 @@
 # This file is part of Ansible Collection mafalb.ansible
 # Copyright (c) 2019-2021 Markus Falb <markus.falb@mafalb.at>
 #
-# Ansible collection mafalb.ansible is free software: you can redistribute it 
+# Ansible collection mafalb.ansible is free software: you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
 # published by the Free Software Foundation, either version 3 of the
 # License, or (at your option) any later version.
@@ -117,6 +117,27 @@
       name: verify_molecule
     vars:
       virtualenv: "{{ item.virtualenv }}"
+    loop: "{{ virtualenvs }}"
+
+  - name: diff is present
+    package:
+      name: diffutils
+
+  - name: ansible-test --requirements did not change anything  # noqa command-instead-of-shell 305
+    shell: diff -u ~/{{ item.virtualenv }}.before.txt ~/{{ item.virtualenv }}.after.txt
+    register: _diff
+    changed_when: false
+    loop: "{{ virtualenvs }}"
+
+  - name: debug
+    debug:
+      var: "{{ item.stdout }}"
+    loop: "{{ _diff.results }}"
+    when: item.rc != 0
+
+  - name: ansible-test --requirements did not change anything  # noqa command-instead-of-shell no-changed-when 301 305
+    shell: diff -u ~/{{ item.virtualenv }}.before.txt ~/{{ item.virtualenv }}.after.txt
+    register: _diff
     loop: "{{ virtualenvs }}"
 
 ...

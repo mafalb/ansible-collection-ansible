@@ -3,7 +3,7 @@
 
 name: CI
 
-on: 
+on: # yamllint disable-line rule:truthy
 
   push:
     branches:
@@ -15,6 +15,146 @@ on:
   - cron: '40 12 * * 6'
 
 jobs:
+
+  SANITY:
+
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+
+      matrix:
+
+        include:
+
+        - ansible_version: '2.9'
+          python-version: 2.7
+
+        - ansible_version: '2.9'
+          python-version: 3.5
+
+        - ansible_version: '2.9'
+          python-version: 3.6
+
+        - ansible_version: '2.9'
+          python-version: 3.7
+
+        - ansible_version: '2.9'
+          python-version: 3.8
+
+
+        - ansible_version: '2.10'
+          python-version: 3.6
+
+        - ansible_version: '2.10'
+          python-version: 3.7
+
+        - ansible_version: '2.10'
+          python-version: 3.8
+
+        - ansible_version: '2.10'
+          python-version: 3.9
+
+
+        - ansible_core_version: '2.11'
+          python-version: 3.6
+
+        - ansible_core_version: '2.11'
+          python-version: 3.7
+
+        - ansible_core_version: '2.11'
+          python-version: 3.8
+
+        - ansible_core_version: '2.11'
+          python-version: 3.9
+
+    env:
+      PY_COLORS: 1
+      ANSIBLE_FORCE_COLOR: 1
+      ANSIBLE_PYTHON_INTERPRETER: ${{ matrix.python-version }}/bin/python
+
+    defaults:
+      run:
+        working-directory: ansible_collections/mafalb/scl
+
+    steps:
+
+    - name: checkout collection mafalb.scl
+      uses: actions/checkout@v2
+      with:
+        path: ansible_collections/mafalb/scl
+
+    - name: setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: python version
+      run: |
+        python --version
+        which python
+        whereis python
+        python3 --version
+        which python3
+        whereis python3
+        ls -l /opt/hostedtoolcache/Python/
+
+    - name: install shellcheck
+      run: sudo apt install shellcheck
+
+    - name: install ansible 2.9/2.10 for python 2.7
+      if: ${{ matrix.python-version == '2.7' && matrix.ansible_version }}
+      run: |
+        pip install virtualenv
+        virtualenv ~/virtualenv
+        . ~/virtualenv/bin/activate
+        pip install wheel
+        pip install -U pip setuptools
+        pip install "ansible==${{ matrix.ansible_version }}.*" ansible-lint 'flake8<3.9' pylint 'pycodestyle<2.7'
+
+    - name: install ansible for python 2.7
+      if: ${{ matrix.python-version == '2.7' && matrix.ansible_core_version }}
+      run: |
+        pip install virtualenv
+        virtualenv ~/virtualenv
+        . ~/virtualenv/bin/activate
+        pip install wheel
+        pip install -U pip setuptools
+        pip install "ansible-core==${{ matrix.ansible_core_version }}.*" ansible ansible-lint 'flake8<3.9' pylint 'pycodestyle<2.7'
+
+    - name: install ansible 2.9/2.10 for python 3
+      if: ${{ matrix.python-version != '2.7' && matrix.ansible_version }}
+      run: |
+        python -m venv ~/virtualenv
+        . ~/virtualenv/bin/activate
+        pip install wheel
+        pip install -U pip setuptools
+        pip install "ansible==${{ matrix.ansible_version }}.*" ansible-lint flake8 pylint 'pycodestyle<2.7'
+
+    - name: install ansible for python 3
+      if: ${{ matrix.python-version != '2.7' && matrix.ansible_core_version }}
+      run: |
+        python -m venv ~/virtualenv
+        . ~/virtualenv/bin/activate
+        pip install wheel
+        pip install -U pip setuptools
+        pip install "ansible-core==${{ matrix.ansible_core_version }}.*" ansible ansible-lint flake8 pylint 'pycodestyle<2.7'
+
+    - name: check ansible version
+      run: |
+        source ~/virtualenv/bin/activate
+        ansible --version
+        which ansible-test
+        ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
+
+    - name: check python version
+      run: |
+        source ~/virtualenv/bin/activate
+        ansible --version | grep "^\s*python.* ${{ matrix.python-version }}"
+
+    - name: lint
+      run: |
+        source ~/virtualenv/bin/activate
+        . tests/lint.sh requirements ${{ matrix.python-version }}
 
   CI:
 
@@ -35,6 +175,7 @@ jobs:
         - alma8
         - debian9
         - debian10
+        - debian11
         - ubuntu16
         - ubuntu18
         - ubuntu20
@@ -88,6 +229,11 @@ jobs:
         - target: debian10
           image: docker.io/debian:buster
 
+        - target: debian11
+          image: docker.io/debian:bullseye
+          test_molecule: true
+          test_controlnode: true
+
         - target: ubuntu16
           image: docker.io/ubuntu:xenial
 
@@ -122,7 +268,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: ansible_collections/mafalb/ansible
-      
+
       - name: install molecule
         run: ansible-playbook -e ansible_python_interpreter=python3 -D playbooks/molecule.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
         env:

@@ -1,0 +1,20 @@
+
+{% if item.registry is defined %}
+FROM {{ item.registry.url }}/{{ item.image }}
+{% else %}
+FROM {{ item.image }}
+{% endif %}
+
+ENV LC_ALL C.UTF-8
+ENV LC_ALL C.UTF-8
+
+{% if item.env is defined %}
+{% for var, value in item.env.items() %}
+{% if value %}
+ENV {{ var }} {{ value }}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+RUN dnf makecache && dnf --assumeyes install python3 sudo python3-devel python*-dnf bash iproute && dnf clean all
+

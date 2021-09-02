@@ -1,0 +1,58 @@
+# vim: set ft=yaml ts=2 expandtab:
+
+# This file is part of Ansible Collection mafalb.ansible
+# Copyright (c) 2019-2021 Markus Falb <markus.falb@mafalb.at>
+#
+# Ansible collection mafalb.ansible is free software: you can redistribute it
+# and/or modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# Ansible collection mafalb.ansible is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Ansible collection mafalb.ansible.
+# If not, see <https://www.gnu.org/licenses/>.
+
+---
+
+# molecule - 3.4.* / 2.10.*
+# default1 - 3.1.4 / 2.9.10
+# default2 - 3.1.5 / 2.9.*
+# default3 - 3.1.4 / 2.10.1
+# default4 - 3.1.5 / 2.10.*
+# default5 - 3.2.0 / 2.9.10
+# default6 - 3.3.* / 2.9.*
+# default7 - 3.2.0 / 2.10.1
+
+- name: Install different variants of molecule
+  hosts: all,!ci-centos6,!ci-ubuntuxenial
+
+  vars:
+    virtualenvs:
+    - { index: 0, virtualenv: molecule }
+    - { index: 1, virtualenv: default1 }
+    - { index: 2, virtualenv: default2 }
+    - { index: 3, virtualenv: default3 }
+    - { index: 4, virtualenv: default4 }
+    - { index: 5, virtualenv: default5 }
+    - { index: 6, virtualenv: default6 }
+    - { index: 7, virtualenv: default7 }
+
+  tasks:
+
+  - name: run ansible-test  # noqa no-changed-when 301
+    shell: |
+      . ~/.virtualenvs/{{ item.virtualenv }}/bin/activate
+      pip freeze >~/{{ item.virtualenv }}.before.txt
+      ~/.virtualenvs/{{ item.virtualenv }}/bin/ansible-test sanity --requirements
+      pip freeze >~/{{ item.virtualenv }}.after.txt
+    loop: "{{ virtualenvs }}"
+    register: _lint_version
+    args:
+      chdir: /ansible_collections/mafalb/ansible
+
+...

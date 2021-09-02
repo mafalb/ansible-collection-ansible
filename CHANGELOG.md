@@ -1,5 +1,13 @@
 # Changelog
 
+## v4.2.0 2021-09-02
+
+- support for ansible-core 2.11.3
+- support for debian 11 bullseye
+- support for ansible 4.4.0
+- support for ansible-core 2.11.4
+- install requirements for ansible-test sanity
+
 ## v4.1.2 2021-08-06
 
 - bump pip version to >=20.3 (handle molecule 3.4, but do not install it)
