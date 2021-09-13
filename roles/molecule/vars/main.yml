@@ -90,6 +90,7 @@ ansible_packages:
   '2.11.2': 'ansible-core==2.11.2,ansible>=4.2.0,<4.3.0'
   '2.11.3': 'ansible-core==2.11.3,ansible>=4.3.0,<4.5.0'
   '2.11.4': 'ansible-core==2.11.4,ansible>=4.5.0,<5'
+  '2.11.5': 'ansible-core==2.11.5,ansible>=4.5.0,<5'
   '2.11.*': 'ansible-core>2.11.3,ansible>=4.5.0,<5.0.0'
 
 molecule_ansible_major_minor_version: "{{ molecule_ansible_version.split('.')[0:2]|join('.') }}"
