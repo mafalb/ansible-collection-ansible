@@ -1,6 +1,6 @@
 # Changelog
 
-## v4.2.1 2021-09-XX
+## v4.3.0 2021-09-14
 
 - support for ansible-core 2.11.5
 
