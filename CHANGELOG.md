@@ -1,5 +1,10 @@
 # Changelog
 
+## v4.4.0 2021-09-22
+
+- support for ansible 4.6.0
+- changed dependency logic ansible <--> ansible-core
+
 ## v4.3.0 2021-09-14
 
 - support for ansible-core 2.11.5
