@@ -309,4 +309,9 @@ jobs:
           source ~/.virtualenvs/molecule/bin/activate
           molecule test -s controlnode
 
+      - name: molecule scenario virtualenv
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule test -s virtualenv
+
 ...

@@ -29,7 +29,7 @@
 
 - name: packages are present
   pip:
-    name: "{{ packages }}"
+    name: "{{ __mafalb_ansible_packages }}"
     extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }} -c {{ virtualenv|default(mafalb_ansible_virtualenv) }}/constraints.txt -c {{ virtualenv|default(mafalb_ansible_virtualenv) }}/virtualenv.constraints.txt"
     virtualenv: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}"
   register: __pip_packages
