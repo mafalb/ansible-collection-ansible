@@ -1,0 +1,41 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+- debug: var=__mafalb_ansible_version
+
+- name: get constraints
+  block:
+    - name: ansible source code is checked out
+      git:
+        repo: https://github.com/ansible/ansible.git
+        dest: /tmp/ansible.git
+        version: v{{ __mafalb_ansible_version }}
+    - name: get a list of all requirements files
+      when: false
+      find:
+        paths: "/tmp/ansible.git/test/lib/ansible_test/_data/requirements"
+        patterns: "*.txt"
+      register: __constraints_files
+    - debug: var=__constraints_files
+      when: false
+    - name: get all requirements
+      shell: cat *.txt|grep -Ev -e "^git\+" -e "^[^[:space:]]+\\["
+      args:
+        chdir: /tmp/ansible.git/test/lib/ansible_test/_data/requirements
+      changed_when: false
+      register: __constraints
+    # do not replace existing constraints file
+    - name: constraints file for ansible-test is present
+      copy:
+        content: "{{ __constraints.stdout }}"
+        dest: "{{ role_path }}/files/constraints/ansible-test/v{{ __mafalb_ansible_version }}.txt"
+        backup: true
+        mode: '0644'
+        force: false
+      register: __reg_constraints_file
+
+  delegate_to: localhost
+
+...

@@ -1,0 +1,50 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+name: CI
+
+on: # yamllint disable-line rule:truthy
+
+  push:
+    branches:
+    - '**'
+    tags-ignore:
+    - '*'
+
+  schedule:
+  - cron: '40 12 * * 2'
+
+jobs:
+
+  CHECK:
+
+    runs-on: ubuntu-20.04
+
+    env:
+      PY_COLORS: 1
+      ANSIBLE_FORCE_COLOR: 1
+
+    defaults:
+      run:
+        working-directory: ansible_collections/mafalb/ansible
+
+    steps:
+
+      - name: checkout collection mafalb.ansible
+        uses: actions/checkout@v2
+        with:
+          path: ansible_collections/mafalb/ansible
+
+      # we are happy with any pre-installed ansible
+      # just install molecule
+      - name: install molecule
+        run: ansible-playbook -e ansible_python_interpreter=python3 -D playbooks/molecule.yml -t all,debug
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: '../../..'
+
+      - name: molecule scenario check_for_new_version
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule test -s check_for_new_version
+
+...

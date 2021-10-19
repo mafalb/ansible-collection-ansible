@@ -1,0 +1,19 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+# use absolute path to virtualenv
+# https://github.com/ansible/ansible/issues/22967
+#
+# and use ansible_user_dir
+# https://github.com/ansible/ansible/issues/57436
+# (~/.virtualenvs/molecule does not work) for
+# setting TMPPATH environment variable for pip
+#
+mafalb_ansible_virtualenv: "{{ ansible_user_dir }}/.virtualenvs/ansible"
+
+mafalb_ansible_version: '2.11'
+molecule_version: '3.5'
+
+...

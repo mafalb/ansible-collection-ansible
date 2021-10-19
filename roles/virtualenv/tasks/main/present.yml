@@ -1,0 +1,88 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+# disable cr repo again when CentOS 7.8 is released
+#
+- name: dependencies are present
+  become: true
+  package:
+    name: "{{ mafalb_ansible_system_dependencies }}"
+
+- name: virtualenv is present
+  pip:
+    name:
+      - pip{{ mafalb_ansible_virtualenv_packages.pip }}
+      - setuptools{{ mafalb_ansible_virtualenv_packages.setuptools }}
+      - wheel
+    virtualenv: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}"
+    virtualenv_command: /usr/bin/python3 -m venv
+ 
+# ensure that packages can't pull in other versions of some packages
+- name: constraints file is present
+  template:
+    src: constraints/virtualenv.txt.j2
+    dest: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}/virtualenv.constraints.txt"
+    backup: true
+    mode: '0644'
+
+- name: dynamically build constraints for ansible-test
+  block:
+    - name: constraints file for ansible-test is present
+      copy:
+        src: constraints/ansible-test/v{{ __mafalb_ansible_version }}.txt
+        content: "{{ __constraints.stdout }}"
+        dest: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}/constraints.txt"
+        backup: true
+        mode: '0644'
+ 
+- name: packages are present
+  pip:
+    name: "{{ packages }}"
+    extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }} -c {{ virtualenv|default(mafalb_ansible_virtualenv) }}/constraints.txt -c {{ virtualenv|default(mafalb_ansible_virtualenv) }}/virtualenv.constraints.txt"
+    virtualenv: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}"
+  register: __pip_packages
+ 
+- name: pip freeze
+  shell: |
+    . {{ virtualenv|default(mafalb_ansible_virtualenv) }}/bin/activate
+    pip freeze
+  changed_when: false
+  register: __freeze
+
+- name: debug
+  debug: var=__pip_packages
+
+- name: debug
+  debug: var=__freeze
+
+- name: assert correct ansible version is present
+  block:
+  # _ansible_version does not work
+  # reserved variable ?
+  #
+  - name: get ansible version
+    command: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}/bin/ansible --version"
+    changed_when: false
+    register: __ansible_version
+  - name: assert that the wanted ansible version is present
+    assert:
+      that:
+      - __ansible_version.stdout is match('ansible .*{{ __mafalb_ansible_version }}')
+
+- name: assert correct molecule version is present
+  block:
+  - name: get molecules version
+    shell: |
+      . {{ virtualenv|default(mafalb_ansible_virtualenv) }}/bin/activate
+      NO_COLOR=1 molecule --version
+    changed_when: false
+    register: __molecule_version
+  - name: assert that the wanted molecule version is present
+    assert:
+      that:
+      - __molecule_version.stdout is match('molecule {{ molecule_version }}')
+  when: molecule_version is defined
+
+...

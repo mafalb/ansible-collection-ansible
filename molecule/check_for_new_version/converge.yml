@@ -1,0 +1,38 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+- hosts: all
+  roles:
+    - role: mafalb.ansible.virtualenv
+      do: constraints
+      mafalb_ansible_version: '2.11'
+      molecule_version: '3.3.4'
+  tasks:
+    - name: check for variable presence
+      assert:
+        that: mafalb_ansible_latest_version is defined
+
+    - name: try to get one version ahead
+      block:
+        - name: create constraints for one version ahead
+          include_role:
+            name: mafalb.ansible.virtualenv
+          vars:
+            do: constraints
+            mafalb_ansible_version: "{{
+              '2.11.' +
+              (mafalb_ansible_latest_version['2.11'].split('.')[2]|int + 1)|string }}"
+      rescue:
+        - name: debug the failed task
+          debug: var=ansible_failed_task.action
+          register: __reg_failed_action
+        - name: debug __reg_failed_action
+          debug: var=__reg_failed_action
+      always:
+        - name: ensure that it has failed
+          assert:
+            that: __reg_failed_action["ansible_failed_task.action"] == 'git'
+
+...

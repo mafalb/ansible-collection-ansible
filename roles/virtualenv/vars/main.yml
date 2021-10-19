@@ -1,0 +1,33 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+# change this when new version of ansible/ansible-core is released
+# also create constraints in files/constraints/ansible-test/
+mafalb_ansible_latest_version:
+  '2.11': '2.11.6'
+  '2.10': '2.10.15'
+  '2.9': '2.9.27'
+
+mafalb_ansible_major_minor_version: "{{
+  mafalb_ansible_version.split('.')[0:2]|join('.') }}"
+
+__mafalb_ansible_version: "{{
+  mafalb_ansible_latest_version[mafalb_ansible_major_minor_version]
+  if mafalb_ansible_version == mafalb_ansible_major_minor_version
+  else mafalb_ansible_version }}"
+
+mafalb_ansible_virtualenv_packages:
+  pip: '>=20.3,<21.1'
+  setuptools: '>41'
+
+mafalb_ansible_virtualenv_command: "python3 -m venv"
+
+mafalb_ansible_possible_packages:
+- ansible
+- "{{ mafalb_ansible_version|pipname }}"
+- ansible-lint
+- molecule[lint,docker,test]=={{ molecule_version }}
+
+...

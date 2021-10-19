@@ -1,0 +1,3 @@
+mafalb_ansible_system_dependencies:
+- libselinux-python3
+- python-setuptools

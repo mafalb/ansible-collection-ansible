@@ -24,7 +24,7 @@ from ansible.module_utils._text import to_native
 __metaclass__ = type
 
 
-def filter_pipname_core(version):
+def filter_pipname(version):
     version = str(version)
     try:
         majorversion = int(version.split('.', 1)[0])
@@ -47,5 +47,6 @@ def filter_pipname_core(version):
 class FilterModule(object):
     def filters(self):
         return {
-            'pipname_core': filter_pipname_core,
+            'pipname_core': filter_pipname,
+            'pipname': filter_pipname
         }
