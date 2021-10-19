@@ -12,11 +12,11 @@ mafalb_ansible_latest_version:
 
 mafalb_ansible_major_minor_version: "{{
   mafalb_ansible_version.split('.')[0:2]|join('.') }}"
-
 __mafalb_ansible_version: "{{
   mafalb_ansible_latest_version[mafalb_ansible_major_minor_version]
   if mafalb_ansible_version == mafalb_ansible_major_minor_version
   else mafalb_ansible_version }}"
+__molecule_version: "{{ molecule_version|mafalb.ansible.pipver }}"
 
 mafalb_ansible_virtualenv_packages:
   pip: '>=20.3,<21.1'

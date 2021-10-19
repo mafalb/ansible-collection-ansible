@@ -1,3 +1,9 @@
+argparse ; python_version < '2.7'
+
+# pip 7.1 added support for constraints, which are required by ansible-test to install most python requirements
+# see https://github.com/pypa/pip/blame/e648e00dc0226ade30ade99591b245b0c98e86c9/NEWS.rst#L1258
+pip >= 7.1, < 10 ; python_version < '2.7' # pip 10+ drops support for python 2.6 (sanity_ok)
+pip >= 7.1 ; python_version >= '2.7' # sanity_ok
 packaging < 21.0 ; python_version < '3.6' # packaging 21.0 requires Python 3.6 or newer
 resolvelib >= 0.5.3, < 0.6.0  # keep in sync with `requirements.txt`
 coverage >= 4.5.1, < 5.0.0 ; python_version <  '3.7' # coverage 4.4 required for "disable_warnings" support but 4.5.1 needed for bug fixes, coverage 5.0+ incompatible
@@ -48,3 +54,125 @@ setuptools < 37 ; python_version == '2.6' # setuptools 37 and later require pyth
 setuptools < 45 ; python_version == '2.7' # setuptools 45 and later require python 3.5 or later
 gssapi < 1.6.0 ; python_version <= '2.7' # gssapi 1.6.0 and later require python 3 or later
 MarkupSafe < 2.0.0 ; python_version < '3.6' # MarkupSafe >= 2.0.0. requires Python >= 3.6
+coverage
+boto
+boto3
+botocore
+packaging
+xmltodict
+azure-cli-core==2.0.35
+azure-cli-nspkg==3.0.2
+azure-common==1.1.11
+azure-mgmt-authorization==0.51.1
+azure-mgmt-batch==5.0.1
+azure-mgmt-cdn==3.0.0
+azure-mgmt-compute==10.0.0
+azure-mgmt-containerinstance==1.4.0
+azure-mgmt-containerregistry==2.0.0
+azure-mgmt-containerservice==4.4.0
+azure-mgmt-dns==2.1.0
+azure-mgmt-keyvault==1.1.0
+azure-mgmt-marketplaceordering==0.1.0
+azure-mgmt-monitor==0.5.2
+azure-mgmt-network==4.0.0
+azure-mgmt-nspkg==2.0.0
+azure-mgmt-redis==5.0.0
+azure-mgmt-resource==2.1.0
+azure-mgmt-rdbms==1.4.1
+azure-mgmt-servicebus==0.5.3
+azure-mgmt-sql==0.10.0
+azure-mgmt-storage==3.1.0
+azure-mgmt-trafficmanager==0.50.0
+azure-mgmt-web==0.41.0
+azure-nspkg==2.0.0
+azure-storage==0.35.1
+msrest==0.6.10
+msrestazure==0.6.2
+azure-keyvault==1.0.0a1
+azure-graphrbac==0.40.0
+azure-mgmt-cosmosdb==0.5.2
+azure-mgmt-hdinsight==0.1.0
+azure-mgmt-devtestlabs==3.0.0
+azure-mgmt-loganalytics==0.2.0
+azure-mgmt-automation==0.1.1
+azure-mgmt-iothub==0.7.0
+cs
+sshpubkeys
+hcloud>=1.6.0 ; python_version >= '2.7' and python_version < '3.9' # Python 2.6 is not supported (sanity_ok); Only hcloud >= 1.6.0 supports Floating IPs with names; Python 3.9 and later are not supported
+infoblox-client
+pyoneopenshift
+pyvmomi
+cryptography
+jinja2
+junit-xml
+ordereddict ; python_version < '2.7'
+packaging
+pyyaml
+resolvelib
+cryptography
+jinja2
+junit-xml
+ordereddict ; python_version < '2.7' # ansible-test junit callback plugin requirement
+packaging
+paramiko
+pyyaml
+jinja2  # ansible-core requirement
+pyyaml  # ansible-core requirement
+antsibull-changelog == 0.9.0
+# Note: this requirements.txt file is used to specify what dependencies are
+# needed to make the package run rather than for deployment of a tested set of
+# packages.  Thus, this should be the loosest set possible (only required
+# packages, not optional ones, and with the widest range of versions that could
+# be suitable)
+jinja2
+PyYAML
+cryptography
+packaging
+# NOTE: resolvelib 0.x version bumps should be considered major/breaking
+# NOTE: and we should update the upper cap with care, at least until 1.0
+# NOTE: Ref: https://github.com/sarugaku/resolvelib/issues/69
+resolvelib >= 0.5.3, < 0.6.0  # dependency resolver used by ansible-galaxy
+pyyaml  # required for the collection loader to parse yaml for plugin routing
+virtualenv ; python_version <= '2.7'  # virtualenv required on Python 2.x, but on Python 3.x we can use the built-in venv instead
+pyyaml  # not frozen due to usage outside sanity tests
+pycodestyle == 2.6.0
+pylint == 2.6.0
+pyyaml  # needed for collection_detail.py
+
+# dependencies
+astroid == 2.4.2
+isort == 5.7.0
+lazy-object-proxy == 1.4.3
+mccabe == 0.6.1
+six  # not frozen due to usage outside sanity tests
+toml == 0.10.2
+typed-ast == 1.4.2
+wrapt == 1.12.1
+pyyaml  # not frozen due to usage outside sanity tests
+voluptuous == 0.12.1
+jinja2  # ansible-core requirement
+pyyaml  # needed for collection_detail.py
+voluptuous == 0.12.1
+yamllint == 1.26.0
+
+# dependencies
+pathspec  # not frozen since it should not impact test results
+pyyaml  # not frozen due to usage outside sanity tests
+cryptography
+jinja2
+mock
+pytest
+pytest-mock
+pytest-xdist
+pyyaml
+resolvelib
+cryptography
+jinja2
+junit-xml
+ntlm-auth
+ordereddict ; python_version < '2.7' # ansible-test junit callback plugin requirement
+requests-ntlm
+requests-credssp
+packaging
+pypsrp
+pyyaml

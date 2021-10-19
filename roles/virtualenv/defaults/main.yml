@@ -14,6 +14,9 @@
 mafalb_ansible_virtualenv: "{{ ansible_user_dir }}/.virtualenvs/ansible"
 
 mafalb_ansible_version: '2.11'
-molecule_version: '3.5'
+
+# molecule 3.4 and newer insists on newer jinja2
+# molecule 3.5 has a bug related to ansible collections
+molecule_version: '3.3'
 
 ...
