@@ -27,16 +27,6 @@
     backup: true
     mode: '0644'
 
-- name: dynamically build constraints for ansible-test
-  block:
-    - name: constraints file for ansible-test is present
-      copy:
-        src: constraints/ansible-test/v{{ __mafalb_ansible_version }}.txt
-        content: "{{ __constraints.stdout }}"
-        dest: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}/constraints.txt"
-        backup: true
-        mode: '0644'
-
 - name: packages are present
   pip:
     name: "{{ packages }}"
