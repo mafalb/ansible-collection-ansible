@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.6.0 2021-XX-XX
+
+- virtualenv role with pip constraints for ansible-test dependencies
+
 ## v4.5.0 2021-10-15
 
 - support for ansible-core 2.11.6
