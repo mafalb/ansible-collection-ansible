@@ -38,7 +38,7 @@ jobs:
       # we are happy with any pre-installed ansible
       # just install molecule
       - name: install molecule
-        run: ansible-playbook -e ansible_python_interpreter=python3 -D playbooks/molecule.yml -t all,debug
+        run: ansible-playbook -e ansible_python_interpreter=python3 -D playbooks/molecule-virtualenv.yml -t all,debug
         env:
           ANSIBLE_COLLECTIONS_PATHS: '../../..'
 
