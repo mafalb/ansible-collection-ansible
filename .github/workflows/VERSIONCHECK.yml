@@ -1,7 +1,7 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
-name: CI
+name: VERSIONCHECK
 
 on: # yamllint disable-line rule:truthy
 
@@ -16,7 +16,7 @@ on: # yamllint disable-line rule:truthy
 
 jobs:
 
-  CHECK:
+  VERSIONCHECK:
 
     runs-on: ubuntu-20.04
 
@@ -42,7 +42,7 @@ jobs:
         env:
           ANSIBLE_COLLECTIONS_PATHS: '../../..'
 
-      - name: molecule scenario check_for_new_version
+      - name: molecule scenario check_for_new_version 2.11
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           molecule test -s check_for_new_version

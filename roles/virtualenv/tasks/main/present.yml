@@ -18,7 +18,7 @@
       - wheel
     virtualenv: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}"
     virtualenv_command: /usr/bin/python3 -m venv
- 
+
 # ensure that packages can't pull in other versions of some packages
 - name: constraints file is present
   template:
@@ -36,14 +36,14 @@
         dest: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}/constraints.txt"
         backup: true
         mode: '0644'
- 
+
 - name: packages are present
   pip:
     name: "{{ packages }}"
     extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }} -c {{ virtualenv|default(mafalb_ansible_virtualenv) }}/constraints.txt -c {{ virtualenv|default(mafalb_ansible_virtualenv) }}/virtualenv.constraints.txt"
     virtualenv: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}"
   register: __pip_packages
- 
+
 - name: pip freeze
   shell: |
     . {{ virtualenv|default(mafalb_ansible_virtualenv) }}/bin/activate

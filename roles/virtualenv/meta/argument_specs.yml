@@ -10,7 +10,7 @@ argument_specs:
     - Install ansible and related packages.
     - Install into a python virtualenv.
     - Available componen
-    
+
     options:
 
       do:
@@ -30,7 +30,7 @@ argument_specs:
 
       mafalb_ansible_packages:
         description:
-        -  Specify the components that you want to install.
+        - Specify the components that you want to install.
         aliases:
         - packages
         type: list
@@ -39,7 +39,7 @@ argument_specs:
         - ansible
         - ansible-lint
         - molecule
-        - ansible-test 
+        - ansible-test
         - ansible-core
         - ansible-base
         default:

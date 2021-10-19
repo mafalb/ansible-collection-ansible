@@ -3,8 +3,6 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-- debug: var=__mafalb_ansible_version
-
 - name: get constraints
   block:
     - name: ansible source code is checked out
@@ -18,7 +16,8 @@
         paths: "/tmp/ansible.git/test/lib/ansible_test/_data/requirements"
         patterns: "*.txt"
       register: __constraints_files
-    - debug: var=__constraints_files
+    - name: debug __constraints_files
+      debug: var=__constraints_files
       when: false
     - name: get all requirements
       shell: cat *.txt|grep -Ev -e "^git\+" -e "^[^[:space:]]+\\["

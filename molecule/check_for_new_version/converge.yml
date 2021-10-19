@@ -4,6 +4,11 @@
 ---
 
 - hosts: all
+  vars:
+    ansible_version_list:
+      - '2.9'
+      - '2.10'
+      - '2.11'
   roles:
     - role: mafalb.ansible.virtualenv
       do: constraints
@@ -22,8 +27,11 @@
           vars:
             do: constraints
             mafalb_ansible_version: "{{
-              '2.11.' +
-              (mafalb_ansible_latest_version['2.11'].split('.')[2]|int + 1)|string }}"
+              __version +
+              (mafalb_ansible_latest_version[__version].split('.')[2]|int + 1)|string }}"
+          loop: "{{ ansible_version_list }}"
+          loop_control:
+            loop_var: __version
       rescue:
         - name: debug the failed task
           debug: var=ansible_failed_task.action
@@ -33,6 +41,7 @@
       always:
         - name: ensure that it has failed
           assert:
-            that: __reg_failed_action["ansible_failed_task.action"] == 'git'
+            that: __reg_failed_action["ansible_failed_task.action"]|default('') == 'git'
+            fail_msg: It seems that there is an unsupported ansible version available.
 
 ...
