@@ -180,6 +180,7 @@ jobs:
         - ubuntu18
         - ubuntu20
         - ubuntu2104
+        - ubuntu2110
 
         ansible_version:
         - '2.11'
@@ -248,6 +249,12 @@ jobs:
 
         - target: ubuntu2104
           image: docker.io/ubuntu:hirsute
+          test_molecule: true
+          test_controlnode: true
+
+        # ubuntu impish
+        - target: ubuntu2110
+          image: docker.io/ubuntu:21.10
           test_molecule: true
           test_controlnode: true
 

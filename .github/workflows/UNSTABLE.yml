@@ -28,7 +28,6 @@ jobs:
         target:
         - fedora35
         - c9s
-        - ubuntu2110
 
         ansible_version:
         - '2.9'
@@ -51,11 +50,6 @@ jobs:
           image: quay.io/centos/centos:stream9-development
           test_molecule: true
           test_controlnode: false
-
-        - target: ubuntu2110
-          image: docker.io/ubuntu:impish
-          test_molecule: true
-          test_controlnode: true
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
