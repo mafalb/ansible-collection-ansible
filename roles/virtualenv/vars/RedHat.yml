@@ -3,7 +3,7 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-molecule_system_dependencies:
+mafalb_ansible_system_dependencies:
 - python3-libselinux
 - python3-cryptography
 
