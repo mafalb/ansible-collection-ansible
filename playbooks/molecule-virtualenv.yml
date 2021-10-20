@@ -11,8 +11,8 @@
       virtualenv: ~/.virtualenv/molecule
       mafalb_ansible_version: "{{ molecule_ansible_version }}"
       packages:
-        - molecule[lint,docker,test]
         - _ansible
+        - molecule[lint,docker,test]~=3.3
       when: molecule_ansible_version is defined
   
     # this is used if molecule_ansible_version is not argument
@@ -20,7 +20,7 @@
       virtualenv: ~/.virtualenv/molecule
       packages:
         - _ansible
-        - molecule[lint,docker,test]
+        - molecule[lint,docker,test]~=3.3
       when: molecule_ansible_version is not defined
 
 ...
