@@ -12,7 +12,7 @@
       mafalb_ansible_version: "{{ molecule_ansible_version }}"
       mafalb_vir
       packages:
-        - molecule
+        - molecule[lint,docker,test]
         - _ansible
       when: molecules_ansible_version is defined
   
@@ -21,7 +21,7 @@
       virtualenv: ~/.virtualenv/molecule
       packages:
         - _ansible
-        molecule[lint,docker,test]
+        - molecule[lint,docker,test]
       when: molecules_ansible_version is defined
 
 ...
