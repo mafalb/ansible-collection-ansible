@@ -10,6 +10,7 @@
     - role: mafalb.ansible.virtualenv
       virtualenv: ~/.virtualenv/molecule
       mafalb_ansible_version: "{{ molecule_ansible_version }}"
+      mafalb_molecule_version: '3.3'
       packages:
         - _ansible
         - molecule[lint,docker,test]~=3.3
@@ -18,6 +19,7 @@
     # this is used if molecule_ansible_version is not argument
     - role: mafalb.ansible.virtualenv
       virtualenv: ~/.virtualenv/molecule
+      mafalb_molecule_version: '3.3'
       packages:
         - _ansible
         - molecule[lint,docker,test]~=3.3
