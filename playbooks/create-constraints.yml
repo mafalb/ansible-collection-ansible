@@ -5,7 +5,8 @@
 
 - hosts: localhost
   pre_tasks:
-    - assert:
+    - name: assert that version is defined
+      assert:
         that: version is defined
   roles:
     - role: mafalb.ansible.virtualenv
