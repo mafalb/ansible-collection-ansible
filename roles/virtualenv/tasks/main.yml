@@ -29,6 +29,7 @@
     - state|default('present') in ['absent','present']
     - do|default('main') in ['main','constraints']
   when:
+  # this is the used ansible interpreter version
   - ansible_version.full is version("2.11", '<')
 
 # we need a default for C(state) in ansible <2.11
