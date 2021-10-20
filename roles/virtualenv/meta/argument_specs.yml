@@ -35,14 +35,6 @@ argument_specs:
         - packages
         type: list
         elements: str
-        choices:
-        - ansible
-        - ansible-lint
-        - molecule
-        - ansible-test
-        - ansible-core
-        - ansible-base
-        - _ansible
         default:
         - ansible-core
 
