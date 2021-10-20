@@ -20,12 +20,21 @@
     virtualenv_command: /usr/bin/python3 -m venv
 
 # ensure that packages can't pull in other versions of some packages
-- name: constraints file is present
+- name: constraints file virtualenv.constraints.txt is present
   template:
     src: constraints/virtualenv.txt.j2
     dest: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}/virtualenv.constraints.txt"
     backup: true
     mode: '0644'
+
+- name: constraints file constraints.txt is present
+  block:
+    - name: constraints file for ansible-test is present
+      copy:
+        src: constraints/ansible-test/v{{ __mafalb_ansible_version }}.txt
+        dest: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}/constraints.txt"
+        backup: true
+        mode: '0644'
 
 - name: packages are present
   pip:
