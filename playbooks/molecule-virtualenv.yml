@@ -10,7 +10,6 @@
     - role: mafalb.ansible.virtualenv
       virtualenv: ~/.virtualenv/molecule
       mafalb_ansible_version: "{{ molecule_ansible_version }}"
-      mafalb_vir
       packages:
         - molecule[lint,docker,test]
         - _ansible
