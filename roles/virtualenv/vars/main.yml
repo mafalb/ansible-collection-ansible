@@ -24,6 +24,6 @@ mafalb_ansible_virtualenv_packages:
 
 mafalb_ansible_virtualenv_command: "python3 -m venv"
 
-__mafalb_ansible_packages: "{{ (packages|default(mafalb_ansible_packages) + [mafalb_ansible_version|mafalb.ansible.pipname] if '_ansible' in packages|default(mafalb_ansible_packages) else packages|default(mafalb_ansible_packages))|difference('_ansible') }}"
+__mafalb_ansible_packages: "{{ (packages|default(mafalb_ansible_packages) + [mafalb_ansible_version|mafalb.ansible.pipname] if '_ansible' in packages|default(mafalb_ansible_packages) else packages|default(mafalb_ansible_packages))|difference(['_ansible']) }}"
 
 ...

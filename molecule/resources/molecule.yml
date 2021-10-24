@@ -22,7 +22,6 @@
 dependency:
   name: galaxy
   options:
-#    role-file: idontexist.yml   # avoid warning while running molecule
     requirements-file: requirements.yml
 
 driver:
@@ -47,8 +46,8 @@ provisioner:
     defaults:
       gathering: smart
       interpreter_python: auto
-      stdout_callback: yaml
-      bin_ansible_callbacks: true
+#      stdout_callback: yaml
+#      bin_ansible_callbacks: True
 
 
 verifier:

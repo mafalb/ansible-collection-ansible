@@ -3,6 +3,11 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
+- name: debug packages
+  debug: var=packages|default(mafalb_ansible_packages)
+- name: debug __mafalb_ansible_packages
+  debug: var=__mafalb_ansible_packages
+
 # disable cr repo again when CentOS 7.8 is released
 #
 - name: dependencies are present
