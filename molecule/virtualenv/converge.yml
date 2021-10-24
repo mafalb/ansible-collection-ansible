@@ -7,7 +7,7 @@
   roles:
     - role: mafalb.ansible.virtualenv
       packages:
-        - molecule
-        - ansible-lint
         - _ansible
+        - molecule[lint,docker,test]~=3.3.4
+
 ...

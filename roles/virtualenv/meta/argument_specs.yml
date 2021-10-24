@@ -55,6 +55,13 @@ argument_specs:
         type: path
         default: ~/.virtualenvs/ansible
 
+      mafalb_ansible_virtualenv_python:
+        description: The path to the virtualenv.
+        aliases:
+        - python
+        type: path
+        default: python3
+
       molecule_version:
         description: The wanted version of molecule
         type: str

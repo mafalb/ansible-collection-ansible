@@ -12,6 +12,7 @@
 # setting TMPPATH environment variable for pip
 #
 mafalb_ansible_virtualenv: "{{ ansible_user_dir }}/.virtualenvs/ansible"
+mafalb_ansible_virtualenv_python: "python3"
 
 mafalb_ansible_version: '2.11'
 

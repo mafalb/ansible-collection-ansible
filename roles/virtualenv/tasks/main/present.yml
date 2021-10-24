@@ -22,7 +22,7 @@
       - setuptools{{ mafalb_ansible_virtualenv_packages.setuptools }}
       - wheel
     virtualenv: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}"
-    virtualenv_command: /usr/bin/python3 -m venv
+    virtualenv_command: "{{ mafalb_ansible_virtualenv_command }}"
 
 # ensure that packages can't pull in other versions of some packages
 - name: constraints file virtualenv.constraints.txt is present
