@@ -13,6 +13,8 @@
         repo: https://github.com/ansible/ansible.git
         dest: /tmp/ansible.git
         version: v{{ __mafalb_ansible_version }}
+        # it's very chatty otherwise:
+      diff: false
     - name: get a list of all requirements files
       when: false
       find:
@@ -22,16 +24,25 @@
     - name: debug __constraints_files
       debug: var=__constraints_files
       when: false
-    - name: get all requirements
+    - name: get all requirements for ansible 2.9
+      shell: cat *.txt|grep -Ev -e "^git\+" -e "^[^[:space:]]+\\[" -e "^paramiko.*python_version >= '2.7'"
+      args:
+        chdir: /tmp/ansible.git/test/lib/ansible_test/_data/requirements
+      changed_when: false
+      register: __constraints_29
+      when: __mafalb_ansible_version is match('2.9')
+    - name: get all requirements for ansible > 2.9
       shell: cat *.txt|grep -Ev -e "^git\+" -e "^[^[:space:]]+\\["
       args:
         chdir: /tmp/ansible.git/test/lib/ansible_test/_data/requirements
       changed_when: false
       register: __constraints
+      when: __mafalb_ansible_version is not match('2.9')
+    - debug: var=__constraints
     # do not replace existing constraints file
     - name: constraints file for ansible-test is present
       copy:
-        content: "{{ __constraints.stdout }}"
+        content: "{{ __constraints.stdout|default(__constraints_29.stdout) }}"
         dest: "{{ role_path }}/files/constraints/ansible-test/v{{ __mafalb_ansible_version }}.txt"
         backup: true
         mode: '0644'
