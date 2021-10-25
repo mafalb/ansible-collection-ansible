@@ -47,7 +47,7 @@ provisioner:
       gathering: smart
       interpreter_python: auto
       stdout_callback: yaml
-      bin_ansible_callbacks: True
+      bin_ansible_callbacks: true
 
 
 verifier:
