@@ -39,7 +39,7 @@
     - name: install requirements  # noqa: no-changed-when 301
       shell: |
         . ~/.virtualenvs/{{ item }}/bin/activate
-        ansible-test sanity --requirements --python 3.6
+        ansible-test sanity --requirements
       loop:
         - ansible29
         - ansible210
