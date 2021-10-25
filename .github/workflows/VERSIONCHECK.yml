@@ -44,7 +44,7 @@ jobs:
 
       - name: molecule scenario check_for_new_version 2.11
         run: |
-          source ~/.virtualenvs/ansible/bin/activate
+          source ~/.virtualenvs/molecule/bin/activate
           molecule test -s check_for_new_version
 
 ...
