@@ -55,8 +55,6 @@
     clients: ["{{ __virtualenv.virtualenv }}/bin/pip"]
   register: __reg_pip
 
-- debug: var=__reg_pip
-
 # preparing to upgrade ansible
 # 1. ansible-base and ansible-core
 # 2. ansible-core and ansible==2.9

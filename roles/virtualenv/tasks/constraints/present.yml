@@ -38,7 +38,8 @@
       changed_when: false
       register: __constraints
       when: __mafalb_ansible_version is not match('2.9')
-    - debug: var=__constraints
+    - name: debug __constraints
+      debug: var=__constraints
     # do not replace existing constraints file
     - name: constraints file for ansible-test is present
       copy:

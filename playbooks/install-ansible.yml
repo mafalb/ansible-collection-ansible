@@ -12,5 +12,5 @@
       mafalb_ansible_version: "{{ virtualenv_ansible_version }}"
       packages: "{{ virtualenv_packages }}"
       when: molecule_ansible_version is defined
-  
+
 ...
