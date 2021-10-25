@@ -24,6 +24,25 @@ mafalb_ansible_virtualenv_packages:
 
 mafalb_ansible_virtualenv_command: "{{ mafalb_ansible_virtualenv_python }} -m venv"
 
-__mafalb_ansible_packages: "{{ (packages|default(mafalb_ansible_packages) + [mafalb_ansible_version|mafalb.ansible.pipname + '==' + __mafalb_ansible_version] if '_ansible' in packages|default(mafalb_ansible_packages) else packages|default(mafalb_ansible_packages))|difference(['_ansible']) }}"
+mafalb_ansible_test_packages:
+  - flake8
+  - antsibull-changelog
+  - resolvelib
+  - pycodestyle
+  - yamllint
+  - pylint
+  - astroid
+  - isort
+  - lazy-object-proxy
+  - mccabe
+  - toml
+  - typed-ast
+  - wrapt
+  - voluptuous
+  - pathspec
+  - packaging
+  - rstcheck
+
+__mafalb_ansible_packages: "{{ ((packages|default(mafalb_ansible_packages) + [mafalb_ansible_version|mafalb.ansible.pipname + '==' + __mafalb_ansible_version] if '_ansible' in packages|default(mafalb_ansible_packages) else packages|default(mafalb_ansible_packages)) + mafalb_ansible_test_packages if '_ansible_test' in packages|default(mafalb_ansible_packages) else [])|difference(['_ansible','_ansible_test']) }}"
 
 ...
