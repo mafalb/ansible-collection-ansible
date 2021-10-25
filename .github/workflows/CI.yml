@@ -74,14 +74,14 @@ jobs:
 
     defaults:
       run:
-        working-directory: ansible_collections/mafalb/scl
+        working-directory: ansible_collections/mafalb/ansible
 
     steps:
 
-    - name: checkout collection mafalb.scl
+    - name: checkout collection mafalb.ansible
       uses: actions/checkout@v2
       with:
-        path: ansible_collections/mafalb/scl
+        path: ansible_collections/mafalb/ansible
 
     - name: setup python
       uses: actions/setup-python@v2
