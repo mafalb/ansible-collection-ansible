@@ -1,0 +1,16 @@
+# Copyright (c) 2019-2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+- hosts: localhost
+  roles:
+
+    # this is used if molecule_ansible_version is argument
+    - role: mafalb.ansible.virtualenv
+      python: "{{ virtualenv_python_version }}"
+      mafalb_ansible_version: "{{ virtualenv_ansible_version }}"
+      packages: "{{ virtualenv_packages }}"
+      when: molecule_ansible_version is defined
+  
+...
