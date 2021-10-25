@@ -25,7 +25,9 @@
       debug: var=__constraints_files
       when: false
     - name: get all requirements for ansible 2.9
-      shell: cat *.txt|grep -Ev -e "^git\+" -e "^[^[:space:]]+\\[" -e "^paramiko.*python_version >= '2.7'"
+      shell: |
+        cat *.txt|grep -Ev -e "^git\+" -e "^[^[:space:]]+\\["\
+          -e "^paramiko.*python_version >= '2.7'"
       args:
         chdir: /tmp/ansible.git/test/lib/ansible_test/_data/requirements
       changed_when: false
@@ -44,7 +46,8 @@
     - name: constraints file for ansible-test is present
       copy:
         content: "{{ __constraints.stdout|default(__constraints_29.stdout) }}"
-        dest: "{{ role_path }}/files/constraints/ansible-test/v{{ __mafalb_ansible_version }}.txt"
+        dest: "{{ role_path }}/files/constraints/ansible-test/v{{
+                  __mafalb_ansible_version }}.txt"
         backup: true
         mode: '0644'
         force: false

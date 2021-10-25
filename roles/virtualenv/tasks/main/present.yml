@@ -31,13 +31,13 @@
     virtualenv: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}"
     virtualenv_command: "{{ mafalb_ansible_virtualenv_command }}"
   # register the result and enjoy the absolute path to the virtualenv
-  register: __virtualenv
+  register: __reg_venv
 
 # ensure that packages can't pull in other versions of some packages
 - name: constraints file virtualenv.constraints.txt is present
   template:
     src: constraints/virtualenv.txt.j2
-    dest: "{{ __virtualenv.virtualenv }}/virtualenv.constraints.txt"
+    dest: "{{ __reg_venv.virtualenv }}/virtualenv.constraints.txt"
     backup: true
     mode: '0644'
 
@@ -46,13 +46,13 @@
     - name: constraints file for ansible-test is present
       copy:
         src: constraints/ansible-test/v{{ __mafalb_ansible_version }}.txt
-        dest: "{{ __virtualenv.virtualenv }}/constraints.txt"
+        dest: "{{ __reg_venv.virtualenv }}/constraints.txt"
         backup: true
         mode: '0644'
 
 - name: get installed pip packages
   pip_package_info:
-    clients: ["{{ __virtualenv.virtualenv }}/bin/pip"]
+    clients: ["{{ __reg_venv.virtualenv }}/bin/pip"]
   register: __reg_pip
 
 # preparing to upgrade ansible
@@ -66,17 +66,23 @@
     - ansible-base
     - ansible-core
     state: absent
-    virtualenv: "{{ __virtualenv.virtualenv }}"
+    virtualenv: "{{ __reg_venv.virtualenv }}"
   when:
-  - (('ansible-base' in __reg_pip.packages[__virtualenv.virtualenv + '/bin/pip']) and
-     ('ansible-core' in __reg_pip.packages[__virtualenv.virtualenv + '/bin/pip'])) or
-    ((('ansible-base' in __reg_pip.packages[__virtualenv.virtualenv + '/bin/pip']) or
-      ('ansible-core' in __reg_pip.packages[__virtualenv.virtualenv + '/bin/pip'])) and
-      ('ansible' in __reg_pip.packages[__virtualenv.virtualenv + '/bin/pip']) and
-      (__reg_pip.packages[__virtualenv.virtualenv + '/bin/pip']['ansible'][0]['version']) is match('2.9'))
+  - (('ansible-base' in __reg_pip.packages[__reg_venv.virtualenv +
+                                           '/bin/pip']) and
+     ('ansible-core' in __reg_pip.packages[__reg_venv.virtualenv +
+                                           '/bin/pip'])) or
+    ((('ansible-base' in __reg_pip.packages[__reg_venv.virtualenv +
+                                            '/bin/pip']) or
+      ('ansible-core' in __reg_pip.packages[__reg_venv.virtualenv +
+                                            '/bin/pip'])) and
+     ('ansible' in __reg_pip.packages[__reg_venv.virtualenv + '/bin/pip']) and
+     (__reg_pip.packages[__reg_venv.virtualenv +
+                         '/bin/pip']['ansible'][0]['version']) is match('2.9'))
 
 - name: get ansible version
-  command: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}/bin/ansible --version"
+  command: "{{
+    virtualenv|default(mafalb_ansible_virtualenv) }}/bin/ansible --version"
   failed_when: false
   changed_when: false
   register: __ansible_version
@@ -92,7 +98,8 @@
     virtualenv: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}"
   when:
     - (__mafalb_ansible_version is match('2.11') and
-       __ansible_version.stdout|default('') is not match('ansible \[core 2.11')) or
+       __ansible_version.stdout|default('') is not
+        match('ansible \[core 2.11')) or
       (__mafalb_ansible_version is not match('2.9') and
        __ansible_version.stdout|default('') is match('ansible 2.9'))
 
@@ -104,8 +111,9 @@
     name: "{{ __mafalb_ansible_packages }}"
     extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }}
        -c {{ virtualenv|default(mafalb_ansible_virtualenv) }}/constraints.txt
-       -c {{ virtualenv|default(mafalb_ansible_virtualenv) }}/virtualenv.constraints.txt"
-    virtualenv: "{{ __virtualenv.virtualenv }}"
+       -c {{ virtualenv|default(mafalb_ansible_virtualenv)
+           }}/virtualenv.constraints.txt"
+    virtualenv: "{{ __reg_venv.virtualenv }}"
   register: __pip_packages
 
 - name: pip freeze
@@ -127,12 +135,14 @@
   # reserved variable ?
   #
   - name: get ansible version
-    command: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}/bin/ansible --version"
+    command: "{{
+      virtualenv|default(mafalb_ansible_virtualenv) }}/bin/ansible --version"
     changed_when: false
     register: __ansible_version
   - name: assert that the wanted ansible version is present
     assert:
       that:
-      - __ansible_version.stdout is match('ansible .*{{ __mafalb_ansible_version }}')
+      - __ansible_version.stdout is
+        match('ansible .*{{ __mafalb_ansible_version }}')
 
 ...
