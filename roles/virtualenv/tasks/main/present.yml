@@ -133,18 +133,4 @@
       that:
       - __ansible_version.stdout is match('ansible .*{{ __mafalb_ansible_version }}')
 
-- name: assert correct molecule version is present
-  block:
-  - name: get molecules version
-    shell: |
-      . {{ virtualenv|default(mafalb_ansible_virtualenv) }}/bin/activate
-      NO_COLOR=1 molecule --version
-    changed_when: false
-    register: __molecule_version
-  - name: assert that the wanted molecule version is present
-    assert:
-      that:
-      - __molecule_version.stdout is match('molecule {{ molecule_version }}')
-  when: molecule_version is defined
-
 ...
