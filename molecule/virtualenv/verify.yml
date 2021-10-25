@@ -1,0 +1,78 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+- hosts: all
+  vars:
+    collection_dir: /root/ansible_collections/mafalb
+
+  tasks:
+
+    - name: destination directory is present
+      file:
+        path: "{{ collection_dir }}"
+        state: directory
+
+    - name: copy collection
+      synchronize:
+        src: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
+        dest: "{{ collection_dir }}"
+        recursive: true
+        rsync_opts:
+          - "--exclude=tests/output"
+        
+    - name: get installed packages for ~/.virtualenvs/ansible
+      shell: |
+        . ~/.virtualenvs/{{ item }}/bin/activate
+        pip freeze >/tmp/{{ item }}-before.txt
+      loop:
+        - ansible29
+        - ansible210
+        - ansible211
+        - molecule29
+        - molecule210
+        - molecule211
+
+    - name: install requirements  
+      shell: |
+        . ~/.virtualenvs/{{ item }}/bin/activate
+        ansible-test sanity --requirements --python 3.6
+      loop:
+        - ansible29
+        - ansible210
+        - ansible211
+        - molecule29
+        - molecule210
+        - molecule211
+      args:
+        chdir: "{{ collection_dir }}/ansible"
+
+    - name: get installed packages for ~/.virtualenvs/ansible
+      shell: |
+        . ~/.virtualenvs/{{ item }}/bin/activate
+        pip freeze >/tmp/{{ item }}-after.txt
+      loop:
+        - ansible29
+        - ansible210
+        - ansible211
+        - molecule29
+        - molecule210
+        - molecule211
+
+    - name: get diff
+      command: diff -u /tmp/{{ item }}-before.txt /tmp/{{ item }}-after.txt
+      changed_when: false
+      loop:
+        - ansible29
+        - ansible210
+        - ansible211
+        - molecule29
+        - molecule210
+        - molecule211
+      register: __reg_diff
+
+    - name: diff
+      debug: var=__reg_diff
+
+...

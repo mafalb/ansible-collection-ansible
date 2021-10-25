@@ -1,2 +1,0 @@
-#plugins/filter/name.py pylint:consider-using-f-string
-#plugins/filter/version.py pylint:consider-using-f-string

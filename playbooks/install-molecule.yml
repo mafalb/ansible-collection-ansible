@@ -10,7 +10,7 @@
     - role: mafalb.ansible.virtualenv
       virtualenv: ~/.virtualenvs/molecule
       python: "{{ molecule_python_version|default('python3') }}"
-      mafalb_ansible_version: "{{ molecule_ansible_version }}"
+      mafalb_ansible_version: "{{ molecule_ansible_version|default('2.11') }}"
       packages:
         - _ansible
         - molecule[lint,docker,test]~=3.3.4

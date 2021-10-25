@@ -5,23 +5,50 @@
 
 - hosts: all
   roles:
-    - role: mafalb.ansible.virtualenv
-      mafalb_ansible_packages:
-        - _ansible
-        - molecule[lint,docker,test]~=3.3.4
-
-    - role: mafalb.ansible.virtualenv
-      virtualenv: ~/.virtualenvs/ansible_test
-      mafalb_ansible_packages:
-        - _ansible
-        - _ansible_test
 
     - role: mafalb.ansible.virtualenv
       virtualenv: ~/.virtualenvs/ansible29
       mafalb_ansible_version: '2.9'
       mafalb_ansible_packages:
         - _ansible
-        - molecule[lint,docker,test]~=3.3.4
         - _ansible_test
+
+    - role: mafalb.ansible.virtualenv
+      virtualenv: ~/.virtualenvs/ansible210
+      mafalb_ansible_version: '2.10'
+      mafalb_ansible_packages:
+        - _ansible
+        - _ansible_test
+
+    - role: mafalb.ansible.virtualenv
+      virtualenv: ~/.virtualenvs/ansible211
+      mafalb_ansible_version: '2.11'
+      mafalb_ansible_packages:
+        - _ansible
+        - _ansible_test
+
+    - role: mafalb.ansible.virtualenv
+      virtualenv: ~/.virtualenvs/molecule29
+      mafalb_ansible_version: '2.9'
+      mafalb_ansible_packages:
+        - _ansible
+        - _ansible_test
+        - molecule[lint,docker,test]~=3.3.4
+
+    - role: mafalb.ansible.virtualenv
+      virtualenv: ~/.virtualenvs/molecule210
+      mafalb_ansible_version: '2.10'
+      mafalb_ansible_packages:
+        - _ansible
+        - _ansible_test
+        - molecule[lint,docker,test]~=3.3.4
+
+    - role: mafalb.ansible.virtualenv
+      virtualenv: ~/.virtualenvs/molecule211
+      mafalb_ansible_version: '2.11'
+      mafalb_ansible_packages:
+        - _ansible
+        - _ansible_test
+        - molecule[lint,docker,test]~=3.3.4
 
 ...

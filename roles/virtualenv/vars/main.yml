@@ -28,58 +28,29 @@ mafalb_ansible_test_packages:
   '2.10':
     - flake8
     - antsibull-changelog
-    - astroid
-    - isort
-    - lazy-object-proxy
-    - mccabe
-    - pathspec
-    - packaging
-    - pycodestyle
     - pylint
     - resolvelib
-    - rstcheck
     - toml
-    - typed-ast
     - voluptuous
-    - wrapt
     - yamllint
   '2.11':
     - flake8
     - antsibull-changelog
-    - astroid
-    - isort
-    - lazy-object-proxy
-    - mccabe
-    - pathspec
-    - packaging
-    - pycodestyle
     - pylint
-    - resolvelib
-    - rstcheck
-    - toml
-    - typed-ast
     - voluptuous
-    - wrapt
     - yamllint
   '2.9':
     - flake8
-    - astroid
-    - cryptography
-    - idna
-    - isort
-    - lazy-object-proxy
-    - mccabe
     - ntlm-auth
-    - pathspec
-    - pycodestyle
     - pylint
     - rstcheck
     - sphinx
-    - typed-ast
+    - virtualenv
     - voluptuous
-    - wrapt
     - yamllint
 
-__mafalb_ansible_packages: "{{ ((packages|default(mafalb_ansible_packages) + [mafalb_ansible_version|mafalb.ansible.pipname + '==' + __mafalb_ansible_version] if '_ansible' in packages|default(mafalb_ansible_packages) else packages|default(mafalb_ansible_packages)) + mafalb_ansible_test_packages[mafalb_ansible_major_minor_version] if '_ansible_test' in packages|default(mafalb_ansible_packages) else [])|difference(['_ansible','_ansible_test']) }}"
+__mafalb_ansible_test_packages: "{{ (packages|default(mafalb_ansible_packages) + mafalb_ansible_test_packages[mafalb_ansible_major_minor_version] if '_ansible_test' in packages|default(mafalb_ansible_packages) else [])|difference(['_ansible','_ansible_test']) }}"
+
+__mafalb_ansible_packages: "{{ (packages|default(mafalb_ansible_packages) + [mafalb_ansible_version|mafalb.ansible.pipname + '==' + __mafalb_ansible_version] if '_ansible' in packages|default(mafalb_ansible_packages) else packages|default(mafalb_ansible_packages))|difference(['_ansible','_ansible_test']) + __mafalb_ansible_test_packages }}"
 
 ...
