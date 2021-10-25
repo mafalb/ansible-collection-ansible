@@ -159,6 +159,7 @@ jobs:
   CI:
 
     runs-on: ubuntu-20.04
+    needs: SANITY
 
     strategy:
       fail-fast: false
