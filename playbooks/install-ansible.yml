@@ -4,6 +4,11 @@
 ---
 
 - hosts: localhost
+  pre_tasks:
+    - name: debug
+      debug:
+        var: virtualenv_python_version
+
   roles:
 
     # this is used if molecule_ansible_version is argument
