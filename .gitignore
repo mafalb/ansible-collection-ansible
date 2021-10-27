@@ -2,3 +2,4 @@ tests/output/
 __pycache__/
 *.pyc
 /.cache/
+pytest

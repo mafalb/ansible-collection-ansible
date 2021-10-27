@@ -9,6 +9,8 @@
       debug: var=packages|default(mafalb_ansible_packages)
     - name: debug mafalb_ansible_version
       debug: var=mafalb_ansible_version
+    - name: debug __mafalb_ansible_version
+      debug: var=__mafalb_ansible_version
     - name: debug __mafalb_ansible_packages
       debug: var=__mafalb_ansible_packages
   tags:

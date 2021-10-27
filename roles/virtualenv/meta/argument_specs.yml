@@ -44,10 +44,6 @@ argument_specs:  # noqa 701
         - update
         type: bool
 
-      mafalb_ansible_version:
-        description: The wanted version of ansible
-        type: str
-
       mafalb_ansible_virtualenv:
         description: The path to the virtualenv.
         aliases:
@@ -61,9 +57,5 @@ argument_specs:  # noqa 701
         - python
         type: path
         default: python3
-
-      molecule_version:
-        description: The wanted version of molecule
-        type: str
 
 ...
