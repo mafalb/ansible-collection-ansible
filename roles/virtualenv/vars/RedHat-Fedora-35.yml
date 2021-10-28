@@ -8,5 +8,6 @@ mafalb_ansible_system_dependencies:
 - gcc
 - libffi-devel
 - python-devel
+- python3-setuptools
 
 ...
