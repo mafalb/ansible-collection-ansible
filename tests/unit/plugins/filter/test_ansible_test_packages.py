@@ -3,17 +3,17 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 
 from __future__ import (absolute_import, division, print_function)
-from ansible.errors import AnsibleFilterError, AnsibleFilterTypeError
-from ansible_collections.mafalb.ansible.plugins.filter.version import ansible_test_packages
+from ansible_collections.mafalb.ansible.plugins.filter.version import (
+    __ansible_test_packages
+)
+from . data import data
 __metaclass__ = type
-
-import pytest
 
 
 def test_ansible_test_packages():
-    p29 = ansible_test_packages('2.9')
-    p210 = ansible_test_packages('2.10')
-    p211 = ansible_test_packages('2.11')
+    p29 = __ansible_test_packages('2.9', data)
+    p210 = __ansible_test_packages('2.10', data)
+    p211 = __ansible_test_packages('2.11', data)
 
     assert isinstance(p29, list)
     assert isinstance(p210, list)

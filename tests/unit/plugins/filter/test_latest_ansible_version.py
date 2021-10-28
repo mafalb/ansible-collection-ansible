@@ -3,11 +3,13 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 
 from __future__ import (absolute_import, division, print_function)
-from ansible.errors import AnsibleFilterError, AnsibleFilterTypeError
-from ansible_collections.mafalb.ansible.plugins.filter.version import latest_ansible_version
+from ansible_collections.mafalb.ansible.plugins.filter.version import (
+    latest_ansible_version
+)
 __metaclass__ = type
 
 import pytest
+from . data import data
 
 TEST_CASES = (
     (['_ansible==2.11.6'], '2.11.6'),
@@ -19,6 +21,8 @@ TEST_CASES = (
 
 
 @pytest.mark.parametrize('in_list, expected', TEST_CASES)
-def test_fix_package_list(in_list, expected):
-    actual = latest_ansible_version(in_list)
-    assert actual == expected, "got {actual} instead of {expected}".format(actual=actual, expected=expected)
+def test_latest_ansible_version(in_list, expected):
+    actual = latest_ansible_version(in_list, data)
+    assert actual == expected, "got {actual} instead of {expected}".format(
+        actual=actual, expected=expected
+    )

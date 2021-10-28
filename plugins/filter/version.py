@@ -3,14 +3,16 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 
 from __future__ import (absolute_import, division, print_function)
-
 try:
     from pkg_resources import Requirement as Pkgreq
 except ImportError:
     Pkgreq = None
-
 from ansible.module_utils.six import raise_from
-from ansible.errors import AnsibleError, AnsibleFilterError, AnsibleFilterTypeError
+from ansible.errors import (
+    AnsibleError,
+    AnsibleFilterError,
+    AnsibleFilterTypeError
+)
 from ansible.module_utils._text import to_native
 __metaclass__ = type
 
@@ -26,12 +28,18 @@ def version2int(version):
     """
 
     if not isinstance(version, str):
-        raise AnsibleFilterTypeError("version is not a string but {type}".format(type=type(version)))
+        raise AnsibleFilterTypeError(
+            "version is not a string but {type}".format(type=type(version))
+        )
     if len(version.split('.')) != 3:
-        raise AnsibleFilterError("not a valid version string: {str}".format(str=version))
+        raise AnsibleFilterError(
+            "not a valid version string: {str}".format(str=version)
+        )
     patch = version.split('.')[2]
     if not isinstance(int(patch[0]), int):
-        raise AnsibleFilterError("Not a valid patch version: {version}".format(version=patch))
+        raise AnsibleFilterError(
+            "Not a valid patch version: {version}".format(version=patch)
+        )
     try:
         patch = int(patch)
     except ValueError:
@@ -44,11 +52,11 @@ def version2int(version):
             + patch
         )
     except ValueError:
-        raise AnsibleFilterError("Not a valid version: {version}".format(version=version))
+        raise AnsibleFilterError("Not a valid version: {x}".format(x=version))
     return value
 
 
-def major_minor_version(arg_req):
+def __major_minor_version(arg_req, data):
     """Take a pip requirement and return the best matching major.minor version
 
     arg_req is a string in the form of
@@ -59,17 +67,13 @@ def major_minor_version(arg_req):
     return a version string in the form of X.Y
     """
 
-    latest_version = {
-        '2.11': '2.11.6',
-        '2.10': '2.10.15',
-        '2.9': '2.9.27',
-    }
-
     try:
         # '_ansible' is not a valid pip name
         req = Pkgreq.parse(arg_req.replace('_ansible', 'ansible'))
     except Exception as e:
-        raise_from(AnsibleFilterTypeError("not a valid pip specifier: {req}".format(req=arg_req)), e)
+        raise_from(AnsibleFilterTypeError(
+            "not a valid pip specifier: {req}".format(req=arg_req)
+        ), e)
 
     if req.name != 'ansible':
         raise AnsibleFilterError("not '_ansible': {str}".format(str=req.name))
@@ -81,19 +85,25 @@ def major_minor_version(arg_req):
     # in all other cases find possible versions
     all_versions = []
     # generate a list of all versions that are theoretically supported
-    for majmin in latest_version:
-        for patch in range(0, int(latest_version[majmin].split('.')[-1]) + 1):
+    for majmin in data['latest_version']:
+        for patch in range(
+            0, int(data['latest_version'][majmin].split('.')[-1]) + 1
+        ):
             all_versions.append(majmin + '.' + str(patch))
     possible_versions = [v for v in all_versions if req.specifier.contains(v)]
     try:
-        latest_possible_version = sorted(possible_versions, key=version2int)[-1]
+        latest_possible_version = sorted(
+            possible_versions, key=version2int
+        )[-1]
     except IndexError:
         # requested version is too old or too new
-        raise AnsibleFilterTypeError("not a supported pip specifier: {req}".format(req=arg_req))
+        raise AnsibleFilterTypeError(
+            "not a supported pip specifier: {req}".format(req=arg_req)
+        )
     return '.'.join(latest_possible_version.split('.')[0:2])
 
 
-def __latest_ansible_version(arg_req):
+def __latest_ansible_version(arg_req, data):
     """Take a pip requirement and return the latest major.minor.patch version
 
     arg_req is a string in the form of
@@ -104,17 +114,13 @@ def __latest_ansible_version(arg_req):
     return a version string in the form of X.Y
     """
 
-    latest_version = {
-        '2.11': '2.11.6',
-        '2.10': '2.10.15',
-        '2.9': '2.9.27',
-    }
-
     try:
         # '_ansible' is not a valid pip name
         req = Pkgreq.parse(arg_req.replace('_ansible', 'ansible'))
     except Exception as e:
-        raise_from(AnsibleFilterTypeError("not a valid pip specifier: {req}".format(req=arg_req)), e)
+        raise_from(AnsibleFilterTypeError(
+            "not a valid pip specifier: {req}".format(req=arg_req)), e
+        )
 
     if req.name != 'ansible':
         raise AnsibleFilterError("not '_ansible': {str}".format(str=req.name))
@@ -122,24 +128,30 @@ def __latest_ansible_version(arg_req):
     # exact version is requested
     if str(req.specifier).startswith('=='):
         majmin = '.'.join(str(req.specifier).replace('==', '').split('.')[0:2])
-        return latest_version[majmin]
+        return data['latest_version'][majmin]
 
     # in all other cases find possible versions
     all_versions = []
     # generate a list of all versions that are theoretically supported
-    for majmin in latest_version:
-        for patch in range(0, int(latest_version[majmin].split('.')[-1]) + 1):
+    for majmin in data['latest_version']:
+        for patch in range(
+            0, int(data['latest_version'][majmin].split('.')[-1]) + 1
+        ):
             all_versions.append(majmin + '.' + str(patch))
     possible_versions = [v for v in all_versions if req.specifier.contains(v)]
     try:
-        latest_possible_version = sorted(possible_versions, key=version2int)[-1]
+        latest_possible_version = sorted(
+            possible_versions, key=version2int
+        )[-1]
     except IndexError:
         # requested version is too old or too new
-        raise AnsibleFilterTypeError("not a supported pip specifier: {req}".format(req=arg_req))
+        raise AnsibleFilterTypeError(
+            "not a supported pip specifier: {req}".format(req=arg_req)
+        )
     return latest_possible_version
 
 
-def fix_ansible_pip_req(arg_req):
+def __fix_ansible_pip_req(arg_req, data):
     """Take a pip requirement and fill in the correct name.
 
     arg_req is a string in the form of
@@ -149,76 +161,51 @@ def fix_ansible_pip_req(arg_req):
     """
 
     if not isinstance(arg_req, str):
-        raise AnsibleFilterTypeError("arg_req is not string {type}".format(type=type(arg_req)))
+        raise AnsibleFilterTypeError("arg_req is not string {type}".format(
+            type=type(arg_req))
+        )
 
     # '_ansible' is not a valid pip name
     req = Pkgreq.parse(arg_req.replace('_ansible', 'ansible'))
 
     # select the proper name for this version
-    if major_minor_version(arg_req) == '2.9':
+    if __major_minor_version(arg_req, data) == '2.9':
         package = 'ansible'
-    elif major_minor_version(arg_req) == '2.10':
+    elif __major_minor_version(arg_req, data) == '2.10':
         package = 'ansible-base'
     else:
         package = 'ansible-core'
     return package + str(req.specifier)
 
 
-def ansible_test_packages(version):
+def __ansible_test_packages(version, data):
     """Return a list of ansible-test requirements"""
-    packages = {
-        '2.10': [
-            'flake8',
-            'antsibull-changelog',
-            'pylint',
-            'resolvelib',
-            'toml',
-            'voluptuous',
-            'yamllint',
-        ],
-        '2.11': [
-            'flake8',
-            'antsibull-changelog',
-            'pylint',
-            'voluptuous',
-            'yamllint',
-        ],
-        '2.9': [
-            'flake8',
-            'ntlm-auth',
-            'pylint',
-            'rstcheck',
-            'sphinx',
-            'virtualenv',
-            'voluptuous',
-            'yamllint',
-        ],
-    }
-    return packages[version]
+    return data['ansible_test_packages'][version]
 
 
-def pip_package_list(arg_packages):
-    """Return a list of pip packages appropriate for the given version of ansible"""
+def pip_package_list(arg_packages, data):
+    """Return a list of pip packages."""
+#    data = yaml.load(data, Loader=yaml.FullLoader)
     packages = [s for s in arg_packages if not s.startswith('_ansible')]
     matching = [s for s in arg_packages if s.startswith('_ansible')]
     for s in matching:
         # '_ansible' is not a valid pip name
         req = Pkgreq.parse(s.replace('_ansible', 'ansible'))
         if req.name == 'ansible':
-            majmin = major_minor_version(s)
-            packages.append(fix_ansible_pip_req(s))
+            majmin = __major_minor_version(s, data)
+            packages.append(__fix_ansible_pip_req(s, data))
         elif req.name == 'ansible_test':
-            packages.extend(ansible_test_packages(majmin))
+            packages.extend(__ansible_test_packages(majmin, data))
     return packages
 
 
-def latest_ansible_version(arg_packages):
-    """Return a list of pip packages appropriate for the given version of ansible"""
+def latest_ansible_version(arg_packages, data):
+    """Return the latest possible ansible version."""
     for s in arg_packages:
         # '_ansible' is not a valid pip name
         req = Pkgreq.parse(s.replace('_ansible', 'ansible'))
         if req.name == 'ansible':
-            return __latest_ansible_version(s)
+            return __latest_ansible_version(s, data)
 
 
 def filter_pipver(version):

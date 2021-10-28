@@ -43,8 +43,7 @@ mafalb_ansible_virtualenv_command: "{{
   python|default(mafalb_ansible_virtualenv_python) }} -m venv"
 
 # I want to write as simple as:
-__mafalb_ansible_version: "{{ packages|default(mafalb_ansible_packages)|mafalb.ansible.latest_ansible_version }}"
-__mafalb_ansible_packages: "{{ packages|default(mafalb_ansible_packages)|mafalb.ansible.fix_package_list }}"
-
+__mafalb_ansible_version: "{{ packages|default(mafalb_ansible_packages)|mafalb.ansible.latest_ansible_version(mafalb_ansible_data) }}"
+__mafalb_ansible_packages: "{{ packages|default(mafalb_ansible_packages)|mafalb.ansible.fix_package_list(mafalb_ansible_data) }}"
 
 ...
