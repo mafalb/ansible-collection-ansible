@@ -6,5 +6,6 @@
 mafalb_ansible_system_dependencies:
 - python3-libselinux
 - python3-cryptography
+- glibc-langpack-en
 
 ...
