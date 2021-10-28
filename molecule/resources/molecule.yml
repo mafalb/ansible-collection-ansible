@@ -46,8 +46,8 @@ provisioner:
     defaults:
       gathering: smart
       interpreter_python: auto
-      stdout_callback: community.general.yaml
-      bin_ansible_callbacks: true
+#      stdout_callback: community.general.yaml
+#      bin_ansible_callbacks: true
 
 
 verifier:
