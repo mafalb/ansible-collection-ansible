@@ -318,13 +318,13 @@ jobs:
           molecule test -s controlnode
 
       - name: molecule scenario virtualenv
-        when: matrix.molecule == true
+        if: matrix.molecule == true
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           molecule test -s virtualenv
 
       - name: molecule scenario virtualenv for ansible 2.9
-        when: matrix.test29 == true
+        if: matrix.test29 == true
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           molecule test -s virtualenv29
