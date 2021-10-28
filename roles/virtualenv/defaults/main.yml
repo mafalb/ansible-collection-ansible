@@ -12,7 +12,9 @@
 # setting TMPPATH environment variable for pip
 #
 mafalb_ansible_virtualenv: "{{ ansible_user_dir }}/.virtualenvs/ansible"
-mafalb_ansible_virtualenv_python: "{{ ansible_python.executable }}"
+
+# we do not support ansible virtualenvs on python2
+mafalb_ansible_virtualenv_python: "{{ 'python3' if ansible_python.version.major == 2 else ansible_python.executable }}"
 
 # molecule 3.4 and newer insists on newer jinja2
 # molecule 3.5 has a bug related to ansible collections
