@@ -324,7 +324,7 @@ jobs:
           molecule test -s virtualenv
 
       - name: molecule scenario virtualenv for ansible 2.9
-        when: test29 == true
+        when: matrix.test29 == true
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           molecule test -s virtualenv29
