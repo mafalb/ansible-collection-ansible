@@ -7,6 +7,10 @@
   vars:
     collection_dir: /root/ansible_collections/mafalb
 
+  module_defaults:
+    shell:
+      executable: /bin/bash
+
   tasks:
 
     - name: destination directory is present
@@ -36,10 +40,11 @@
         - molecule211
       changed_when: false
 
-    - name: install requirements  # noqa: no-changed-when 301
+    - name: get python version
       shell: |
-        . ~/.virtualenvs/{{ item }}/bin/activate
-        ansible-test sanity --requirements --python {{ virtualenv_python_version|replace("python","") }}
+        set -o pipefail
+        awk -F=\  '/^version / {print $2}' ~/.virtualenvs/{{ item }}/pyvenv.cfg|cut -d. -f1-2
+      changed_when: false
       loop:
         - ansible29
         - ansible210
@@ -47,6 +52,21 @@
         - molecule29
         - molecule210
         - molecule211
+      register: __reg_python_version
+
+    - name: install requirements  # noqa: no-changed-when 301
+      shell: |
+        . ~/.virtualenvs/{{ item }}/bin/activate
+        ansible-test sanity --requirements --python {{ __reg_python_version.results[__i].stdout }}
+      loop:
+        - ansible29
+        - ansible210
+        - ansible211
+        - molecule29
+        - molecule210
+        - molecule211
+      loop_control:
+        index_var: __i
       args:
         chdir: "{{ collection_dir }}/ansible"
 
