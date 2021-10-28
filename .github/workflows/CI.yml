@@ -204,26 +204,31 @@ jobs:
           image: quay.io/centos/centos:stream8
           test_molecule: true
           test_controlnode: true
+          test29: true
 
         - target: alma8
           image: quay.io/almalinux/almalinux:8
           test_molecule: true
           test_controlnode: true
+          test29: true
 
         - target: rocky8
           image: quay.io/rockylinux/rockylinux:8
           test_molecule: true
           test_controlnode: true
+          test29: true
 
         - target: centos7
           image: quay.io/centos/centos:7
           test_molecule: true
           test_controlnode: true
+          test29: true
 
         - target: centos8
           image: quay.io/centos/centos:8
           test_molecule: true
           test_controlnode: true
+          test29: true
 
         - target: debian9
           image: docker.io/debian:stretch
@@ -242,11 +247,13 @@ jobs:
         - target: ubuntu18
           image: docker.io/ubuntu:bionic
           test_molecule: true
+          test29: true
 
         - target: ubuntu20
           image: docker.io/ubuntu:focal
           test_molecule: true
           test_controlnode: true
+          test29: true
 
         - target: ubuntu2104
           image: docker.io/ubuntu:hirsute
@@ -311,8 +318,14 @@ jobs:
           molecule test -s controlnode
 
       - name: molecule scenario virtualenv
+        when: matrix.molecule == true
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           molecule test -s virtualenv
 
+      - name: molecule scenario virtualenv for ansible 2.9
+        when: test29 == true
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule test -s virtualenv29
 ...

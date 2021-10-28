@@ -32,10 +32,8 @@
         . ~/.virtualenvs/{{ item }}/bin/activate
         pip freeze >/tmp/{{ item }}-before.txt
       loop:
-        - ansible210
-        - ansible211
-        - molecule210
-        - molecule211
+        - ansible29
+        - molecule29
       changed_when: false
 
     - name: get python version
@@ -44,10 +42,8 @@
         awk -F=\  '/^version / {print $2}' ~/.virtualenvs/{{ item }}/pyvenv.cfg|cut -d. -f1-2
       changed_when: false
       loop:
-        - ansible210
-        - ansible211
-        - molecule210
-        - molecule211
+        - ansible29
+        - molecule29
       register: __reg_python_version
 
     - name: install requirements  # noqa: no-changed-when 301
@@ -55,10 +51,8 @@
         . ~/.virtualenvs/{{ item }}/bin/activate
         ansible-test sanity --requirements --python {{ __reg_python_version.results[__i].stdout }}
       loop:
-        - ansible210
-        - ansible211
-        - molecule210
-        - molecule211
+        - ansible29
+        - molecule29
       loop_control:
         index_var: __i
       args:
@@ -69,20 +63,16 @@
         . ~/.virtualenvs/{{ item }}/bin/activate
         pip freeze >/tmp/{{ item }}-after.txt
       loop:
-        - ansible210
-        - ansible211
-        - molecule210
-        - molecule211
+        - ansible29
+        - molecule29
       changed_when: false
 
     - name: get diff
       command: diff -u /tmp/{{ item }}-before.txt /tmp/{{ item }}-after.txt
       changed_when: false
       loop:
-        - ansible210
-        - ansible211
-        - molecule210
-        - molecule211
+        - ansible29
+        - molecule29
       register: __reg_diff
 
     - name: diff

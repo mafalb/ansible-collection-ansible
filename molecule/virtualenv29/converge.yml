@@ -1,0 +1,22 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+- hosts: all
+  roles:
+
+    - role: mafalb.ansible.virtualenv
+      virtualenv: ~/.virtualenvs/ansible29
+      mafalb_ansible_packages:
+        - _ansible~=2.9.0
+        - _ansible_test
+
+    - role: mafalb.ansible.virtualenv
+      virtualenv: ~/.virtualenvs/molecule29
+      mafalb_ansible_packages:
+        - _ansible~=2.9.0
+        - _ansible_test
+        - molecule[lint,docker,test]~=3.3.4
+
+...
