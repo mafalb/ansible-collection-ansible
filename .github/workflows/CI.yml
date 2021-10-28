@@ -318,7 +318,7 @@ jobs:
           molecule test -s controlnode
 
       - name: molecule scenario virtualenv
-        if: matrix.molecule == true
+        if: matrix.test_molecule == true
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           molecule test -s virtualenv
