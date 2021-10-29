@@ -40,7 +40,7 @@
     - role: mafalb.ansible.virtualenv
       virtualenv: ~/.virtualenvs/molecule212
       mafalb_ansible_packages:
-        - _ansible~=2.12.0rc1  # fix me after release
+        - _ansible==2.12.0rc1  # fix me after release
         - _ansible_test
         - molecule[lint,docker,test]~=3.3.4
 
