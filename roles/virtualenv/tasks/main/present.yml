@@ -13,14 +13,13 @@
       debug: var=__mafalb_ansible_version
     - name: debug __mafalb_ansible_packages
       debug: var=__mafalb_ansible_packages
+    - name: debug mafalb_ansible_virtualenv_command
+      debug: var=mafalb_ansible_virtualenv_command
   tags:
     - never
     - debug
 
-# disable cr repo again when CentOS 7.8 is released
-#
 - name: dependencies are present
-  become: true
   package:
     name: "{{ mafalb_ansible_system_dependencies }}"
 
