@@ -11,6 +11,7 @@
   roles:
     - role: mafalb.ansible.virtualenv
       do: constraints
-      mafalb_ansible_version: "{{ version }}"
+      packages:
+      - _ansible==2.12.0rc1
 
 ...
