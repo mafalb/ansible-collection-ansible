@@ -25,6 +25,7 @@ jobs:
 
         - ansible_version: '2.9'
           python_version: '2.7'
+          extra_arg: "-e mafalb_ansible_virtualenv_command=virtualenv"
 
         - ansible_version: '2.9'
           python_version: '3.5'
@@ -97,7 +98,7 @@ jobs:
 
       - name: install molecule
         run: |
-          ansible-playbook -D playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}", "ansible-lint${{ matrix.ansible_lint_specifier }}", "_ansible_test", "flake8"]}' -e mafalb_ansible_virtualenv_python=python${{ matrix.python_version }} -t all,debug
+          ansible-playbook -D playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}", "ansible-lint${{ matrix.ansible_lint_specifier }}", "_ansible_test", "flake8"]}' -e mafalb_ansible_virtualenv_python=python${{ matrix.python_version }} ${{ extra_arg }} -t all,debug
         env:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
 

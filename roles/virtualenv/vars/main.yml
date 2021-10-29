@@ -7,9 +7,6 @@ mafalb_ansible_virtualenv_packages:
   pip: '>=20.3,<21.1'
   setuptools: '>41'
 
-mafalb_ansible_virtualenv_command: "{{
-  python|default(mafalb_ansible_virtualenv_python) }} -m venv"
-
 # I want to write as simple as:
 __mafalb_ansible_version: "{{ packages|default(mafalb_ansible_packages|default(['_ansible']))|mafalb.ansible.latest_version() }}"
 __mafalb_ansible_packages: "{{ packages|default(mafalb_ansible_packages|default(['_ansible']))|mafalb.ansible.fix_package_list() }}"

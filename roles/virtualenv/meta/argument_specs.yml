@@ -58,4 +58,12 @@ argument_specs:  # noqa 701
         type: path
         default: python3
 
+      mafalb_ansible_virtualenv_command:
+        description: The path to the virtualenv
+        aliases:
+          - virtualenv_command
+        type: str
+
+...
+
 ...
