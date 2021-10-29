@@ -87,9 +87,7 @@ jobs:
 
       - name: install shellcheck
         run: |
-          which sudo
-          which apt-get
-          sudo apt-get install shellcheck
+          /usr/bin/sudo apt-get install shellcheck
   
       - name: setup python
         uses: actions/setup-python@v2
