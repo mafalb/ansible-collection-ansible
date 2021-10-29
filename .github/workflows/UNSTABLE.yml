@@ -214,13 +214,9 @@ jobs:
         env:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
 
-      - name: install community.docker for ansible >= 2.11
-        if: matrix.ansible_version != '2.9' && matrix.ansible_version != '2.10'
-        run: ansible-galaxy collection install community.docker
-
-      - name: install community.general
-        if: matrix.ansible_version == '2.10'
-        run: ansible-galaxy collection install community.general
+      - name: install community.docker
+        run: |
+          ansible-galaxy collection install community.docker
 
       - name: check ansible version
         run: |
