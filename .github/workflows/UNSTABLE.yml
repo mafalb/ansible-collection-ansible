@@ -76,6 +76,16 @@ jobs:
         env:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
 
+      - name: install community.docker for ansible >= 2.11
+        if: ! contains(matrix.ansible_version,['2.9','2.10']
+        run: ansible-galaxy collection install community.docker
+
+      - name: install community.general
+        if: matrix.ansible_version == '2.10'
+        run: ansible-galaxy collection install community.general
+
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: ../../..
       - name: check ansible version
         run: |
           source ~/.virtualenvs/molecule/bin/activate
