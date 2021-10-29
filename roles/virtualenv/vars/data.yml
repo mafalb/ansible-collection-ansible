@@ -1,0 +1,38 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+# change this when new version of ansible/ansible-core is released
+# also create constraints in files/constraints/ansible-test/
+latest_version:
+  '2.11': '2.11.6'
+  '2.10': '2.10.15'
+  '2.9': '2.9.27'
+ansible_test_packages:
+  '2.10':
+    - flake8
+    - antsibull-changelog
+    - pylint
+    - resolvelib
+    - toml
+    - voluptuous
+    - yamllint
+  '2.11':
+    - flake8
+    - antsibull-changelog
+    - pylint
+    - voluptuous
+    - yamllint
+    - typed-ast
+  '2.9':
+    - flake8
+    - ntlm-auth
+    - pylint
+    - rstcheck
+    - sphinx
+    - virtualenv
+    - voluptuous
+    - yamllint
+
+...

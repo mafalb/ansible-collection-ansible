@@ -6,7 +6,7 @@ from __future__ import (absolute_import, division, print_function)
 import yaml
 __metaclass__ = type
 
-datafile = open('roles/virtualenv/vars/main.yml', 'r')
+datafile = open('roles/virtualenv/vars/data.yml', 'r')
 data = yaml.load(datafile, Loader=yaml.FullLoader)
 datafile.close()
 

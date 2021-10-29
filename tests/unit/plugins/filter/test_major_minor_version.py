@@ -4,12 +4,11 @@
 
 from __future__ import (absolute_import, division, print_function)
 from ansible.errors import AnsibleFilterError, AnsibleFilterTypeError
-from ansible_collections.mafalb.ansible.plugins.filter.version import (
+from ansible_collections.mafalb.ansible.plugins.filter.ansible import (
     __major_minor_version
 )
 __metaclass__ = type
 
-from . data import data
 import pytest
 
 TEST_CASES = (
@@ -36,7 +35,7 @@ FAIL_CASES = (
 
 @pytest.mark.parametrize('req, expected', TEST_CASES)
 def test_major_minor_version(req, expected):
-    actual = __major_minor_version(req, data)
+    actual = __major_minor_version(req)
     assert actual == expected, "value was not {x} but {y}".format(
         x=expected, y=actual
     )
@@ -45,7 +44,7 @@ def test_major_minor_version(req, expected):
 @pytest.mark.parametrize('req', FAIL_CASES)
 def test_fail(req):
     try:
-        x = __major_minor_version(req, data)
+        x = __major_minor_version(req)
     except (AnsibleFilterTypeError, AnsibleFilterError):
         pass
     try:

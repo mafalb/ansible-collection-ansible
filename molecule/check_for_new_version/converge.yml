@@ -4,13 +4,7 @@
 ---
 
 - hosts: all
-  roles:
-    - role: mafalb.ansible.virtualenv
-      do: constraints
   tasks:
-    - name: check for variable presence
-      assert:
-        that: mafalb_ansible_latest_version is defined
 
     - name: try to get one version ahead for 2.11
       block:
@@ -19,9 +13,8 @@
             name: mafalb.ansible.virtualenv
           vars:
             do: constraints
-            mafalb_ansible_version: "{{
-              '2.11.' +
-              (mafalb_ansible_latest_version['2.11'].split('.')[2]|int + 1)|string }}"
+            packages:
+              - _ansible=={{ '2.11'|mafalb.ansible.next_version }}
       rescue:
         - name: debug the failed task
           debug: var=ansible_failed_task.action
@@ -41,9 +34,8 @@
             name: mafalb.ansible.virtualenv
           vars:
             do: constraints
-            mafalb_ansible_version: "{{
-              '2.10.' +
-              (mafalb_ansible_latest_version['2.10'].split('.')[2]|int + 1)|string }}"
+            packages:
+              - _ansible=={{ '2.10'|mafalb.ansible.next_version }}
       rescue:
         - name: debug the failed task
           debug: var=ansible_failed_task.action
@@ -63,9 +55,8 @@
             name: mafalb.ansible.virtualenv
           vars:
             do: constraints
-            mafalb_ansible_version: "{{
-              '2.9.' +
-              (mafalb_ansible_latest_version['2.9'].split('.')[2]|int + 1)|string }}"
+            packages:
+              - _ansible=={{ '2.9'|mafalb.ansible.next_version }}
       rescue:
         - name: debug the failed task
           debug: var=ansible_failed_task.action

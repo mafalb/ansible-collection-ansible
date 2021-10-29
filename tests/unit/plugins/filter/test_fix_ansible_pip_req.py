@@ -4,14 +4,12 @@
 
 from __future__ import (absolute_import, division, print_function)
 from ansible.errors import AnsibleFilterError, AnsibleFilterTypeError
-from ansible_collections.mafalb.ansible.plugins.filter.version import (
+from ansible_collections.mafalb.ansible.plugins.filter.ansible import (
     __fix_ansible_pip_req
 )
 __metaclass__ = type
 
 import pytest
-
-from . data import data
 
 TEST_CASES = (
     ('ansible==2.11.6', 'ansible-core==2.11.6'),
@@ -29,7 +27,7 @@ FAIL_CASES = (
 
 @pytest.mark.parametrize('req, expected', TEST_CASES)
 def test_fix_ansible_pip_req(req, expected):
-    actual = __fix_ansible_pip_req(req, data)
+    actual = __fix_ansible_pip_req(req)
     assert actual == expected, "value was not {x} but {y}".format(
         x=expected, y=actual
     )
@@ -38,7 +36,7 @@ def test_fix_ansible_pip_req(req, expected):
 @pytest.mark.parametrize('req', FAIL_CASES)
 def test_fail(req):
     try:
-        x = __fix_ansible_pip_req(req, data)
+        x = __fix_ansible_pip_req(req)
     except (AnsibleFilterTypeError, AnsibleFilterError):
         pass
     try:

@@ -4,7 +4,7 @@
 
 from __future__ import (absolute_import, division, print_function)
 from ansible.errors import AnsibleFilterError
-from ansible_collections.mafalb.ansible.plugins.filter.version import (
+from ansible_collections.mafalb.ansible.plugins.filter.ansible import (
     version2int
 )
 __metaclass__ = type

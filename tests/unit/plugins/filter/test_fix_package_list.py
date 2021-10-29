@@ -3,14 +3,12 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 
 from __future__ import (absolute_import, division, print_function)
-from ansible_collections.mafalb.ansible.plugins.filter.version import (
+from ansible_collections.mafalb.ansible.plugins.filter.ansible import (
     pip_package_list
 )
 __metaclass__ = type
 
 import pytest
-
-from . data import data
 
 TEST_CASES = (
     (['_ansible==2.11.6'], ['ansible-core==2.11.6']),
@@ -24,7 +22,7 @@ TEST_CASES = (
 
 @pytest.mark.parametrize('in_list, out_list', TEST_CASES)
 def test_fix_package_list(in_list, out_list):
-    actual = pip_package_list(in_list, data)
+    actual = pip_package_list(in_list)
     for req in out_list:
         assert req in actual, "'{req}' is not in '{res}'".format(req=req,
                                                                  res=actual)

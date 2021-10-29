@@ -14,7 +14,12 @@ from ansible.errors import (
     AnsibleFilterTypeError
 )
 from ansible.module_utils._text import to_native
+import yaml
 __metaclass__ = type
+
+datafile = open('roles/virtualenv/vars/data.yml', 'r')
+data = yaml.load(datafile, Loader=yaml.FullLoader)
+datafile.close()
 
 
 def version2int(version):
@@ -56,7 +61,7 @@ def version2int(version):
     return value
 
 
-def __major_minor_version(arg_req, data):
+def __major_minor_version(arg_req):
     """Take a pip requirement and return the best matching major.minor version
 
     arg_req is a string in the form of
@@ -103,7 +108,20 @@ def __major_minor_version(arg_req, data):
     return '.'.join(latest_possible_version.split('.')[0:2])
 
 
-def __latest_ansible_version(arg_req, data):
+def next_ansible_version(majmin):
+    """Return the next version of ansible."""
+    try:
+        version = data['latest_version'][majmin]
+    except (KeyError, TypeError):
+        # majmin is probably in wrong format
+        raise AnsibleFilterError(
+            "not a supported major minor version: {v}".format(v=majmin)
+        )
+    patch = int(version.split('.')[2]) + 1
+    return '.'.join(version.split('.')[0:2] + [str(patch)])
+
+
+def __latest_ansible_version(arg_req):
     """Take a pip requirement and return the latest major.minor.patch version
 
     arg_req is a string in the form of
@@ -125,10 +143,9 @@ def __latest_ansible_version(arg_req, data):
     if req.name != 'ansible':
         raise AnsibleFilterError("not '_ansible': {str}".format(str=req.name))
 
-    # exact version is requested
+    # exact version is requested, respect that
     if str(req.specifier).startswith('=='):
-        majmin = '.'.join(str(req.specifier).replace('==', '').split('.')[0:2])
-        return data['latest_version'][majmin]
+        return str(req.specifier).replace('==', '')
 
     # in all other cases find possible versions
     all_versions = []
@@ -151,7 +168,7 @@ def __latest_ansible_version(arg_req, data):
     return latest_possible_version
 
 
-def __fix_ansible_pip_req(arg_req, data):
+def __fix_ansible_pip_req(arg_req):
     """Take a pip requirement and fill in the correct name.
 
     arg_req is a string in the form of
@@ -169,21 +186,21 @@ def __fix_ansible_pip_req(arg_req, data):
     req = Pkgreq.parse(arg_req.replace('_ansible', 'ansible'))
 
     # select the proper name for this version
-    if __major_minor_version(arg_req, data) == '2.9':
+    if __major_minor_version(arg_req) == '2.9':
         package = 'ansible'
-    elif __major_minor_version(arg_req, data) == '2.10':
+    elif __major_minor_version(arg_req) == '2.10':
         package = 'ansible-base'
     else:
         package = 'ansible-core'
     return package + str(req.specifier)
 
 
-def __ansible_test_packages(version, data):
+def __ansible_test_packages(version):
     """Return a list of ansible-test requirements"""
     return data['ansible_test_packages'][version]
 
 
-def pip_package_list(arg_packages, data):
+def pip_package_list(arg_packages):
     """Return a list of pip packages."""
 #    data = yaml.load(data, Loader=yaml.FullLoader)
     packages = [s for s in arg_packages if not s.startswith('_ansible')]
@@ -192,20 +209,20 @@ def pip_package_list(arg_packages, data):
         # '_ansible' is not a valid pip name
         req = Pkgreq.parse(s.replace('_ansible', 'ansible'))
         if req.name == 'ansible':
-            majmin = __major_minor_version(s, data)
-            packages.append(__fix_ansible_pip_req(s, data))
+            majmin = __major_minor_version(s)
+            packages.append(__fix_ansible_pip_req(s))
         elif req.name == 'ansible_test':
-            packages.extend(__ansible_test_packages(majmin, data))
+            packages.extend(__ansible_test_packages(majmin))
     return packages
 
 
-def latest_ansible_version(arg_packages, data):
+def latest_ansible_version(arg_packages):
     """Return the latest possible ansible version."""
     for s in arg_packages:
         # '_ansible' is not a valid pip name
         req = Pkgreq.parse(s.replace('_ansible', 'ansible'))
         if req.name == 'ansible':
-            return __latest_ansible_version(s, data)
+            return __latest_ansible_version(s)
 
 
 def filter_pipver(version):
@@ -248,4 +265,6 @@ class FilterModule(object):
             'semver': filter_semver,
             'fix_package_list': pip_package_list,
             'latest_ansible_version': latest_ansible_version,
+            'latest_version': latest_ansible_version,
+            'next_version': next_ansible_version,
         }
