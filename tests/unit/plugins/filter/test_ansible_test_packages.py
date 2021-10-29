@@ -23,7 +23,9 @@ def test_ansible_test_packages():
     assert len(p29) > 1
     assert len(p210) > 1
     assert len(p211) > 1
+    assert len(p212) > 1
 
     assert sorted(p29) != sorted(p210)
     assert sorted(p29) != sorted(p211)
     assert sorted(p210) != sorted(p211)
+    assert sorted(p211) != sorted(p212)

@@ -127,12 +127,12 @@ jobs:
       - name: sanity
         run: |
           source ~/.virtualenvs/ansible/bin/activate
-          ansible-test sanity --python ${{ matrix.python_version }}
+          ansible-test sanity --requirements --python ${{ matrix.python_version }}
 
       - name: unit tests
         run: |
           source ~/.virtualenvs/ansible/bin/activate
-          ansible-test units --coverage --python ${{ matrix.python_version }}
+          ansible-test units --coverage --requirements --python ${{ matrix.python_version }}
 
 
   UNSTABLE_MOLECULE:

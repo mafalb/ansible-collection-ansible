@@ -18,6 +18,7 @@ ansible_test_packages:
     - toml
     - voluptuous
     - yamllint
+    - coverage
   '2.11':
     - flake8
     - antsibull-changelog
@@ -25,7 +26,10 @@ ansible_test_packages:
     - voluptuous
     - yamllint
     - typed-ast
-  '2.12': []
+    - coverage
+    - mock
+  '2.12':
+    - coverage
   '2.9':
     - flake8
     - ntlm-auth
@@ -35,5 +39,6 @@ ansible_test_packages:
     - virtualenv
     - voluptuous
     - yamllint
+    - coverage
 
 ...
