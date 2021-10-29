@@ -10,6 +10,15 @@ latest_version:
   '2.10': '2.10.15'
   '2.9': '2.9.27'
 ansible_test_packages:
+  '2.9':
+    - flake8
+    - ntlm-auth
+    - pylint
+    - rstcheck
+    - sphinx
+    - virtualenv
+    - voluptuous
+    - yamllint
   '2.10':
     - flake8
     - antsibull-changelog
@@ -31,15 +40,5 @@ ansible_test_packages:
   '2.12':
     - pytest
     - voluptuous
-  '2.9':
-    - flake8
-    - ntlm-auth
-    - pylint
-    - rstcheck
-    - sphinx
-    - virtualenv
-    - voluptuous
-    - yamllint
-    - pytest
 
 ...
