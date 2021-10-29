@@ -69,15 +69,8 @@ jobs:
         with:
           path: ansible_collections/mafalb/ansible
 
-      - name: install system ansible
-        run: sudo apt-get install ansible
-
-      # note: this uses ansible-playbook from system ansible
-      #
       - name: install molecule
-        run: /usr/bin/ansible-playbook -D playbooks/molecule.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
-        env:
-          ANSIBLE_COLLECTIONS_PATHS: '../../..'
+        run: ansible-playbook -D playbooks/install-molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
 
       - name: check ansible version
         run: |
@@ -106,5 +99,17 @@ jobs:
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           molecule test -s controlnode
+
+      - name: molecule scenario virtualenv
+        if: matrix.test_molecule == true
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule test -s virtualenv
+
+      - name: molecule scenario virtualenv for ansible 2.9
+        if: matrix.test29 == true
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule test -s virtualenv29
 
 ...
