@@ -85,13 +85,15 @@ jobs:
 
     steps:
 
+      - name: install shellcheck
+        run: |
+          sudo apt update
+          sudo apt install shellcheck
+  
       - name: setup python
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-  
-      - name: install shellcheck
-        run: sudo apt install shellcheck
   
       - name: checkout collection ansible
         uses: actions/checkout@v2
