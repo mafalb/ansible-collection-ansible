@@ -96,7 +96,7 @@ jobs:
   
       - name: install molecule
         run: |
-          ansible-playbook -D playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}", "ansible-lint${{ matrix.ansible_lint_specifier }}", "_ansible_test"]}' -t all,debug
+          ansible-playbook -D playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}", "ansible-lint${{ matrix.ansible_lint_specifier }}", "_ansible_test"]}' -e virtualenv_python_version=python${{ matrix.python_version }} -t all,debug
         env:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
 
