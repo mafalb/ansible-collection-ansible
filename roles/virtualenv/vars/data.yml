@@ -19,6 +19,7 @@ ansible_test_packages:
     - voluptuous
     - yamllint
     - coverage
+    - pytest
   '2.11':
     - flake8
     - antsibull-changelog
@@ -26,10 +27,10 @@ ansible_test_packages:
     - voluptuous
     - yamllint
     - typed-ast
-    - coverage
-    - mock
+    - pytest
   '2.12':
-    - coverage
+    - pytest
+    - voluptuous
   '2.9':
     - flake8
     - ntlm-auth
@@ -39,6 +40,6 @@ ansible_test_packages:
     - virtualenv
     - voluptuous
     - yamllint
-    - coverage
+    - pytest
 
 ...
