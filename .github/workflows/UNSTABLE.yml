@@ -110,10 +110,6 @@ jobs:
         env:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
 
-      - name: install community.docker
-        run: |
-          ansible-galaxy collection install community.docker
-
       - name: install shellcheck
         run: sudo apt-get install shellcheck
 
@@ -216,6 +212,7 @@ jobs:
 
       - name: install community.docker
         run: |
+          source ~/.virtualenvs/molecule/bin/activate
           ansible-galaxy collection install community.docker
 
       - name: check ansible version
