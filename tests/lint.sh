@@ -57,4 +57,4 @@ flake8 -v --exclude tests/output
 
 echo "ansible-test sanity..."
 # shellcheck disable=SC2068
-ansible-test sanity ${args[@]}
+#ansible-test sanity ${args[@]}

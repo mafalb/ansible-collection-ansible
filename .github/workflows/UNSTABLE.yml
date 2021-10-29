@@ -11,12 +11,129 @@ on:  # yamllint disable-line rule:truthy
     tags-ignore:
     - '*'
 
-  schedule:
-  - cron: '40 12 * * 6'
-
 jobs:
 
-  UNSTABLE:
+  UNSTABLE_ANSIBLE_TEST:
+
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+
+      matrix:
+
+        include:
+
+        - ansible_version: '2.9'
+          python-version: 2.7
+
+        - ansible_version: '2.9'
+          python-version: 3.5
+
+        - ansible_version: '2.9'
+          python-version: 3.6
+
+        - ansible_version: '2.9'
+          python-version: 3.7
+
+        - ansible_version: '2.9'
+          python-version: 3.8
+
+
+        - ansible_version: '2.10'
+          python-version: 3.6
+
+        - ansible_version: '2.10'
+          python-version: 3.7
+
+        - ansible_version: '2.10'
+          python-version: 3.8
+
+        - ansible_version: '2.10'
+          python-version: 3.9
+
+
+        - ansible_core_version: '2.11'
+          python-version: 3.6
+
+        - ansible_core_version: '2.11'
+          python-version: 3.7
+
+        - ansible_core_version: '2.11'
+          python-version: 3.8
+
+        - ansible_core_version: '2.11'
+          python-version: 3.9
+
+
+        - ansible_core_version: '2.12.0rc1'
+          python-version: '3.8'
+
+        - ansible_core_version: '2.12.0rc1'
+          python-version: '3.9'
+
+        - ansible_core_version: '2.12.0rc1'
+          python-version: '3.10'
+
+    env:
+      PY_COLORS: 1
+      ANSIBLE_FORCE_COLOR: 1
+      ANSIBLE_PYTHON_INTERPRETER: ${{ matrix.python-version }}/bin/python
+
+    defaults:
+      run:
+        working-directory: ansible_collections/mafalb/ansible
+
+    steps:
+
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+  
+      - name: install shellcheck
+        run: sudo apt install shellcheck
+  
+      - name: checkout collection ansible
+        uses: actions/checkout@v2
+        with:
+          path: ansible_collections/mafalb/ansible
+
+      - name: install molecule
+        run: |
+          ansible-playbook -D playbooks/install-molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: ../../..
+
+      - name: install community.docker for ansible >= 2.11
+        if: matrix.ansible_version != '2.9' && matrix.ansible_version != '2.10'
+        run: ansible-galaxy collection install community.docker
+
+      - name: install community.general for ansible 2.10
+        if: matrix.ansible_version == '2.10'
+        run: ansible-galaxy collection install community.general
+
+      - name: check ansible version
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
+
+      - name: lint
+        run: |
+          source ~/virtualenv/bin/activate
+          . tests/lint.sh requirements ${{ matrix.python-version }}
+
+      - name: sanity
+        run: |
+          source ~/virtualenv/bin/activate
+          ansible-test sanity --python ${{ matrix.python-version }}
+
+      - name: unit tests
+        run: |
+          source ~/virtualenv/bin/activate
+          ansible-test units --coverage --python ${{ matrix.python-version }}
+
+
+  UNSTABLE_MOLECULE:
 
     runs-on: ubuntu-20.04
 
@@ -81,7 +198,6 @@ jobs:
       - name: install molecule
         run: |
           ansible-playbook -D playbooks/install-molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
-          ansible-galaxy collection install community.docker
         env:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
 
@@ -93,8 +209,6 @@ jobs:
         if: matrix.ansible_version == '2.10'
         run: ansible-galaxy collection install community.general
 
-        env:
-          ANSIBLE_COLLECTIONS_PATHS: ../../..
       - name: check ansible version
         run: |
           source ~/.virtualenvs/molecule/bin/activate
