@@ -121,17 +121,17 @@ jobs:
 
       - name: lint
         run: |
-          source ~/virtualenv/bin/activate
+          source ~/.virtualenvs/ansible/bin/activate
           . tests/lint.sh requirements ${{ matrix.python_version }}
 
       - name: sanity
         run: |
-          source ~/virtualenv/bin/activate
+          source ~/.virtualenvs/ansible/bin/activate
           ansible-test sanity --python ${{ matrix.python_version }}
 
       - name: unit tests
         run: |
-          source ~/virtualenv/bin/activate
+          source ~/.virtualenvs/ansible/bin/activate
           ansible-test units --coverage --python ${{ matrix.python_version }}
 
 
