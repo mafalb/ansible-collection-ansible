@@ -95,10 +95,6 @@ jobs:
         with:
           python-version: ${{ matrix.python_version }}
 
-      - name: check python version
-        run: |
-          python --version | grep "${{ matrix.python_version }}"
-
       - name: install molecule for python 2.7
         if: matrix.python_version == '2.7'
         run: |
