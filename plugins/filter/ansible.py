@@ -121,7 +121,7 @@ def next_ansible_version(majmin):
     return '.'.join(version.split('.')[0:2] + [str(patch)])
 
 
-def __latest_ansible_version(arg_req):
+def __best_ansible_version(arg_req):
     """Take a pip requirement and return the latest major.minor.patch version
 
     arg_req is a string in the form of
@@ -145,7 +145,11 @@ def __latest_ansible_version(arg_req):
 
     # exact version is requested, respect that
     if str(req.specifier).startswith('=='):
-        return str(req.specifier).replace('==', '')
+        version = str(req.specifier).replace('==', '')
+        if len(version.split('.')) == 3:  # e.g. 2.11.6
+            return str(req.specifier).replace('==', '')
+        elif len(version.split('.')) == 2:  # e.g. 2.11
+            return data['latest_version'][version]
 
     # in all other cases find possible versions
     all_versions = []
@@ -157,15 +161,13 @@ def __latest_ansible_version(arg_req):
             all_versions.append(majmin + '.' + str(patch))
     possible_versions = [v for v in all_versions if req.specifier.contains(v)]
     try:
-        latest_possible_version = sorted(
-            possible_versions, key=version2int
-        )[-1]
+        best_version = sorted(possible_versions, key=version2int)[-1]
     except IndexError:
         # requested version is too old or too new
         raise AnsibleFilterTypeError(
             "not a supported pip specifier: {req}".format(req=arg_req)
         )
-    return latest_possible_version
+    return best_version
 
 
 def __fix_ansible_pip_req(arg_req):
@@ -216,55 +218,22 @@ def pip_package_list(arg_packages):
     return packages
 
 
-def latest_ansible_version(arg_packages):
+def best_version(arg_packages):
     """Return the latest possible ansible version."""
     for s in arg_packages:
         # '_ansible' is not a valid pip name
         req = Pkgreq.parse(s.replace('_ansible', 'ansible'))
         if req.name == 'ansible':
-            return __latest_ansible_version(s)
-
-
-def filter_pipver(version):
-    version = str(version)
-    try:
-        if (version.count('.') == 2):
-            return version
-        elif (version.count('.') == 1):
-            return version + ".*"
-        elif (version.count('.') == 0):
-            return version + ".*"
-        else:
-            raise AnsibleError('Bad version number: %s' % version)
-    except Exception as e:
-        raise_from(AnsibleError('Error in filter_pipver, ',
-                   'this was original exception: %s' % to_native(e)), e)
-
-
-def filter_semver(version):
-    version = str(version)
-    try:
-        if (version.count('.') == 2):
-            return version.replace('*', '0')
-        elif (version.count('.') == 1):
-            return (version + ".0").replace('*', '0')
-        elif (version.count('.') == 0):
-            return (version + ".0.0").replace('*', '0')
-        else:
-            raise AnsibleError('Wrong version number: %s' % version)
-    except Exception as e:
-        raise_from(AnsibleError('Error in filter_semver, ',
-                   'this was original exception: %s' % to_native(e)), e)
+            return __best_ansible_version(s)
 
 
 class FilterModule(object):
 
     def filters(self):
         return {
-            'pipver': filter_pipver,
-            'semver': filter_semver,
             'fix_package_list': pip_package_list,
-            'latest_ansible_version': latest_ansible_version,
-            'latest_version': latest_ansible_version,
+            'latest_ansible_version': best_version,  # remove
+            'latest_version': best_version,          # remove
+            'best_version': best_version,
             'next_version': next_ansible_version,
         }

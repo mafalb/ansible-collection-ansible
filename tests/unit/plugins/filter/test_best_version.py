@@ -4,13 +4,14 @@
 
 from __future__ import (absolute_import, division, print_function)
 from ansible_collections.mafalb.ansible.plugins.filter.ansible import (
-    latest_ansible_version
+    best_version
 )
 __metaclass__ = type
 
 import pytest
 
 TEST_CASES = (
+    (['_ansible==2.9'], '2.9.27'),
     (['_ansible==2.11.7'], '2.11.7'),
     (['_ansible==2.11.6'], '2.11.6'),
     (['_ansible==2.11.5'], '2.11.5'),
@@ -22,8 +23,8 @@ TEST_CASES = (
 
 
 @pytest.mark.parametrize('in_list, expected', TEST_CASES)
-def test_latest_ansible_version(in_list, expected):
-    actual = latest_ansible_version(in_list)
+def test_best_version(in_list, expected):
+    actual = best_version(in_list)
     assert actual == expected, "got {actual} instead of {expected}".format(
         actual=actual, expected=expected
     )
