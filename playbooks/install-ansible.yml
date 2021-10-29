@@ -8,7 +8,7 @@
     - name: debug
       assert:
         that: virtualenv_python_version is defined
-        success_msg: virtualenv_python: {{ virtualenv_python_version }}
+        success_msg: "virtualenv_python: {{ virtualenv_python_version }}"
         fail_msg: virtualenv_python is not defined
 
   roles:
