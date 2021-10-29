@@ -77,7 +77,6 @@ jobs:
     env:
       PY_COLORS: 1
       ANSIBLE_FORCE_COLOR: 1
-      ANSIBLE_PYTHON_INTERPRETER: ${{ matrix.python-version }}/bin/python
 
     defaults:
       run:
@@ -85,24 +84,16 @@ jobs:
 
     steps:
 
-      - name: test
-        run: |
-          ls /usr/bin/
-
-      - name: install shellcheck
-        run: |
-          /usr/bin/sudo apt-get install shellcheck
-  
-      - name: setup python
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-  
       - name: checkout collection ansible
         uses: actions/checkout@v2
         with:
           path: ansible_collections/mafalb/ansible
 
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+  
       - name: install molecule
         run: |
           ansible-playbook -D playbooks/install-molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
@@ -122,6 +113,9 @@ jobs:
           source ~/.virtualenvs/molecule/bin/activate
           ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
 
+      - name: install shellcheck
+        run: sudo apt-get install shellcheck
+  
       - name: lint
         run: |
           source ~/virtualenv/bin/activate
