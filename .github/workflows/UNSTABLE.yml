@@ -94,7 +94,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python_version }}
-  
+
       - name: install molecule
         run: |
           ansible-playbook -D playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}", "ansible-lint${{ matrix.ansible_lint_specifier }}", "_ansible_test"]}' -e mafalb_ansible_virtualenv_python=python${{ matrix.python_version }} -t all,debug
@@ -107,7 +107,7 @@ jobs:
 
       - name: install shellcheck
         run: sudo apt-get install shellcheck
-  
+
       - name: check ansible version
         run: |
           source ~/.virtualenvs/ansible/bin/activate
