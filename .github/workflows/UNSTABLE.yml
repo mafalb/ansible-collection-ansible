@@ -26,13 +26,16 @@ jobs:
       matrix:
 
         target:
+        # there are special dependencies for fedora35 that are probably not necessary anymore
         - fedora35
         - c9s
+        - c8s
 
         ansible_version:
         - '2.9'
         - '2.10'
         - '2.11'
+        - '2.12.0rc1'
 
         include:
 
