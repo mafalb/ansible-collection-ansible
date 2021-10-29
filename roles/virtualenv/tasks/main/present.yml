@@ -35,6 +35,9 @@
   # register the result and enjoy the absolute path to the virtualenv
   register: __reg_venv
 
+- name: debug virtualenv
+  debug: var=__reg_venv
+
 # ensure that packages can't pull in other versions of some packages
 - name: constraints file virtualenv.constraints.txt is present
   template:
