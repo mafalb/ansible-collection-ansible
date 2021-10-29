@@ -13,6 +13,7 @@ def test_ansible_test_packages():
     p29 = __ansible_test_packages('2.9')
     p210 = __ansible_test_packages('2.10')
     p211 = __ansible_test_packages('2.11')
+    p212 = __ansible_test_packages('2.12')
 
     assert isinstance(p29, list)
     assert isinstance(p210, list)

@@ -27,12 +27,14 @@ FAIL_CASES = (
     (['_ansible=="2.9"'], AnsibleFilterError),
 )
 
+
 @pytest.mark.parametrize('in_list, expected', TEST_CASES)
 def test_best_version(in_list, expected):
     actual = best_version(in_list)
     assert actual == expected, "got {actual} instead of {expected}".format(
         actual=actual, expected=expected
     )
+
 
 @pytest.mark.parametrize('version, exception', FAIL_CASES)
 def test_fail(version, exception):

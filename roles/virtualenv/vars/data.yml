@@ -25,6 +25,7 @@ ansible_test_packages:
     - voluptuous
     - yamllint
     - typed-ast
+  '2.12': []
   '2.9':
     - flake8
     - ntlm-auth

@@ -12,6 +12,7 @@ import pytest
 
 TEST_CASES = (
     (['_ansible==2.12.0rc1'], ['ansible-core==2.12.0rc1']),
+    (['_ansible==2.12.0rc1', '_ansible_test'], ['ansible-core==2.12.0rc1']),
     (['_ansible==2.11'], ['ansible-core==2.11.6']),
     (['_ansible==2.11.6'], ['ansible-core==2.11.6']),
     (['_ansible<2.11.6'], ['ansible-core<2.11.6']),
