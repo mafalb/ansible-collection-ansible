@@ -96,7 +96,7 @@ jobs:
   
       - name: install molecule
         run: |
-          ansible-playbook -D playbooks/install-molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
+          ansible-playbook -D playbooks/install-molecule.yml -t all,debug
         env:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
 
