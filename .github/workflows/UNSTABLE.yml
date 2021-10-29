@@ -24,32 +24,32 @@ jobs:
         include:
 
         - ansible_version: '2.9'
-          python_version: 2.7
+          python_version: '2.7'
 
         - ansible_version: '2.9'
-          python_version: 3.5
+          python_version: '3.5'
 
         - ansible_version: '2.9'
-          python_version: 3.6
+          python_version: '3.6'
 
         - ansible_version: '2.9'
-          python_version: 3.7
+          python_version: '3.7'
 
         - ansible_version: '2.9'
-          python_version: 3.8
+          python_version: '3.8'
 
 
         - ansible_version: '2.10'
-          python_version: 3.6
+          python_version: '3.6'
 
         - ansible_version: '2.10'
-          python_version: 3.7
+          python_version: '3.7'
 
         - ansible_version: '2.10'
-          python_version: 3.8
+          python_version: '3.8'
 
         - ansible_version: '2.10'
-          python_version: 3.9
+          python_version: '3.9'
 
 
         - ansible_version: '2.11'
