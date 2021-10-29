@@ -149,7 +149,12 @@ def __best_ansible_version(arg_req):
         if len(version.split('.')) == 3:  # e.g. 2.11.6
             return str(req.specifier).replace('==', '')
         elif len(version.split('.')) == 2:  # e.g. 2.11
-            return data['latest_version'][version]
+            try:
+                return data['latest_version'][version]
+            except KeyError:
+                raise AnsibleFilterError(
+                    "version not supported: {v}".format(v=version)
+                )
 
     # in all other cases find possible versions
     all_versions = []

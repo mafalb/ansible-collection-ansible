@@ -11,7 +11,7 @@
       virtualenv: ~/.virtualenvs/molecule
       python: "{{ molecule_python_version|default('python3') }}"
       packages:
-        - _ansible=="{{ molecule_ansible_version }}"
+        - _ansible=={{ molecule_ansible_version }}
         - molecule[lint,docker,test]~=3.3.4
       when: molecule_ansible_version is defined
 

@@ -3,12 +3,13 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 
 from __future__ import (absolute_import, division, print_function)
+from ansible.errors import AnsibleFilterError
 from ansible_collections.mafalb.ansible.plugins.filter.ansible import (
     best_version
 )
+import pytest
 __metaclass__ = type
 
-import pytest
 
 TEST_CASES = (
     (['_ansible==2.9'], '2.9.27'),
@@ -21,6 +22,9 @@ TEST_CASES = (
     (['_ansible~=2.11.6', '_ansible_test'], '2.11.6'),
 )
 
+FAIL_CASES = (
+    (['_ansible=="2.9"'], AnsibleFilterError),
+)
 
 @pytest.mark.parametrize('in_list, expected', TEST_CASES)
 def test_best_version(in_list, expected):
@@ -28,3 +32,8 @@ def test_best_version(in_list, expected):
     assert actual == expected, "got {actual} instead of {expected}".format(
         actual=actual, expected=expected
     )
+
+@pytest.mark.parametrize('version, exception', FAIL_CASES)
+def test_fail(version, exception):
+    with pytest.raises(exception):
+        best_version(version)
