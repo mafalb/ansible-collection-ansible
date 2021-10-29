@@ -138,6 +138,7 @@ jobs:
   UNSTABLE_MOLECULE:
 
     runs-on: ubuntu-20.04
+    needs: UNSTABLE_ANSIBLE_TEST
 
     strategy:
       fail-fast: false
