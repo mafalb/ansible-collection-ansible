@@ -85,6 +85,10 @@ jobs:
 
     steps:
 
+      - name: test
+        run: |
+          ls /usr/bin/
+
       - name: install shellcheck
         run: |
           /usr/bin/sudo apt-get install shellcheck
