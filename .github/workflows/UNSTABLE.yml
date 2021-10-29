@@ -70,7 +70,9 @@ jobs:
           path: ansible_collections/mafalb/ansible
 
       - name: install molecule
-        run: ansible-playbook -D playbooks/install-molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
+        run: |
+          ansible-playbook -D playbooks/install-molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
+          ansible-galaxy collection install community.docker
         env:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
 
