@@ -143,7 +143,7 @@ def __best_ansible_version(arg_req):
     if req.name != 'ansible':
         raise AnsibleFilterError("not '_ansible': {str}".format(str=req.name))
 
-    # exact version is requested, respect that
+    # exact version is requested, expand to full version if necessary
     if str(req.specifier).startswith('=='):
         version = str(req.specifier).replace('==', '')
         if len(version.split('.')) == 3:  # e.g. 2.11.6
@@ -192,6 +192,18 @@ def __fix_ansible_pip_req(arg_req):
     # '_ansible' is not a valid pip name
     req = Pkgreq.parse(arg_req.replace('_ansible', 'ansible'))
 
+    specifier = str(req.specifier)
+    # exact version is requested, expand to full version if necessary
+    if specifier.startswith('=='):
+        version = str(specifier).replace('==', '')
+        if len(version.split('.')) == 2:  # e.g. 2.11
+            try:
+                specifier = '==' + data['latest_version'][version]
+            except KeyError:
+                raise AnsibleFilterError(
+                    "version not supported: {v}".format(v=version)
+                )
+
     # select the proper name for this version
     if __major_minor_version(arg_req) == '2.9':
         package = 'ansible'
@@ -199,7 +211,7 @@ def __fix_ansible_pip_req(arg_req):
         package = 'ansible-base'
     else:
         package = 'ansible-core'
-    return package + str(req.specifier)
+    return package + specifier
 
 
 def __ansible_test_packages(version):
