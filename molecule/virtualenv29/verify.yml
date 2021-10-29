@@ -46,7 +46,7 @@
         - molecule29
       register: __reg_python_version
 
-    - name: install requirements  # noqa: no-changed-when 301
+    - name: install requirements  # noqa no-changed-when 301
       shell: |
         . ~/.virtualenvs/{{ item }}/bin/activate
         ansible-test sanity --requirements --python {{ __reg_python_version.results[__i].stdout }}
