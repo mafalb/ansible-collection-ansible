@@ -2,6 +2,6 @@
 ---
 
 collections:
-- name: ansible.posix.synchronize
+- name: ansible.posix
 
 ...
