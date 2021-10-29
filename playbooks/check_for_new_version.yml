@@ -12,7 +12,7 @@
       package:
         name: git
 
-    - name: get all tags  # noqa command-instead-of-module
+    - name: get all tags  # noqa command-instead-of-module 303
       command: git ls-remote --tags https://github.com/ansible/ansible
       register: __reg_tags
       changed_when: false

@@ -18,6 +18,7 @@ def test_ansible_test_packages():
     assert isinstance(p29, list)
     assert isinstance(p210, list)
     assert isinstance(p211, list)
+    assert isinstance(p212, list)
 
     assert len(p29) > 1
     assert len(p210) > 1

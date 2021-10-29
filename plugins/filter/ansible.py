@@ -9,11 +9,9 @@ except ImportError:
     Pkgreq = None
 from ansible.module_utils.six import raise_from
 from ansible.errors import (
-    AnsibleError,
     AnsibleFilterError,
     AnsibleFilterTypeError
 )
-from ansible.module_utils._text import to_native
 import yaml
 __metaclass__ = type
 
