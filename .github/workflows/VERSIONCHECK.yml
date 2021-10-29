@@ -12,7 +12,7 @@ on: # yamllint disable-line rule:truthy
     - '*'
 
   schedule:
-  - cron: '40 12 * * 2'
+  - cron: '07 10 * * *'
 
 jobs:
 
@@ -23,6 +23,7 @@ jobs:
     env:
       PY_COLORS: 1
       ANSIBLE_FORCE_COLOR: 1
+      ANSIBLE_COLLECTIONS_PATHS: ../../..
 
     defaults:
       run:
@@ -36,18 +37,9 @@ jobs:
           path: ansible_collections/mafalb/ansible
 
       # we are happy with any pre-installed ansible
-      # just install molecule
       - name: install molecule
-        run: ansible-playbook -D playbooks/install-molecule.yml -t all,debug
+        run: ansible-playbook playbooks/check_for_new_version.yml
         env:
           ANSIBLE_COLLECTIONS_PATHS: '../../..'
-
-      - name: install community.docker
-        run: ansible-galaxy collection install community.docker
-
-      - name: molecule scenario check_for_new_version 2.11
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          molecule test -s check_for_new_version
 
 ...
