@@ -8,13 +8,13 @@
 
     - role: mafalb.ansible.virtualenv
       virtualenv: ~/.virtualenvs/ansible29
-      mafalb_ansible_packages:
+      packages:
         - _ansible~=2.9.0
         - _ansible_test
 
     - role: mafalb.ansible.virtualenv
       virtualenv: ~/.virtualenvs/molecule29
-      mafalb_ansible_packages:
+      packages:
         - _ansible~=2.9.0
         - _ansible_test
         - molecule[lint,docker,test]~=3.3.4
