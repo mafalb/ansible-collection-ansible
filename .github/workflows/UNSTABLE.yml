@@ -54,6 +54,12 @@ jobs:
           test_molecule: true
           test_controlnode: false
 
+        - target: c8s
+          image: quay.io/centos/centos:stream8
+          test_molecule: true
+          test_controlnode: true
+          test29: true
+
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
       CI_IMAGE: ${{ matrix.image }}
