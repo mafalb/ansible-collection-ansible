@@ -211,6 +211,7 @@ jobs:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
 
       - name: install community.docker
+        if: matrix.ansible_version != '2.9'
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           ansible-galaxy collection install community.docker
@@ -242,6 +243,12 @@ jobs:
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           molecule test -s controlnode
+
+      - name: install community.docker
+        if: matrix.ansible_version != '2.9'
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          ansible-galaxy collection install community.general
 
       - name: molecule scenario virtualenv
         if: matrix.test_molecule == true
