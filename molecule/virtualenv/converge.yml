@@ -19,6 +19,11 @@
         - _ansible_test
 
     - role: mafalb.ansible.virtualenv
+      virtualenv: ~/.virtualenvs/ansible212
+      mafalb_ansible_packages:
+        - _ansible==2.12.0rc1  # fix me after release
+        - _ansible_test
+    - role: mafalb.ansible.virtualenv
       virtualenv: ~/.virtualenvs/molecule210
       mafalb_ansible_packages:
         - _ansible~=2.10.0
@@ -29,6 +34,13 @@
       virtualenv: ~/.virtualenvs/molecule211
       mafalb_ansible_packages:
         - _ansible==2.11.6
+        - _ansible_test
+        - molecule[lint,docker,test]~=3.3.4
+
+    - role: mafalb.ansible.virtualenv
+      virtualenv: ~/.virtualenvs/molecule212
+      mafalb_ansible_packages:
+        - _ansible~=2.12.0rc1  # fix me after release
         - _ansible_test
         - molecule[lint,docker,test]~=3.3.4
 

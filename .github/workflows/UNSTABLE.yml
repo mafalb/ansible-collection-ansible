@@ -152,6 +152,7 @@ jobs:
         - '2.9'
         - '2.10'
         - '2.11'
+        # fix virtualenv molecule scenario after release
         - '2.12.0rc1'
 
         include:

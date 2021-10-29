@@ -34,8 +34,10 @@
       loop:
         - ansible210
         - ansible211
+        - ansible212
         - molecule210
         - molecule211
+        - molecule212
       changed_when: false
 
     - name: get python version
@@ -46,8 +48,10 @@
       loop:
         - ansible210
         - ansible211
+        - ansible212
         - molecule210
         - molecule211
+        - molecule212
       register: __reg_python_version
 
     - name: install requirements  # noqa: no-changed-when 301
@@ -57,8 +61,10 @@
       loop:
         - ansible210
         - ansible211
+        - ansible212
         - molecule210
         - molecule211
+        - molecule212
       loop_control:
         index_var: __i
       args:
@@ -71,8 +77,9 @@
       loop:
         - ansible210
         - ansible211
+        - ansible212
         - molecule210
-        - molecule211
+        - molecule212
       changed_when: false
 
     - name: get diff
@@ -81,8 +88,10 @@
       loop:
         - ansible210
         - ansible211
+        - ansible212
         - molecule210
         - molecule211
+        - molecule212
       register: __reg_diff
 
     - name: diff
