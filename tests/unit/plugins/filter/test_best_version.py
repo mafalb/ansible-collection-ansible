@@ -12,6 +12,7 @@ __metaclass__ = type
 
 
 TEST_CASES = (
+    (['_ansible==2.12.0rc1'], '2.12.0rc1'),
     (['_ansible==2.9'], '2.9.27'),
     (['_ansible==2.11.7'], '2.11.7'),
     (['_ansible==2.11.6'], '2.11.6'),
