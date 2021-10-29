@@ -99,7 +99,7 @@ jobs:
         if: matrix.python_version == '2.7'
         run: |
           pip install virtualenv
-          ansible-playbook -D playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}", "ansible-lint${{ matrix.ansible_lint_specifier }}", "_ansible_test", "flake8"]}' -e mafalb_ansible_virtualenv_command="virtualenv -p python${{ matrix.python_version }}" -t all,debug
+          ansible-playbook -vvv -D playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}", "ansible-lint${{ matrix.ansible_lint_specifier }}", "_ansible_test", "flake8"]}' -e mafalb_ansible_virtualenv_command="virtualenv -p python${{ matrix.python_version }}" -t all,debug
         env:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
 
