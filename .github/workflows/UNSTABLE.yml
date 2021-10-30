@@ -154,14 +154,11 @@ jobs:
         # there are special dependencies for fedora35 that are probably not necessary anymore
         - fedora35
         - c9s
-        - c8s
 
         ansible_version:
         - '2.9'
         - '2.10'
         - '2.11'
-        # fix virtualenv molecule scenario after release
-        - '2.12.0rc1'
 
         include:
 
@@ -185,6 +182,13 @@ jobs:
           test_molecule: true
           test_controlnode: true
           test29: true
+
+        # ubuntu impish
+        - target: ubuntu2110
+          image: docker.io/ubuntu:21.10
+          test_molecule: true
+          test_controlnode: true
+          ansible_version: 2.12.0rc1
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
