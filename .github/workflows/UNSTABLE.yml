@@ -95,16 +95,11 @@ jobs:
         with:
           python-version: ${{ matrix.python_version }}
 
-      - name: install molecule for python 2.7
+      - name: install virtualenv for python 2.7
         if: matrix.python_version == '2.7'
-        run: |
-          pip install virtualenv
-          ansible-playbook -vvv -D playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}", "ansible-lint${{ matrix.ansible_lint_specifier }}", "_ansible_test", "flake8"]}' -e "mafalb_ansible_virtualenv_python='python${{ matrix.python_version }}'" -t all,debug
-        env:
-          ANSIBLE_COLLECTIONS_PATHS: ../../..
+        run: pip install virtualenv
 
       - name: install molecule
-        if: matrix.python_version != '2.7'
         run: |
           ansible-playbook -D playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}", "ansible-lint${{ matrix.ansible_lint_specifier }}", "_ansible_test", "flake8"]}' -e mafalb_ansible_virtualenv_python=python${{ matrix.python_version }} -t all,debug
         env:
