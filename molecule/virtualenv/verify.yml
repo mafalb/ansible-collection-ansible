@@ -79,6 +79,7 @@
         - ansible211
         - ansible212
         - molecule210
+        - molecule211
         - molecule212
       changed_when: false
 
