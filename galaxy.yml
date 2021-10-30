@@ -48,6 +48,7 @@ tags:
 # range specifiers can be set and are separated by ','
 dependencies:
   'mafalb.epel': '>=0.1.0'
+  'community.general': '*'
 
 # The URL of the originating SCM repository
 repository: https://github.com/mafalb/ansible-collection-ansible
