@@ -1,6 +1,0 @@
-- hosts: localhost
-  tasks:
-  - assert:
-      that:
-        - true is boolean
-      
