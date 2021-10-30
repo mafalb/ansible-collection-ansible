@@ -20,7 +20,7 @@
         mode: "0755"
 
     - name: copy collection
-      synchronize:
+      ansible.posix.synchronize:
         src: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
         dest: "{{ collection_dir }}"
         recursive: true
