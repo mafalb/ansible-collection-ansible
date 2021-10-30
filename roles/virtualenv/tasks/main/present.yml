@@ -52,7 +52,7 @@
         mode: '0644'
 
 - name: get installed pip packages
-  community.general.pip_package_info:
+  pip_package_info:
     clients: ["{{ __reg_venv.virtualenv }}/bin/pip"]
   register: __reg_pip
 
