@@ -20,6 +20,11 @@
   package:
     name: "{{ mafalb_ansible_system_dependencies }}"
 
+- name: get major version of targeted python
+  command: "{{ mafalb_ansible_virtualenv_python }} --version"
+  changed_when: false
+  register: __reg__virtualenv_python
+
 - name: virtualenv is present
   pip:
     name:
@@ -27,7 +32,7 @@
       - setuptools{{ mafalb_ansible_virtualenv_packages.setuptools }}
       - wheel
     virtualenv: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}"
-    virtualenv_command: "{{ mafalb_ansible_virtualenv_command }}"
+    virtualenv_command: "{{ mafalb_ansible_virtualenv_command[__reg__virtualenv_python[7]] }}"
   # register the result and enjoy the absolute path to the virtualenv
   register: __reg_venv
 
