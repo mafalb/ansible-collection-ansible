@@ -1,0 +1,19 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+- name: include OS specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+  - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+  - "{{ ansible_os_family }}.yml"
+
+# the content of state was validated in vars.yml
+# we need a default for ansible <2.11
+#
+- name: include tasks
+  include_tasks:
+    file: "{{ state|default('present') }}.yml"
+
+...
