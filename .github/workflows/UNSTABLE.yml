@@ -172,19 +172,19 @@ jobs:
           #
           - os: fedora35
             image: quay.io/fedora/fedora:35-x86_64
-  
+
           - os: c9s
             image: quay.io/centos/centos:stream9-development
-  
+
           - os: c8s
             image: quay.io/centos/centos:stream8
-  
+
           # ubuntu impish
           - os: ubuntu2110
             image: docker.io/ubuntu:21.10
 
         exclude:
-          
+
           # ansible
           - os: fedora35
             ansible_version: '2.9'
@@ -224,7 +224,7 @@ jobs:
             python_version: '3.6'
           - os: ubuntu2110
             python_version: '3.8'
-        
+
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
       CI_IMAGE: ${{ matrix.image }}
