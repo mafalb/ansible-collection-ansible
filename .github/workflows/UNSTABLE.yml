@@ -146,45 +146,85 @@ jobs:
       matrix:
 
         target:
-        # there are special dependencies for fedora35 that are probably not necessary anymore
-        - fedora35
-        - c9s
+          # there are special dependencies for fedora35 that are probably not necessary anymore
+          - fedora35
+          - c8s
+          - c9s
+          - ubuntu2110
+
+        python_version:
+          - '2.7'
+          - '3.6'
+          - '3.8'
+          - '3.9'
+          - '3.10'
 
         ansible_version:
-        - '2.9'
-        - '2.10'
-        - '2.11'
+          - '2.9'
+          - '2.10'
+          - '2.11'
+          - '2.12.0rc1'
 
         include:
 
-        # for now only with installed gcc and libffi-devel
-        # waiting for python 3.10 wheel for cffi
-        #
-        - target: fedora35
-          image: quay.io/fedora/fedora:35-x86_64
-          test_molecule: true
-          test_controlnode: true
+          # for now only with installed gcc and libffi-devel
+          # waiting for python 3.10 wheel for cffi
+          #
+          - target: fedora35
+            image: quay.io/fedora/fedora:35-x86_64
+  
+          - target: c9s
+            image: quay.io/centos/centos:stream9-development
+  
+          - target: c8s
+            image: quay.io/centos/centos:stream8
+  
+          # ubuntu impish
+          - target: ubuntu2110
+            image: docker.io/ubuntu:21.10
 
-        # no controlnode because of missing epel
-        #
-        - target: c9s
-          image: quay.io/centos/centos:stream9-development
-          test_molecule: true
-          test_controlnode: false
+        exclude:
+          
+          # ansible
+          - os: fedora35
+            ansible_version: '2.9'
+          # python
+          - os: fedora35
+            python_version: '3.6'
+          - os: fedora35
+            python_version: '3.8'
+          - os: fedora35
+            python_version: '3.9'
 
-        - target: c8s
-          image: quay.io/centos/centos:stream8
-          test_molecule: true
-          test_controlnode: true
-          test29: true
+          # python
+          - os: c8s
+            python_version: '3.10'
+          # python and ansible
+          - os: c8s
+            python_version: '3.6'
+            ansible_version: '2.12'
+          - os: c8s
+            python_version: '3.9'
+            ansible_version: '2.9'
 
-        # ubuntu impish
-        - target: ubuntu2110
-          image: docker.io/ubuntu:21.10
-          test_molecule: true
-          test_controlnode: true
-          ansible_version: 2.12.0rc1
+          # ansible
+          - os: c9s
+            ansible_version: '2.9'
+          # python
+          - os: c9s
+            python_version: '3.6'
+          - os: c9s
+            python_version: '3.8'
+          - os: c9s
+            python_version: '3.9'
 
+          - os: ubuntu2110
+            ansible_version: '2.9'
+          - os: ubuntu2110
+            python_version: '3.6'
+          - os: ubuntu2110
+            python_version: '3.8'
+        
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
       CI_IMAGE: ${{ matrix.image }}
