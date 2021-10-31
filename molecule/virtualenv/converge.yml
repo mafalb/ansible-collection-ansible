@@ -8,7 +8,7 @@
     - name: debug targeted ansible version
       debug: msg="doing {{ arg_ansible_version }} on {{ arg_python_version }}"
   roles:
-    - role: mafalb.python.python
+    - role: mafalb.ansible.python
       version: "{{ arg_python_version|default(_default) }}"
     - role: mafalb.ansible.virtualenv
       virtualenv: ~/.virtualenvs/ansible-{{ arg_ansible_version }}-py{{ arg_python_version }}
