@@ -145,7 +145,7 @@ jobs:
 
       matrix:
 
-        target:
+        os:
           # there are special dependencies for fedora35 that are probably not necessary anymore
           - fedora35
           - c8s
@@ -170,17 +170,17 @@ jobs:
           # for now only with installed gcc and libffi-devel
           # waiting for python 3.10 wheel for cffi
           #
-          - target: fedora35
+          - os: fedora35
             image: quay.io/fedora/fedora:35-x86_64
   
-          - target: c9s
+          - os: c9s
             image: quay.io/centos/centos:stream9-development
   
-          - target: c8s
+          - os: c8s
             image: quay.io/centos/centos:stream8
   
           # ubuntu impish
-          - target: ubuntu2110
+          - os: ubuntu2110
             image: docker.io/ubuntu:21.10
 
         exclude:
@@ -228,7 +228,7 @@ jobs:
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
       CI_IMAGE: ${{ matrix.image }}
-      CI_HOSTNAME: ci-${{ matrix.target }}
+      CI_HOSTNAME: ci-${{ matrix.os }}
       PY_COLORS: 1
       ANSIBLE_FORCE_COLOR: 1
 
