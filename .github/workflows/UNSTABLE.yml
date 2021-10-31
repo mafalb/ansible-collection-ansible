@@ -289,6 +289,6 @@ jobs:
       - name: molecule scenario virtualenv
         run: |
           source ~/.virtualenvs/molecule/bin/activate
-          molecule test -s virtualenv -- -e ansible_version="${{ matrix.ansible_version }}" -e python_version="${{ matrix.python_version }}"
+          molecule test -s virtualenv
 
 ...
