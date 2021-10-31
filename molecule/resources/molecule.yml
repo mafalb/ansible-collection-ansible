@@ -40,6 +40,7 @@ provisioner:
   ansible_args:
     - --tags=all,debug
     - --diff
+    - -e arg_ansible_version='${ANSIBLE_VERSION}' -e arg_python_version=${PYTHON_VERSION}
   lint:
     name: ansible-lint
   config_options:

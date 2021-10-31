@@ -13,9 +13,10 @@ from ansible.errors import (
     AnsibleFilterTypeError
 )
 import yaml
+from os.path import dirname
 __metaclass__ = type
 
-datafile = open('roles/virtualenv/vars/data.yml', 'r')
+datafile = open(dirname(__file__) + '/../../roles/virtualenv/vars/data.yml', 'r')
 data = yaml.load(datafile, Loader=yaml.FullLoader)
 datafile.close()
 

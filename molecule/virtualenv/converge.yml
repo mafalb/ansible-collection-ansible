@@ -4,44 +4,16 @@
 ---
 
 - hosts: all
+  pre_tasks:
+    - name: debug targeted ansible version
+      debug: msg="doing {{ arg_ansible_version }} on {{ arg_python_version }}"
   roles:
-
+    - role: mafalb.python.python
+      version: "{{ arg_python_version|default(_default) }}"
     - role: mafalb.ansible.virtualenv
-      virtualenv: ~/.virtualenvs/ansible210
+      virtualenv: ~/.virtualenvs/ansible-{{ arg_ansible_version }}-py{{ arg_python_version }}
       mafalb_ansible_packages:
-        - _ansible~=2.10.0
+        - _ansible=={{ arg_ansible_version }}
         - _ansible_test
-
-    - role: mafalb.ansible.virtualenv
-      virtualenv: ~/.virtualenvs/ansible211
-      mafalb_ansible_packages:
-        - _ansible~=2.11.0
-        - _ansible_test
-
-    - role: mafalb.ansible.virtualenv
-      virtualenv: ~/.virtualenvs/ansible212
-      mafalb_ansible_packages:
-        - _ansible==2.12.0rc1  # fix me after release
-        - _ansible_test
-    - role: mafalb.ansible.virtualenv
-      virtualenv: ~/.virtualenvs/molecule210
-      mafalb_ansible_packages:
-        - _ansible~=2.10.0
-        - _ansible_test
-        - molecule[lint,docker,test]~=3.3.4
-
-    - role: mafalb.ansible.virtualenv
-      virtualenv: ~/.virtualenvs/molecule211
-      mafalb_ansible_packages:
-        - _ansible==2.11.6
-        - _ansible_test
-        - molecule[lint,docker,test]~=3.3.4
-
-    - role: mafalb.ansible.virtualenv
-      virtualenv: ~/.virtualenvs/molecule212
-      mafalb_ansible_packages:
-        - _ansible==2.12.0rc1  # fix me after release
-        - _ansible_test
-        - molecule[lint,docker,test]~=3.3.4
 
 ...

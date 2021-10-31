@@ -227,6 +227,7 @@ jobs:
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
+      PYTHON_VERSION: ${{ matrix.python_version }}
       CI_IMAGE: ${{ matrix.image }}
       CI_HOSTNAME: ci-${{ matrix.os }}
       PY_COLORS: 1
@@ -286,15 +287,8 @@ jobs:
           molecule test -s controlnode
 
       - name: molecule scenario virtualenv
-        if: matrix.test_molecule == true
         run: |
           source ~/.virtualenvs/molecule/bin/activate
-          molecule test -s virtualenv
-
-      - name: molecule scenario virtualenv for ansible 2.9
-        if: matrix.test29 == true
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          molecule test -s virtualenv29
+          molecule test -s virtualenv -- -e ansible_version="${{ matrix.ansible_version }}" -e python_version="${{ matrix.python_version }}"
 
 ...
