@@ -44,9 +44,7 @@
     - name: install requirements  # noqa no-changed-when 301
       shell: |
         . ~/.virtualenvs/{{ virtualenv_basename }}/bin/activate
-        ansible-test sanity --requirements --python {{ __reg_python_version.results[__i].stdout }}
-      loop_control:
-        index_var: __i
+        ansible-test sanity --requirements --python {{ __reg_python_version.stdout }}
       args:
         chdir: "{{ collection_dir }}/ansible"
 
