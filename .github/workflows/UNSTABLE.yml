@@ -185,6 +185,13 @@ jobs:
 
         exclude:
 
+          - ansible_version: '2.10'
+            python_version: '2.7'
+          - ansible_version: '2.11'
+            python_version: '2.7'
+          - ansible_version: '2.12'
+            python_version: '2.7'
+
           # ansible
           - os: fedora35
             ansible_version: '2.9'
