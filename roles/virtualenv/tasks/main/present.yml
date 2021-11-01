@@ -21,16 +21,19 @@
     name: "{{ mafalb_ansible_system_dependencies }}"
 
 - name: get major version of targeted python
-  command: "{{ mafalb_ansible_virtualenv_python }} --version"
-  changed_when: false
-  register: __reg__virtualenv_python
+  block:
 
-- name: get major version of targeted python 2
-  command: echo {{ __reg__virtualenv_python.stderr[7]
-                   if __reg__virtualenv_python.stdout|length == 0
-                   else __reg__virtualenv_python.stdout[7] }}
-  changed_when: false
-  register: __reg__virtualenv_python
+    - name: step 1
+      command: "{{ mafalb_ansible_virtualenv_python }} --version"
+      changed_when: false
+      register: __reg_virtualenv_python
+
+    - name: get major version of targeted python 2
+      command: echo {{ __reg_virtualenv_python.stderr[7]
+               if __reg_virtualenv_python.stdout|length == 0
+               else __reg_virtualenv_python.stdout[7] }}
+      changed_when: false
+      register: __reg_virtualenv_python_maj
 
 - name: debug __reg__virtualenv_python
   debug: var=__reg__virtualenv_python
@@ -131,7 +134,7 @@
 
 - name: packages are present
   pip:
-    name: "{{ __mafalb_ansible_packages|difference(ansible_test_packages_not[__reg__virtualenv_python.stdout[7]]) }}"
+    name: "{{ __mafalb_ansible_packages|difference(ansible_test_packages_not[__reg_virtualenv_python_maj.stdout]) }}"
     extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }}
        -c {{ virtualenv|default(mafalb_ansible_virtualenv) }}/constraints.txt
        -c {{ virtualenv|default(mafalb_ansible_virtualenv)
