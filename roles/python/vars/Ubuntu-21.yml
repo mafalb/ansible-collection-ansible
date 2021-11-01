@@ -9,6 +9,5 @@ mafalb_python_package:
   '2.7': python2
   '3.9': python3
   '3.10': python3.10
-__mafalb_python_version: "{{ version|default(mafalb_python_version)|default(mafalb_python_default_version) }}"
 
 ...
