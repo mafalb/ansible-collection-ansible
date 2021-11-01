@@ -3,12 +3,7 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-mafalb_python_default_version: '3.9'
-mafalb_python_package:
-  '_default': python3
-  '2.7': python2
-  '3.9': python3
-  '3.10': python3.10
 __mafalb_python_version: "{{ version|default(mafalb_python_version)|default(mafalb_python_default_version) }}"
+__mafalb_python_extra_packages: "{{ [ 'python' + __mafalb_python_version + '-venv' ] }}"
 
 ...

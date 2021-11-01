@@ -3,11 +3,9 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-- name: python is present
-  package:
-    name: "{{
-      [mafalb_python_package[__mafalb_python_version]]
-      + __mafalb_python_extra_packages
-    }}"
+__mafalb_python_version: "{{
+  version|default(mafalb_python_version)|default(mafalb_python_default_version)
+}}"
+__mafalb_python_extra_packages: []
 
 ...
