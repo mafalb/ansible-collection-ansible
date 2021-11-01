@@ -15,4 +15,10 @@ mafalb_ansible_virtualenv_command:
 __mafalb_ansible_version: "{{ packages|default(mafalb_ansible_packages|default(['_ansible']))|mafalb.ansible.latest_version() }}"
 __mafalb_ansible_packages: "{{ packages|default(mafalb_ansible_packages|default(['_ansible']))|mafalb.ansible.fix_package_list() }}"
 
+ansible_test_packages_not:
+  '2':
+    - pytest
+    - pylint
+  '3': []
+
 ...

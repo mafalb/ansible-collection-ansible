@@ -50,7 +50,7 @@
       - wheel
     virtualenv: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}"
     virtualenv_command: "{{
-      mafalb_ansible_virtualenv_command[__reg_virtualenv_python_maj]
+      mafalb_ansible_virtualenv_command[__reg_virtualenv_python.stdout[7]]
     }}"
   # register the result and enjoy the absolute path to the virtualenv
   register: __reg_venv
