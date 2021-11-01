@@ -202,7 +202,7 @@ jobs:
           # python and ansible
           - os: c8s
             python_version: '3.6'
-            ansible_version: '2.12'
+            ansible_version: '2.12.0rc1'
           - os: c8s
             python_version: '3.9'
             ansible_version: '2.9'
