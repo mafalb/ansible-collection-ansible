@@ -30,7 +30,7 @@
 
     - name: get installed packages for ~/.virtualenvs/ansible
       shell: |
-        . ~/.virtualenvs/{{ virtualenv_basename }}
+        . ~/.virtualenvs/{{ virtualenv_basename }}/bin/activate
         pip freeze >/tmp/{{ virtualenv_basename }}-before.txt
       changed_when: false
 
