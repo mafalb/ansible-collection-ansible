@@ -35,10 +35,10 @@
       changed_when: false
       register: __reg_virtualenv_python_maj
 
-- name: debug __reg__virtualenv_python
-  debug: var=__reg__virtualenv_python
-- name: debug __reg__virtualenv_python 2
-  debug: var=__reg__virtualenv_python.stdout[7]
+- name: debug __reg_virtualenv_python
+  debug: var=__reg_virtualenv_python
+- name: debug __reg_virtualenv_python 2
+  debug: var=__reg_virtualenv_python.stdout[7]
 - name: debug mafalb_ansible_virtualenv_command
   debug: var=mafalb_ansible_virtualenv_command
 
@@ -50,7 +50,7 @@
       - wheel
     virtualenv: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}"
     virtualenv_command: "{{
-      mafalb_ansible_virtualenv_command[__reg__virtualenv_python.stdout[7]]
+      mafalb_ansible_virtualenv_command[__reg_virtualenv_python_maj]
     }}"
   # register the result and enjoy the absolute path to the virtualenv
   register: __reg_venv
