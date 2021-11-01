@@ -18,6 +18,8 @@ ansible_test_packages:
     - virtualenv
     - voluptuous
     - yamllint
+    - pytest      # not supported for python 2
+    - pylint      # not supported for python 2
   '2.10':
     - flake8
     - antsibull-changelog
@@ -40,4 +42,9 @@ ansible_test_packages:
     - pytest
     - voluptuous
 
+ansible_test_packages_not:
+  '2':
+    - pytest
+    - pylint
+  '3': []
 ...

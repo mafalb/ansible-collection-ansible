@@ -25,6 +25,13 @@
   changed_when: false
   register: __reg__virtualenv_python
 
+- name: get major version of targeted python 2
+  command: echo {{ __reg__virtualenv_python.stderr[7]
+                   if __reg__virtualenv_python.stdout|length == 0
+                   else __reg__virtualenv_python.stdout[7] }}
+  changed_when: false
+  register: __reg__virtualenv_python
+
 - name: debug __reg__virtualenv_python
   debug: var=__reg__virtualenv_python
 - name: debug __reg__virtualenv_python 2
@@ -40,9 +47,7 @@
       - wheel
     virtualenv: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}"
     virtualenv_command: "{{
-      mafalb_ansible_virtualenv_command[__reg__virtualenv_python.stderr[7]
-        if __reg__virtualenv_python.stdout|length == 0
-        else __reg__virtualenv_python.stdout[7]]
+      mafalb_ansible_virtualenv_command[__reg__virtualenv_python.stdout[7]]
     }}"
   # register the result and enjoy the absolute path to the virtualenv
   register: __reg_venv
@@ -123,9 +128,10 @@
 
 - name: debug previous installed ansible version
   debug: var=__ansible_version
+
 - name: packages are present
   pip:
-    name: "{{ __mafalb_ansible_packages }}"
+    name: "{{ __mafalb_ansible_packages|difference(ansible_test_packages_not[__reg__virtualenv_python.stdout[7]]) }}"
     extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }}
        -c {{ virtualenv|default(mafalb_ansible_virtualenv) }}/constraints.txt
        -c {{ virtualenv|default(mafalb_ansible_virtualenv)
