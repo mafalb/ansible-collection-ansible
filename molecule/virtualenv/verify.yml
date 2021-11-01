@@ -6,6 +6,7 @@
 - hosts: all
   vars:
     collection_dir: /root/ansible_collections/mafalb
+    virtualenv_basename: ansible-{{ arg_ansible_version }}-py{{ arg_python_version }}
 
   module_defaults:
     shell:
@@ -29,20 +30,20 @@
 
     - name: get installed packages for ~/.virtualenvs/ansible
       shell: |
-        . ~/.virtualenvs/ansible-{{ arg_ansible_version }}-py{{ arg_python_version }}
-        pip freeze >/tmp/ansible-l{{ arg_ansible_version }}-py{{ arg_python_version }}-before.txt
+        . ~/.virtualenvs/{{ virtualenv_basename }}
+        pip freeze >/tmp/{{ virtualenv_basename }}-before.txt
       changed_when: false
 
     - name: get python version
       shell: |
         set -o pipefail
-        awk -F=\  '/^version / {print $2}' ~/.virtualenvs/ansible-{{ arg_ansible_version }}-py{{ arg_python_version }}/pyvenv.cfg|cut -d. -f1-2
+        awk -F=\  '/^version / {print $2}' ~/.virtualenvs/{{ virtualenv_basename }}/pyvenv.cfg|cut -d. -f1-2
       changed_when: false
       register: __reg_python_version
 
     - name: install requirements  # noqa no-changed-when 301
       shell: |
-        . ~/.virtualenvs/ansible-{{ arg_ansible_version }}-py{{ arg_python_version }}/bin/activate
+        . ~/.virtualenvs/{{ virtualenv_basename }}/bin/activate
         ansible-test sanity --requirements --python {{ __reg_python_version.results[__i].stdout }}
       loop_control:
         index_var: __i
@@ -51,12 +52,12 @@
 
     - name: get installed packages for ~/.virtualenvs/ansible
       shell: |
-        . ~/.virtualenvs/ansible-{{ arg_ansible_version }}-py{{ arg_python_version }}/bin/activate
-        pip freeze >/tmp/ansible-{{ arg_ansible_version }}-py{{ arg_python_version }}-after.txt
+        . ~/.virtualenvs/{{ virtualenv_basename }}/bin/activate
+        pip freeze >/tmp/{{ virtualenv_basename }}-after.txt
       changed_when: false
 
     - name: get diff
-      command: diff -u /tmp/ansible-{{ arg_ansible_version }}-py{{ arg_python_version }}-before.txt /tmp/ansible-{{ arg_ansible_version }}-py{{ arg_python_version }}-after.txt
+      command: diff -u /tmp/{{ virtualenv_basename }}-before.txt /tmp/{{ virtualenv_basename }}-after.txt
       changed_when: false
       register: __reg_diff
 
