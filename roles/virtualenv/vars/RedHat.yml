@@ -9,4 +9,8 @@ mafalb_ansible_system_dependencies:
 - glibc-langpack-en
 - python3-setuptools
 
+mafalb_ansible_virtualenv_command:
+  '2': "virtualenv-2 -p {{ mafalb_ansible_virtualenv_python }}"
+  '3': "{{ mafalb_ansible_virtualenv_python }} -m venv"
+
 ...

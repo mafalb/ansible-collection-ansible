@@ -8,4 +8,8 @@ mafalb_ansible_system_dependencies:
 - python-setuptools
 - python3
 
+mafalb_ansible_virtualenv_command:
+  '2': "virtualenv -p {{ mafalb_ansible_virtualenv_python }}"
+  '3': "{{ mafalb_ansible_virtualenv_python }} -m venv"
+
 ...
