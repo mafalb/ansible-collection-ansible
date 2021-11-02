@@ -34,12 +34,21 @@
         pip freeze >/tmp/{{ virtualenv_basename }}-before.txt
       changed_when: false
 
-    - name: get python version
-      shell: |
-        set -o pipefail
-        awk -F=\  '/^version / {print $2}' ~/.virtualenvs/{{ virtualenv_basename }}/pyvenv.cfg|cut -d. -f1-2
-      changed_when: false
-      register: __reg_python_version
+    - name: get major version of targeted python
+      block:
+
+        - name: step 1
+          command: "~/.virtualenvs/{{ virtualenv_basename }}/bin/python --version"
+          changed_when: false
+          register: __reg_virtualenv_python
+
+        - name: get major version of targeted python 2
+          command: >
+            echo {{ __reg_virtualenv_python.stderr[7:10]
+            if __reg_virtualenv_python.stdout|length == 0
+            else __reg_virtualenv_python.stdout[7:10] }}
+          changed_when: false
+          register: __reg_python_version
 
     - name: install requirements  # noqa no-changed-when 301
       shell: |

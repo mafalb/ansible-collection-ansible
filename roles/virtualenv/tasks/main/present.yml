@@ -37,10 +37,12 @@
 
 - name: debug __reg_virtualenv_python
   debug: var=__reg_virtualenv_python
-- name: debug __reg_virtualenv_python 2
-  debug: var=__reg_virtualenv_python.stdout[7]
+- name: debug __reg_virtualenv_python_maj
+  debug: var=__reg_virtualenv_python_maj.stdout
 - name: debug mafalb_ansible_virtualenv_command
   debug: var=mafalb_ansible_virtualenv_command
+- name: debug mafalb_ansible_virtualenv_command 2
+  debug: var=mafalb_ansible_virtualenv_command[__reg_virtualenv_python_maj.stdout]
 
 - name: virtualenv is present
   pip:
@@ -49,6 +51,7 @@
       - setuptools{{ mafalb_ansible_virtualenv_packages.setuptools }}
       - wheel
     virtualenv: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}"
+    virtualenv_python: "{{ mafalb_ansible_virtualenv_python if __reg_virtualenv_python_maj.stdout == '2' else omit }}"
     virtualenv_command: "{{
       mafalb_ansible_virtualenv_command[__reg_virtualenv_python_maj.stdout]
     }}"
