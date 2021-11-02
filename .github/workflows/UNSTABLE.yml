@@ -171,7 +171,7 @@ jobs:
           # waiting for python 3.10 wheel for cffi
           #
           - os: fedora35
-            image: quay.io/fedora/fedora:35-x86_64
+            image: fedoraproject.org/fedora:35
 
           - os: c9s
             image: quay.io/centos/centos:stream9-development
@@ -187,7 +187,7 @@ jobs:
 
           - ansible_version: '2.10'
             python_version: '2.7'
-          - ansilbe_version: '2.10'
+          - ansible_version: '2.10'
             python_version: '3.10'
           - ansible_version: '2.11'
             python_version: '2.7'
