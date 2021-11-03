@@ -16,7 +16,7 @@ on: # yamllint disable-line rule:truthy
 
 jobs:
 
-  CI:
+  ansible-test:
 
     # don't run on pull request from ourselves
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
@@ -141,7 +141,7 @@ jobs:
           source ~/.virtualenvs/ansible/bin/activate
           ansible-test units --coverage --requirements --python ${{ matrix.python_version }}
 
-  molecule:
+  CI:
 
     # don't run on pull request from ourselves
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
