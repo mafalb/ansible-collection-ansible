@@ -11,4 +11,9 @@ mafalb_python_package:
   '3.8': '@python38'
   '3.9': '@python39'
 
+# RHEL8 does not provide python-virtualenv
+__mafalb_python_extra_packages:
+  '2': ['python2-virtualenv']
+  '3': []
+ 
 ...
