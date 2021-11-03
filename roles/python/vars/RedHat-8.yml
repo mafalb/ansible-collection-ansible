@@ -15,5 +15,5 @@ mafalb_python_package:
 __mafalb_python_extra_packages:
   '2': ['python2-virtualenv']
   '3': []
- 
+
 ...
