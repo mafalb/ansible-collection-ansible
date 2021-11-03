@@ -34,26 +34,25 @@
         pip freeze >/tmp/{{ virtualenv_basename }}-before.txt
       changed_when: false
 
-    - name: get major version of targeted python
+    - name: check major version of targeted python
       block:
 
-        - name: step 1
+        - name: call targeted python
           command: "~/.virtualenvs/{{ virtualenv_basename }}/bin/python --version"
           changed_when: false
           register: __reg_virtualenv_python
 
-        - name: get major version of targeted python 2
-          command: >
-            echo {{ __reg_virtualenv_python.stderr[7:10]
-            if __reg_virtualenv_python.stdout|length == 0
-            else __reg_virtualenv_python.stdout[7:10] }}
-          changed_when: false
-          register: __reg_python_version
+        - name: assert that targetet version is the requested
+          assert:
+            that:
+              - (__reg_virtualenv_python.stdout is match("Python {{ arg_python_version }}")
+                 or __reg_virtualenv_python.stderr is match("Python {{ arg_python_version }}")
+                )
 
     - name: install requirements  # noqa no-changed-when 301
       shell: |
         . ~/.virtualenvs/{{ virtualenv_basename }}/bin/activate
-        ansible-test sanity --requirements --python {{ __reg_python_version.stdout }}
+        ansible-test sanity --requirements --python {{ arg_python_version }}
       args:
         chdir: "{{ collection_dir }}/ansible"
 
