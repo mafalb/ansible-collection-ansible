@@ -16,8 +16,10 @@ on: # yamllint disable-line rule:truthy
 
 jobs:
 
-  SANITY:
+  CI:
 
+    # don't run on pull request from ourselves
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
@@ -26,51 +28,62 @@ jobs:
 
         include:
 
-        - ansible_version: '2.9'
-          python-version: 2.7
+          - ansible_version: '2.9'
+            python_version: '2.7'
 
-        - ansible_version: '2.9'
-          python-version: 3.5
+          - ansible_version: '2.9'
+            python_version: '3.5'
 
-        - ansible_version: '2.9'
-          python-version: 3.6
+          - ansible_version: '2.9'
+            python_version: '3.6'
 
-        - ansible_version: '2.9'
-          python-version: 3.7
+          - ansible_version: '2.9'
+            python_version: '3.7'
 
-        - ansible_version: '2.9'
-          python-version: 3.8
-
-
-        - ansible_version: '2.10'
-          python-version: 3.6
-
-        - ansible_version: '2.10'
-          python-version: 3.7
-
-        - ansible_version: '2.10'
-          python-version: 3.8
-
-        - ansible_version: '2.10'
-          python-version: 3.9
+          - ansible_version: '2.9'
+            python_version: '3.8'
 
 
-        - ansible_core_version: '2.11'
-          python-version: 3.6
+          - ansible_version: '2.10'
+            python_version: '3.6'
 
-        - ansible_core_version: '2.11'
-          python-version: 3.7
+          - ansible_version: '2.10'
+            python_version: '3.7'
 
-        - ansible_core_version: '2.11'
-          python-version: 3.8
+          - ansible_version: '2.10'
+            python_version: '3.8'
 
-        - ansible_core_version: '2.11'
-          python-version: 3.9
+          - ansible_version: '2.10'
+            python_version: '3.9'
+
+
+          - ansible_version: '2.11'
+            python_version: 3.6
+
+          - ansible_version: '2.11'
+            python_version: 3.7
+
+          - ansible_version: '2.11'
+            python_version: 3.8
+
+          - ansible_version: '2.11'
+            python_version: 3.9
+
+          # change to 2.12 after release
+          - ansible_version: '2.12.0rc1'
+            python_version: '3.8'
+
+          - ansible_version: '2.12.0rc1'
+            python_version: '3.9'
+
+          - ansible_version: '2.12.0rc1'
+            python_version: '3.10'
 
     env:
       PY_COLORS: 1
       ANSIBLE_FORCE_COLOR: 1
-      ANSIBLE_PYTHON_INTERPRETER: ${{ matrix.python-version }}/bin/python
+      # necessary ?
+      ANSIBLE_PYTHON_INTERPRETER: python${{ matrix.python_version }}
 
     defaults:
       run:
@@ -78,88 +91,62 @@ jobs:
 
     steps:
 
-    - name: checkout collection mafalb.ansible
-      uses: actions/checkout@v2
-      with:
-        path: ansible_collections/mafalb/ansible
+      - name: checkout collection mafalb.ansible
+        uses: actions/checkout@v2
+        with:
+          path: ansible_collections/mafalb/ansible
 
-    - name: setup python
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python_version }}
 
-    - name: python version
-      run: |
-        python --version
-        which python
-        whereis python
-        python3 --version
-        which python3
-        whereis python3
-        ls -l /opt/hostedtoolcache/Python/
+      # necessary ?
+      - name: install virtualenv for python 2.7
+        if: matrix.python_version == '2.7'
+        run: pip install virtualenv
 
-    - name: install shellcheck
-      run: sudo apt install shellcheck
+      - name: install molecule
+        run: |
+          ansible-playbook -D playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}", "ansible-lint${{ matrix.ansible_lint_specifier }}", "_ansible_test", "flake8"]}' -e mafalb_ansible_virtualenv_python=python${{ matrix.python_version }} -t all,debug
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: ../../..
 
-    - name: install ansible 2.9/2.10 for python 2.7
-      if: ${{ matrix.python-version == '2.7' && matrix.ansible_version }}
-      run: |
-        pip install virtualenv
-        virtualenv ~/virtualenv
-        . ~/virtualenv/bin/activate
-        pip install wheel
-        pip install -U pip setuptools
-        pip install "ansible==${{ matrix.ansible_version }}.*" ansible-lint 'flake8<3.9' pylint 'pycodestyle<2.7'
+      - name: install shellcheck
+        run: sudo apt-get install shellcheck
 
-    - name: install ansible for python 2.7
-      if: ${{ matrix.python-version == '2.7' && matrix.ansible_core_version }}
-      run: |
-        pip install virtualenv
-        virtualenv ~/virtualenv
-        . ~/virtualenv/bin/activate
-        pip install wheel
-        pip install -U pip setuptools
-        pip install "ansible-core==${{ matrix.ansible_core_version }}.*" ansible ansible-lint 'flake8<3.9' pylint 'pycodestyle<2.7'
+      - name: check ansible version
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          ansible --version
+          ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
 
-    - name: install ansible 2.9/2.10 for python 3
-      if: ${{ matrix.python-version != '2.7' && matrix.ansible_version }}
-      run: |
-        python -m venv ~/virtualenv
-        . ~/virtualenv/bin/activate
-        pip install wheel
-        pip install -U pip setuptools
-        pip install "ansible==${{ matrix.ansible_version }}.*" ansible-lint flake8 pylint 'pycodestyle<2.7'
+      - name: check python version
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          ansible --version | grep "^\s*python.* ${{ matrix.python_version }}"
 
-    - name: install ansible for python 3
-      if: ${{ matrix.python-version != '2.7' && matrix.ansible_core_version }}
-      run: |
-        python -m venv ~/virtualenv
-        . ~/virtualenv/bin/activate
-        pip install wheel
-        pip install -U pip setuptools
-        pip install "ansible-core==${{ matrix.ansible_core_version }}.*" ansible ansible-lint flake8 pylint 'pycodestyle<2.7'
+      - name: lint
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          . tests/lint.sh requirements ${{ matrix.python_version }}
 
-    - name: check ansible version
-      run: |
-        source ~/virtualenv/bin/activate
-        ansible --version
-        which ansible-test
-        ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
+      - name: sanity
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          ansible-test sanity --requirements --python ${{ matrix.python_version }}
 
-    - name: check python version
-      run: |
-        source ~/virtualenv/bin/activate
-        ansible --version | grep "^\s*python.* ${{ matrix.python-version }}"
+      - name: unit tests
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          ansible-test units --coverage --requirements --python ${{ matrix.python_version }}
 
-    - name: lint
-      run: |
-        source ~/virtualenv/bin/activate
-        . tests/lint.sh requirements ${{ matrix.python-version }}
+  molecule:
 
-  CI:
-
+    # don't run on pull request from ourselves
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-20.04
-    needs: SANITY
+    needs: ansible-test
 
     strategy:
       fail-fast: false
@@ -167,21 +154,22 @@ jobs:
       matrix:
 
         target:
-        - fedora33
-        - fedora34
-        - c8s
-        - centos7
-        - centos8
-        - rocky8
-        - alma8
-        - debian9
-        - debian10
-        - debian11
-        - ubuntu16
-        - ubuntu18
-        - ubuntu20
-        - ubuntu2104
-        - ubuntu2110
+          - fedora33
+          - fedora34
+          - fedora35
+          - c8s
+          - c9s
+          - centos7
+          - centos8
+          - rocky8
+          - alma8
+          - debian9
+          - debian10
+          - debian11
+          - ubuntu18
+          - ubuntu20
+          - ubuntu2104
+          - ubuntu2110
 
         ansible_version:
         - '2.11'
@@ -195,9 +183,14 @@ jobs:
           test_molecule: true
           test_controlnode: true
 
+
         - target: fedora34
           image: docker.io/fedora:34
           test_molecule: true
+          test_controlnode: true
+
+        - os: fedora35
+          image: registry.fedoraproject.org/fedora:35
           test_controlnode: true
 
         - target: c8s
@@ -205,6 +198,10 @@ jobs:
           test_molecule: true
           test_controlnode: true
           test29: true
+
+        - os: c9s
+          image: quay.io/centos/centos:stream9
+          test_controlnode: true
 
         - target: alma8
           image: quay.io/almalinux/almalinux:8
@@ -316,17 +313,5 @@ jobs:
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           molecule test -s controlnode
-
-      - name: molecule scenario virtualenv
-        if: matrix.test_molecule == true
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          molecule test -s virtualenv
-
-      - name: molecule scenario virtualenv for ansible 2.9
-        if: matrix.test29 == true
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          molecule test -s virtualenv29
 
 ...

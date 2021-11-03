@@ -16,7 +16,7 @@ on: # yamllint disable-line rule:truthy
 
 jobs:
 
-  VERSIONCHECK:
+  check_update:
 
     runs-on: ubuntu-20.04
 
