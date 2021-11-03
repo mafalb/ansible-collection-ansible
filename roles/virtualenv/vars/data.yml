@@ -42,10 +42,4 @@ ansible_test_packages:
     - pytest
     - voluptuous
 
-ansible_test_packages_not:
-  '2':
-    - pytest
-    - pylint
-  '3': []
-
 ...
