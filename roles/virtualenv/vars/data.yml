@@ -39,7 +39,12 @@ ansible_test_packages:
     - typed-ast
     - pytest
   '2.12':
+    - mock
     - pytest
+    - pytest-mock
+    - pytest-xdist
     - voluptuous
+    - wrapt
+    - yamllint
 
 ...
