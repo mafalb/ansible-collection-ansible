@@ -174,7 +174,7 @@ jobs:
             image: registry.fedoraproject.org/fedora:35
 
           - os: c9s
-            image: quay.io/centos/centos:stream9-development
+            image: quay.io/centos/centos:stream9
 
           - os: c8s
             image: quay.io/centos/centos:stream8
@@ -185,6 +185,11 @@ jobs:
 
         exclude:
 
+          # impossible ansible - python combinations
+          - ansible_version: '2.9'
+            python_version: '3.9'
+          - ansible_version: '2.9'
+            python_version: '3.10'
           - ansible_version: '2.10'
             python_version: '2.7'
           - ansible_version: '2.10'
@@ -198,10 +203,6 @@ jobs:
           - ansible_version: '2.12.0rc1'
             python_version: '3.6'
 
-          # ansible
-          - os: fedora35
-            ansible_version: '2.9'
-          # python
           - os: fedora35
             python_version: '3.6'
           - os: fedora35
@@ -209,20 +210,11 @@ jobs:
           - os: fedora35
             python_version: '3.9'
 
-          # python
           - os: c8s
             python_version: '3.10'
-          # python and ansible
-          - os: c8s
-            ansible_version: '2.12.0rc1'
-            python_version: '2.7'
-          - os: c8s
-            ansible_version: '2.12.0rc1'
-            python_version: '3.6'
-          - os: c8s
-            ansible_version: '2.9'
-            python_version: '3.9'
 
+          - os: c9s
+            python_version: '2.9'
           - os: c9s
             python_version: '3.6'
           - os: c9s
@@ -230,8 +222,6 @@ jobs:
           - os: c9s
             python_version: '3.10'
 
-          - os: ubuntu2110
-            ansible_version: '2.9'
           - os: ubuntu2110
             python_version: '3.6'
           - os: ubuntu2110
