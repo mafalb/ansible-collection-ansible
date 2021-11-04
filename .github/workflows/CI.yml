@@ -247,11 +247,11 @@ jobs:
           - os: c9s
             ansible_version: '2.12'
 
-          - os: alma
+          - os: alma8
             ansible_version: '2.10'
-          - os: alma
+          - os: alma8
             ansible_version: '2.11'
-          - os: alma
+          - os: alma8
             ansible_version: '2.12'
 
           - os: rocky8
