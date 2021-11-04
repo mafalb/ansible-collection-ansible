@@ -33,6 +33,9 @@
     changed_when: false
     register: __ansible_version
 
+  - name: debug
+    debug: var=__ansible_version
+
   - name: assertions
     assert:
       that:
