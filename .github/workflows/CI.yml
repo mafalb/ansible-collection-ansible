@@ -176,132 +176,132 @@ jobs:
 
         include:
 
-        - os: fedora33
-          image: docker.io/fedora:33
+          - os: fedora33
+            image: docker.io/fedora:33
+  
+          - os: fedora34
+            image: docker.io/fedora:34
+  
+          - os: fedora35
+            image: registry.fedoraproject.org/fedora:35
+  
+          - os: c8s
+            image: quay.io/centos/centos:stream8
+  
+          - os: c9s
+            image: quay.io/centos/centos:stream9
+  
+          - os: alma8
+            image: quay.io/almalinux/almalinux:8
+  
+          - os: rocky8
+            image: quay.io/rockylinux/rockylinux:8
+  
+          - os: centos7
+            image: quay.io/centos/centos:7
+  
+          - os: centos8
+            image: quay.io/centos/centos:8
+  
+          - os: debian11
+            image: docker.io/debian:bullseye
+  
+          - os: ubuntu20
+            image: docker.io/ubuntu:focal
+  
+          - os: ubuntu2104
+            image: docker.io/ubuntu:hirsute
+  
+          # ubuntu impish
+          - os: ubuntu2110
+            image: docker.io/ubuntu:21.10
+  
+        exclude:
 
-        - os: fedora34
-          image: docker.io/fedora:34
-
-        - os: fedora35
-          image: registry.fedoraproject.org/fedora:35
-
-        - os: c8s
-          image: quay.io/centos/centos:stream8
-
-        - os: c9s
-          image: quay.io/centos/centos:stream9
-
-        - os: alma8
-          image: quay.io/almalinux/almalinux:8
-
-        - os: rocky8
-          image: quay.io/rockylinux/rockylinux:8
-
-        - os: centos7
-          image: quay.io/centos/centos:7
-
-        - os: centos8
-          image: quay.io/centos/centos:8
-
-        - os: debian11
-          image: docker.io/debian:bullseye
-
-        - os: ubuntu20
-          image: docker.io/ubuntu:focal
-
-        - os: ubuntu2104
-          image: docker.io/ubuntu:hirsute
-
-        # ubuntu impish
-        - os: ubuntu2110
-          image: docker.io/ubuntu:21.10
-
-      exclude:
-
-        - os: fedora33
-          ansible_version: '2.10'
-        - os: fedora33
-          ansible_version: '2.12'
-
-        - os: fedora34
-          ansible_version: '2.10'
-        - os: fedora34
-          ansible_version: '2.12'
-
-        - os: fedora35
-          ansible_version: '2.10'
-        - os: fedora35
-          ansible_version: '2.12'
-
-        - os: c8s
-          ansible_version: '2.10'
-        - os: c8s
-          ansible_version: '2.11'
-        - os: c8s
-          ansible_version: '2.12'
-
-        - os: c9s
-          ansible_version: '2.9'
-        - os: c9s
-          ansible_version: '2.10'
-        - os: c9s
-          ansible_version: '2.12'
-
-        - os: alma
-          ansible_version: '2.10'
-        - os: alma
-          ansible_version: '2.11'
-        - os: alma
-          ansible_version: '2.12'
-
-        - os: rocky8
-          ansible_version: '2.10'
-        - os: rocky8
-          ansible_version: '2.11'
-        - os: rocky8
-          ansible_version: '2.12'
-
-        - os: centos7
-          ansible_version: '2.10'
-        - os: centos7
-          ansible_version: '2.11'
-        - os: centos7
-          ansible_version: '2.12'
-
-        - os: centos8
-          ansible_version: '2.10'
-        - os: centos8
-          ansible_version: '2.11'
-        - os: centos8
-          ansible_version: '2.12'
-          
-        - os: debian11
-          ansible_version: '2.9'
-        - os: debian11
-          ansible_version: '2.11'
-        - os: debian11
-          ansible_version: '2.12'
-      
-        - os: ubuntu20
-          ansible_version: '2.10'
-        - os: ubuntu20
-          ansible_version: '2.11'
-        - os: ubuntu20
-          ansible_version: '2.12'
-
-        - os: ubuntu2104
-          ansible_version: '2.9'
-        - os: ubuntu2104
-          ansible_version: '2.11'
-        - os: ubuntu2104
-          ansible_version: '2.12'
-
-        - os: ubuntu2110
-          ansible_version: '2.9'
-        - os: ubuntu2110
-          ansible_version: '2.11'
-        - os: ubuntu2110
-          ansible_version: '2.12'
+          - os: fedora33
+            ansible_version: '2.10'
+          - os: fedora33
+            ansible_version: '2.12'
+  
+          - os: fedora34
+            ansible_version: '2.10'
+          - os: fedora34
+            ansible_version: '2.12'
+  
+          - os: fedora35
+            ansible_version: '2.10'
+          - os: fedora35
+            ansible_version: '2.12'
+  
+          - os: c8s
+            ansible_version: '2.10'
+          - os: c8s
+            ansible_version: '2.11'
+          - os: c8s
+            ansible_version: '2.12'
+  
+          - os: c9s
+            ansible_version: '2.9'
+          - os: c9s
+            ansible_version: '2.10'
+          - os: c9s
+            ansible_version: '2.12'
+  
+          - os: alma
+            ansible_version: '2.10'
+          - os: alma
+            ansible_version: '2.11'
+          - os: alma
+            ansible_version: '2.12'
+  
+          - os: rocky8
+            ansible_version: '2.10'
+          - os: rocky8
+            ansible_version: '2.11'
+          - os: rocky8
+            ansible_version: '2.12'
+  
+          - os: centos7
+            ansible_version: '2.10'
+          - os: centos7
+            ansible_version: '2.11'
+          - os: centos7
+            ansible_version: '2.12'
+  
+          - os: centos8
+            ansible_version: '2.10'
+          - os: centos8
+            ansible_version: '2.11'
+          - os: centos8
+            ansible_version: '2.12'
+            
+          - os: debian11
+            ansible_version: '2.9'
+          - os: debian11
+            ansible_version: '2.11'
+          - os: debian11
+            ansible_version: '2.12'
+        
+          - os: ubuntu20
+            ansible_version: '2.10'
+          - os: ubuntu20
+            ansible_version: '2.11'
+          - os: ubuntu20
+            ansible_version: '2.12'
+  
+          - os: ubuntu2104
+            ansible_version: '2.9'
+          - os: ubuntu2104
+            ansible_version: '2.11'
+          - os: ubuntu2104
+            ansible_version: '2.12'
+  
+          - os: ubuntu2110
+            ansible_version: '2.9'
+          - os: ubuntu2110
+            ansible_version: '2.11'
+          - os: ubuntu2110
+            ansible_version: '2.12'
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
