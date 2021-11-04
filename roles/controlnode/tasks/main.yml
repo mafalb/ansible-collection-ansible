@@ -1,22 +1,6 @@
-# vim: set ft=yaml ts=2 expandtab:
-
-# This file is part of Ansible Collection mafalb.ansible
-# Copyright (c) 2019-2021 Markus Falb <markus.falb@mafalb.at>
-#
-# Ansible collection mafalb.ansible is free software: you can redistribute it
-# and/or modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation, either version 3 of the
-# License, or (at your option) any later version.
-#
-# Ansible collection mafalb.ansible is distributed in the hope that it will be
-# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Ansible collection mafalb.ansible.
-# If not, see <https://www.gnu.org/licenses/>.
-
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
 - name: get OS specific variables
@@ -25,16 +9,28 @@
   loop_control:
     loop_var: file
   with_first_found:
-  - "{{ ansible_os_family }}-{{ ansible_distribution }}.yml" # for Fedora
+  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+  - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
   - "{{ ansible_os_family }}.yml" # for all others
 
-- name: ansibles dependencies are present
-  package:
-    name: "{{ ansible_dependencies }}"
-  when: ansible_dependencies is defined
+- name: ansible
+  block:
+    - name: ansible dependencies are present
+      package:
+        name: "{{ mafalb_ansible_deps[mafalb_ansible_version|default(mafalb_ansible_default_version)] }}"
+    - name: ansible is present
+      package:
+        name: "{{ mafalb_ansible_package[mafalb_ansible_version|default(mafalb_ansible_default_version)] }}"
+  when: "'_ansible' in packages|default(mafalb_ansible_packages)"
 
-- name: ansible is present
-  package:
-    name: "{{ ansible_package }}"
+- name: ansible-test
+  block:
+    - name: ansible-test dependencies are present
+      package:
+        name: "{{ mafalb_ansible_test_deps[mafalb_ansible_version|default(mafalb_ansible_default_version)] }}"
+    - name: ansible-test is present
+      package:
+        name: "{{ mafalb_ansible_test_package[mafalb_ansible_version|default(mafalb_ansible_default_version)] }}"
+  when: "'_ansible_test' in packages|default(mafalb_ansible_packages)"
 
 ...

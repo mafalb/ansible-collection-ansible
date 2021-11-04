@@ -3,10 +3,7 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-- name: Install ansible
-  hosts: all
-
-  roles:
-  - role: mafalb.ansible.controlnode
+mafalb_ansible_packages:
+  - '_ansible'
 
 ...
