@@ -326,6 +326,14 @@ jobs:
         env:
           ANSIBLE_COLLECTIONS_PATHS: '../../..'
 
+      - name: install community.docker
+        if: matrix.ansible_version != '2.9'
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          ansible-galaxy collection install community.docker
+          # necessary for molecule and for mafalb.ansible
+          ansible-galaxy collection install community.general
+
       - name: check ansible version
         run: |
           source ~/.virtualenvs/molecule/bin/activate
