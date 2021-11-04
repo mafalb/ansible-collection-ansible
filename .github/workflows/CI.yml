@@ -141,7 +141,7 @@ jobs:
           source ~/.virtualenvs/ansible/bin/activate
           ansible-test units --coverage --requirements --python ${{ matrix.python_version }}
 
-  CI:
+  controlnode:
 
     # don't run on pull request from ourselves
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
@@ -153,7 +153,7 @@ jobs:
 
       matrix:
 
-        target:
+        os:
           - fedora33
           - fedora34
           - fedora35
@@ -163,110 +163,150 @@ jobs:
           - centos8
           - rocky8
           - alma8
-          - debian9
-          - debian10
           - debian11
-          - ubuntu18
           - ubuntu20
           - ubuntu2104
           - ubuntu2110
 
         ansible_version:
-        - '2.11'
-        - '2.10'
-        - '2.9'
+          - '2.12.0rc1'
+          - '2.11'
+          - '2.10'
+          - '2.9'
 
         include:
 
-        - target: fedora33
+        - os: fedora33
           image: docker.io/fedora:33
-          test_molecule: true
-          test_controlnode: true
 
-
-        - target: fedora34
+        - os: fedora34
           image: docker.io/fedora:34
-          test_molecule: true
-          test_controlnode: true
 
         - os: fedora35
           image: registry.fedoraproject.org/fedora:35
-          test_controlnode: true
 
-        - target: c8s
+        - os: c8s
           image: quay.io/centos/centos:stream8
-          test_molecule: true
-          test_controlnode: true
-          test29: true
 
         - os: c9s
           image: quay.io/centos/centos:stream9
-          test_controlnode: true
 
-        - target: alma8
+        - os: alma8
           image: quay.io/almalinux/almalinux:8
-          test_molecule: true
-          test_controlnode: true
-          test29: true
 
-        - target: rocky8
+        - os: rocky8
           image: quay.io/rockylinux/rockylinux:8
-          test_molecule: true
-          test_controlnode: true
-          test29: true
 
-        - target: centos7
+        - os: centos7
           image: quay.io/centos/centos:7
-          test_molecule: true
-          test_controlnode: true
-          test29: true
 
-        - target: centos8
+        - os: centos8
           image: quay.io/centos/centos:8
-          test_molecule: true
-          test_controlnode: true
-          test29: true
 
-        - target: debian9
-          image: docker.io/debian:stretch
-
-        - target: debian10
-          image: docker.io/debian:buster
-
-        - target: debian11
+        - os: debian11
           image: docker.io/debian:bullseye
-          test_molecule: true
-          test_controlnode: true
 
-        - target: ubuntu16
-          image: docker.io/ubuntu:xenial
-
-        - target: ubuntu18
-          image: docker.io/ubuntu:bionic
-          test_molecule: true
-          test29: true
-
-        - target: ubuntu20
+        - os: ubuntu20
           image: docker.io/ubuntu:focal
-          test_molecule: true
-          test_controlnode: true
-          test29: true
 
-        - target: ubuntu2104
+        - os: ubuntu2104
           image: docker.io/ubuntu:hirsute
-          test_molecule: true
-          test_controlnode: true
 
         # ubuntu impish
-        - target: ubuntu2110
+        - os: ubuntu2110
           image: docker.io/ubuntu:21.10
-          test_molecule: true
-          test_controlnode: true
+
+      exclude:
+
+        - os: fedora33
+          ansible_version: '2.10'
+        - os: fedora33
+          ansible_version: '2.12'
+
+        - os: fedora34
+          ansible_version: '2.10'
+        - os: fedora34
+          ansible_version: '2.12'
+
+        - os: fedora35
+          ansible_version: '2.10'
+        - os: fedora35
+          ansible_version: '2.12'
+
+        - os: c8s
+          ansible_version: '2.10'
+        - os: c8s
+          ansible_version: '2.11'
+        - os: c8s
+          ansible_version: '2.12'
+
+        - os: c9s
+          ansible_version: '2.9'
+        - os: c9s
+          ansible_version: '2.10'
+        - os: c9s
+          ansible_version: '2.12'
+
+        - os: alma
+          ansible_version: '2.10'
+        - os: alma
+          ansible_version: '2.11'
+        - os: alma
+          ansible_version: '2.12'
+
+        - os: rocky8
+          ansible_version: '2.10'
+        - os: rocky8
+          ansible_version: '2.11'
+        - os: rocky8
+          ansible_version: '2.12'
+
+        - os: centos7
+          ansible_version: '2.10'
+        - os: centos7
+          ansible_version: '2.11'
+        - os: centos7
+          ansible_version: '2.12'
+
+        - os: centos8
+          ansible_version: '2.10'
+        - os: centos8
+          ansible_version: '2.11'
+        - os: centos8
+          ansible_version: '2.12'
+          
+        - os: debian11
+          ansible_version: '2.9'
+        - os: debian11
+          ansible_version: '2.11'
+        - os: debian11
+          ansible_version: '2.12'
+      
+        - os: ubuntu20
+          ansible_version: '2.10'
+        - os: ubuntu20
+          ansible_version: '2.11'
+        - os: ubuntu20
+          ansible_version: '2.12'
+
+        - os: ubuntu2104
+          ansible_version: '2.9'
+        - os: ubuntu2104
+          ansible_version: '2.11'
+        - os: ubuntu2104
+          ansible_version: '2.12'
+
+        - os: ubuntu2110
+          ansible_version: '2.9'
+        - os: ubuntu2110
+          ansible_version: '2.11'
+        - os: ubuntu2110
+          ansible_version: '2.12'
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
       CI_IMAGE: ${{ matrix.image }}
-      CI_HOSTNAME: ci-${{ matrix.target }}
+      CI_HOSTNAME: ci-${{ matrix.os }}
       PY_COLORS: 1
       ANSIBLE_FORCE_COLOR: 1
 
@@ -282,7 +322,7 @@ jobs:
           path: ansible_collections/mafalb/ansible
 
       - name: install molecule
-        run: ansible-playbook -e ansible_python_interpreter=python3 -D playbooks/molecule.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
+        run: ansible-playbook -e ansible_python_interpreter=python3 -D playbooks/install-molecule.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
         env:
           ANSIBLE_COLLECTIONS_PATHS: '../../..'
 
@@ -291,25 +331,7 @@ jobs:
           source ~/.virtualenvs/molecule/bin/activate
           ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
 
-      - name: molecule node scenario
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          molecule test -s node
-
-      - name: molecule default scenario
-        if: matrix.test_molecule == true
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          molecule test --destroy never
-
-      - name: molecule update scenario
-        if: matrix.test_molecule == true
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          molecule test --destroy never -s update
-
       - name: molecule controlnode scenario
-        if: matrix.test_controlnode == true
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           molecule test -s controlnode

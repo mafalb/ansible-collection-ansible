@@ -8,6 +8,7 @@
 - support for ansible 2.12
 - support for ansible collections 4.8.0
 - support for ansible collections 5.0.0
+- remove support for ubuntu 16
 
 ## v4.5.0 2021-10-15
 

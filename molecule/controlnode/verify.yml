@@ -31,5 +31,12 @@
   - name: ansible is in the path
     command: ansible --version
     changed_when: false
+    register: __ansible_version
+
+  - name: assertions
+    assert:
+      that:
+        - __ansible_version.stdout is match('ansible')
+        - __ansible_version.stdout is search(arg_ansible_version|mandatory)
 
 ...

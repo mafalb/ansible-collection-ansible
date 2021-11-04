@@ -8,5 +8,6 @@
 
   roles:
   - role: mafalb.ansible.controlnode
+    version: "{{ arg_ansible_version|mandatory }}"
 
 ...
