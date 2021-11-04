@@ -174,48 +174,6 @@ jobs:
           - '2.10'
           - '2.9'
 
-        include:
-
-          - os: fedora33
-            image: docker.io/fedora:33
-
-          - os: fedora34
-            image: docker.io/fedora:34
-
-          - os: fedora35
-            image: registry.fedoraproject.org/fedora:35
-
-          - os: c8s
-            image: quay.io/centos/centos:stream8
-
-          - os: c9s
-            image: quay.io/centos/centos:stream9
-
-          - os: alma8
-            image: quay.io/almalinux/almalinux:8
-
-          - os: rocky8
-            image: quay.io/rockylinux/rockylinux:8
-
-          - os: centos7
-            image: quay.io/centos/centos:7
-
-          - os: centos8
-            image: quay.io/centos/centos:8
-
-          - os: debian11
-            image: docker.io/debian:bullseye
-
-          - os: ubuntu20
-            image: docker.io/ubuntu:focal
-
-          - os: ubuntu2104
-            image: docker.io/ubuntu:hirsute
-
-          # ubuntu impish
-          - os: ubuntu2110
-            image: docker.io/ubuntu:21.10
-
         exclude:
 
           - os: fedora33
@@ -344,6 +302,6 @@ jobs:
       - name: molecule controlnode scenario
         run: |
           source ~/.virtualenvs/molecule/bin/activate
-          molecule test -s controlnode
+          molecule -e env-${{ matrix.os }} test -s controlnode
 
 ...
