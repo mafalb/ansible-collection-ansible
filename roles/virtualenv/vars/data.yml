@@ -43,6 +43,7 @@ ansible_test_packages:
     - pytest-mock
     - pytest-xdist
     - voluptuous
+    - wrapt
     - yamllint
 
 ...
