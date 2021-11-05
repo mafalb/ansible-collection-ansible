@@ -154,6 +154,7 @@ jobs:
       matrix:
 
         os:
+          - arch
           - fedora33
           - fedora34
           - fedora35
@@ -175,6 +176,13 @@ jobs:
           - '2.9'
 
         exclude:
+
+          - os: arch
+            ansible_version: '2.9'
+          - os: arch
+            ansible_version: '2.10'
+          - os: arch
+            ansible_version: '2.12'
 
           - os: fedora33
             ansible_version: '2.10'
