@@ -146,7 +146,9 @@ jobs:
     # don't run on pull request from ourselves
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-20.04
-    needs: ansible-test
+    needs:
+      - ansible-test
+      - virtualenv
 
     strategy:
       fail-fast: false
