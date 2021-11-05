@@ -427,7 +427,7 @@ jobs:
             python_version: '3.7'
           - os: centos8
             python_version: '3.10'
-          
+
           # alma8 has 2.7, 3.6, 3.8, 3.9
           - os: alma8
             python_version: '3.5'
@@ -507,7 +507,7 @@ jobs:
             python_version: '3.7'
           - os: ubuntu20
             python_version: '3.10'
-          
+
           # ubuntu2104 has 2.7, 3.9, 3.10
           - os: ubuntu2104
             python_version: '3.5'
@@ -517,7 +517,7 @@ jobs:
             python_version: '3.7'
           - os: ubuntu2104
             python_version: '3.8'
-          
+
           # ubuntu2110 has 2.7, 3.9, 3.10
           - os: ubuntu2110
             python_version: '3.5'
