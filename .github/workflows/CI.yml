@@ -312,7 +312,7 @@ jobs:
           source ~/.virtualenvs/molecule/bin/activate
           molecule -e .env-${{ matrix.os }}.yml test -s controlnode
 
-  UNSTABLE_MOLECULE:
+  virtualenv:
 
     runs-on: ubuntu-20.04
     needs: ansible-test
@@ -325,22 +325,22 @@ jobs:
         os:
           # there are special dependencies for fedora35 that are probably not necessary anymore
           - arch
-          #- fedora33
-          #- fedora34
-          #- fedora35
-          #- c8s
-          #- c9s
-          #- centos7
-          #- centos8
-          #- rocky8
-          #- alma8
+          - fedora33
+          - fedora34
+          - fedora35
+          - c8s
+          - c9s
+          - centos7
+          - centos8
+          - rocky8
+          - alma8
           - debian9
           - debian10
           - debian11
           - ubuntu18
-          #- ubuntu20
-          #- ubuntu2104
-          #- ubuntu2110
+          - ubuntu20
+          - ubuntu2104
+          - ubuntu2110
 
         ansible_version:
           - '2.9'
@@ -348,45 +348,14 @@ jobs:
           - '2.11'
           - '2.12.0rc1'
 
-        include:
-
-          - os: arch
-            python_version: '2.7'
-          - os: arch
-            python_version: '3.9'
-
-          - os: debian9
-            python_version: '2.7'
-          - os: debian9
-            python_version: '3.5'
-
-          - os: debian10
-            python_version: '2.7'
-          - os: debian10
-            python_version: '3.6'
-          - os: debian10
-            python_version: '3.7'
-
-          - os: debian11
-            python_version: '2.7'
-          - os: debian11
-            python_version: '3.9'
-
-          - os: ubuntu18
-            python_version: '2.7'
-          - os: ubuntu18
-            python_version: '3.6'
-          - os: ubuntu18
-            python_version: '3.7'
-          - os: ubuntu18
-            python_version: '3.8'
-
-          - os: ubuntu20
-            python_version: '2.7'
-          - os: ubuntu20
-            python_version: '3.8'
-          - os: ubuntu20
-            python_version: '3.9'
+        python_version:
+          - '2.7'
+          - '3.5'
+          - '3.6'
+          - '3.7'
+          - '3.8'
+          - '3.9'
+          - '3.10'
 
         exclude:
 
@@ -407,6 +376,157 @@ jobs:
             python_version: '2.7'
           - ansible_version: '2.12.0rc1'
             python_version: '3.6'
+
+          - os: fedora33
+            python_version: '3.10'
+
+          - os: fedora34
+            python_version: '3.10'
+
+          - os: fedora35
+            python_version: '3.5'
+
+          # c8s has 2.7, 3.6, 3.8, 3.9
+          - os: c8s
+            python_version: '3.5'
+          - os: c8s
+            python_version: '3.7'
+          - os: c8s
+            python_version: '3.10'
+
+          # c9s has only 3.9 at this point
+          - os: c9s
+            python_version: '2.7'
+          - os: c9s
+            python_version: '3.5'
+          - os: c9s
+            python_version: '3.6'
+          - os: c9s
+            python_version: '3.7'
+          - os: c9s
+            python_version: '3.8'
+          - os: c9s
+            python_version: '3.10'
+
+          # centos7 has 2.7, 3.6
+          - os: centos7
+            python_version: '3.5'
+          - os: centos7
+            python_version: '3.7'
+          - os: centos7
+            python_version: '3.8'
+          - os: centos7
+            python_version: '3.9'
+          - os: centos7
+            python_version: '3.10'
+
+          # centos8 has 2.7, 3.6, 3.8, 3.9
+          - os: centos8
+            python_version: '3.5'
+          - os: centos8
+            python_version: '3.7'
+          - os: centos8
+            python_version: '3.10'
+          
+          # alma8 has 2.7, 3.6, 3.8, 3.9
+          - os: alma8
+            python_version: '3.5'
+          - os: alma8
+            python_version: '3.7'
+          - os: alma8
+            python_version: '3.10'
+
+          # rocky8 has 2.7, 3.6, 3.8, 3.9
+          - os: rocky8
+            python_version: '3.5'
+          - os: rocky8
+            python_version: '3.7'
+          - os: rocky8
+            python_version: '3.10'
+
+          # arch has 2.7 and 3.9
+          - os: arch
+            python_version: '3.5'
+          - os: arch
+            python_version: '3.6'
+          - os: arch
+            python_version: '3.7'
+          - os: arch
+            python_version: '3.8'
+          - os: arch
+            python_version: '3.10'
+
+          # debian9 has 2.7 and 3.5
+          - os: debian9
+            python_version: '3.6'
+          - os: debian9
+            python_version: '3.7'
+          - os: debian9
+            python_version: '3.8'
+          - os: debian9
+            python_version: '3.9'
+          - os: debian9
+            python_version: '3.10'
+
+          # debian 10 has 2.7, 3.6 and 3.7
+          - os: debian10
+            python_version: '3.5'
+          - os: debian10
+            python_version: '3.8'
+          - os: debian10
+            python_version: '3.9'
+          - os: debian10
+            python_version: '3.10'
+
+          # debian 11 has 2.7 and 3.9
+          - os: debian11
+            python_version: '3.5'
+          - os: debian11
+            python_version: '3.6'
+          - os: debian11
+            python_version: '3.7'
+          - os: debian11
+            python_version: '3.8'
+          - os: debian11
+            python_version: '3.10'
+
+          # ubuntu18 has 2.7, 3.6, 3.7, 3.8
+          - os: ubuntu18
+            python_version: '3.5'
+          - os: ubuntu18
+            python_version: '3.9'
+          - os: ubuntu18
+            python_version: '3.10'
+
+          # ubuntu20 has 2.7, 3.8, 3.9
+          - os: ubuntu20
+            python_version: '3.5'
+          - os: ubuntu20
+            python_version: '3.6'
+          - os: ubuntu20
+            python_version: '3.7'
+          - os: ubuntu20
+            python_version: '3.10'
+          
+          # ubuntu2104 has 2.7, 3.9, 3.10
+          - os: ubuntu2104
+            python_version: '3.5'
+          - os: ubuntu2104
+            python_version: '3.6'
+          - os: ubuntu2104
+            python_version: '3.7'
+          - os: ubuntu2104
+            python_version: '3.8'
+          
+          # ubuntu2110 has 2.7, 3.9, 3.10
+          - os: ubuntu2110
+            python_version: '3.5'
+          - os: ubuntu2110
+            python_version: '3.6'
+          - os: ubuntu2110
+            python_version: '3.7'
+          - os: ubuntu2110
+            python_version: '3.8'
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
