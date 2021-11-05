@@ -302,6 +302,6 @@ jobs:
       - name: molecule controlnode scenario
         run: |
           source ~/.virtualenvs/molecule/bin/activate
-          molecule -e .env-${{ matrix.os }} test -s controlnode
+          molecule -e .env-${{ matrix.os }}.yml test -s controlnode
 
 ...
