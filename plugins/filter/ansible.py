@@ -239,6 +239,9 @@ def pip_package_list(arg_packages):
 def best_version(arg_packages):
     """Return the latest possible ansible version."""
     for s in arg_packages:
+        # we are not interested in the collections package
+        if 'ansible' == s:
+            continue
         # '_ansible' is not a valid pip name
         req = Pkgreq.parse(s.replace('_ansible', 'ansible'))
         if req.name == 'ansible':

@@ -377,7 +377,11 @@ jobs:
           - ansible_version: '2.12.0rc1'
             python_version: '2.7'
           - ansible_version: '2.12.0rc1'
+            python_version: '3.5'
+          - ansible_version: '2.12.0rc1'
             python_version: '3.6'
+          - ansible_version: '2.12.0rc1'
+            python_version: '3.7'
 
           - os: fedora33
             python_version: '3.10'
@@ -572,5 +576,58 @@ jobs:
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           molecule -e .env-${{ matrix.os }}.yml test -s virtualenv
+
+  update:
+
+    runs-on: ubuntu-20.04
+    needs: virtualenv
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        os:
+          - c8s
+          - ubuntu2110
+        include:
+          - os: c8s
+            python_version: '3.8'
+          - os: ubuntu2110
+            python_version: '3.9'
+
+    env:
+      CI_IMAGE: ${{ matrix.image }}
+      CI_HOSTNAME: ci-${{ matrix.os }}
+      PY_COLORS: 1
+      ANSIBLE_FORCE_COLOR: 1
+
+    defaults:
+      run:
+        working-directory: ansible_collections/mafalb/ansible
+
+    steps:
+
+      - name: checkout collection ansible
+        uses: actions/checkout@v2
+        with:
+          path: ansible_collections/mafalb/ansible
+
+      - name: install molecule
+        run: |
+          ansible-playbook -D playbooks/install-molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: ../../..
+
+      - name: install community.docker
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          ansible-galaxy collection install community.docker
+          # necessary for molecule and for mafalb.ansible
+          ansible-galaxy collection install community.general
+
+      - name: molecule scenario virtualenv
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule -e .env-${{ matrix.os }}.yml test -s update
 
 ...
