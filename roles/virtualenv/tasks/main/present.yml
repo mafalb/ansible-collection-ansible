@@ -25,13 +25,11 @@
 
 - name: get major version of targeted python
   block:
-
     - name: step 1
       command: "{{ mafalb_ansible_virtualenv_python }} --version"
       changed_when: false
       register: __reg_virtualenv_python
-
-    - name: get major version of targeted python 2
+    - name: get major version of targeted python
       command: echo {{ __reg_virtualenv_python.stderr[7]
                if __reg_virtualenv_python.stdout|length == 0
                else __reg_virtualenv_python.stdout[7] }}
@@ -46,6 +44,13 @@
   debug: var=mafalb_ansible_virtualenv_command
 - name: debug mafalb_ansible_virtualenv_command 2
   debug: var=mafalb_ansible_virtualenv_command[__reg_virtualenv_python_maj.stdout]
+
+- name: extra dependencies for python 3.5 are present
+  package:
+    name: "{{ mafalb_ansible_python_dependencies['3.5'] }}"
+  when:
+    - __reg_virtualenv_python.stdout is match("Python 3.5.")
+    - mafalb_ansible_python_dependencies is defined
 
 - name: virtualenv is present
   pip:
