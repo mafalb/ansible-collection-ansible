@@ -369,9 +369,13 @@ jobs:
           - ansible_version: '2.10'
             python_version: '2.7'
           - ansible_version: '2.10'
+            python_version: '3.5'
+          - ansible_version: '2.10'
             python_version: '3.10'
           - ansible_version: '2.11'
             python_version: '2.7'
+          - ansible_version: '2.11'
+            python_version: '3.5'
           - ansible_version: '2.11'
             python_version: '3.10'
           - ansible_version: '2.12.0rc1'
@@ -523,6 +527,8 @@ jobs:
             python_version: '3.7'
           - os: ubuntu2104
             python_version: '3.8'
+          - os: ubuntu2104
+            python_version: '3.10'  # present, but not working properly
 
           # ubuntu2110 has 2.7, 3.9, 3.10
           - os: ubuntu2110
