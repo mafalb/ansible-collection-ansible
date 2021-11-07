@@ -277,6 +277,7 @@ jobs:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
       CI_IMAGE: ${{ matrix.image }}
       CI_HOSTNAME: ci-${{ matrix.os }}
+      CI_DRIVER: docker
       PY_COLORS: 1
       ANSIBLE_FORCE_COLOR: 1
 
@@ -551,6 +552,7 @@ jobs:
       PYTHON_VERSION: ${{ matrix.python_version }}
       CI_IMAGE: ${{ matrix.image }}
       CI_HOSTNAME: ci-${{ matrix.os }}
+      CI_DRIVER: docker
       PY_COLORS: 1
       ANSIBLE_FORCE_COLOR: 1
 
@@ -610,6 +612,7 @@ jobs:
     env:
       CI_IMAGE: ${{ matrix.image }}
       CI_HOSTNAME: ci-${{ matrix.os }}
+      CI_DRIVER: docker
       PY_COLORS: 1
       ANSIBLE_FORCE_COLOR: 1
 
