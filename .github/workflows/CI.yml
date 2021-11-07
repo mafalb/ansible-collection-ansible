@@ -391,6 +391,8 @@ jobs:
             python_version: '3.10'
 
           - os: fedora34
+            python_version: '3.5'
+          - os: fedora34
             python_version: '3.10'
 
           - os: fedora35
