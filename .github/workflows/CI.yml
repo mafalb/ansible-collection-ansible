@@ -504,6 +504,10 @@ jobs:
           - os: ubuntu18
             python_version: '3.5'
           - os: ubuntu18
+            python_version: '3.7'  # no wheel for cffi
+          - os: ubuntu18
+            python_version: '3.8'  # no wheel for cffi
+          - os: ubuntu18
             python_version: '3.9'
           - os: ubuntu18
             python_version: '3.10'
