@@ -6,7 +6,7 @@
 - hosts: all
   roles:
     - role: mafalb.ansible.python
-      version: '3.8'
+      version: "{{ arg_python_version }}"
     - role: ci.ansible
       target_version: '2.9.10'
     - role: ci.ansible
