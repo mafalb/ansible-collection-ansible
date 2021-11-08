@@ -8,6 +8,13 @@
     that:
       - mafalb_python_package[__mafalb_python_version] is defined
 
+- name: debug
+  debug:
+    msg: "{{
+      [mafalb_python_package[__mafalb_python_version]]
+      + __mafalb_python_extra_packages[__mafalb_python_version[0]]
+    }}"
+  
 - name: python is present
   package:
     name: "{{

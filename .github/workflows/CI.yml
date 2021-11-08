@@ -481,9 +481,11 @@ jobs:
           - os: debian9
             python_version: '3.10'
 
-          # debian 10 has 2.7, 3.6 and 3.7
+          # debian 10 has 2.7 and 3.7
           - os: debian10
             python_version: '3.5'
+          - os: debian10
+            python_version: '3.6'
           - os: debian10
             python_version: '3.8'
           - os: debian10
