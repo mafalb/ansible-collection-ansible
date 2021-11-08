@@ -13,10 +13,4 @@ mafalb_ansible_virtualenv_command:
   '2': "virtualenv -p {{ mafalb_ansible_virtualenv_python }}"
   '3': "{{ mafalb_ansible_virtualenv_python }} -m venv"
 
-mafalb_ansible_python_dependencies:
-  '3.5':
-    - redhat-rpm-config
-    - gcc
-    - libffi-devel
-
 ...

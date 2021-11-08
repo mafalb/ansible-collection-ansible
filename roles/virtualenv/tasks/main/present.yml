@@ -55,6 +55,20 @@
 - name: debug mafalb_ansible_virtualenv_command 2
   debug: var=mafalb_ansible_virtualenv_command[__reg_virtualenv_python_maj.stdout]
 
+- name: extra dependencies for ansible 2.9 are present
+  package:
+    name: "{{ mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.9'] }}"
+  when:
+    - __mafalb_ansible_version is match('2.9')
+    - mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.9'] is defined
+
+- name: extra dependencies for ansible 2.10 are present
+  package:
+    name: "{{ mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.10'] }}"
+  when:
+    - __mafalb_ansible_version is match('2.10')
+    - mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.10'] is defined
+
 - name: extra dependencies for ansible 2.11 are present
   package:
     name: "{{ mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.11'] }}"

@@ -4,10 +4,10 @@
 ---
 
 mafalb_ansible_system_dependencies:
-- python3-selinux
-- python3-setuptools
-- python3-venv
+- python3-libselinux
 - python3-cryptography
+- glibc-langpack-en
+- python3-setuptools
 
 mafalb_ansible_virtualenv_command:
   '2': "virtualenv -p {{ mafalb_ansible_virtualenv_python }}"
@@ -15,10 +15,12 @@ mafalb_ansible_virtualenv_command:
 
 # no wheel, e.g. cffi
 mafalb_ansible_extra_deps:
-  '3.7':
-    '2.11':
-      - python3-dev
-      - libffi-dev
+  '3.5':
+    '2.9': &deps
+      - redhat-rpm-config
       - gcc
+      - libffi-devel
+    '2.10': *deps
+    '2.11': *deps
 
 ...
