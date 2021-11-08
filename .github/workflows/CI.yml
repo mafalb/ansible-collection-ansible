@@ -317,7 +317,7 @@ jobs:
 
   virtualenv:
 
-    if: False
+    if: false
     runs-on: ubuntu-20.04
     needs: ansible-test
 
@@ -599,7 +599,9 @@ jobs:
   update:
 
     runs-on: ubuntu-20.04
-#    needs: virtualenv
+    needs:
+      - ansible-test
+      #- virtualenv
 
     strategy:
       fail-fast: false
