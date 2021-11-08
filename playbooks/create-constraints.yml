@@ -12,6 +12,6 @@
     - role: mafalb.ansible.virtualenv
       do: constraints
       packages:
-      - _ansible==2.12.0rc1
+      - _ansible=={{ version }}
 
 ...
