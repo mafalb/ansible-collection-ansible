@@ -542,7 +542,7 @@ jobs:
             python_version: '3.6'
           - os: ubuntu2110
             python_version: '3.7'
-          H- os: ubuntu2110
+          - os: ubuntu2110
             python_version: '3.8'
 
     env:
