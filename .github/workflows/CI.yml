@@ -542,7 +542,7 @@ jobs:
             python_version: '3.6'
           - os: ubuntu2110
             python_version: '3.7'
-          - os: ubuntu2110
+          H- os: ubuntu2110
             python_version: '3.8'
 
     env:
@@ -591,10 +591,9 @@ jobs:
                   -a "${{ matrix.os }}" != 'centos7'\
                   -a  "${{ matrix.ansible_version }}" = '2.9'
           then
-              molecule -e .env-${{ matrix.os }}.yml test -s virtualenv -- -e ansible_python_interpreter=python3
-          else
-              molecule -e .env-${{ matrix.os }}.yml test -s virtualenv
+              export ANSIBLE_PYTHON_INTERPRETER=python3
           fi
+          molecule -e .env-${{ matrix.os }}.yml test -s virtualenv
 
   update:
 
