@@ -587,7 +587,14 @@ jobs:
       - name: molecule scenario virtualenv
         run: |
           source ~/.virtualenvs/molecule/bin/activate
-          molecule -e .env-${{ matrix.os }}.yml test -s virtualenv
+          if test "${{ matrix.os }}" != 'debian9'
+                  -a "${{ matrix.os }}" != "centos7"\
+                  -a  "${{ matrix.ansible_version }}" = '2.9'
+          then
+              molecule -e .env-${{ matrix.os }}.yml test -s virtualenv -- -e ansible_python_interpreter=python3
+          else
+              molecule -e .env-${{ matrix.os }}.yml test -s virtualenv
+          fi
 
   update:
 
