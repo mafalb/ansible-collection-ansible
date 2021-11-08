@@ -4,10 +4,8 @@
 ---
 
 mafalb_ansible_system_dependencies:
-- python3-selinux
-- python3-setuptools
-- python3-venv
-- python3-cryptography
+- "{{ 'python3-setuptools' if ansible_python.version.major == '3' else 'python-setuptools' }}"
+- "{{ 'python3-venv' if ansible_python.version.major == '3' else 'python-virtualenv' }}"
 
 mafalb_ansible_virtualenv_command:
   '2': "virtualenv -p {{ mafalb_ansible_virtualenv_python }}"
