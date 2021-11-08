@@ -148,7 +148,7 @@ jobs:
     runs-on: ubuntu-20.04
     needs:
       - ansible-test
-      - virtualenv
+#      - virtualenv
 
     strategy:
       fail-fast: false
@@ -317,6 +317,7 @@ jobs:
 
   virtualenv:
 
+    if: False
     runs-on: ubuntu-20.04
     needs: ansible-test
 
@@ -598,7 +599,7 @@ jobs:
   update:
 
     runs-on: ubuntu-20.04
-    needs: virtualenv
+#    needs: virtualenv
 
     strategy:
       fail-fast: false
@@ -607,6 +608,8 @@ jobs:
         os:
           - c8s
           - ubuntu2110
+        ansible_version:
+          - '2.12'
         include:
           - os: c8s
             python_version: '3.8'
