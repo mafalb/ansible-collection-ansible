@@ -649,7 +649,7 @@ jobs:
           # necessary for molecule and for mafalb.ansible
           ansible-galaxy collection install community.general
 
-      - name: molecule scenario virtualenv
+      - name: molecule scenario update
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           molecule -e .env-${{ matrix.os }}.yml test -s update
