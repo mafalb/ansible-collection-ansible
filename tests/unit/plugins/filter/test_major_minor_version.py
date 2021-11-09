@@ -13,17 +13,18 @@ import pytest
 
 TEST_CASES = (
     ('_ansible==2.12.0rc1', '2.12'),
+    ('_ansible==2.12.0', '2.12'),
     ('_ansible==2.11.6', '2.11'),
     ('_ansible~=2.10.0', '2.10'),
     ('_ansible<2.9.99', '2.9'),
-    ('_ansible>2.10.9', '2.11'),
+    ('_ansible>2.10.9', '2.12'),
 )
 
 INVALID_CASES = (
 )
 
 FAIL_CASES = (
-    ('_ansible>=2.12.0.rc1'),
+    ('_ansible>=2.13.0.rc1'),
     ('2'),
     ('2.'),
     (''),

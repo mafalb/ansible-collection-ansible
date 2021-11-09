@@ -31,17 +31,15 @@
   - name: ansible is in the path
     command: ansible --version
     changed_when: false
+    register: __ansible_version
 
-  - name: ansible-lint is present
-    shell: |
-      . ~/.virtualenvs/ansible_lint/bin/activate
-      ansible-lint --version
-    changed_when: false
-    when: ansible_os_family in ['RedHat', 'Rocky']
+  - name: debug
+    debug: var=__ansible_version
 
-  - name: ansible-lint is present
-    command: ansible-lint --version
-    changed_when: false
-    when: not ansible_os_family in ['RedHat', 'Rocky']
+  - name: assertions
+    assert:
+      that:
+        - __ansible_version.stdout is match('ansible')
+        - __ansible_version.stdout is search(arg_ansible_version|mandatory)
 
 ...

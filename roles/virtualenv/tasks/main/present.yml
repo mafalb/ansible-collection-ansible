@@ -5,6 +5,9 @@
 
 - name: debug
   block:
+
+    - name: debug __mafalb_ansible_version
+      debug: var=packages|default(mafalb_ansible_packages|default(['_ansible']))
     - name: debug __mafalb_ansible_version
       debug: var=__mafalb_ansible_version
     - name: debug __mafalb_ansible_packages
@@ -22,27 +25,63 @@
 
 - name: get major version of targeted python
   block:
-
-    - name: step 1
+    - name: get targeted python version step 1
       command: "{{ mafalb_ansible_virtualenv_python }} --version"
       changed_when: false
       register: __reg_virtualenv_python
-
-    - name: get major version of targeted python 2
-      command: echo {{ __reg_virtualenv_python.stderr[7]
+    - name: get targeted python version step 1
+      command: echo {{ __reg_virtualenv_python.stderr
                if __reg_virtualenv_python.stdout|length == 0
-               else __reg_virtualenv_python.stdout[7] }}
+               else __reg_virtualenv_python.stdout }}
+      changed_when: false
+      register: __reg_virtualenv_python
+    - name: get major version of targeted python
+      command: echo {{ __reg_virtualenv_python.stdout[7] }}
       changed_when: false
       register: __reg_virtualenv_python_maj
+    - name: get major.minor version of targeted python
+      command: echo {{ __reg_virtualenv_python.stdout.split()[1].split('.')[0:2]|join('.') }}
+      changed_when: false
+      register: __reg_virtualenv_python_majmin
 
 - name: debug __reg_virtualenv_python
   debug: var=__reg_virtualenv_python
 - name: debug __reg_virtualenv_python_maj
   debug: var=__reg_virtualenv_python_maj.stdout
+- name: debug __reg_virtualenv_python_majmin
+  debug: var=__reg_virtualenv_python_majmin.stdout
 - name: debug mafalb_ansible_virtualenv_command
   debug: var=mafalb_ansible_virtualenv_command
 - name: debug mafalb_ansible_virtualenv_command 2
   debug: var=mafalb_ansible_virtualenv_command[__reg_virtualenv_python_maj.stdout]
+
+- name: extra dependencies for ansible 2.9 are present
+  package:
+    name: "{{ mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.9'] }}"
+  when:
+    - __mafalb_ansible_version is match('2.9')
+    - mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.9'] is defined
+
+- name: extra dependencies for ansible 2.10 are present
+  package:
+    name: "{{ mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.10'] }}"
+  when:
+    - __mafalb_ansible_version is match('2.10')
+    - mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.10'] is defined
+
+- name: extra dependencies for ansible 2.11 are present
+  package:
+    name: "{{ mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.11'] }}"
+  when:
+    - __mafalb_ansible_version is match('2.11')
+    - mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.11'] is defined
+
+- name: extra dependencies for ansible 2.12 are present
+  package:
+    name: "{{ mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.12'] }}"
+  when:
+    - __mafalb_ansible_version is match('2.12')
+    - mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.12'] is defined
 
 - name: virtualenv is present
   pip:

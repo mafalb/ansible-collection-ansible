@@ -1,0 +1,37 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+mafalb_ansible_system_dependencies:
+- python3-selinux
+- python3-setuptools
+- python3-venv
+- python3-cryptography
+
+mafalb_ansible_virtualenv_command:
+  '2': "virtualenv -p {{ mafalb_ansible_virtualenv_python }}"
+  '3': "{{ mafalb_ansible_virtualenv_python }} -m venv"
+
+# no wheel for cffi with python 3
+mafalb_ansible_extra_deps:
+  '3.7':
+    '2.11':
+      - python3.7-dev
+      - libffi-dev
+      - gcc
+    '2.12':
+      - python3.7-dev
+      - libffi-dev
+      - gcc
+  '3.8':
+    '2.11':
+      - python3.8-dev
+      - libffi-dev
+      - gcc
+    '2.12':
+      - python3.8-dev
+      - libffi-dev
+      - gcc
+
+...

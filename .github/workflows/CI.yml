@@ -16,8 +16,10 @@ on: # yamllint disable-line rule:truthy
 
 jobs:
 
-  SANITY:
+  ansible-test:
 
+    # don't run on pull request from ourselves
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
@@ -26,51 +28,62 @@ jobs:
 
         include:
 
-        - ansible_version: '2.9'
-          python-version: 2.7
+          - ansible_version: '2.9'
+            python_version: '2.7'
 
-        - ansible_version: '2.9'
-          python-version: 3.5
+          - ansible_version: '2.9'
+            python_version: '3.5'
 
-        - ansible_version: '2.9'
-          python-version: 3.6
+          - ansible_version: '2.9'
+            python_version: '3.6'
 
-        - ansible_version: '2.9'
-          python-version: 3.7
+          - ansible_version: '2.9'
+            python_version: '3.7'
 
-        - ansible_version: '2.9'
-          python-version: 3.8
-
-
-        - ansible_version: '2.10'
-          python-version: 3.6
-
-        - ansible_version: '2.10'
-          python-version: 3.7
-
-        - ansible_version: '2.10'
-          python-version: 3.8
-
-        - ansible_version: '2.10'
-          python-version: 3.9
+          - ansible_version: '2.9'
+            python_version: '3.8'
 
 
-        - ansible_core_version: '2.11'
-          python-version: 3.6
+          - ansible_version: '2.10'
+            python_version: '3.6'
 
-        - ansible_core_version: '2.11'
-          python-version: 3.7
+          - ansible_version: '2.10'
+            python_version: '3.7'
 
-        - ansible_core_version: '2.11'
-          python-version: 3.8
+          - ansible_version: '2.10'
+            python_version: '3.8'
 
-        - ansible_core_version: '2.11'
-          python-version: 3.9
+          - ansible_version: '2.10'
+            python_version: '3.9'
+
+
+          - ansible_version: '2.11'
+            python_version: 3.6
+
+          - ansible_version: '2.11'
+            python_version: 3.7
+
+          - ansible_version: '2.11'
+            python_version: 3.8
+
+          - ansible_version: '2.11'
+            python_version: 3.9
+
+
+          - ansible_version: '2.12'
+            python_version: '3.8'
+
+          - ansible_version: '2.12'
+            python_version: '3.9'
+
+          - ansible_version: '2.12'
+            python_version: '3.10'
 
     env:
       PY_COLORS: 1
       ANSIBLE_FORCE_COLOR: 1
-      ANSIBLE_PYTHON_INTERPRETER: ${{ matrix.python-version }}/bin/python
+      # necessary ?
+      ANSIBLE_PYTHON_INTERPRETER: python${{ matrix.python_version }}
 
     defaults:
       run:
@@ -78,198 +91,192 @@ jobs:
 
     steps:
 
-    - name: checkout collection mafalb.ansible
-      uses: actions/checkout@v2
-      with:
-        path: ansible_collections/mafalb/ansible
+      - name: checkout collection mafalb.ansible
+        uses: actions/checkout@v2
+        with:
+          path: ansible_collections/mafalb/ansible
 
-    - name: setup python
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python_version }}
 
-    - name: python version
-      run: |
-        python --version
-        which python
-        whereis python
-        python3 --version
-        which python3
-        whereis python3
-        ls -l /opt/hostedtoolcache/Python/
+      # necessary ?
+      - name: install virtualenv for python 2.7
+        if: matrix.python_version == '2.7'
+        run: pip install virtualenv
 
-    - name: install shellcheck
-      run: sudo apt install shellcheck
+      - name: install molecule
+        run: |
+          ansible-playbook -D playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}", "ansible-lint${{ matrix.ansible_lint_specifier }}", "_ansible_test", "flake8"]}' -e mafalb_ansible_virtualenv_python=python${{ matrix.python_version }} -t all,debug
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: ../../..
 
-    - name: install ansible 2.9/2.10 for python 2.7
-      if: ${{ matrix.python-version == '2.7' && matrix.ansible_version }}
-      run: |
-        pip install virtualenv
-        virtualenv ~/virtualenv
-        . ~/virtualenv/bin/activate
-        pip install wheel
-        pip install -U pip setuptools
-        pip install "ansible==${{ matrix.ansible_version }}.*" ansible-lint 'flake8<3.9' pylint 'pycodestyle<2.7'
+      - name: install shellcheck
+        run: sudo apt-get install shellcheck
 
-    - name: install ansible for python 2.7
-      if: ${{ matrix.python-version == '2.7' && matrix.ansible_core_version }}
-      run: |
-        pip install virtualenv
-        virtualenv ~/virtualenv
-        . ~/virtualenv/bin/activate
-        pip install wheel
-        pip install -U pip setuptools
-        pip install "ansible-core==${{ matrix.ansible_core_version }}.*" ansible ansible-lint 'flake8<3.9' pylint 'pycodestyle<2.7'
+      - name: check ansible version
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          ansible --version
+          ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
 
-    - name: install ansible 2.9/2.10 for python 3
-      if: ${{ matrix.python-version != '2.7' && matrix.ansible_version }}
-      run: |
-        python -m venv ~/virtualenv
-        . ~/virtualenv/bin/activate
-        pip install wheel
-        pip install -U pip setuptools
-        pip install "ansible==${{ matrix.ansible_version }}.*" ansible-lint flake8 pylint 'pycodestyle<2.7'
+      - name: check python version
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          ansible --version | grep "^\s*python.* ${{ matrix.python_version }}"
 
-    - name: install ansible for python 3
-      if: ${{ matrix.python-version != '2.7' && matrix.ansible_core_version }}
-      run: |
-        python -m venv ~/virtualenv
-        . ~/virtualenv/bin/activate
-        pip install wheel
-        pip install -U pip setuptools
-        pip install "ansible-core==${{ matrix.ansible_core_version }}.*" ansible ansible-lint flake8 pylint 'pycodestyle<2.7'
+      - name: lint
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          . tests/lint.sh requirements ${{ matrix.python_version }}
 
-    - name: check ansible version
-      run: |
-        source ~/virtualenv/bin/activate
-        ansible --version
-        which ansible-test
-        ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
+      - name: sanity
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          ansible-test sanity --requirements --python ${{ matrix.python_version }}
 
-    - name: check python version
-      run: |
-        source ~/virtualenv/bin/activate
-        ansible --version | grep "^\s*python.* ${{ matrix.python-version }}"
+      - name: unit tests
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          ansible-test units --coverage --requirements --python ${{ matrix.python_version }}
 
-    - name: lint
-      run: |
-        source ~/virtualenv/bin/activate
-        . tests/lint.sh requirements ${{ matrix.python-version }}
+  controlnode:
 
-  CI:
-
+    # don't run on pull request from ourselves
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-20.04
-    needs: SANITY
+    needs:
+      - ansible-test
 
     strategy:
       fail-fast: false
 
       matrix:
 
-        target:
-        - fedora33
-        - fedora34
-        - c8s
-        - centos7
-        - centos8
-        - rocky8
-        - alma8
-        - debian9
-        - debian10
-        - debian11
-        - ubuntu16
-        - ubuntu18
-        - ubuntu20
-        - ubuntu2104
-        - ubuntu2110
+        os:
+          #- arch
+          - fedora33
+          - fedora34
+          - fedora35
+          - c8s
+          - c9s
+          - centos7
+          - centos8
+          - rocky8
+          - alma8
+          - debian11
+          - ubuntu20
+          - ubuntu2104
+          - ubuntu2110
 
         ansible_version:
-        - '2.11'
-        - '2.10'
-        - '2.9'
+          - '2.12'
+          - '2.11'
+          - '2.10'
+          - '2.9'
 
-        include:
+        exclude:
 
-        - target: fedora33
-          image: docker.io/fedora:33
-          test_molecule: true
-          test_controlnode: true
+          #- os: arch
+          #  ansible_version: '2.9'
+          #- os: arch
+          #  ansible_version: '2.10'
+          #- os: arch
+          #  ansible_version: '2.12'
 
-        - target: fedora34
-          image: docker.io/fedora:34
-          test_molecule: true
-          test_controlnode: true
+          - os: fedora33
+            ansible_version: '2.10'
+          - os: fedora33
+            ansible_version: '2.11'
+          - os: fedora33
+            ansible_version: '2.12'
 
-        - target: c8s
-          image: quay.io/centos/centos:stream8
-          test_molecule: true
-          test_controlnode: true
-          test29: true
+          - os: fedora34
+            ansible_version: '2.10'
+          - os: fedora34
+            ansible_version: '2.12'
 
-        - target: alma8
-          image: quay.io/almalinux/almalinux:8
-          test_molecule: true
-          test_controlnode: true
-          test29: true
+          - os: fedora35
+            ansible_version: '2.10'
+          - os: fedora35
+            ansible_version: '2.12'
 
-        - target: rocky8
-          image: quay.io/rockylinux/rockylinux:8
-          test_molecule: true
-          test_controlnode: true
-          test29: true
+          - os: c8s
+            ansible_version: '2.10'
+          - os: c8s
+            ansible_version: '2.11'
+          - os: c8s
+            ansible_version: '2.12'
 
-        - target: centos7
-          image: quay.io/centos/centos:7
-          test_molecule: true
-          test_controlnode: true
-          test29: true
+          - os: c9s
+            ansible_version: '2.9'
+          - os: c9s
+            ansible_version: '2.10'
+          - os: c9s
+            ansible_version: '2.12'
 
-        - target: centos8
-          image: quay.io/centos/centos:8
-          test_molecule: true
-          test_controlnode: true
-          test29: true
+          - os: alma8
+            ansible_version: '2.10'
+          - os: alma8
+            ansible_version: '2.11'
+          - os: alma8
+            ansible_version: '2.12'
 
-        - target: debian9
-          image: docker.io/debian:stretch
+          - os: rocky8
+            ansible_version: '2.10'
+          - os: rocky8
+            ansible_version: '2.11'
+          - os: rocky8
+            ansible_version: '2.12'
 
-        - target: debian10
-          image: docker.io/debian:buster
+          - os: centos7
+            ansible_version: '2.10'
+          - os: centos7
+            ansible_version: '2.11'
+          - os: centos7
+            ansible_version: '2.12'
 
-        - target: debian11
-          image: docker.io/debian:bullseye
-          test_molecule: true
-          test_controlnode: true
+          - os: centos8
+            ansible_version: '2.10'
+          - os: centos8
+            ansible_version: '2.11'
+          - os: centos8
+            ansible_version: '2.12'
 
-        - target: ubuntu16
-          image: docker.io/ubuntu:xenial
+          - os: debian11
+            ansible_version: '2.9'
+          - os: debian11
+            ansible_version: '2.11'
+          - os: debian11
+            ansible_version: '2.12'
 
-        - target: ubuntu18
-          image: docker.io/ubuntu:bionic
-          test_molecule: true
-          test29: true
+          - os: ubuntu20
+            ansible_version: '2.10'
+          - os: ubuntu20
+            ansible_version: '2.11'
+          - os: ubuntu20
+            ansible_version: '2.12'
 
-        - target: ubuntu20
-          image: docker.io/ubuntu:focal
-          test_molecule: true
-          test_controlnode: true
-          test29: true
+          - os: ubuntu2104
+            ansible_version: '2.9'
+          - os: ubuntu2104
+            ansible_version: '2.11'
+          - os: ubuntu2104
+            ansible_version: '2.12'
 
-        - target: ubuntu2104
-          image: docker.io/ubuntu:hirsute
-          test_molecule: true
-          test_controlnode: true
-
-        # ubuntu impish
-        - target: ubuntu2110
-          image: docker.io/ubuntu:21.10
-          test_molecule: true
-          test_controlnode: true
+          - os: ubuntu2110
+            ansible_version: '2.9'
+          - os: ubuntu2110
+            ansible_version: '2.11'
+          - os: ubuntu2110
+            ansible_version: '2.12'
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
       CI_IMAGE: ${{ matrix.image }}
-      CI_HOSTNAME: ci-${{ matrix.target }}
+      CI_HOSTNAME: ci-${{ matrix.os }}
+      CI_DRIVER: docker
       PY_COLORS: 1
       ANSIBLE_FORCE_COLOR: 1
 
@@ -285,48 +292,365 @@ jobs:
           path: ansible_collections/mafalb/ansible
 
       - name: install molecule
-        run: ansible-playbook -e ansible_python_interpreter=python3 -D playbooks/molecule.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
+        run: ansible-playbook -e ansible_python_interpreter=python3 -D playbooks/install-molecule.yml -t all,debug -e molecule_ansible_version=${{ matrix.ansible_version }}
         env:
           ANSIBLE_COLLECTIONS_PATHS: '../../..'
+
+      - name: install community.docker
+        if: matrix.ansible_version != '2.9'
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          ansible-galaxy collection install community.docker
+          # necessary for molecule and for mafalb.ansible
+          ansible-galaxy collection install community.general
 
       - name: check ansible version
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
 
-      - name: molecule node scenario
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          molecule test -s node
-
-      - name: molecule default scenario
-        if: matrix.test_molecule == true
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          molecule test --destroy never
-
-      - name: molecule update scenario
-        if: matrix.test_molecule == true
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          molecule test --destroy never -s update
-
       - name: molecule controlnode scenario
-        if: matrix.test_controlnode == true
         run: |
           source ~/.virtualenvs/molecule/bin/activate
-          molecule test -s controlnode
+          molecule -e .env-${{ matrix.os }}.yml test -s controlnode
+
+  virtualenv:
+
+    runs-on: ubuntu-20.04
+    needs: ansible-test
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+
+        os:
+          # there are special dependencies for fedora35 that are probably not necessary anymore
+          #- arch
+          - fedora33
+          - fedora34
+          - fedora35
+          - c8s
+          - c9s
+          - centos7
+          - centos8
+          - rocky8
+          - alma8
+          - debian9
+          - debian10
+          - debian11
+          - ubuntu18
+          - ubuntu20
+          - ubuntu2104
+          - ubuntu2110
+
+        ansible_version:
+          - '2.9'
+          - '2.10'
+          - '2.11'
+          - '2.12'
+
+        python_version:
+          - '2.7'
+          - '3.5'
+          - '3.6'
+          - '3.7'
+          - '3.8'
+          - '3.9'
+          - '3.10'
+
+        exclude:
+
+          # impossible ansible - python combinations
+          - ansible_version: '2.9'
+            python_version: '3.9'
+          - ansible_version: '2.9'
+            python_version: '3.10'
+          - ansible_version: '2.10'
+            python_version: '2.7'
+          - ansible_version: '2.10'
+            python_version: '3.5'
+          - ansible_version: '2.10'
+            python_version: '3.10'
+          - ansible_version: '2.11'
+            python_version: '2.7'
+          - ansible_version: '2.11'
+            python_version: '3.5'
+          - ansible_version: '2.11'
+            python_version: '3.10'
+          - ansible_version: '2.12'
+            python_version: '2.7'
+          - ansible_version: '2.12'
+            python_version: '3.5'
+          - ansible_version: '2.12'
+            python_version: '3.6'
+          - ansible_version: '2.12'
+            python_version: '3.7'
+
+          - os: fedora33
+            python_version: '3.10'
+
+          - os: fedora34
+            python_version: '3.5'
+          - os: fedora34
+            python_version: '3.10'
+
+          - os: fedora35
+            python_version: '3.5'
+
+          # c8s has 2.7, 3.6, 3.8, 3.9
+          - os: c8s
+            python_version: '3.5'
+          - os: c8s
+            python_version: '3.7'
+          - os: c8s
+            python_version: '3.10'
+
+          # c9s has only 3.9 at this point
+          - os: c9s
+            python_version: '2.7'
+          - os: c9s
+            python_version: '3.5'
+          - os: c9s
+            python_version: '3.6'
+          - os: c9s
+            python_version: '3.7'
+          - os: c9s
+            python_version: '3.8'
+          - os: c9s
+            python_version: '3.10'
+
+          # centos7 has 2.7, 3.6
+          - os: centos7
+            python_version: '3.5'
+          - os: centos7
+            python_version: '3.7'
+          - os: centos7
+            python_version: '3.8'
+          - os: centos7
+            python_version: '3.9'
+          - os: centos7
+            python_version: '3.10'
+
+          # centos8 has 2.7, 3.6, 3.8, 3.9
+          - os: centos8
+            python_version: '3.5'
+          - os: centos8
+            python_version: '3.7'
+          - os: centos8
+            python_version: '3.10'
+
+          # alma8 has 2.7, 3.6, 3.8, 3.9
+          - os: alma8
+            python_version: '3.5'
+          - os: alma8
+            python_version: '3.7'
+          - os: alma8
+            python_version: '3.10'
+
+          # rocky8 has 2.7, 3.6, 3.8, 3.9
+          - os: rocky8
+            python_version: '3.5'
+          - os: rocky8
+            python_version: '3.7'
+          - os: rocky8
+            python_version: '3.10'
+
+          # arch has 2.7 and 3.9
+          #- os: arch
+          #  python_version: '3.5'
+          #- os: arch
+          #  python_version: '3.6'
+          #- os: arch
+          #  python_version: '3.7'
+          #- os: arch
+          #  python_version: '3.8'
+          #- os: arch
+          #  python_version: '3.10'
+
+          # debian9 has 2.7 and 3.5
+          - os: debian9
+            python_version: '3.6'
+          - os: debian9
+            python_version: '3.7'
+          - os: debian9
+            python_version: '3.8'
+          - os: debian9
+            python_version: '3.9'
+          - os: debian9
+            python_version: '3.10'
+
+          # debian 10 has 2.7 and 3.7
+          - os: debian10
+            python_version: '3.5'
+          - os: debian10
+            python_version: '3.6'
+          - os: debian10
+            python_version: '3.8'
+          - os: debian10
+            python_version: '3.9'
+          - os: debian10
+            python_version: '3.10'
+
+          # debian 11 has 2.7 and 3.9
+          - os: debian11
+            python_version: '3.5'
+          - os: debian11
+            python_version: '3.6'
+          - os: debian11
+            python_version: '3.7'
+          - os: debian11
+            python_version: '3.8'
+          - os: debian11
+            python_version: '3.10'
+
+          # ubuntu18 has 2.7, 3.6, 3.7, 3.8
+          - os: ubuntu18
+            python_version: '3.5'
+          - os: ubuntu18
+            python_version: '3.9'
+          - os: ubuntu18
+            python_version: '3.10'
+
+          # ubuntu20 has 2.7, 3.8, 3.9
+          - os: ubuntu20
+            python_version: '3.5'
+          - os: ubuntu20
+            python_version: '3.6'
+          - os: ubuntu20
+            python_version: '3.7'
+          - os: ubuntu20
+            python_version: '3.10'
+
+          # ubuntu2104 has 2.7, 3.9, 3.10
+          - os: ubuntu2104
+            python_version: '3.5'
+          - os: ubuntu2104
+            python_version: '3.6'
+          - os: ubuntu2104
+            python_version: '3.7'
+          - os: ubuntu2104
+            python_version: '3.8'
+          - os: ubuntu2104
+            python_version: '3.10'  # present, but not working properly
+
+          # ubuntu2110 has 2.7, 3.9, 3.10
+          - os: ubuntu2110
+            python_version: '3.5'
+          - os: ubuntu2110
+            python_version: '3.6'
+          - os: ubuntu2110
+            python_version: '3.7'
+          - os: ubuntu2110
+            python_version: '3.8'
+
+    env:
+      ANSIBLE_VERSION: ${{ matrix.ansible_version }}
+      PYTHON_VERSION: ${{ matrix.python_version }}
+      CI_IMAGE: ${{ matrix.image }}
+      CI_HOSTNAME: ci-${{ matrix.os }}
+      CI_DRIVER: docker
+      PY_COLORS: 1
+      ANSIBLE_FORCE_COLOR: 1
+
+    defaults:
+      run:
+        working-directory: ansible_collections/mafalb/ansible
+
+    steps:
+
+      - name: checkout collection ansible
+        uses: actions/checkout@v2
+        with:
+          path: ansible_collections/mafalb/ansible
+
+      - name: install molecule
+        run: |
+          ansible-playbook -D playbooks/install-molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: ../../..
+
+      - name: install community.docker
+        if: matrix.ansible_version != '2.9'
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          ansible-galaxy collection install community.docker
+          # necessary for molecule and for mafalb.ansible
+          ansible-galaxy collection install community.general
+
+      - name: check ansible version
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
 
       - name: molecule scenario virtualenv
-        if: matrix.test_molecule == true
         run: |
           source ~/.virtualenvs/molecule/bin/activate
-          molecule test -s virtualenv
+          if test "${{ matrix.os }}" != 'debian9'\
+                  -a "${{ matrix.os }}" != 'centos7'\
+                  -a  "${{ matrix.ansible_version }}" = '2.9'
+          then
+              export ANSIBLE_PYTHON_INTERPRETER=python3
+          fi
+          molecule -e .env-${{ matrix.os }}.yml test -s virtualenv
 
-      - name: molecule scenario virtualenv for ansible 2.9
-        if: matrix.test29 == true
+  update:
+
+    runs-on: ubuntu-20.04
+    needs:
+      - ansible-test
+      #- virtualenv
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        os:
+          - c8s
+          - ubuntu20
+        ansible_version:
+          - '2.12'
+        include:
+          - os: c8s
+            python_version: '3.8'
+          - os: ubuntu20
+            python_version: '3.8'
+
+    env:
+      PYTHON_VERSION: ${{ matrix.python_version }}
+      CI_IMAGE: ${{ matrix.image }}
+      CI_HOSTNAME: ci-${{ matrix.os }}
+      CI_DRIVER: docker
+      PY_COLORS: 1
+      ANSIBLE_FORCE_COLOR: 1
+
+    defaults:
+      run:
+        working-directory: ansible_collections/mafalb/ansible
+
+    steps:
+
+      - name: checkout collection ansible
+        uses: actions/checkout@v2
+        with:
+          path: ansible_collections/mafalb/ansible
+
+      - name: install molecule
+        run: |
+          ansible-playbook -D playbooks/install-molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: ../../..
+
+      - name: install community.docker
         run: |
           source ~/.virtualenvs/molecule/bin/activate
-          molecule test -s virtualenv29
+          ansible-galaxy collection install community.docker
+          # necessary for molecule and for mafalb.ansible
+          ansible-galaxy collection install community.general
+
+      - name: molecule scenario update
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule -e .env-${{ matrix.os }}.yml test -s update
 
 ...
