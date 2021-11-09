@@ -43,7 +43,7 @@ jobs:
 
       - name: install molecule
         run: |
-          apt install ansible
+          sudo apt install ansible
           /usr/bin/ansible-playbook -D playbooks/molecule.yml -e molecule_ansible_version="2.11" -t all,debug
         env:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
