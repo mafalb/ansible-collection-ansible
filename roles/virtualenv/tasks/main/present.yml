@@ -44,8 +44,11 @@
       changed_when: false
       register: __reg_virtualenv_python_majmin
 
+- name: debug mafalb_ansible_virtualenv_python
+  debug: var=mafalb_ansible_virtualenv_python
 - name: debug __reg_virtualenv_python
   debug: var=__reg_virtualenv_python
+
 - name: debug __reg_virtualenv_python_maj
   debug: var=__reg_virtualenv_python_maj.stdout
 - name: debug __reg_virtualenv_python_majmin
