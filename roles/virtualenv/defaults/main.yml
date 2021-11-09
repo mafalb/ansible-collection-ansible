@@ -16,7 +16,7 @@ mafalb_ansible_virtualenv: "{{
 }}"
 
 mafalb_ansible_virtualenv_python: "{{
-  python|default('python3'
+  python|default('/usr/bin/python3'
                  if ansible_python.version.major == 2
                  else ansible_python.executable
                 )
