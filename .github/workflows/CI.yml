@@ -148,7 +148,6 @@ jobs:
     runs-on: ubuntu-20.04
     needs:
       - ansible-test
-#      - virtualenv
 
     strategy:
       fail-fast: false
@@ -317,7 +316,6 @@ jobs:
 
   virtualenv:
 
-    if: false
     runs-on: ubuntu-20.04
     needs: ansible-test
 
@@ -615,8 +613,8 @@ jobs:
         include:
           - os: c8s
             python_version: '3.8'
-          - os: ubuntu2110
-            python_version: '3.9'
+          - os: ubuntu20
+            python_version: '3.8'
 
     env:
       PYTHON_VERSION: ${{ matrix.python_version }}
