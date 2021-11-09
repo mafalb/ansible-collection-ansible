@@ -94,9 +94,10 @@
       - wheel
     virtualenv: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}"
     virtualenv_python: "{{ mafalb_ansible_virtualenv_python if __reg_virtualenv_python_maj.stdout == '2' else omit }}"
-    virtualenv_command: "{{
-      mafalb_ansible_virtualenv_command[__reg_virtualenv_python_maj.stdout]
-    }}"
+    virtualenv_command: python3 -m venv
+#"{{
+#      mafalb_ansible_virtualenv_command[__reg_virtualenv_python_maj.stdout]
+#    }}"
   # register the result and enjoy the absolute path to the virtualenv
   register: __reg_venv
 
