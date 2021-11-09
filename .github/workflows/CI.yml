@@ -607,7 +607,7 @@ jobs:
       matrix:
         os:
           - c8s
-          - ubuntu2110
+          - ubuntu20
         ansible_version:
           - '2.12'
         include:
