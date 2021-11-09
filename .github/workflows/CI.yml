@@ -47,7 +47,7 @@ jobs:
           sudo apt install python3-venv
           python3 -m venv /tmp/test
           sudo apt install ansible
-          /usr/bin/ansible-playbook -D playbooks/molecule.yml -e molecule_ansible_version="2.11" -t all,debug
+          /usr/bin/ansible-playbook -vvv -D playbooks/molecule.yml -e molecule_ansible_version="2.11" -t all,debug
         env:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
 
