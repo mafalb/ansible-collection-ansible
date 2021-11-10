@@ -1,3 +1,4 @@
 # {{ ansible_managed }}
 pip{{ mafalb_ansible_virtualenv_packages.pip }}
 setuptools{{ mafalb_ansible_virtualenv_packages.setuptools }}
+cryptography<3.1 ; python_version == 3.5
