@@ -1,0 +1,5 @@
+# older ansible-lint can't do custom modules in collections
+#
+exclude_paths:
+  - roles/virtualenv/tasks/main/present.yml
+  - tests/integration/targets/python_version/tasks/main.yml
