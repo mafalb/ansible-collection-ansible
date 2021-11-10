@@ -5,9 +5,11 @@
 
 mafalb_ansible_system_dependencies:
 - python3-setuptools
+- python2-six
+- virtualenv
 
 mafalb_ansible_virtualenv_command:
-  2: "virtualenv -p {{ mafalb_ansible_virtualenv_python }}"
+  2: "/usr/bin/virtualenv -p {{ mafalb_ansible_virtualenv_python }}"
   3: "{{ __reg_targeted_python.executable }} -m venv"
 
 ...
