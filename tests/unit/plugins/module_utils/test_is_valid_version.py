@@ -10,6 +10,7 @@ import pytest
 __metaclass__ = type
 
 TEST_CASES = (
+    ('Python 3.10.0', True),
     ('Python 3.6.8', True),
     ('Python 2.7.2', True),
     ('Python 4.0.1', False),

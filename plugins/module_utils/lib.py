@@ -15,8 +15,8 @@ def which(executable):
     if sys.version_info >= (3, 0):
         return shutil.which(executable)
     else:
-      path=os.getenv('PATH')
-      for p in path.split(os.pathsep):
-          p=os.path.join(p,executable)
-          if os.path.exists(p) and os.access(p, os.X_OK):
-              return p
+        path = os.getenv('PATH')
+        for p in path.split(os.pathsep):
+            p = os.path.join(p, executable)
+            if os.path.exists(p) and os.access(p, os.X_OK):
+                return p
