@@ -6,8 +6,8 @@
 mafalb_ansible_system_dependencies:
 - python3-selinux
 - python3-setuptools
-- python3-venv
 - python3-cryptography
+- "{{ 'python3-venv' if ansible_python.version.major == '3' else 'python-virtualenv' }}"
 # no wheel, e.g. cffi
 - python3-dev
 - libffi-dev
