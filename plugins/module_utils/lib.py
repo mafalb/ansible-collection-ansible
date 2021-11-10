@@ -15,7 +15,7 @@ def which(executable):
     if sys.version_info >= (3, 0):
         return shutil.which(executable)
     if not isinstance(executable, str):
-        raise TypeError       
+        raise TypeError
     else:
         path = os.getenv('PATH')
         for p in path.split(os.pathsep):
