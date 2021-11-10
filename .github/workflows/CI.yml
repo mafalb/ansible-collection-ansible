@@ -106,7 +106,6 @@ jobs:
         if: matrix.python_version == '2.7'
         run: |
           pip install six
-          which virtualenv
 
       - name: install molecule
         run: |
