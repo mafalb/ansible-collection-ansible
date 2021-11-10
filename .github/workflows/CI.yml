@@ -103,10 +103,9 @@ jobs:
 
       # necessary ?
       - name: install virtualenv for python 2.7
-#        if: matrix.python_version == '2.7'
-        if: false
+        if: matrix.python_version == '2.7'
         run: |
-          pip install virtualenv
+          pip install six
           which virtualenv
 
       - name: install molecule
