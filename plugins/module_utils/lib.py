@@ -12,6 +12,8 @@ import sys
 
 def which(executable):
     """Return absolute path"""
+    if not isinstance(executable, str):
+        raise TypeError
     if sys.version_info >= (3, 0):
         return shutil.which(executable)
     if not isinstance(executable, str):
