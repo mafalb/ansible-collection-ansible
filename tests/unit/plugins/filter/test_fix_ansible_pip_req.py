@@ -3,7 +3,7 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 
 from __future__ import (absolute_import, division, print_function)
-from ansible.errors import AnsibleFilterError, AnsibleFilterTypeError
+from ansible.errors import AnsibleFilterError
 from ansible_collections.mafalb.ansible.plugins.filter.ansible import (
     __fix_ansible_pip_req
 )
@@ -37,7 +37,7 @@ def test_fix_ansible_pip_req(req, expected):
 def test_fail(req):
     try:
         x = __fix_ansible_pip_req(req)
-    except (AnsibleFilterTypeError, AnsibleFilterError):
+    except (AnsibleFilterError):
         pass
     try:
         x

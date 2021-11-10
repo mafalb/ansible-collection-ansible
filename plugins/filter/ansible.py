@@ -10,7 +10,6 @@ except ImportError:
 from ansible.module_utils.six import raise_from
 from ansible.errors import (
     AnsibleFilterError,
-    AnsibleFilterTypeError
 )
 import yaml
 from os.path import dirname
@@ -34,7 +33,7 @@ def version2int(version):
     """
 
     if not isinstance(version, str):
-        raise AnsibleFilterTypeError(
+        raise AnsibleFilterError(
             "version is not a string but {type}".format(type=type(version))
         )
     if len(version.split('.')) != 3:
@@ -77,7 +76,7 @@ def __major_minor_version(arg_req):
         # '_ansible' is not a valid pip name
         req = Pkgreq.parse(arg_req.replace('_ansible', 'ansible'))
     except Exception as e:
-        raise_from(AnsibleFilterTypeError(
+        raise_from(AnsibleFilterError(
             "not a valid pip specifier: {req}".format(req=arg_req)
         ), e)
 
@@ -103,7 +102,7 @@ def __major_minor_version(arg_req):
         )[-1]
     except IndexError:
         # requested version is too old or too new
-        raise AnsibleFilterTypeError(
+        raise AnsibleFilterError(
             "not a supported pip specifier: {req}".format(req=arg_req)
         )
     return '.'.join(latest_possible_version.split('.')[0:2])
@@ -137,7 +136,7 @@ def __best_ansible_version(arg_req):
         # '_ansible' is not a valid pip name
         req = Pkgreq.parse(arg_req.replace('_ansible', 'ansible'))
     except Exception as e:
-        raise_from(AnsibleFilterTypeError(
+        raise_from(AnsibleFilterError(
             "not a valid pip specifier: {req}".format(req=arg_req)), e
         )
 
@@ -170,7 +169,7 @@ def __best_ansible_version(arg_req):
         best_version = sorted(possible_versions, key=version2int)[-1]
     except IndexError:
         # requested version is too old or too new
-        raise AnsibleFilterTypeError(
+        raise AnsibleFilterError(
             "not a supported pip specifier: {req}".format(req=arg_req)
         )
     return best_version
@@ -186,7 +185,7 @@ def __fix_ansible_pip_req(arg_req):
     """
 
     if not isinstance(arg_req, str):
-        raise AnsibleFilterTypeError("arg_req is not string {type}".format(
+        raise AnsibleFilterError("arg_req is not string {type}".format(
             type=type(arg_req))
         )
 

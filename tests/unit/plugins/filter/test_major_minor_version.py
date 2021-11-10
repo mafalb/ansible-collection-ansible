@@ -3,7 +3,7 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 
 from __future__ import (absolute_import, division, print_function)
-from ansible.errors import AnsibleFilterError, AnsibleFilterTypeError
+from ansible.errors import AnsibleFilterError
 from ansible_collections.mafalb.ansible.plugins.filter.ansible import (
     __major_minor_version
 )
@@ -46,7 +46,7 @@ def test_major_minor_version(req, expected):
 def test_fail(req):
     try:
         x = __major_minor_version(req)
-    except (AnsibleFilterTypeError, AnsibleFilterError):
+    except (AnsibleFilterError):
         pass
     try:
         x
