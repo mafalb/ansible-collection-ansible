@@ -4,17 +4,14 @@
 ---
 
 mafalb_ansible_system_dependencies:
-- python3-selinux
 - python3-setuptools
-- python3-venv
-- python3-cryptography
 # no wheel for cffi with python 3
-- python3.7-dev
+- python{{ __reg_targeted_python.version.majmin }}-dev
 - libffi-dev
 - gcc
 
 mafalb_ansible_virtualenv_command:
-  2: "/usr/bin/virtualenv -p {{ mafalb_ansible_virtualenv_python }}"
+  2: "virtualenv -p {{ mafalb_ansible_virtualenv_python }}"
   3: "{{ __reg_targeted_python.executable }} -m venv"
 
 ...
