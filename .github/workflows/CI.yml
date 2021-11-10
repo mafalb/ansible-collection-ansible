@@ -129,6 +129,10 @@ jobs:
       - name: lint
         run: |
           source ~/.virtualenvs/ansible/bin/activate
+          if ansible-lint --version|grep "^ansible-lint 4"
+          then
+              ANSIBLE_LINT_VERSION=4
+          fi
           . tests/lint.sh requirements ${{ matrix.python_version }}
 
       - name: sanity
