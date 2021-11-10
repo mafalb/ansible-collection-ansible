@@ -78,7 +78,7 @@
   block:
     - name: constraints file for ansible-test is present
       copy:
-        src: constraints/ansible-test/v{{ __mafalb_ansible_version }}.txt
+        src: constraints/ansible-test/v{{ packages|default(mafalb_ansible_packages|default(['_ansible']))|mafalb.ansible.best_version() }}.txt
         dest: "{{ __reg_venv.virtualenv }}/constraints.txt"
         backup: true
         mode: '0644'
