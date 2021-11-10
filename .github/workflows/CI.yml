@@ -103,7 +103,8 @@ jobs:
 
       # necessary ?
       - name: install virtualenv for python 2.7
-        if: matrix.python_version == '2.7'
+#        if: matrix.python_version == '2.7'
+        if: false
         run: |
           pip install virtualenv
           which virtualenv
