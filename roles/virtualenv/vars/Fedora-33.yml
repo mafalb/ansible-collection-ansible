@@ -10,17 +10,7 @@ mafalb_ansible_system_dependencies:
 - python3-setuptools
 
 mafalb_ansible_virtualenv_command:
-  '2': "virtualenv -p {{ mafalb_ansible_virtualenv_python }}"
-  '3': "{{ mafalb_ansible_virtualenv_python }} -m venv"
-
-# no wheel, e.g. cffi
-mafalb_ansible_extra_deps:
-  '3.5':
-    '2.9': &deps
-      - redhat-rpm-config
-      - gcc
-      - libffi-devel
-    '2.10': *deps
-    '2.11': *deps
+  2: "/usr/bin/virtualenv -p {{ mafalb_ansible_virtualenv_python }}"
+  3: "{{ __reg_targeted_python.executable }} -m venv"
 
 ...

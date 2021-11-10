@@ -39,6 +39,7 @@ ansible_test_packages:
     - yamllint
     - typed-ast
     - pytest
+    - junit-xml
   '2.12':
     - mock
     - pytest-mock

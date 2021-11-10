@@ -9,12 +9,13 @@ mafalb_ansible_virtualenv_packages:
 
 # I want to write as simple as:
 __mafalb_ansible_version: "{{ packages|default(mafalb_ansible_packages|default(['_ansible']))|mafalb.ansible.best_version() }}"
+__mafalb_ansible_majmin_version: "{{ __mafalb_ansible_version.split('.')[0:2]|join('.') }}"
 __mafalb_ansible_packages: "{{ packages|default(mafalb_ansible_packages|default(['_ansible']))|mafalb.ansible.fix_package_list() }}"
 
 ansible_test_packages_not:
-  '2':
+  2:
     - pytest
     - pylint
-  '3': []
+  3: []
 
 ...

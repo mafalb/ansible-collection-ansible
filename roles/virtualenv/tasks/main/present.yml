@@ -18,70 +18,27 @@
     - never
     - debug
 
+- name: get info about targeted python interpreter
+  mafalb.ansible.python_info:
+    executable: "{{ mafalb_ansible_virtualenv_python }}"
+  register: __reg_targeted_python
+
+- name: get OS specific variables
+  with_first_found:
+  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}-py{{ __reg_targeted_python.version.majmin }}-{{ __mafalb_ansible_majmin_version }}.yml"
+  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}-py{{ __reg_targeted_python.version.majmin }}.yml"
+  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+  - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+  - "{{ ansible_os_family }}.yml"
+  include_vars:
+    file: "{{ __vars_file }}"
+  loop_control:
+    loop_var: __vars_file
+
 - name: dependencies are present
   become: true
   package:
     name: "{{ mafalb_ansible_system_dependencies }}"
-
-- name: get major version of targeted python
-  block:
-    - name: get targeted python version step 1
-      command: "{{ mafalb_ansible_virtualenv_python }} --version"
-      changed_when: false
-      register: __reg_virtualenv_python
-    - name: get targeted python version step 1
-      command: echo {{ __reg_virtualenv_python.stderr
-               if __reg_virtualenv_python.stdout|length == 0
-               else __reg_virtualenv_python.stdout }}
-      changed_when: false
-      register: __reg_virtualenv_python
-    - name: get major version of targeted python
-      command: echo {{ __reg_virtualenv_python.stdout[7] }}
-      changed_when: false
-      register: __reg_virtualenv_python_maj
-    - name: get major.minor version of targeted python
-      command: echo {{ __reg_virtualenv_python.stdout.split()[1].split('.')[0:2]|join('.') }}
-      changed_when: false
-      register: __reg_virtualenv_python_majmin
-
-- name: debug __reg_virtualenv_python
-  debug: var=__reg_virtualenv_python
-- name: debug __reg_virtualenv_python_maj
-  debug: var=__reg_virtualenv_python_maj.stdout
-- name: debug __reg_virtualenv_python_majmin
-  debug: var=__reg_virtualenv_python_majmin.stdout
-- name: debug mafalb_ansible_virtualenv_command
-  debug: var=mafalb_ansible_virtualenv_command
-- name: debug mafalb_ansible_virtualenv_command 2
-  debug: var=mafalb_ansible_virtualenv_command[__reg_virtualenv_python_maj.stdout]
-
-- name: extra dependencies for ansible 2.9 are present
-  package:
-    name: "{{ mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.9'] }}"
-  when:
-    - __mafalb_ansible_version is match('2.9')
-    - mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.9'] is defined
-
-- name: extra dependencies for ansible 2.10 are present
-  package:
-    name: "{{ mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.10'] }}"
-  when:
-    - __mafalb_ansible_version is match('2.10')
-    - mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.10'] is defined
-
-- name: extra dependencies for ansible 2.11 are present
-  package:
-    name: "{{ mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.11'] }}"
-  when:
-    - __mafalb_ansible_version is match('2.11')
-    - mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.11'] is defined
-
-- name: extra dependencies for ansible 2.12 are present
-  package:
-    name: "{{ mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.12'] }}"
-  when:
-    - __mafalb_ansible_version is match('2.12')
-    - mafalb_ansible_extra_deps[__reg_virtualenv_python_majmin.stdout]['2.12'] is defined
 
 - name: virtualenv is present
   pip:
@@ -90,15 +47,18 @@
       - setuptools{{ mafalb_ansible_virtualenv_packages.setuptools }}
       - wheel
     virtualenv: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}"
-    virtualenv_python: "{{ mafalb_ansible_virtualenv_python if __reg_virtualenv_python_maj.stdout == '2' else omit }}"
+    virtualenv_python: "{{ mafalb_ansible_virtualenv_python if __reg_targeted_python.version.major == 2 else omit }}"
     virtualenv_command: "{{
-      mafalb_ansible_virtualenv_command[__reg_virtualenv_python_maj.stdout]
+      mafalb_ansible_virtualenv_command[__reg_targeted_python.version.major]
     }}"
   # register the result and enjoy the absolute path to the virtualenv
   register: __reg_venv
 
 - name: debug virtualenv
   debug: var=__reg_venv
+  tags:
+    - never
+    - debug
 
 # ensure that packages can't pull in other versions of some packages
 - name: constraints file virtualenv.constraints.txt is present
@@ -176,7 +136,7 @@
 
 - name: packages are present
   pip:
-    name: "{{ __mafalb_ansible_packages|difference(ansible_test_packages_not[__reg_virtualenv_python_maj.stdout]) }}"
+    name: "{{ __mafalb_ansible_packages|difference(ansible_test_packages_not[__reg_targeted_python.version.major]) }}"
     extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }}
        -c {{ virtualenv|default(mafalb_ansible_virtualenv) }}/constraints.txt
        -c {{ virtualenv|default(mafalb_ansible_virtualenv)
@@ -192,10 +152,14 @@
   register: __freeze
 
 - name: debug
-  debug: var=__pip_packages
-
-- name: debug
-  debug: var=__freeze
+  block:
+    - name: debug installed pip packages
+      debug: var=__pip_packages
+    - name: debug
+      debug: var=__freeze
+  tags:
+    - never
+    - debug
 
 - name: assert correct ansible version is present
   block:

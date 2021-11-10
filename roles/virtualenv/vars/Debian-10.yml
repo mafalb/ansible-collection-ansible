@@ -10,15 +10,7 @@ mafalb_ansible_system_dependencies:
 - python3-cryptography
 
 mafalb_ansible_virtualenv_command:
-  '2': "virtualenv -p {{ mafalb_ansible_virtualenv_python }}"
-  '3': "{{ mafalb_ansible_virtualenv_python }} -m venv"
-
-# no wheel, e.g. cffi
-mafalb_ansible_extra_deps:
-  '3.7':
-    '2.11':
-      - python3-dev
-      - libffi-dev
-      - gcc
+  2: "/usr/bin/virtualenv -p {{ mafalb_ansible_virtualenv_python }}"
+  3: "{{ __reg_targeted_python.executable }} -m venv"
 
 ...

@@ -4,9 +4,12 @@
 ---
 
 mafalb_ansible_system_dependencies:
-- libselinux-python3
-- python-setuptools
-- python3
+- "{{ 'python3-setuptools' if ansible_python.version.major == '3' else 'python-setuptools' }}"
+- "{{ 'python3-venv' if ansible_python.version.major == '3' else 'python-virtualenv' }}"
+# no wheel, e.g. cffi
+- python3-dev
+- libffi-dev
+- gcc
 
 mafalb_ansible_virtualenv_command:
   2: "/usr/bin/virtualenv -p {{ mafalb_ansible_virtualenv_python }}"
