@@ -112,7 +112,7 @@ def main():
     version = out.split()[1]
 
     results['version']['major'] = int(version[0])
-    results['version']['minor'] = int('.'.join(version.split('.')[1]))
+    results['version']['minor'] = int(version.split('.')[1])
     results['version']['majmin'] = '.'.join(version.split('.')[0:2])
     results['executable'] = executable
 
