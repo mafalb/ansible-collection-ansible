@@ -5,7 +5,7 @@
 
 mafalb_ansible_system_dependencies:
 - python3-setuptools
-- python2-six
+- python-six
 - virtualenv
 
 mafalb_ansible_virtualenv_command:
