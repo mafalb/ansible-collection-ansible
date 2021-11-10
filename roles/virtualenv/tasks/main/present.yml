@@ -40,6 +40,12 @@
   package:
     name: "{{ mafalb_ansible_system_dependencies }}"
 
+- name: debug
+  debug: var=__reg_targeted_python.executable
+  tags:
+    - never
+    - debug
+
 - name: virtualenv is present
   pip:
     name:
