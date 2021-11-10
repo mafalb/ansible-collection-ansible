@@ -26,7 +26,6 @@ TEST_CASES = (
 @pytest.mark.parametrize('version, expected', TEST_CASES)
 def test_is_valid_version(version, expected):
     result = is_valid_version(version)
-    assert expected == result, "Result not {x} but {y}".format(
-                                                            x=expected,
-                                                            y=result
-                                                            )
+    assert expected == result, "Result not {x} but {y}".format(x=expected,
+                                                               y=result
+                                                               )
