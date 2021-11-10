@@ -11,7 +11,7 @@ mafalb_ansible_system_dependencies:
 - "{{ 'python3-venv' if ansible_python.version.major == '3' else 'virtualenv' }}"
 
 mafalb_ansible_virtualenv_command:
-  2: "/usr/bin/virtualenv -p {{ mafalb_ansible_virtualenv_python }}"
+  2: "virtualenv -p {{ mafalb_ansible_virtualenv_python }}"
   3: "{{ __reg_targeted_python.executable }} -m venv"
 
 ...
