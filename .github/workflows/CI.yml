@@ -141,6 +141,11 @@ jobs:
           source ~/.virtualenvs/ansible/bin/activate
           ansible-test units --coverage --requirements --python ${{ matrix.python_version }}
 
+      - name: integration tests
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          ansible-test integration --requirements --python ${{ matrix.python_version }}
+
   controlnode:
 
     # don't run on pull request from ourselves
@@ -635,9 +640,10 @@ jobs:
         with:
           path: ansible_collections/mafalb/ansible
 
-      - name: install molecule
+      - name: install molecule with system ansible (old!)
         run: |
-          ansible-playbook -D playbooks/install-molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
+          sudo apt install ansible
+          /usr/bin/ansible-playbook -D playbooks/molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
         env:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
 
