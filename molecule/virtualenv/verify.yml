@@ -53,6 +53,7 @@
       shell: |
         . ~/.virtualenvs/{{ virtualenv_basename }}/bin/activate
         ansible-test sanity --requirements --python {{ arg_python_version }}
+        ansible-test units --requirements --python {{ arg_python_version }}
       args:
         chdir: "{{ collection_dir }}/ansible"
 
