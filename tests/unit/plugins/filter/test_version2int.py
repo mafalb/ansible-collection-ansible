@@ -22,12 +22,12 @@ VERSION2INT_TEST_CASES = (
     ('2.9.10', 20910),
     ('2.12.0rc1', 0),
     ('2.12.0b2', 0),
+    ('2.12', 21200),
 )
 
 VERSION2INT_SPECIAL_CASES = (
     ('notnumeric'),
     (''),
-    ('2.12')
 )
 
 

@@ -5,13 +5,23 @@
 from __future__ import (absolute_import, division, print_function)
 from ansible.errors import AnsibleFilterError
 from ansible_collections.mafalb.ansible.plugins.filter.ansible import (
-    __fix_ansible_pip_req
+    __fix_ansible_pip_req,
+    version2int
 )
 __metaclass__ = type
 
 import pytest
 
+import yaml
+
+datafile = open('roles/virtualenv/vars/data.yml', 'r')
+data = yaml.load(datafile, Loader=yaml.FullLoader)
+datafile.close()
+
+latest = sorted(data['latest_version'], key=version2int)[-1]
+
 TEST_CASES = (
+    ('ansible', 'ansible-core==' + data['latest_version'][latest]),
     ('ansible==2.11.6', 'ansible-core==2.11.6'),
     ('ansible~=2.10.0', 'ansible-base~=2.10.0'),
     ('ansible<2.9.99', 'ansible<2.9.99'),

@@ -36,7 +36,11 @@ def version2int(version):
         raise AnsibleFilterError(
             "version is not a string but {type}".format(type=type(version))
         )
+    if len(version.split('.')) == 2:
+        # fix it
+        version = version + '.0'
     if len(version.split('.')) != 3:
+        # should not happen
         raise AnsibleFilterError(
             "not a valid version string: {str}".format(str=version)
         )
@@ -203,7 +207,9 @@ def __fix_ansible_pip_req(arg_req):
                 raise AnsibleFilterError(
                     "version not supported: {v}".format(v=version)
                 )
-
+    if specifier == '':
+        # fix empty specifier
+        specifier = '==' + data['latest_version'][__major_minor_version(arg_req)]
     # select the proper name for this version
     if __major_minor_version(arg_req) == '2.9':
         package = 'ansible'

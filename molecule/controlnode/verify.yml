@@ -21,25 +21,42 @@
 
 - name: Verify ansible
   hosts: all
-
+  vars:
+    collection_dir: /root/ansible_collections/mafalb
+    virtualenv_basename: ansible-{{ arg_ansible_version }}-py{{ arg_python_version }}
   module_defaults:
     shell:
       executable: /bin/bash
 
-  tasks:
+  pre_tasks:
+    - name: ansible is in the path
+      command: ansible --version
+      changed_when: false
+      register: __ansible_version
+    - name: debug
+      debug: var=__ansible_version
+    - name: assertions
+      assert:
+        that:
+          - __ansible_version.stdout is match('ansible')
+          - __ansible_version.stdout is search(arg_ansible_version|mandatory)
+    - name: destination directory is present
+      file:
+        path: "{{ collection_dir }}"
+        state: directory
+        mode: "0755"
+    - name: copy collection
+      synchronize:
+        src: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
+        dest: "{{ collection_dir }}"
+        recursive: true
+        rsync_opts:
+          - "--exclude=tests/output"
 
-  - name: ansible is in the path
-    command: ansible --version
-    changed_when: false
-    register: __ansible_version
-
-  - name: debug
-    debug: var=__ansible_version
-
-  - name: assertions
-    assert:
-      that:
-        - __ansible_version.stdout is match('ansible')
-        - __ansible_version.stdout is search(arg_ansible_version|mandatory)
+  roles:
+    - role: mafalb.ansible.python
+    - role: mafalb.ansible.virtualenv
+      packages:
+        - _ansible==2.11
 
 ...

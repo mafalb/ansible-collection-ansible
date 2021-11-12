@@ -4,11 +4,19 @@
 
 from __future__ import (absolute_import, division, print_function)
 from ansible_collections.mafalb.ansible.plugins.filter.ansible import (
-    pip_package_list
+    pip_package_list,
+    version2int,
 )
 __metaclass__ = type
 
 import pytest
+import yaml
+
+datafile = open('roles/virtualenv/vars/data.yml', 'r')
+data = yaml.load(datafile, Loader=yaml.FullLoader)
+datafile.close()
+
+latest = sorted(data['latest_version'], key=version2int)[-1]
 
 TEST_CASES = (
     (['_ansible==2.12.0rc1'], ['ansible-core==2.12.0rc1']),
@@ -17,7 +25,7 @@ TEST_CASES = (
     (['_ansible==2.11.6'], ['ansible-core==2.11.6']),
     (['_ansible<2.11.6'], ['ansible-core<2.11.6']),
     (['_ansible~=2.9.6'], ['ansible~=2.9.6']),
-    (['_ansible'], ['ansible-core']),
+    (['_ansible'], ['ansible-core==' + data['latest_version'][latest]]),
     (['_ansible~=2.11.6', '_ansible_test'],
      ['ansible-core~=2.11.6', 'voluptuous']),
 )

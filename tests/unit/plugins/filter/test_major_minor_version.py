@@ -12,6 +12,7 @@ __metaclass__ = type
 import pytest
 
 TEST_CASES = (
+    ('_ansible', '2.12'),
     ('_ansible==2.12.0rc1', '2.12'),
     ('_ansible==2.12.0', '2.12'),
     ('_ansible==2.11.6', '2.11'),
