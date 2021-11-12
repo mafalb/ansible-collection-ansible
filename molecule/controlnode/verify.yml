@@ -28,7 +28,7 @@
     shell:
       executable: /bin/bash
 
-  pre_tasks:
+  tasks:
     - name: ansible is in the path
       command: ansible --version
       changed_when: false
@@ -52,11 +52,10 @@
         recursive: true
         rsync_opts:
           - "--exclude=tests/output"
-
-  roles:
-    - role: mafalb.ansible.python
-    - role: mafalb.ansible.virtualenv
-      packages:
-        - _ansible==2.11
+    - name: playbook is present
+      copy:
+        src: install-ansible.sh
+        dest: /tmp/
+        mode: '644'
 
 ...
