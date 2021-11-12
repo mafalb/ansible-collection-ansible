@@ -110,7 +110,7 @@ jobs:
         run: |
           pip install virtualenv
 
-      - name: install molecule
+      - name: install ansible
         run: |
           ansible-playbook -D playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}", "ansible-lint${{ matrix.ansible_lint_specifier }}", "_ansible_test", "flake8"]}' -e mafalb_ansible_virtualenv_python=python${{ matrix.python_version }} -t all,debug
         env:

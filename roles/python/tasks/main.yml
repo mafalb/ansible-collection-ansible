@@ -4,16 +4,20 @@
 ---
 
 - name: include OS family specific variables
-  include_vars: "{{ item }}"
+  include_vars: "{{ __file }}"
   with_first_found:
   - "{{ ansible_os_family }}.yml"
+  loop_control:
+    loop_var: __file
 
 - name: include OS specific variables
-  include_vars: "{{ item }}"
+  include_vars: "{{ __file }}"
   with_first_found:
   - "{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml"
   - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
   - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+  loop_control:
+    loop_var: __file
 
 # the content of state was validated in vars.yml
 # we need a default for ansible <2.11
