@@ -209,7 +209,9 @@ def __fix_ansible_pip_req(arg_req):
                 )
     if specifier == '':
         # fix empty specifier
-        specifier = '==' + data['latest_version'][__major_minor_version(arg_req)]
+        specifier = ('=='
+                     + data['latest_version'][__major_minor_version(arg_req)]
+                     )
     # select the proper name for this version
     if __major_minor_version(arg_req) == '2.9':
         package = 'ansible'
