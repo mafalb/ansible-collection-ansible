@@ -95,7 +95,8 @@ def __major_minor_version(arg_req, python_version=None):
     all_versions = []
     # generate a list of all versions that are theoretically supported
     for majmin in data['latest_version']:
-        if python_version and python_version not in data['python_versions'][majmin]:
+        if (python_version
+                and python_version not in data['python_versions'][majmin]):
             # ansible X.Y is not compatible with requested python
             continue
         for patch in range(
@@ -151,7 +152,7 @@ def __best_ansible_version(arg_req, python_version):
         raise AnsibleFilterError("not '_ansible': {str}".format(str=req.name))
 
     # exact version is requested, expand to full version if necessary
-    # it could be that that's not compatible with requested python version, though
+    # it could be that that's not compatible with requested python version
     if str(req.specifier).startswith('=='):
         version = str(req.specifier).replace('==', '')
         if len(version.split('.')) == 3:  # e.g. 2.11.6
@@ -168,7 +169,8 @@ def __best_ansible_version(arg_req, python_version):
     all_versions = []
     # generate a list of all versions that are theoretically supported
     for majmin in data['latest_version']:
-        if python_version and python_version not in data['python_versions'][majmin]:
+        if (python_version
+                and python_version not in data['python_versions'][majmin]):
             # ansible X.Y is not compatible with requested python
             continue
         for patch in range(

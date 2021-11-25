@@ -32,7 +32,8 @@ TEST_CASES = (
 
 TEST_CASES_WITH_PYTHON = (
     (['_ansible==2.12.0rc1'], '3.8', ['ansible-core==2.12.0rc1']),
-    (['_ansible==2.12.0rc1', '_ansible_test'], '3.8', ['ansible-core==2.12.0rc1']),
+    (['_ansible==2.12.0rc1', '_ansible_test'], '3.8',
+     ['ansible-core==2.12.0rc1']),
     (['_ansible==2.11'], '3.8', ['ansible-core==2.11.6']),
     (['_ansible==2.11'], None, ['ansible-core==2.11.6']),
     (['_ansible==2.11.6'], '3.8', ['ansible-core==2.11.6']),
@@ -43,6 +44,7 @@ TEST_CASES_WITH_PYTHON = (
      ['ansible-core~=2.11.6', 'voluptuous']),
 )
 
+
 @pytest.mark.parametrize('in_list, out_list', TEST_CASES)
 def test_fix_package_list(in_list, out_list):
     actual = pip_package_list(in_list)
@@ -50,7 +52,11 @@ def test_fix_package_list(in_list, out_list):
         assert req in actual, "'{req}' is not in '{res}'".format(req=req,
                                                                  res=actual)
 
-@pytest.mark.parametrize('in_list, python_version, out_list', TEST_CASES_WITH_PYTHON)
+
+@pytest.mark.parametrize(
+    'in_list, python_version, out_list',
+    TEST_CASES_WITH_PYTHON
+)
 def test_fix_package_list_with_python(in_list, python_version, out_list):
     actual = pip_package_list(in_list, python_version)
     for req in out_list:
