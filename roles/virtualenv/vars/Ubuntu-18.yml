@@ -10,4 +10,6 @@ mafalb_ansible_virtualenv_command:
   2: "virtualenv -p {{ mafalb_ansible_virtualenv_python }}"
   3: "{{ __reg_targeted_python.executable }} -m venv"
 
+mafalb_ansible_default_openssl_version: '1.1'
+
 ...

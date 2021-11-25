@@ -77,6 +77,14 @@
     backup: true
     mode: '0644'
 
+# some extra constraints
+- name: constraints file virtualenv.constraints.txt is present
+  template:
+    src: constraints/ansible.txt.j2
+    dest: "{{ __reg_venv.virtualenv }}/ansible.constraints.txt"
+    backup: true
+    mode: '0644'
+
 - name: constraints file constraints.txt is present
   block:
     - name: constraints file for ansible-test is present
@@ -146,9 +154,9 @@
   pip:
     name: "{{ __mafalb_ansible_packages|difference(ansible_test_packages_not[__reg_targeted_python.version.major]) }}"
     extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }}
-       -c {{ virtualenv|default(mafalb_ansible_virtualenv) }}/constraints.txt
-       -c {{ virtualenv|default(mafalb_ansible_virtualenv)
-           }}/virtualenv.constraints.txt"
+       -c {{ __reg_venv.virtualenv }}/constraints.txt
+       -c {{ __reg_venv.virtualenv }}/ansible.constraints.txt
+       -c {{ __reg_venv.virtualenv }}/virtualenv.constraints.txt"
     virtualenv: "{{ __reg_venv.virtualenv }}"
   register: __pip_packages
 
