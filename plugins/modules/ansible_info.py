@@ -71,6 +71,7 @@ def main():
     )
     results = dict(
         changed=False,
+        version={}
     )
     module = AnsibleModule(
         argument_spec=module_args,
