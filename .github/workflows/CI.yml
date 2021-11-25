@@ -327,7 +327,7 @@ jobs:
           source ~/.virtualenvs/molecule/bin/activate
           molecule -e .env-${{ matrix.os }}.yml test -s controlnode --destroy never
           # this finds some errors when dependendencies differ from ansible-test's
-          docker exec -ti ci-${{ matrix.os }} bash /tmp/install-ansible.sh
+          docker exec -t ci-${{ matrix.os }} bash /tmp/install-ansible.sh
 
   virtualenv:
 
