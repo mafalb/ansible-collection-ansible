@@ -21,6 +21,8 @@ ansible_test_packages:
     - yamllint
     - pytest      # not supported for python 2
     - pylint      # not supported for python 2
+    - pytest-mock
+    - pytest-xdist
   '2.10':
     - flake8
     - antsibull-changelog
@@ -31,6 +33,9 @@ ansible_test_packages:
     - yamllint
     - coverage
     - pytest
+    - pytest-xdist
+    - pytest-mock
+    - mock
   '2.11':
     - flake8
     - antsibull-changelog
@@ -40,6 +45,9 @@ ansible_test_packages:
     - typed-ast
     - pytest
     - junit-xml
+    - pytest-xdist
+    - pytest-mock
+    - mock
   '2.12':
     - mock
     - pytest-mock
@@ -47,5 +55,10 @@ ansible_test_packages:
     - voluptuous
     - wrapt
     - yamllint
-
+python_versions:
+  '2.9': ['2.7', '3.5', '3.6', '3.7', '3.8']
+  '2.10': ['2.7', '3.5', '3.6', '3.7', '3.8', '3.9']
+  '2.11': ['2.7', '3.5', '3.6', '3.7', '3.8', '3.9']
+  '2.12': ['3.8', '3.9', '3.10']
+   
 ...

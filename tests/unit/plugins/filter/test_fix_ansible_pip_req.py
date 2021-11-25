@@ -21,7 +21,7 @@ datafile.close()
 latest = sorted(data['latest_version'], key=version2int)[-1]
 
 TEST_CASES = (
-    ('ansible', 'ansible-core==' + data['latest_version'][latest]),
+    ('ansible', 'ansible-core'),
     ('ansible==2.11.6', 'ansible-core==2.11.6'),
     ('ansible~=2.10.0', 'ansible-base~=2.10.0'),
     ('ansible<2.9.99', 'ansible<2.9.99'),

@@ -23,6 +23,9 @@
     executable: "{{ mafalb_ansible_virtualenv_python }}"
   register: __reg_targeted_python
 
+- name: compute the best matching ansible version and fix package list
+  include_vars: runtime_vars.yml
+
 - name: get OS specific variables
   with_first_found:
   - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}-py{{ __reg_targeted_python.version.majmin }}-{{ __mafalb_ansible_majmin_version }}.yml"
@@ -136,7 +139,6 @@
       (__mafalb_ansible_version is not match('2.9') and
        __ansible_version.stdout|default('') is match('ansible 2.9'))
 
-
 - name: debug previous installed ansible version
   debug: var=__ansible_version
 
@@ -150,6 +152,12 @@
     virtualenv: "{{ __reg_venv.virtualenv }}"
   register: __pip_packages
 
+- name: pip freeze
+  shell: |
+    . {{ virtualenv|default(mafalb_ansible_virtualenv) }}/bin/activate
+    pip freeze
+  changed_when: false
+  register: __freeze
 - name: pip freeze
   shell: |
     . {{ virtualenv|default(mafalb_ansible_virtualenv) }}/bin/activate

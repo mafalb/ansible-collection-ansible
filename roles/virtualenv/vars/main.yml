@@ -12,6 +12,9 @@ __mafalb_ansible_version: "{{ packages|default(mafalb_ansible_packages|default([
 __mafalb_ansible_majmin_version: "{{ __mafalb_ansible_version.split('.')[0:2]|join('.') }}"
 __mafalb_ansible_packages: "{{ packages|default(mafalb_ansible_packages|default(['_ansible']))|mafalb.ansible.fix_package_list() }}"
 
+mafalb_ansible:
+  packages: "{{ packages|default(mafalb_ansible_packages)|default(['_ansible']) }}"
+  
 ansible_test_packages_not:
   2:
     - pytest

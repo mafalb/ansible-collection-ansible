@@ -26,6 +26,22 @@ TEST_CASES = (
     (['_ansible~=2.11.6', '_ansible_test'], '2.11.6'),
 )
 
+TEST_CASES_WITH_PYTHON = (
+    (['_ansible==2.12.0rc1'], '3.6', '2.12.0rc1'),
+    (['_ansible~=2.12.0'], '3.8', '2.12.0'),
+    (['_ansible==2.12'], '3.8', '2.12.0'),
+    (['_ansible==2.9'], '3.8', '2.9.27'),
+    (['_ansible==2.11.7'], '3.8', '2.11.7'),
+    (['_ansible==2.11.6'], '3.8', '2.11.6'),
+    (['_ansible==2.11.5'], '3.8', '2.11.5'),
+    (['_ansible<2.11.6'], '3.5', '2.11.5'),
+    (['_ansible~=2.9.6'], '3.8', '2.9.27'),
+    (['ansible', '_ansible==2.9.10', '_ansible_test'], '3.8', '2.9.10'),
+    (['_ansible'], '3.8', '2.12.0'),
+    (['_ansible'], '3.7', '2.11.6'),
+    (['_ansible~=2.11.6', '_ansible_test'], '3.8', '2.11.6'),
+)
+
 FAIL_CASES = (
     (['_ansible=="2.9"'], AnsibleFilterError),
 )
@@ -38,6 +54,12 @@ def test_best_version(in_list, expected):
         actual=actual, expected=expected
     )
 
+@pytest.mark.parametrize('in_list, python_version, expected', TEST_CASES_WITH_PYTHON)
+def test_best_version_with_python(in_list, python_version, expected):
+    actual = best_version(in_list, python_version)
+    assert actual == expected, "got {actual} instead of {expected}".format(
+        actual=actual, expected=expected
+    )
 
 @pytest.mark.parametrize('version, exception', FAIL_CASES)
 def test_fail(version, exception):
