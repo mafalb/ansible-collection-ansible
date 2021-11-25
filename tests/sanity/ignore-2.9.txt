@@ -1,1 +1,1 @@
-molecule/controlnode/files/install-ansible.sh shellcheck
+molecule/controlnode/files/install-ansible.sh shellcheck:SC2148
