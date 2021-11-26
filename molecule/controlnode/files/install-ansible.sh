@@ -3,7 +3,7 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 
 
-ANSIBLE_COLLECTIONS_PATHS=/root ansible-playbook -D /dev/stdin << PLAYBOOK
+ansible-playbook -D /dev/stdin << PLAYBOOK
 ---
 
 - hosts: localhost

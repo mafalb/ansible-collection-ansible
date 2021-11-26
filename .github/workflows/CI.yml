@@ -325,9 +325,14 @@ jobs:
       - name: molecule controlnode scenario
         run: |
           source ~/.virtualenvs/molecule/bin/activate
+          # dont destroy, next task needs it
           molecule -e .env-${{ matrix.os }}.yml test -s controlnode --destroy never
+
+      - name: run install-ansible.sh
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
           # this finds some errors when dependendencies differ from ansible-test's
-          docker exec -t ci-${{ matrix.os }} bash /tmp/install-ansible.sh
+          docker exec -t ci-${{ matrix.os }} ansible-playbook /root/install-ansible.yml
 
   virtualenv:
 

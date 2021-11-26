@@ -8,8 +8,6 @@
     - name: rsync is present
       package:
         name:
-          - rsync
-          - git
           - diffutils
     - block:
       - name: locale are present

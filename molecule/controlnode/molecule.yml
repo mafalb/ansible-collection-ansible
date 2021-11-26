@@ -1,1 +1,43 @@
-../resources/molecule.yml
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+dependency:
+  name: galaxy
+  options:
+    requirements-file: requirements.yml
+
+driver:
+  name: ${CI_DRIVER:-docker}
+
+platforms:
+- name: ${CI_HOSTNAME}
+  image: ${CI_IMAGE}
+  #dockerfile: ../resources/${CI_HOSTNAME:-"ci-centos7"}.j2
+  dockerfile: ../resources/Dockerfile.j2
+  volumes:
+  - "${PWD}/../../:/root/collections/ansible_collections:Z"
+
+provisioner:
+  name: ansible
+  ansible_args:
+    - --tags=all,debug
+    - --diff
+    - -e arg_ansible_version='${ANSIBLE_VERSION}' -e arg_python_version=${PYTHON_VERSION}
+  lint:
+    name: ansible-lint
+  config_options:
+    defaults:
+      gathering: smart
+      interpreter_python: auto
+#      stdout_callback: community.general.yaml
+#      bin_ansible_callbacks: true
+
+
+verifier:
+  name: ansible
+  lint:
+    name: ansible-lint
+
+...

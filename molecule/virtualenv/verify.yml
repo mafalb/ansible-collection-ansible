@@ -5,7 +5,7 @@
 
 - hosts: all
   vars:
-    collection_dir: /root/ansible_collections/mafalb
+    collection_dir: /root/collections/ansible_collections/mafalb
     virtualenv_basename: ansible-{{ arg_ansible_version }}-py{{ arg_python_version }}
 
   module_defaults:
@@ -13,20 +13,6 @@
       executable: /bin/bash
 
   tasks:
-
-    - name: destination directory is present
-      file:
-        path: "{{ collection_dir }}"
-        state: directory
-        mode: "0755"
-
-    - name: copy collection
-      synchronize:
-        src: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
-        dest: "{{ collection_dir }}"
-        recursive: true
-        rsync_opts:
-          - "--exclude=tests/output"
 
     - name: get installed packages for ~/.virtualenvs/ansible
       shell: |
