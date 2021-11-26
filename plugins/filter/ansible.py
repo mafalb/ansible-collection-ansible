@@ -18,7 +18,7 @@ __metaclass__ = type
 datafile = open(dirname(__file__)
                 + '/../../roles/virtualenv/vars/data.yml', 'r'
                 )
-data = yaml.load(datafile, Loader=yaml.FullLoader)
+data = yaml.load(datafile, Loader=yaml.Loader)
 datafile.close()
 
 
@@ -233,7 +233,7 @@ def __ansible_test_packages(version):
 
 def pip_package_list(arg_packages, python_version=None):
     """Return a list of pip packages."""
-#    data = yaml.load(data, Loader=yaml.FullLoader)
+#    data = yaml.load(data, Loader=yaml.Loader)
     packages = [s for s in arg_packages if not s.startswith('_ansible')]
     matching = [s for s in arg_packages if s.startswith('_ansible')]
     for s in matching:

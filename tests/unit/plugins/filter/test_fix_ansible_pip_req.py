@@ -15,7 +15,7 @@ import pytest
 import yaml
 
 datafile = open('roles/virtualenv/vars/data.yml', 'r')
-data = yaml.load(datafile, Loader=yaml.FullLoader)
+data = yaml.load(datafile, Loader=yaml.Loader)
 datafile.close()
 
 latest = sorted(data['latest_version'], key=version2int)[-1]
