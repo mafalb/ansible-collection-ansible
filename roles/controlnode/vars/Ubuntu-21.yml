@@ -13,7 +13,7 @@ mafalb_ansible_package:
     - ansible-base
     - ansible
 mafalb_collections_package:
-  '2.10': 
+  '2.10':
     - ansible
 mafalb_ansible_test_package:
   '2.10': []
