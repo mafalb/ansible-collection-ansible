@@ -5,10 +5,11 @@
 
 - hosts: all
   tasks:
-    - name: rsync is present
+    - name: necessary tools for CI are present
       package:
         name:
           - diffutils
+          - git
     - block:
       - name: locale are present
         package:
