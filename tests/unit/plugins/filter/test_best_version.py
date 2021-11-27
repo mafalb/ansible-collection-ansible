@@ -23,6 +23,7 @@ TEST_CASES = (
     (['_ansible~=2.9.6'], '2.9.27'),
     (['_ansible'], '2.12.0'),
     (['_ansible~=2.11.6', '_ansible_test'], '2.11.6'),
+    (['ansible', '_ansible==2.11', '_ansible_test'], '2.11.6'),
 )
 
 T_WITH_PYTHON = (

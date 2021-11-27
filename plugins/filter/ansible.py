@@ -143,20 +143,16 @@ def next_ansible_version(majmin):
 def best_version(arg_packages, python_version=None):
     """Take a pip requirement and return the latest major.minor.patch version
 
-    arg_req is a string in the form of
-    _ansible==2.11.6
-    _ansible~=2.11.6
-    etc.
+    arg_req is a list, e.g.
+    [ '_ansible==2.11.6', 'ansible', '_ansible_test' ]
 
-    return a version string in the form of X.Y
+    return a version string in the form of X.Y.Z
     """
 
     for s in arg_packages:
         # we are interested in the _ansible pseudo package
         if s.startswith('_ansible') and not s.startswith('_ansible_test'):
             break
-        # no  _ansible metapackage
-        raise AnsibleFilterError("not '_ansible': {str}".format(str=s))
 
     # '_ansible' is not a valid pip name
     try:
