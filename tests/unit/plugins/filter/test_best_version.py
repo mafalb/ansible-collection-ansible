@@ -21,7 +21,6 @@ TEST_CASES = (
     (['_ansible==2.11.5'], '2.11.5'),
     (['_ansible<2.11.6'], '2.11.5'),
     (['_ansible~=2.9.6'], '2.9.27'),
-    (['ansible', '_ansible==2.9.10', '_ansible_test'], '2.9.10'),
     (['_ansible'], '2.12.0'),
     (['_ansible~=2.11.6', '_ansible_test'], '2.11.6'),
 )
@@ -36,7 +35,6 @@ T_WITH_PYTHON = (
     (['_ansible==2.11.5'], '3.8', '2.11.5'),
     (['_ansible<2.11.6'], '3.5', '2.11.5'),
     (['_ansible~=2.9.6'], '3.8', '2.9.27'),
-    (['ansible', '_ansible==2.9.10', '_ansible_test'], '3.8', '2.9.10'),
     (['_ansible'], '3.8', '2.12.0'),
     (['_ansible'], '3.7', '2.11.6'),
     (['_ansible~=2.11.6', '_ansible_test'], '3.8', '2.11.6'),
@@ -44,6 +42,7 @@ T_WITH_PYTHON = (
 
 FAIL_CASES = (
     (['_ansible=="2.9"'], AnsibleFilterError),
+    (['ansible=="2.9"'], AnsibleFilterError),
 )
 
 

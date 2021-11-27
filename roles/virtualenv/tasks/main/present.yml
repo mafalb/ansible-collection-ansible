@@ -8,6 +8,8 @@
 
     - name: debug __mafalb_ansible_version
       debug: var=packages|default(mafalb_ansible_packages|default(['_ansible']))
+    - name: debug __mafalb_ansible_majmin_version
+      debug: msg="{{ __mafalb_ansible_version.split('.')[0:2]|join('.') }}"
     - name: debug __mafalb_ansible_version
       debug: var=__mafalb_ansible_version
     - name: debug __mafalb_ansible_packages
