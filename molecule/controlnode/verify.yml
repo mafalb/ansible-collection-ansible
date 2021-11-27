@@ -29,7 +29,7 @@
         src: install-ansible.yml
         dest: /root/
         mode: '644'
-    - name: community.general is present
+    - name: community.general is present # noqa no-changed-when 301
       command: ansible-galaxy collection install community.general
 
 ...
