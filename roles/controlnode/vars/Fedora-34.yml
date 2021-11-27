@@ -19,7 +19,6 @@ mafalb_ansible_package:
     - ansible
   '2.11':
     - ansible-core
-    - ansible-collection-community-general
 mafalb_collections_packages:
   '2.9': []
   '2.11': []

@@ -29,5 +29,7 @@
         src: install-ansible.yml
         dest: /root/
         mode: '644'
+    - name: community.general is present
+      command: ansible-galaxy collection install community.general
 
 ...
