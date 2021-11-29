@@ -24,4 +24,13 @@
         - molecule[lint,docker,test]~=3.3.4
       when: molecule_ansible_version is not defined
 
+  tasks:
+    - name: docker_container is present
+      command: ansible-galaxy collection install {{ item }}
+      loop:
+        - community.general
+        - containers.docker
+      when:
+        - molecule_ansible_version|default('2.11') is not version('2.10', '<')
+
 ...
