@@ -29,7 +29,7 @@
       command: ansible-galaxy collection install {{ item }}
       loop:
         - community.general
-        - containers.docker
+        - community.docker
       when:
         - molecule_ansible_version|default('2.11') is not version('2.10', '<')
 
