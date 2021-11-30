@@ -1,0 +1,36 @@
+# Copyright (c) 2019-2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+- hosts: localhost
+  roles:
+
+    # this is used if molecule_ansible_version is argument
+    - role: mafalb.ansible.virtualenv
+      virtualenv: ~/.virtualenvs/molecule
+      python: "{{ molecule_python_version|default('python3') }}"
+      packages:
+        - _ansible=={{ molecule_ansible_version }}
+        - molecule[lint,docker,test]~=3.3.4
+      when: molecule_ansible_version is defined
+
+    # this is used if molecule_ansible_version is not argument
+    - role: mafalb.ansible.virtualenv
+      virtualenv: ~/.virtualenvs/molecule
+      python: "{{ molecule_python_version|default('python3') }}"
+      packages:
+        - _ansible
+        - molecule[lint,docker,test]~=3.3.4
+      when: molecule_ansible_version is not defined
+
+  tasks:
+    - name: docker_container is present
+      command: ansible-galaxy collection install {{ item }}
+      loop:
+        - community.general
+        - community.docker
+      when:
+        - molecule_ansible_version|default('2.11') is not version('2.10', '<')
+
+...

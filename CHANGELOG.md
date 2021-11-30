@@ -1,5 +1,15 @@
 # Changelog
 
+## v5.0.0 2021-11-29
+
+- virtualenv role with pip constraints for ansible-test dependencies
+- support for fedora 35
+- support for centos stream 9
+- support for ansible 2.12
+- support for ansible collections 4.8.0
+- support for ansible collections 4.9.0
+- remove support for ubuntu 16
+
 ## v4.5.0 2021-10-15
 
 - support for ansible-core 2.11.6

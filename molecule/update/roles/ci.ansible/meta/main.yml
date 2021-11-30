@@ -1,0 +1,35 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+galaxy_info:
+  role_name: ansible
+  author: Markus Falb <markus.falb@mafalb.at>
+  description: Ansible helper role for ci
+  license: GPL-3.0-or-later
+  min_ansible_version: 2.9
+  platforms:
+  - name: EL
+    versions:
+    - 7
+    - 8
+  - name: Fedora
+    versions:
+    - 33
+    - 34
+  - name: Ubuntu
+    versions:
+    - xenial
+    - bionic
+    - focal
+    - impish
+  - name: Debian
+    versions:
+    - stretch
+    - buster
+    - bullseye
+
+dependencies: []
+
+...

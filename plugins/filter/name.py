@@ -24,7 +24,7 @@ from ansible.module_utils._text import to_native
 __metaclass__ = type
 
 
-def filter_pipname_core(version):
+def filter_pipname(version):
     version = str(version)
     try:
         majorversion = int(version.split('.', 1)[0])
@@ -40,12 +40,14 @@ def filter_pipname_core(version):
             raise ValueError("I can not handle the ansible majorversion %s"
                              % version)
     except Exception as e:
-        raise_from(AnsibleError('Error in filter_pipname_core, ',
-                   'this was original exception: %s' % to_native(e)), e)
+        raise_from(AnsibleError(
+            'Error in filter_pipname, this was original exception: %s' %
+            to_native(e)), e)
 
 
 class FilterModule(object):
     def filters(self):
         return {
-            'pipname_core': filter_pipname_core,
+            'pipname_core': filter_pipname,
+            'pipname': filter_pipname
         }

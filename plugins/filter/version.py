@@ -1,25 +1,16 @@
-# vim: set ts=4 expandtab:
-
-# This file is part of Ansible Collection mafalb.ansible
-# Copyright (c) 2020-2021 Markus Falb <markus.falb@mafalb.at>
-#
-# Ansible collection mafalb.ansible is free software: you can redistribute it
-# and/or modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation, either version 3 of the
-# License, or (at your option) any later version.
-#
-# Ansible collection mafalb.ansible is distributed in the hope that it will be
-# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Ansible collection mafalb.ansible.
-# If not, see <https://www.gnu.org/licenses/>.
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 
 from __future__ import (absolute_import, division, print_function)
+try:
+    from pkg_resources import Requirement as Pkgreq
+except ImportError:
+    Pkgreq = None
 from ansible.module_utils.six import raise_from
-from ansible.errors import AnsibleError
+from ansible.errors import (
+    AnsibleError,
+)
 from ansible.module_utils._text import to_native
 __metaclass__ = type
 
@@ -57,6 +48,7 @@ def filter_semver(version):
 
 
 class FilterModule(object):
+
     def filters(self):
         return {
             'pipver': filter_pipver,

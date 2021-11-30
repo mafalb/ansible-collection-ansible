@@ -1,0 +1,66 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+# change this when new version of ansible/ansible-core is released
+# also create constraints in files/constraints/ansible-test/
+latest_version:
+  '2.9': '2.9.27'
+  '2.10': '2.10.15'
+  '2.11': '2.11.6'
+  '2.12': '2.12.0'
+ansible_test_packages:
+  '2.9':
+    - mock
+    - flake8
+    - ntlm-auth
+    - rstcheck
+    - sphinx
+    - virtualenv
+    - voluptuous
+    - yamllint
+    - pytest      # not supported for python 2
+    - pylint      # not supported for python 2
+    - pytest-mock
+    - pytest-xdist
+  '2.10':
+    - flake8
+    - antsibull-changelog
+    - pylint
+    - resolvelib
+    - toml
+    - voluptuous
+    - yamllint
+    - coverage
+    - pytest
+    - pytest-xdist
+    - pytest-mock
+    - mock
+  '2.11':
+    - flake8
+    - antsibull-changelog
+    - pylint
+    - voluptuous
+    - yamllint
+    - typed-ast
+    - pytest
+    - junit-xml
+    - pytest-xdist
+    - pytest-mock
+    - mock
+  '2.12':
+    - mock
+    - pytest-mock
+    - pytest-xdist
+    - voluptuous
+    - wrapt
+    - yamllint
+
+python_versions:
+  '2.9': ['2.7', '3.5', '3.6', '3.7', '3.8']
+  '2.10': ['2.7', '3.5', '3.6', '3.7', '3.8', '3.9']
+  '2.11': ['2.7', '3.5', '3.6', '3.7', '3.8', '3.9']
+  '2.12': ['3.8', '3.9', '3.10']
+
+...

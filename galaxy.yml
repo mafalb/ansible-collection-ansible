@@ -11,7 +11,7 @@ namespace: mafalb
 name: ansible
 
 # The version of the collection. Must be compatible with semantic versioning
-version: 4.5.0
+version: 4.6.0
 
 # The path to the Markdown (.md) readme file. This path is relative to the root of the collection
 readme: README.md
@@ -48,6 +48,7 @@ tags:
 # range specifiers can be set and are separated by ','
 dependencies:
   'mafalb.epel': '>=0.1.0'
+  'community.general': '*'
 
 # The URL of the originating SCM repository
 repository: https://github.com/mafalb/ansible-collection-ansible

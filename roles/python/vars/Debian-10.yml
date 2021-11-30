@@ -1,0 +1,12 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+mafalb_python_default_version: '3.7'
+mafalb_python_package:
+  '_default': python3
+  '2.7': python2
+  '3.7': python3
+
+...

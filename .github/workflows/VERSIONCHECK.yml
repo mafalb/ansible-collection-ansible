@@ -1,0 +1,45 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+name: VERSIONCHECK
+
+on: # yamllint disable-line rule:truthy
+
+  push:
+    branches:
+    - '**'
+    tags-ignore:
+    - '*'
+
+  schedule:
+  - cron: '07 10 * * *'
+
+jobs:
+
+  check_update:
+
+    runs-on: ubuntu-20.04
+
+    env:
+      PY_COLORS: 1
+      ANSIBLE_FORCE_COLOR: 1
+      ANSIBLE_COLLECTIONS_PATHS: ../../..
+
+    defaults:
+      run:
+        working-directory: ansible_collections/mafalb/ansible
+
+    steps:
+
+      - name: checkout collection mafalb.ansible
+        uses: actions/checkout@v2
+        with:
+          path: ansible_collections/mafalb/ansible
+
+      # we are happy with any pre-installed ansible
+      - name: install molecule
+        run: ansible-playbook playbooks/check_for_new_version.yml
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: '../../..'
+
+...

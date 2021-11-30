@@ -1,0 +1,20 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+mafalb_ansible_default_version: '2.11'
+mafalb_ansible_deps:
+  '2.11': []
+mafalb_ansible_test_deps:
+  '2.11':
+    - python3-toml
+mafalb_ansible_package:
+  '2.11':
+    - ansible-core
+mafalb_collections_package:
+  '2.11': []
+mafalb_ansible_test_package:
+  '2.11': ansible-test
+
+...

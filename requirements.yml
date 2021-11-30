@@ -4,5 +4,6 @@
 collections:
 - name: mafalb.epel
   version: '>=0.1.1'
+- name: community.general
 
 ...

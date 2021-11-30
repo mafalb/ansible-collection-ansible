@@ -1,0 +1,16 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+mafalb_python_default_version: '3.9'
+mafalb_python_package:
+  '_default': core/python
+  '2.7': extra/python2
+  '3.9': core/python
+__mafalb_python_version: "{{ version|default(mafalb_python_version)|default(mafalb_python_default_version) }}"
+__mafalb_python_extra_packages:
+  '2': ['extra/python2-virtualenv']
+  '3': []
+
+...

@@ -22,15 +22,14 @@
 dependency:
   name: galaxy
   options:
-#    role-file: idontexist.yml   # avoid warning while running molecule
     requirements-file: requirements.yml
 
 driver:
-  name: docker
+  name: ${CI_DRIVER:-docker}
 
 platforms:
-- name: ${CI_HOSTNAME:-"ci-centos7"}
-  image: ${CI_IMAGE:-"quay.io/centos/centos:7"}
+- name: ${CI_HOSTNAME}
+  image: ${CI_IMAGE}
   #dockerfile: ../resources/${CI_HOSTNAME:-"ci-centos7"}.j2
   dockerfile: ../resources/Dockerfile.j2
   volumes:
@@ -41,14 +40,15 @@ provisioner:
   ansible_args:
     - --tags=all,debug
     - --diff
+    - -e arg_ansible_version='${ANSIBLE_VERSION}' -e arg_python_version=${PYTHON_VERSION}
   lint:
     name: ansible-lint
   config_options:
     defaults:
       gathering: smart
       interpreter_python: auto
-      stdout_callback: yaml
-      bin_ansible_callbacks: true
+#      stdout_callback: community.general.yaml
+#      bin_ansible_callbacks: true
 
 
 verifier:

@@ -1,0 +1,23 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+- hosts: all
+  tasks:
+    - name: necessary tools for CI are present
+      package:
+        name:
+          - diffutils
+          - git
+    - block:
+      - name: locale are present
+        package:
+          name: locales
+      - name: generate locale
+        locale_gen:
+          name: en_US.UTF-8
+      when:
+        - ansible_distribution == 'Ubuntu'
+        - ansible_distribution_major_version == '18'
+...

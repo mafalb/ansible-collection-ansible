@@ -1,0 +1,22 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+mafalb_ansible_system_dependencies:
+- python3-libselinux
+- python3-cryptography
+- glibc-langpack-en
+- python3-setuptools
+# no wheel, e.g. cffi
+- redhat-rpm-config
+- gcc
+- libffi-devel
+
+mafalb_ansible_virtualenv_command:
+  2: "/usr/bin/virtualenv -p {{ mafalb_ansible_virtualenv_python }}"
+  3: "{{ __reg_targeted_python.executable }} -m venv"
+
+mafalb_ansible_default_openssl_version: '1.1'
+
+...

@@ -1,95 +1,26 @@
-# vim: set ft=yaml ts=2 expandtab:
-
-# This file is part of Ansible Collection mafalb.ansible
-# Copyright (c) 2019-2021 Markus Falb <markus.falb@mafalb.at>
-#
-# Ansible collection mafalb.ansible is free software: you can redistribute it
-# and/or modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation, either version 3 of the
-# License, or (at your option) any later version.
-#
-# Ansible collection mafalb.ansible is distributed in the hope that it will be
-# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Ansible collection mafalb.ansible.
-# If not, see <https://www.gnu.org/licenses/>.
-
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-# default1 - 3.1.4 / 2.9.10
-# default2 - 3.1.5 / 2.9.*
-# default3 - 3.1.4 / 2.10.1
-# default4 - 3.1.5 / 2.10.*
-# default5 - 3.2.0 / 2.9.10
-# default6 - 3.2.* / 2.9.*
-# default7 - 3.2.0 / 2.10.1
-
-- name: Upgrade different variants of molecule
-  hosts: all,!ci-centos6,!ci-ubuntuxenial
-
-  tasks:
-
-  - name: prepare default1 - 3.1.4 / 2.9.10 to 3.1.* / 2.9.*
-    include_role:
-      name: mafalb.ansible.molecule
-    vars:
-      molecule_version: '3.1'
-      molecule_ansible_version: '2.9'
-      molecule_update: true
-      molecule_virtualenv: ~/.virtualenvs/default1
-
-  - name: prepare default2 - 3.1 / 2.9 to 3.2 / 2.9.*
-    include_role:
-      name: mafalb.ansible.molecule
-    vars:
-      molecule_ansible_version: '2.9'
-      molecule_update: true
-      molecule_virtualenv: ~/.virtualenvs/default2
-
-  - name: prepare default3 - 3.1.4 / 2.10.1 to 3.1.5 / 2.10.*
-    include_role:
-      name: mafalb.ansible.molecule
-    vars:
-      molecule_version: '3.1'
-      molecule_ansible_version: '2.10.*'
-      molecule_update: true
-      molecule_virtualenv: ~/.virtualenvs/default3
-
-  - name: prepare default4 - 3.1 / 2.10 to 3.3.* / 2.10.*
-    include_role:
-      name: mafalb.ansible.molecule
-    vars:
-      molecule_version: 3
-      molecule_update: true
-      molecule_ansible_version: '2.10'
-      molecule_virtualenv: ~/.virtualenvs/default4
-
-  - name: prepare default5 - 3.2.0 / 2.9.10 to 3.3 / 2.9
-    include_role:
-      name: mafalb.ansible.molecule
-    vars:
-      molecule_ansible_version: '2.9.10'
-      molecule_update: true
-      molecule_virtualenv: ~/.virtualenvs/default5
-
-  - name: prepare default6 - 3.3 / 2.9
-    include_role:
-      name: mafalb.ansible.molecule
-    vars:
-      molecule_version: 3
-      molecule_ansible_version: '2.9.*'
-      molecule_update: true
-      molecule_virtualenv: ~/.virtualenvs/default6
-
-  - name: prepare default7 - 3.3.0 / 2.10.1
-    include_role:
-      name: mafalb.ansible.molecule
-    vars:
-      molecule_update: true
-      molecule_ansible_version: '2.10'
-      molecule_virtualenv: ~/.virtualenvs/default7
+- hosts: all
+  roles:
+    - role: mafalb.ansible.python
+      version: "{{ arg_python_version }}"
+    - role: ci.ansible
+      target_version: '2.9.10'
+    - role: ci.ansible
+      target_version: '2.9.27'
+    - role: ci.ansible
+      target_version: '2.10.15'
+    - role: ci.ansible
+      target_version: '2.11.4'
+    - role: ci.ansible
+      target_version: '2.12.0'
+      when: false
+    - role: ci.ansible
+      target_version: '2.10.10'
+    - role: ci.ansible
+      target_version: '2.9.27'
 
 ...
