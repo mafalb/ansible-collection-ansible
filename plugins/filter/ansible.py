@@ -22,6 +22,33 @@ data = yaml.load(datafile, Loader=yaml.Loader)
 datafile.close()
 
 
+def parse_requirement(arg_req):
+    try:
+        # '_ansible' is not a valid pip name
+        req = Pkgreq.parse(arg_req.replace('_ansible', 'ansible'))
+    except Exception as e:
+        raise_from(AnsibleFilterError(
+            "not a valid pip specifier: {s}".format(s=arg_req)), e
+        )
+    if hasattr(req, 'name'):
+        name = req.name
+        spec = req.specifier
+        specstr = str(req.specifier)
+        contains_function = req.specifier.contains
+    elif hasattr(req, 'key'):
+        name = req.key
+        if req.specs:
+            spec = req.specs[0]
+            specstr = spec[0] + spec[1]
+        else:
+            spec = None
+            specstr = ''
+        contains_function = req.__contains__
+    else:
+        raise AnsibleFilterError("no valid Requirements {x}".format(x=req))
+    return name, spec, specstr, contains_function
+
+
 def version2int(version):
     """Return a numeric representation of a version string in the form X.Y.Z
 
@@ -76,25 +103,7 @@ def __major_minor_version(arg_req, python_version=None):
     return a version string in the form of X.Y
     """
 
-    try:
-        # '_ansible' is not a valid pip name
-        req = Pkgreq.parse(arg_req.replace('_ansible', 'ansible'))
-    except Exception as e:
-        raise_from(AnsibleFilterError(
-            "not a valid pip specifier: {req}".format(req=arg_req)
-        ), e)
-
-    if hasattr(req, 'name'):
-        name = req.name
-        spec = req.specifier
-        specstr = str(req.specifier)
-    elif hasattr(req, 'key'):
-        name = req.key
-        spec = req.specs[0]
-        specstr = spec[0] + spec[1]
-    else:
-        raise AnsibleFilterError("no valid Requirements {x}".format(x=req))
-
+    name, spec, specstr, req_contains = parse_requirement(arg_req)
     if name != 'ansible':
         raise AnsibleFilterError("not '_ansible': {str}".format(str=name))
 
@@ -114,7 +123,7 @@ def __major_minor_version(arg_req, python_version=None):
             0, int(data['latest_version'][majmin].split('.')[-1]) + 1
         ):
             all_versions.append(majmin + '.' + str(patch))
-    possible_versions = [v for v in all_versions if req.specifier.contains(v)]
+    possible_versions = [v for v in all_versions if req_contains(v)]
     try:
         latest_possible_version = sorted(
             possible_versions, key=version2int
@@ -153,27 +162,9 @@ def best_version(arg_packages, python_version=None):
         # we are interested in the _ansible pseudo package
         if s.startswith('_ansible') and not s.startswith('_ansible_test'):
             break
-
-    # '_ansible' is not a valid pip name
-    try:
-        req = Pkgreq.parse(s.replace('_ansible', 'ansible'))
-    except Exception as e:
-        raise_from(AnsibleFilterError(
-            "not a valid pip specifier: {x}".format(x=s)), e
-        )
-    if hasattr(req, 'name'):
-        name = req.name
-        spec = req.specifier
-        specstr = str(req.specifier)
-    elif hasattr(req, 'key'):
-        name = req.key
-        spec = req.specs[0]
-        specstr = spec[0] + spec[1]
-    else:
-        raise AnsibleFilterError("no valid Requirements {x}".format(x=req))
-
+    name, spec, specstr, req_contains = parse_requirement(s)
     if name != 'ansible':
-        raise AnsibleFilterError("not '_ansible': {str}".format(str=req.name))
+        raise AnsibleFilterError("not '_ansible': {str}".format(str=name))
 
     # exact version is requested, expand to full version if necessary
     # it could be that that's not compatible with requested python version
@@ -201,7 +192,7 @@ def best_version(arg_packages, python_version=None):
             0, int(data['latest_version'][majmin].split('.')[-1]) + 1
         ):
             all_versions.append(majmin + '.' + str(patch))
-    possible_versions = [v for v in all_versions if spec.contains(v)]
+    possible_versions = [v for v in all_versions if req_contains(v)]
     try:
         best_version = sorted(possible_versions, key=version2int)[-1]
     except IndexError:
@@ -229,18 +220,7 @@ def pip_package_list(arg_packages, python_version=None):
     packages = [s for s in arg_packages if not s.startswith('_ansible')]
     matching = [s for s in arg_packages if s.startswith('_ansible')]
     for s in matching:
-        # '_ansible' is not a valid pip name
-        req = Pkgreq.parse(s.replace('_ansible', 'ansible'))
-        if hasattr(req, 'name'):
-            name = req.name
-            spec = req.specifier
-            specstr = str(req.specifier)
-        elif hasattr(req, 'key'):
-            name = req.key
-            spec = req.specs[0]
-            specstr = spec[0] + spec[1]
-        else:
-            raise AnsibleFilterError("no valid Requirements {x}".format(x=req))
+        name, spec, specstr, req_contains = parse_requirement(s)
         if name == 'ansible':
             majmin = __major_minor_version(s)
             specifier = specstr

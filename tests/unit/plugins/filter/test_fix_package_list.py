@@ -28,6 +28,8 @@ TEST_CASES = (
     (['_ansible'], ['ansible-core']),
     (['_ansible~=2.11.6', '_ansible_test'],
      ['ansible-core~=2.11.6', 'voluptuous']),
+    (["_ansible==2.9", "molecule~=3.3.0", "ansible-lint", "_ansible_test"],
+     ['ansible==2.9.27', 'voluptuous']),
 )
 
 TEST_CASES_WITH_PYTHON = (
