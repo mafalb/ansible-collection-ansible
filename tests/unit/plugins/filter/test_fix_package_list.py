@@ -21,21 +21,23 @@ latest = sorted(data['latest_version'], key=version2int)[-1]
 TEST_CASES = (
     (['_ansible==2.12.0rc1'], ['ansible-core==2.12.0rc1']),
     (['_ansible==2.12.0rc1', '_ansible_test'], ['ansible-core==2.12.0rc1']),
-    (['_ansible==2.11'], ['ansible-core==2.11.6']),
+    (['_ansible==2.11'], ['ansible-core==2.11.7']),
     (['_ansible==2.11.6'], ['ansible-core==2.11.6']),
     (['_ansible<2.11.6'], ['ansible-core<2.11.6']),
     (['_ansible~=2.9.6'], ['ansible~=2.9.6']),
     (['_ansible'], ['ansible-core']),
     (['_ansible~=2.11.6', '_ansible_test'],
      ['ansible-core~=2.11.6', 'voluptuous']),
+    (["_ansible==2.9", "molecule~=3.3.0", "ansible-lint", "_ansible_test"],
+     ['ansible==2.9.27', 'voluptuous']),
 )
 
 TEST_CASES_WITH_PYTHON = (
     (['_ansible==2.12.0rc1'], '3.8', ['ansible-core==2.12.0rc1']),
     (['_ansible==2.12.0rc1', '_ansible_test'], '3.8',
      ['ansible-core==2.12.0rc1']),
-    (['_ansible==2.11'], '3.8', ['ansible-core==2.11.6']),
-    (['_ansible==2.11'], None, ['ansible-core==2.11.6']),
+    (['_ansible==2.11'], '3.8', ['ansible-core==2.11.7']),
+    (['_ansible==2.11'], None, ['ansible-core==2.11.7']),
     (['_ansible==2.11.6'], '3.8', ['ansible-core==2.11.6']),
     (['_ansible<2.11.6'], '3.8', ['ansible-core<2.11.6']),
     (['_ansible~=2.9.6'], '3.8', ['ansible~=2.9.6']),

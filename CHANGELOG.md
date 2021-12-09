@@ -1,5 +1,12 @@
 # Changelog
 
+## v5.0.1 2021-12-08
+
+- support for ansible-core 2.12.1
+- support for ansible-core 2.11.7
+- support for ansible collections 5.0.1
+- bugfixes in custom filters for very old setuptools (CentOS 7)
+
 ## v5.0.0 2021-11-29
 
 - virtualenv role with pip constraints for ansible-test dependencies
