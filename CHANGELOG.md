@@ -1,6 +1,6 @@
 # Changelog
 
-## v5.0.2 2021-12-08
+## v5.0.1 2021-12-14
 
 - support for ansible-core 2.12.1
 - support for ansible-core 2.11.7
