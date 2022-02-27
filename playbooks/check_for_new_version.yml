@@ -38,4 +38,11 @@
         fail_msg: "{{ '2.11'|mafalb.ansible.next_version }} is available"
         success_msg: "{{ '2.11'|mafalb.ansible.next_version }} is not available"
 
+    - name: assert that no new ansible 2.12 version is available
+      assert:
+        that:
+          - not __reg_tags.stdout|regex_search('2.11'|mafalb.ansible.next_version + '$')
+        fail_msg: "{{ '2.12'|mafalb.ansible.next_version }} is available"
+        success_msg: "{{ '2.12'|mafalb.ansible.next_version }} is not available"
+
 ...
