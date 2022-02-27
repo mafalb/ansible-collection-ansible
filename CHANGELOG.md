@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.0.2 2022-02-27
+
+- support for ansible-core 2.12.2
+- c8s has ansible 2.12 now. I suppose the ansible 2.9 from epel will go away.
+- fedora 35 has ansible 2.12 instead of 2.11
+
 ## v5.0.1 2021-12-14
 
 - support for ansible-core 2.12.1
