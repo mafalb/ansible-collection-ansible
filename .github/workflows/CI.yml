@@ -175,7 +175,6 @@ jobs:
           - c8s
           - c9s
           - centos7
-          - centos8
           - rocky8
           - alma8
           - debian11
@@ -248,13 +247,6 @@ jobs:
           - os: centos7
             ansible_version: '2.11'
           - os: centos7
-            ansible_version: '2.12'
-
-          - os: centos8
-            ansible_version: '2.10'
-          - os: centos8
-            ansible_version: '2.11'
-          - os: centos8
             ansible_version: '2.12'
 
           - os: debian11
@@ -353,7 +345,6 @@ jobs:
           - c8s
           - c9s
           - centos7
-          - centos8
           - rocky8
           - alma8
           - debian9
@@ -450,14 +441,6 @@ jobs:
           - os: centos7
             python_version: '3.9'
           - os: centos7
-            python_version: '3.10'
-
-          # centos8 has 2.7, 3.6, 3.8, 3.9
-          - os: centos8
-            python_version: '3.5'
-          - os: centos8
-            python_version: '3.7'
-          - os: centos8
             python_version: '3.10'
 
           # alma8 has 2.7, 3.6, 3.8, 3.9
