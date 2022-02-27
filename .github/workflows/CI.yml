@@ -212,14 +212,14 @@ jobs:
           - os: fedora35
             ansible_version: '2.10'
           - os: fedora35
-            ansible_version: '2.12'
+            ansible_version: '2.11'
 
+          - os: c8s
+            ansible_version: '2.9'
           - os: c8s
             ansible_version: '2.10'
           - os: c8s
             ansible_version: '2.11'
-          - os: c8s
-            ansible_version: '2.12'
 
           - os: c9s
             ansible_version: '2.9'
