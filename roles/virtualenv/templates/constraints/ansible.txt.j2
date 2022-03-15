@@ -6,3 +6,4 @@ cryptography{{ ansible_cryptography_specifier[mafalb_ansible_default_openssl_ver
 # with ansible 2.9 and ansible 2.10
 {% if __mafalb_ansible_version is version('2.11','<') %}
 ansible-lint <6
+{% endif %}
