@@ -17,8 +17,6 @@
       register: __reg_tags
       changed_when: false
 
-    - debug: var=__reg_tags.stdout
-    - debug: msg="{{ __reg_tags.stdout|regex_search('2.11'|mafalb.ansible.next_version + '$') }}"
     - name: assert that no new ansible 2.9 version is available
       assert:
         that:
