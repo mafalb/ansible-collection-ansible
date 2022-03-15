@@ -1,1 +1,3 @@
+skip_list:
+  - fqcn-builtins  # for now to gain ansible 2.9 compatibility
 warn_list: []
