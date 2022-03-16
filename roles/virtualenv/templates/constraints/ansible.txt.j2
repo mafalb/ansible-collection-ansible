@@ -1,3 +1,9 @@
 # {{ ansible_managed }}
 cryptography<3.1 ; python_version == '3.5'
 cryptography{{ ansible_cryptography_specifier[mafalb_ansible_default_openssl_version] }}
+
+# ansible-lint 6 is pulling in ansible-core and this is conflicting
+# with ansible 2.9 and ansible 2.10
+{% if __mafalb_ansible_version is version('2.11','<') %}
+ansible-lint <6
+{% endif %}

@@ -1,4 +1,6 @@
-# vim: set ft=yaml ts=2 expandtab:
+# Copyright (c) 2020-2022 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
 name: CI
@@ -45,7 +47,6 @@ jobs:
 
           - ansible_version: '2.9.6'
             python_version: '3.8'
-
 
           - ansible_version: '2.10'
             python_version: '3.6'

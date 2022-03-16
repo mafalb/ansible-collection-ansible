@@ -1,5 +1,12 @@
 # Changelog
 
+## v5.0.3 2022-03-15
+
+- constrain ansible-lint <6 for ansible <2.11
+- support for ansible-core 2.12.3
+- support for ansible-core 2.11.8 and ansible 2.11.9
+- support for ansible-base 2.10.17
+
 ## v5.0.2 2022-02-27
 
 - support for ansible-core 2.12.2
