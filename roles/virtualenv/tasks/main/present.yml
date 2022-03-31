@@ -156,18 +156,12 @@
   pip:
     name: "{{ __mafalb_ansible_packages|difference(ansible_test_packages_not[__reg_targeted_python.version.major]) }}"
     extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }}
-       -c {{ __reg_venv.virtualenv }}/constraints.txt
+       -c {{ __reg_venv.virtualenv }}/virtualenv.constraints.txt
        -c {{ __reg_venv.virtualenv }}/ansible.constraints.txt
-       -c {{ __reg_venv.virtualenv }}/virtualenv.constraints.txt"
+       -c {{ __reg_venv.virtualenv }}/constraints.txt"
     virtualenv: "{{ __reg_venv.virtualenv }}"
   register: __pip_packages
 
-- name: pip freeze
-  shell: |
-    . {{ virtualenv|default(mafalb_ansible_virtualenv) }}/bin/activate
-    pip freeze
-  changed_when: false
-  register: __freeze
 - name: pip freeze
   shell: |
     . {{ virtualenv|default(mafalb_ansible_virtualenv) }}/bin/activate
@@ -178,8 +172,10 @@
 - name: debug
   block:
     - name: debug installed pip packages
-      debug: var=__pip_packages
-    - name: debug
+      debug: var=__pip_packages.name
+    - name: debug installed pip packages
+      debug: var=__pip_packages.stderr
+    - name: debug pip packages
       debug: var=__freeze
   tags:
     - never
