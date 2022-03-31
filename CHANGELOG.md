@@ -3,6 +3,7 @@
 ## v5.0.3 2022-03-31
 
 - constrain ansible-lint <6 for ansible <2.11
+- constrain voluptous for python 2.7
 - support for ansible-core 2.12.3 2.12.4
 - support for ansible-core 2.11.8 2.11.9 2.11.10
 - support for ansible-base 2.10.17
