@@ -7,12 +7,13 @@ from ansible.errors import AnsibleFilterError
 from ansible_collections.mafalb.ansible.plugins.filter.ansible import (
     best_version
 )
+import pytest
 import yaml
+
 datafile = open('roles/virtualenv/vars/data.yml', 'r')
 data = yaml.load(datafile, Loader=yaml.Loader)
 datafile.close()
 
-import pytest
 __metaclass__ = type
 
 
@@ -28,7 +29,8 @@ TEST_CASES = (
     (['_ansible~=2.9.6'], '2.9.27'),
     (['_ansible'], data['latest_version']['2.12']),
     (['_ansible~=2.11.6', '_ansible_test'], data['latest_version']['2.11']),
-    (['ansible', '_ansible==2.11', '_ansible_test'], data['latest_version']['2.11']),
+    (['ansible', '_ansible==2.11', '_ansible_test'],
+     data['latest_version']['2.11']),
 )
 
 T_WITH_PYTHON = (
@@ -43,7 +45,8 @@ T_WITH_PYTHON = (
     (['_ansible~=2.9.6'], '3.8', '2.9.27'),
     (['_ansible'], '3.8', data['latest_version']['2.12']),
     (['_ansible'], '3.7', data['latest_version']['2.11']),
-    (['_ansible~=2.11.6', '_ansible_test'], '3.8', data['latest_version']['2.11']),
+    (['_ansible~=2.11.6', '_ansible_test'], '3.8',
+     data['latest_version']['2.11']),
 )
 
 FAIL_CASES = (
