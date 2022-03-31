@@ -156,9 +156,9 @@
   pip:
     name: "{{ __mafalb_ansible_packages|difference(ansible_test_packages_not[__reg_targeted_python.version.major]) }}"
     extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }}
-       -c {{ __reg_venv.virtualenv }}/virtualenv.constraints.txt"
+       -c {{ __reg_venv.virtualenv }}/virtualenv.constraints.txt
        -c {{ __reg_venv.virtualenv }}/ansible.constraints.txt
-       -c {{ __reg_venv.virtualenv }}/constraints.txt
+       -c {{ __reg_venv.virtualenv }}/constraints.txt"
     virtualenv: "{{ __reg_venv.virtualenv }}"
   register: __pip_packages
 
