@@ -83,6 +83,16 @@ jobs:
           - ansible_version: '2.12'
             python_version: '3.10'
 
+          - ansible_version: '2.14'
+            python_version: '3.9'
+
+          - ansible_version: '2.14'
+            python_version: '3.10'
+
+          - ansible_version: '2.14'
+            python_version: '3.11'
+
+
     env:
       PY_COLORS: 1
       ANSIBLE_FORCE_COLOR: 1
@@ -169,25 +179,12 @@ jobs:
       matrix:
 
         os:
-          #- arch
-          - fedora33
-          - fedora34
-          - fedora35
+          - fedora38
           - c8s
-          - c9s
-          - centos7
-          - rocky8
-          - alma8
-          - debian11
-          - ubuntu20
-          - ubuntu2104
-          - ubuntu2110
+          - debian12
 
         ansible_version:
-          - '2.12'
-          - '2.11'
-          - '2.10'
-          - '2.9'
+          - '2.14'
 
         exclude:
 

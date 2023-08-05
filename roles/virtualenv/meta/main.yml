@@ -7,7 +7,7 @@ galaxy_info:
   author: Markus Falb <markus.falb@mafalb.at>
   description: Ansible role mafalb.ansible.virtualenv
   license: GPL-3.0-or-later
-  min_ansible_version: 2.9
+  min_ansible_version: 2.14
 
   # https://galaxy.ansible.com/api/v1/platforms/
   #
@@ -18,8 +18,7 @@ galaxy_info:
     - 8
   - name: Fedora
     versions:
-    - 33
-    - 34
+    - 38
   - name: Ubuntu
     versions:
     - xenial
@@ -28,9 +27,7 @@ galaxy_info:
     - impish
   - name: Debian
     versions:
-    - stretch
-    - buster
-    - bullseye
+    - bookworm
 
   galaxy_tags:
   - ansible

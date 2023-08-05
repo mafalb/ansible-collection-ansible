@@ -25,6 +25,30 @@ molecule_virtualenv_command: "{{ ansible_python.executable }} -m venv"
 #
 # ansible community has the following dependencies on ansible base/core
 #
+# 8.2.0 -> ansible-core<2.16, >=2.15.2
+# 8.1.0 -> ansible-core<2.16, >=2.15.1
+# 8.0.0 -> ansible-core<2.16, >=2.15.0
+# 7.7.0 -> ansible-core<2.15, >=2.14.7
+# 7.6.0 -> ansible-core<2.15, >=2.14.6
+# 7.5.0 -> ansible-core<2.15, >=2.14.5
+# 7.4.0 -> ansible-core<2.15, >=2.14.4
+# 7.3.0 -> ansible-core<2.15, >=2.14.3
+# 7.2.0 -> ansible-core<2.15, >=2.14.2
+# 7.1.0 -> ansible-core<2.15, >=2.14.1
+# 7.0.0 -> ansible-core<2.15, >=2.14.0
+# 6.7.0 -> ansible-core<2.14, >=2.13.7
+# 6.6.0 -> ansible-core<2.14, >=2.13.6
+# 6.5.0 -> ansible-core<2.14, >=2.13.5
+# 6.4.0 -> ansible-core<2.14, >=2.13.4
+# 6.3.0 -> ansible-core<2.14, >=2.13.3
+# 6.2.0 -> ansible-core<2.14, >=2.13.2
+# 6.1.0 -> ansible-core<2.14, >=2.13.1
+# 6.0.0 -> ansible-core<2.14, >=2.13.0
+# 5.9.0 -> ansible-core<2.13,>=2.12.6
+# 5.8.0 -> ansible-core<2.13,>=2.12.5
+# 5.7.0 -> ansible-core<2.13,>=2.12.5
+# 5.6.0 -> ansible-core<2.13,>=2.12.4
+# 5.5.0 -> ansible-core<2.13,>=2.12.3
 # 5.4.0 -> ansible-core<2.13,>=2.12.2
 # 5.3.0 -> ansible-core<2.13,>=2.12.2
 # 5.2.0 -> ansible-core<2.13,>=2.12.1
@@ -116,8 +140,22 @@ ansible_packages:
   '2.12.0rc1': 'ansible-core==2.12.0rc1,ansible==5.0.0rc1'
   '2.12.0': 'ansible-core==2.12.0,ansible<5.1.0'
   '2.12.1': 'ansible-core==2.12.1,ansible<5.3.0'
-  '2.12.2': 'ansible-core==2.12.2,ansible<6'
+  '2.12.2': 'ansible-core==2.12.2,ansible<5.5.0'
+  '2.12.3': 'ansible-core==2.12.3,ansible<5.6.0'
+  '2.12.4': 'ansible-core==2.12.4,ansible<5.7.0'
+  '2.12.5': 'ansible-core==2.12.5,ansible<5.9.0'
+  '2.12.6': 'ansible-core==2.12.6,ansible<6'
   '2.12.*': 'ansible-core~=2.12.0,<2.13,ansible<6'
+
+  '2.14.0': 'ansible-core==2.14.0,ansible<7.1.0'
+  '2.14.1': 'ansible-core==2.14.1,ansible<7.2.0'
+  '2.14.2': 'ansible-core==2.14.2,ansible<7.3.0'
+  '2.14.3': 'ansible-core==2.14.3,ansible<7.4.0'
+  '2.14.4': 'ansible-core==2.14.4,ansible<7.5.0'
+  '2.14.5': 'ansible-core==2.14.5,ansible<7.6.0'
+  '2.14.6': 'ansible-core==2.14.6,ansible<7.7.0'
+  '2.14.*': 'ansible-core~=2.14.0,ansible<8'
+
 
 molecule_ansible_major_minor_version: "{{ molecule_ansible_version.split('.')[0:2]|join('.') }}"
 
