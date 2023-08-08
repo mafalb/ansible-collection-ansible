@@ -28,7 +28,10 @@ def parse_requirement(arg_req):
         req = Pkgreq.parse(arg_req.replace('_ansible', 'ansible'))
     except Exception as e:
         raise_from(AnsibleFilterError(
-            "not a valid pip specifier: {s} {ss}".format(s=arg_req, ss=str(e))), e
+            "not a valid pip specifier: {s} {ss}".format(
+                                                    s=arg_req,
+                                                    ss=str(e)
+                                                    )), e
         )
     if hasattr(req, 'name'):
         name = req.name
