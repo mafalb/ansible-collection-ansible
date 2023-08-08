@@ -32,7 +32,7 @@ def parse_requirement(arg_req):
                                                     s=arg_req,
                                                     ss=str(e)
                                                     )), e
-        )
+                   )
     if hasattr(req, 'name'):
         name = req.name
         spec = req.specifier
