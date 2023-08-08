@@ -45,4 +45,25 @@
         fail_msg: "{{ '2.12'|mafalb.ansible.next_version }} is available"
         success_msg: "{{ '2.12'|mafalb.ansible.next_version }} is not available"
 
+    - name: assert that no new ansible 2.13 version is available
+      assert:
+        that:
+          - not __reg_tags.stdout|regex_search('2.13'|mafalb.ansible.next_version + '\n')
+        fail_msg: "{{ '2.13'|mafalb.ansible.next_version }} is available"
+        success_msg: "{{ '2.13'|mafalb.ansible.next_version }} is not available"
+
+    - name: assert that no new ansible 2.14 version is available
+      assert:
+        that:
+          - not __reg_tags.stdout|regex_search('2.14'|mafalb.ansible.next_version + '\n')
+        fail_msg: "{{ '2.14'|mafalb.ansible.next_version }} is available"
+        success_msg: "{{ '2.14'|mafalb.ansible.next_version }} is not available"
+
+    - name: assert that no new ansible 2.15 version is available
+      assert:
+        that:
+          - not __reg_tags.stdout|regex_search('2.15'|mafalb.ansible.next_version + '\n')
+        fail_msg: "{{ '2.15'|mafalb.ansible.next_version }} is available"
+        success_msg: "{{ '2.15'|mafalb.ansible.next_version }} is not available"
+
 ...
