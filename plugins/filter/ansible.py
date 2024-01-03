@@ -11,6 +11,7 @@ from ansible.module_utils.six import raise_from
 from ansible.errors import (
     AnsibleFilterError,
 )
+import sys
 import yaml
 from os.path import dirname
 __metaclass__ = type
@@ -159,6 +160,9 @@ def best_version(arg_packages, python_version=None):
     return a version string in the form of X.Y.Z
     """
 
+    if not python_version:
+        python_version =  str(sys.version_info.major) + '.' + str(sys.version_info.minor)
+
     for s in arg_packages:
         # we are interested in the _ansible pseudo package
         if s.startswith('_ansible') and not s.startswith('_ansible_test'):
@@ -172,10 +176,17 @@ def best_version(arg_packages, python_version=None):
     if specstr.startswith('=='):
         version = specstr.replace('==', '')
         if len(version.split('.')) == 3:  # e.g. 2.11.6
-            return version
+            majmin='.'.join(version.split('.')[0:2])
+            if python_version in data['python_versions'][majmin]:
+                return version
+            else:
+                raise AnsibleFilterError(
+                    "version not supported: {v}".format(v=version)
+                )
         elif len(version.split('.')) == 2:  # e.g. 2.11
             try:
-                return data['latest_version'][version]
+                if python_version in data['python_versions'][version]:
+                    return data['latest_version'][version]
             except KeyError:
                 raise AnsibleFilterError(
                     "version not supported: {v}".format(v=version)
@@ -199,7 +210,7 @@ def best_version(arg_packages, python_version=None):
     except IndexError:
         # requested version is too old or too new
         raise AnsibleFilterError(
-            "not a supported pip specifier: {req}".format(req=s)
+            "not a supported python interpreter for: {req}".format(req=s)
         )
     return best_version
 
@@ -218,12 +229,18 @@ def pip_package_list(arg_packages, python_version=None):
             type=type(arg_packages))
         )
 
+    if not python_version:
+        python_version =  str(sys.version_info.major) + '.' + str(sys.version_info.minor)
+
     packages = [s for s in arg_packages if not s.startswith('_ansible')]
     matching = [s for s in arg_packages if s.startswith('_ansible')]
     for s in matching:
         name, spec, specstr, req_contains = parse_requirement(s)
         if name == 'ansible':
             majmin = __major_minor_version(s)
+    for s in matching:
+        name, spec, specstr, req_contains = parse_requirement(s)
+        if name == 'ansible':
             specifier = specstr
             # exact version is requested, expand to full version if necessary
             if specifier.startswith('=='):
@@ -250,8 +267,10 @@ def pip_package_list(arg_packages, python_version=None):
 
 def __ansible_test_packages(version):
     """Return a list of ansible-test requirements"""
-    return data['ansible_test_packages'][version]
-
+    try:
+        return data['ansible_test_packages'][version]
+    except Exception as e:
+        raise AnsibleFilterError("No key in ansible_test_packages: {s}".format(s=str(e)))
 
 class FilterModule(object):
 

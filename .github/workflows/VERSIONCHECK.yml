@@ -37,7 +37,7 @@ jobs:
           path: ansible_collections/mafalb/ansible
 
       # we are happy with any pre-installed ansible
-      - name: install molecule
+      - name: check for new versions
         run: ansible-playbook playbooks/check_for_new_version.yml
         env:
           ANSIBLE_COLLECTIONS_PATHS: '../../..'

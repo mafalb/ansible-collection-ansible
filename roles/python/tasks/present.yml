@@ -6,20 +6,20 @@
 - name: assertions
   assert:
     that:
-      - mafalb_python_package[__mafalb_python_version] is defined
+      - python_package[python_version] is defined
 
 - name: debug
   debug:
     msg: "{{
-      [mafalb_python_package[__mafalb_python_version]]
-      + __mafalb_python_extra_packages[__mafalb_python_version[0]]
+      [python_package[python_version]]
+      + __python_extra_packages[python_version[0]]
     }}"
 
 - name: python is present
   package:
     name: "{{
-      [mafalb_python_package[__mafalb_python_version]]
-      + __mafalb_python_extra_packages[__mafalb_python_version[0]]
+      [python_package[python_version]]
+      + __python_extra_packages[python_version[0]]
     }}"
 
 ...

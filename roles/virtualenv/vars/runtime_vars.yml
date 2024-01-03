@@ -1,9 +1,12 @@
 # Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+
+# the variables defined here dont fit into main.yml because they depend on data that was not available then
 ---
 
-__mafalb_ansible_version: "{{  mafalb_ansible.packages|mafalb.ansible.best_version(__reg_targeted_python.version.majmin) }}"
-__mafalb_ansible_packages: "{{ mafalb_ansible.packages|mafalb.ansible.fix_package_list(__reg_targeted_python.version.majmin) }}"
+__mafalb_ansible_version: "{{  mafalb_ansible_packages|default(packages)|mafalb.ansible.best_version(__reg_targeted_python.version.majmin) }}"
+__mafalb_ansible_majmin_version: "{{ __mafalb_ansible_version.split('.')[0:2]|join('.') }}"
+__mafalb_ansible_packages: "{{ mafalb_ansible_packages|default(packages)|mafalb.ansible.fix_package_list(__reg_targeted_python.version.majmin) }}"
 
 ...

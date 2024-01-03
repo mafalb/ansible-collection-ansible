@@ -25,11 +25,15 @@ Variables are optional. Only specify them if you want to override the defaults.
 ```molecule_version``` To pin to a specific version.
 
 ```yaml
-molecule_version: 3
+molecule_version: 6
 ```
 
 ```yaml
-molecule_version: 3.1
+molecule_version: 6.0
+```
+
+```yaml
+molecule_version: 6.0.3
 ```
 
 ```molecule_update``` Set if you want to update an existent installation of molecule
@@ -43,13 +47,13 @@ molecule_update: true
 this is the version of the ansible-core (or ansible-base) package, not the version of the ansible package
 
 ```yaml
-molecule_ansible_version: 2.11
+molecule_ansible_version: 2.14
 ```
 
 ```molecule_ansible_community_version``` the version of ansible community, i.e. the ansible package
 
 ```yaml
-molecule_ansible_community_version: 4.0.0
+molecule_ansible_community_version: 7.3.0
 ```
 
 ```molecule_virtualenv``` set the path to the virtualenv. Specify a absolute path. ```~/something``` will not work.

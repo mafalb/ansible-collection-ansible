@@ -3,8 +3,8 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-mafalb_python_default_version: '3.6'
-mafalb_python_package:
+python_default_version: '3.6'
+python_package:
   '_default': '@python36'
   '2.7': '@python27'
   '3.6': '@python36'
@@ -12,7 +12,7 @@ mafalb_python_package:
   '3.9': '@python39'
 
 # RHEL8 does not provide python-virtualenv
-__mafalb_python_extra_packages:
+__python_extra_packages:
   '2': ['python2-virtualenv']
   '3': []
 

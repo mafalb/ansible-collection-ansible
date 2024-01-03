@@ -60,11 +60,6 @@
     - { index: 0, virtualenv: molecule }
     - { index: 1, virtualenv: default1 }
     - { index: 2, virtualenv: default2 }
-    - { index: 3, virtualenv: default3 }
-    - { index: 4, virtualenv: default4 }
-    - { index: 5, virtualenv: default5 }
-    - { index: 6, virtualenv: default6 }
-    - { index: 7, virtualenv: default7 }
 
   tasks:
 
@@ -104,41 +99,19 @@
     assert:
       that:
 
-      - _molecules_version.results[0].stdout_lines[1] is match('    ansible:2.11.')
-      - _molecules_version.results[0].stdout_lines[0].split()[1] is match('3.3')
-      - _lint_version.results[0].stdout_lines[0].split()[1] is version('5','>=')
+      - _molecules_version.results[0].stdout_lines[1] is match('    ansible:2.14.')
+      - _molecules_version.results[0].stdout_lines[0].split()[1] is match('6.0')
+      - _lint_version.results[0].stdout_lines[0].split()[1] is version('6','>=')
 
-      - _molecules_version.results[1].stdout_lines[1] is match('    ansible:2.9.10')
-      - _molecules_version.results[1].stdout_lines[0].split()[1] is version('3.1.4','=')
-      - _lint_version.results[1].stdout_lines[0].split()[1] is version('5','<')
+      - _molecules_version.results[1].stdout_lines[1] is match('    ansible:2.14.3')
+      - _molecules_version.results[1].stdout_lines[0].split()[1] is version('6.0.3','=')
+      - _lint_version.results[1].stdout_lines[0].split()[1] is version('7','<')
 
-      - _molecules_version.results[2].stdout_lines[1] is match('    ansible:2.9.')
-      - _molecules_version.results[2].stdout_lines[0].split()[1] is version('3.1.5','=')
-      - _lint_version.results[2].stdout_lines[0].split()[1] is version('5','<')
+      - _molecules_version.results[2].stdout_lines[1] is match('    ansible:2.14.')
+      - _molecules_version.results[2].stdout_lines[0].split()[1] is match('6.0','=')
+      - _lint_version.results[2].stdout_lines[0].split()[1] is version('7','<')
+      - _lint_version.results[2].stdout_lines[0].split()[1] is version('6','>')
 
-      - _molecules_version.results[3].stdout_lines[1] is match('    ansible:2.10.')
-      - _molecules_version.results[3].stdout_lines[1].split()[0].split(":")[1] is version('2.10.2', '=')
-      - _molecules_version.results[3].stdout_lines[0].split()[1] is version('3.1.4','=')
-      - _lint_version.results[3].stdout_lines[0].split()[1] is version('5','<')
-
-      - _molecules_version.results[4].stdout_lines[1] is match('    ansible:2.10.')
-      - _molecules_version.results[4].stdout_lines[1].split()[0].split(":")[1] is version('2.10.0', '>=')
-      - _molecules_version.results[4].stdout_lines[0].split()[1] is version('3.1.5','=')
-      - _lint_version.results[4].stdout_lines[0].split()[1] is version('5','<')
-
-      - _molecules_version.results[5].stdout_lines[1] is match('    ansible:2.9.10')
-      - _molecules_version.results[5].stdout_lines[0].split()[1] is version('3.2.0','=')
-      - _lint_version.results[5].stdout_lines[0].split()[1] is version('5','<')
-
-      - _molecules_version.results[6].stdout_lines[1] is match('    ansible:2.9.')
-      - _molecules_version.results[6].stdout_lines[1].split()[0].split(":")[1] is version('2.9.0', '>=')
-      - _molecules_version.results[6].stdout_lines[0].split()[1] is version('3.3.0','>=')
-      - _lint_version.results[6].stdout_lines[0].split()[1] is version('5','>=')
-
-      - _molecules_version.results[7].stdout_lines[1] is match('    ansible:2.10.3')
-      - _molecules_version.results[7].stdout_lines[1].split()[0].split(":")[1] is version('2.10.3', '=')
-      - _molecules_version.results[7].stdout_lines[0].split()[1] is version('3.2.0','=')
-      - _lint_version.results[7].stdout_lines[0].split()[1] is version('5','<')
 
   - name: verify molecule installation
     include_role:

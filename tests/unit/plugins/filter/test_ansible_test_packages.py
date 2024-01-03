@@ -6,7 +6,24 @@ from __future__ import (absolute_import, division, print_function)
 from ansible_collections.mafalb.ansible.plugins.filter.ansible import (
     __ansible_test_packages
 )
+
+import yaml
+
+datafile = open('roles/virtualenv/vars/data.yml', 'r')
+data = yaml.load(datafile, Loader=yaml.Loader)
+datafile.close()
+
+
 __metaclass__ = type
+
+
+def test_data_integrity():
+    for ansible_version in data['python_versions']:
+        data['ansible_test_packages'][ansible_version]
+    for ansible_version in data['python_versions']:
+        data['latest_version'][ansible_version]
+    for ansible_version in data['latest_version']:
+        data['ansible_test_packages'][ansible_version]
 
 
 def test_ansible_test_packages():

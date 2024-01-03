@@ -5,28 +5,25 @@
 
 - name: debug
   block:
+    - name: debug __python_virtualenv
+      debug: var=__python_virtualenv
 
-    - name: debug __mafalb_ansible_version
-      debug: var=packages|default(mafalb_ansible_packages|default(['_ansible']))
-    - name: debug __mafalb_ansible_majmin_version
-      debug: msg="{{ __mafalb_ansible_version.split('.')[0:2]|join('.') }}"
-    - name: debug __mafalb_ansible_version
-      debug: var=__mafalb_ansible_version
-    - name: debug __mafalb_ansible_packages
-      debug: var=__mafalb_ansible_packages
-    - name: debug mafalb_ansible_virtualenv_command
-      debug: var=mafalb_ansible_virtualenv_command
+    - name: debug __python_virtualenv_interpreter
+      debug: var=__python_virtualenv_interpreter
+
+    - name: debug mafalb_ansible_virtualenv_python
+      debug: var=mafalb_ansible_virtualenv_python
   tags:
     - never
     - debug
 
 - name: get info about targeted python interpreter
   mafalb.ansible.python_info:
-    executable: "{{ mafalb_ansible_virtualenv_python }}"
+    executable: "{{ python_interpreter|default(ansible_python.executable) }}"
   register: __reg_targeted_python
 
-- name: compute the best matching ansible version and fix package list
-  include_vars: runtime_vars.yml
+- name: debug targeted python interpreter
+  debug: var=__reg_targeted_python
 
 - name: get OS specific variables
   with_first_found:
@@ -40,16 +37,14 @@
   loop_control:
     loop_var: __vars_file
 
+- name: compute the best matching ansible version (if version is not specified) and fix package list
+  ansible.builtin.include_vars:
+    file: runtime_vars.yml
+
 - name: dependencies are present
   become: true
   package:
     name: "{{ mafalb_ansible_system_dependencies }}"
-
-- name: debug
-  debug: var=__reg_targeted_python.executable
-  tags:
-    - never
-    - debug
 
 - name: virtualenv is present
   pip:
@@ -57,7 +52,7 @@
       - pip{{ mafalb_ansible_virtualenv_packages.pip }}
       - setuptools{{ mafalb_ansible_virtualenv_packages.setuptools }}
       - wheel
-    virtualenv: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}"
+    virtualenv: "{{ __python_virtualenv }}"
     virtualenv_python: "{{ mafalb_ansible_virtualenv_python if __reg_targeted_python.version.major == 2 else omit }}"
     virtualenv_command: "{{
       mafalb_ansible_virtualenv_command[__reg_targeted_python.version.major]
@@ -65,30 +60,42 @@
   # register the result and enjoy the absolute path to the virtualenv
   register: __reg_venv
 
-- name: debug virtualenv
-  debug: var=__reg_venv
+- name: get info about targeted python interpreter
+  mafalb.ansible.python_info:
+    executable: "{{ __python_virtualenv_interpreter }}"
+  register: __reg_targeted_python
+
+- name: debug
+  block:
+    - name: debug targeted python interpreter
+      debug: var=__reg_targeted_python
+
+    - name: debug virtualenv
+      debug: var=__reg_venv
+
+    - name: debug __mafalb_ansible_version
+      debug: var=__mafalb_ansible_version
+
+    - name: debug __mafalb_ansible_packages
+      debug: var=__mafalb_ansible_packages
   tags:
     - never
     - debug
 
-# ensure that packages can't pull in other versions of some packages
-- name: constraints file virtualenv.constraints.txt is present
-  template:
-    src: constraints/virtualenv.txt.j2
-    dest: "{{ __reg_venv.virtualenv }}/virtualenv.constraints.txt"
-    backup: true
-    mode: '0644'
-
-# some extra constraints
-- name: constraints file virtualenv.constraints.txt is present
-  template:
-    src: constraints/ansible.txt.j2
-    dest: "{{ __reg_venv.virtualenv }}/ansible.constraints.txt"
-    backup: true
-    mode: '0644'
-
-- name: constraints file constraints.txt is present
+- name: ensure that packages can't pull in unwanted versions of some packages
   block:
+    - name: constraints file virtualenv.constraints.txt is present
+      template:
+        src: constraints/virtualenv.txt.j2
+        dest: "{{ __reg_venv.virtualenv }}/virtualenv.constraints.txt"
+        backup: true
+        mode: '0644'
+    - name: constraints file ansible.constraints.txt is present
+      template:
+        src: constraints/ansible.txt.j2
+        dest: "{{ __reg_venv.virtualenv }}/ansible.constraints.txt"
+        backup: true
+        mode: '0644'
     - name: constraints file for ansible-test is present
       copy:
         src: constraints/ansible-test/v{{ __mafalb_ansible_version }}.txt
@@ -127,8 +134,7 @@
                          '/bin/pip']['ansible'][0]['version']) is match('2.9'))
 
 - name: get ansible version
-  command: "{{
-    virtualenv|default(mafalb_ansible_virtualenv) }}/bin/ansible --version"
+  command: "{{ __python_virtualenv }}/bin/ansible --version"
   failed_when: false
   changed_when: false
   register: __ansible_version
@@ -141,7 +147,7 @@
       - ansible-base
       - ansible-core
     state: absent
-    virtualenv: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}"
+    virtualenv: "{{ __python_virtualenv }}"
   when:
     - (__mafalb_ansible_version is match('2.11') and
        __ansible_version.stdout|default('') is not
@@ -149,8 +155,16 @@
       (__mafalb_ansible_version is not match('2.9') and
        __ansible_version.stdout|default('') is match('ansible 2.9'))
 
-- name: debug previous installed ansible version
-  debug: var=__ansible_version
+- name: debug
+  block:
+    - name: debug previous installed ansible version
+      debug: var=__ansible_version
+
+    - name: debug __mafalb_ansible_packages
+      debug: var=__mafalb_ansible_packages
+  tags:
+    - never
+    - debug
 
 - name: packages are present
   pip:
@@ -164,7 +178,7 @@
 
 - name: pip freeze
   shell: |
-    . {{ virtualenv|default(mafalb_ansible_virtualenv) }}/bin/activate
+    . {{ __python_virtualenv }}/bin/activate
     pip freeze
   changed_when: false
   register: __freeze
@@ -187,8 +201,7 @@
   # reserved variable ?
   #
   - name: get ansible version
-    command: "{{
-      virtualenv|default(mafalb_ansible_virtualenv) }}/bin/ansible --version"
+    command: "{{ __python_virtualenv }}/bin/ansible --version"
     changed_when: false
     register: __ansible_version
   - name: assert that the wanted ansible version is present

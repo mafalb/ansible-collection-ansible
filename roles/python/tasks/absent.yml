@@ -5,7 +5,7 @@
 
 - name: python is absent
   package:
-    name: "{{ mafalb_python_package }}"
+    name: "{{ python_package }}"
     state: absent
 
 ...

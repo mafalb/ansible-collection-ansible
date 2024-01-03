@@ -24,7 +24,6 @@ TEST_CASES = (
     (['_ansible==2.11'], ['ansible-core==' + data['latest_version']['2.11']]),
     (['_ansible==2.11.6'], ['ansible-core==2.11.6']),
     (['_ansible<2.11.6'], ['ansible-core<2.11.6']),
-    (['_ansible~=2.9.6'], ['ansible~=2.9.6']),
     (['_ansible'], ['ansible-core']),
     (['_ansible~=2.11.6', '_ansible_test'],
      ['ansible-core~=2.11.6', 'voluptuous']),

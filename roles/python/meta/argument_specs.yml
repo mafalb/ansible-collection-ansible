@@ -11,7 +11,7 @@ argument_specs:  # noqa 701
 
     options:
 
-      state:
+      python_state:
         description:
         - The state of python
         type: str
@@ -20,11 +20,9 @@ argument_specs:  # noqa 701
         - present
         default: present
 
-      version:
+      python_version:
         description:
         - Specify the components that you want to install.
-        aliases:
-          - mafalb_python_version
         type: list
         elements: str
         defaults: _default

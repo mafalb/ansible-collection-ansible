@@ -11,19 +11,26 @@
 # (~/.virtualenvs/molecule does not work) for
 # setting TMPPATH environment variable for pip
 #
-mafalb_ansible_virtualenv: "{{
-  virtualenv|default(ansible_user_dir + '/.virtualenvs/ansible')
+___python_virtualenv: "{{
+  python_virtualenv|default('~/.virtualenvs/ansible'|regex_replace('^~', ansible_user_dir))
+}}"
+__python_virtualenv: "{{ ___python_virtualenv|regex_replace('^~', ansible_user_dir) }}"
+
+# the path to the python interpreter
+# relevant for virtualenvs that already exists
+#
+__python_virtualenv_interpreter: "{{
+  __python_virtualenv + '/bin/python'
 }}"
 
+# we want to create a python3 venv even if we run ansible
+# with python2
+#
 mafalb_ansible_virtualenv_python: "{{
   python|default('python3'
                  if ansible_python.version.major == 2
                  else ansible_python.executable
                 )
 }}"
-
-# molecule 3.4 and newer insists on newer jinja2
-# molecule 3.5 has a bug related to ansible collections
-molecule_version: '3.3'
 
 ...

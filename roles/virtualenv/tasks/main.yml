@@ -20,7 +20,7 @@
 - name: assertions
   assert:
     that:
-    - virtualenv|default(mafalb_ansible_virtualenv) is defined
+    - __python_virtualenv is defined
 
 # only necessary if ansible does not support argument_spec
 # do not assert for ansible 2.11 and greater

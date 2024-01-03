@@ -1,7 +1,7 @@
 # vim: set ft=yaml ts=2 expandtab:
 
 # This file is part of Ansible Collection mafalb.ansible
-# Copyright (c) 2019-2021 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) 2019-2021,2023 Markus Falb <markus.falb@mafalb.at>
 #
 # Ansible collection mafalb.ansible is free software: you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -20,78 +20,55 @@
 ---
 
 # molecule - 3.4.* / 2.10.*
-# default1 - 3.1.4 / 2.9.10
-# default2 - 3.1.5 / 2.9.*
-# default3 - 3.1.4 / 2.10.1
-# default4 - 3.1.5 / 2.10.*
-# default5 - 3.2.0 / 2.9.10
-# default6 - 3.3.* / 2.9.*
-# default7 - 3.2.0 / 2.10.1
+# default1 - 6.0.3 / 2.14.3
+# default2 - 6 / 2.14
 
 - name: Install different variants of molecule
   hosts: all,!ci-centos6,!ci-ubuntuxenial
 
   roles:
-  - role: mafalb.ansible.molecule
+
+    - role: mafalb.ansible.python
+      python_version: '3.6'
+
+    - role: mafalb.ansible.python
+      python_version: '3.9'
+
+    - role: mafalb.ansible.virtualenv
+      packages:
+        - _ansible_test
+        - _ansible
+        - ansible-lint
+        - molecule
 
   tasks:
 
-  - name: prepare default1 - 3.1.4 / 2.9.10
+  - name: prepare default1 - 6.0.3 / 2.14.3
     include_role:
-      name: mafalb.ansible.molecule
+      name: mafalb.ansible.virtualenv
     vars:
-      molecule_version: '3.1.4'
-      molecule_ansible_version: '2.9.10'
-      molecule_virtualenv: ~/.virtualenvs/default1
+      packages:
+        - _ansible_test
+        - _ansible==2.14.3
+        - ansible-lint
+        - molecule
+      python_virtualenv: ~/.virtualenvs/default1
+      python_interpreter: 'python3.9'
 
-  - name: prepare default2 - 3.1 / 2.9
-    include_role:
-      name: mafalb.ansible.molecule
-    vars:
-      molecule_version: '3.1'
-      molecule_ansible_version: '2.9'
-      molecule_virtualenv: ~/.virtualenvs/default2
+  - name: debug
+    debug:
+      var: python_interpreter
 
-  - name: prepare default3 - 3.1.4 / 2.10.1
+  - name: prepare default2 - 6 / 2.14
     include_role:
       name: mafalb.ansible.molecule
     vars:
-      molecule_version: '3.1.4'
-      molecule_ansible_version: '2.10.2'
-      molecule_ansible_community_version: '2.10.1'
-      molecule_virtualenv: ~/.virtualenvs/default3
-
-  - name: prepare default4 - 3.1 / 2.10
-    include_role:
-      name: mafalb.ansible.molecule
-    vars:
-      molecule_version: '3.1'
-      molecule_ansible_version: '2.10'
-      molecule_virtualenv: ~/.virtualenvs/default4
-
-  - name: prepare default5 - 3.2.0 / 2.9.10
-    include_role:
-      name: mafalb.ansible.molecule
-    vars:
-      molecule_version: '3.2.0'
-      molecule_ansible_version: '2.9.10'
-      molecule_virtualenv: ~/.virtualenvs/default5
-
-  - name: prepare default6 - 3.3 / 2.9
-    include_role:
-      name: mafalb.ansible.molecule
-    vars:
-      molecule_version: 3
-      molecule_ansible_version: '2.9'
-      molecule_virtualenv: ~/.virtualenvs/default6
-
-  - name: prepare default7 - 3.2.0 / 2.10.1
-    include_role:
-      name: mafalb.ansible.molecule
-    vars:
-      molecule_version: '3.2.0'
-      molecule_ansible_version: '2.10.3'
-      molecule_ansible_community_version: '2.10.2'
-      molecule_virtualenv: ~/.virtualenvs/default7
+      packages:
+        - _ansible_test
+        - _ansible~=2.14.3
+        - ansible-lint
+        - molecule~=6.0
+      python_virtualenv: ~/.virtualenvs/default2
+      python_interpreter: 'python3.9'
 
 ...

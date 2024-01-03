@@ -44,17 +44,15 @@ argument_specs:  # noqa 701
         - update
         type: bool
 
-      mafalb_ansible_virtualenv:
+      python_virtualenv:
         description: The path to the virtualenv.
-        aliases:
-        - virtualenv
         type: path
         default: ~/.virtualenvs/ansible
 
       mafalb_ansible_virtualenv_python:
         description: The path to the virtualenv.
         aliases:
-        - python
+          - python
         type: path
 
 ...
