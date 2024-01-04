@@ -19,20 +19,12 @@ datafile.close()
 latest = sorted(data['latest_ansible_version'], key=version2int)[-1]
 
 TEST_CASES = (
-    (['_ansible==2.12.0rc1'], ['ansible-core==2.12.0rc1']),
-    (['_ansible==2.12.0rc1', '_ansible_test'], ['ansible-core==2.12.0rc1']),
-    (['_ansible==2.11'],
-     ['ansible-core==' + data['latest_ansible_version']['2.11']]),
-    (['_ansible==2.11.6'], ['ansible-core==2.11.6']),
-    (['_ansible<2.11.6'], ['ansible-core<2.11.6']),
     (['_ansible'], ['ansible-core']),
-    (['_ansible~=2.11.6', '_ansible_test'],
-     ['ansible-core~=2.11.6', 'voluptuous']),
-    (["_ansible==2.9", "molecule~=3.3.0", "ansible-lint", "_ansible_test"],
-     ['ansible==2.9.27', 'voluptuous']),
-
 )
 
+# all tests with version numbers are prone to fail sometimes
+# eventually the installed python is too new for the ansible
+#
 TEST_CASES_WITH_PYTHON = (
     (['_ansible==2.12.0rc1'], '3.8', ['ansible-core==2.12.0rc1']),
     (['_ansible==2.12.0rc1', '_ansible_test'], '3.8',
@@ -50,7 +42,9 @@ TEST_CASES_WITH_PYTHON = (
     (["_ansible~=2.14.3", "ansible-lint", "molecule"], '3.9',
      ["ansible-core~=2.14.3", "ansible-lint", "molecule"]),
     (["_ansible_test", "_ansible~=2.14.3", "ansible-lint", "molecule"], '3.9',
-     ["ansible-core~=2.14.3", "ansible-lint", "molecule"])
+     ["ansible-core~=2.14.3", "ansible-lint", "molecule"]),
+    (["_ansible==2.9", "molecule~=3.3.0", "ansible-lint", "_ansible_test"], '3.8',
+     ['ansible==2.9.27', 'voluptuous']),
 )
 
 
