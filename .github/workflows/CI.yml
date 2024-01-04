@@ -31,9 +31,6 @@ jobs:
         include:
 
           - ansible_version: '2.9'
-            python_version: '2.7'
-
-          - ansible_version: '2.9'
             python_version: '3.5'
 
           - ansible_version: '2.9'
@@ -111,15 +108,9 @@ jobs:
           path: ansible_collections/mafalb/ansible
 
       - name: setup python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python
         with:
           python-version: ${{ matrix.python_version }}
-
-      # necessary ?
-      - name: install virtualenv for python 2.7
-        if: matrix.python_version == '2.7'
-        run: |
-          pip install virtualenv
 
       - name: install ansible
         run: |
