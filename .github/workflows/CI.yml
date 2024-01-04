@@ -108,7 +108,7 @@ jobs:
           path: ansible_collections/mafalb/ansible
 
       - name: setup python
-        uses: actions/setup-python
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python_version }}
 
