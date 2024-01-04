@@ -3,7 +3,7 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-argument_specs:  # noqa 701
+argument_specs:
   main:
     short_description: Install python interpreter
     description:

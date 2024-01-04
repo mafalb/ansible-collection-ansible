@@ -43,8 +43,8 @@ TEST_CASES_WITH_PYTHON = (
      ["ansible-core~=2.14.3", "ansible-lint", "molecule"]),
     (["_ansible_test", "_ansible~=2.14.3", "ansible-lint", "molecule"], '3.9',
      ["ansible-core~=2.14.3", "ansible-lint", "molecule"]),
-    (["_ansible==2.9", "molecule~=3.3.0", "ansible-lint", "_ansible_test"], '3.8',
-     ['ansible==2.9.27', 'voluptuous']),
+    (["_ansible==2.9", "molecule~=3.3.0", "ansible-lint", "_ansible_test"],
+     '3.8', ['ansible==2.9.27', 'voluptuous']),
 )
 
 
