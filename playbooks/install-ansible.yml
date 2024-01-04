@@ -8,6 +8,6 @@
   roles:
     - role: mafalb.ansible.virtualenv
       virtualenv_packages: "{{ virtualenv_packages }}"
-      virtualenv_interpreter: "{{ virtualenv_interpreter if virtualenv_interpreter is defined else omit }}"
+      virtualenv_python_interpreter: "{{ virtualenv_interpreter if virtualenv_interpreter is defined else omit }}"
 
 ...
