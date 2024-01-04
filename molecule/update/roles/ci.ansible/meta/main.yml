@@ -10,6 +10,29 @@ galaxy_info:
   license: GPL-3.0-or-later
   min_ansible_version: '2.9'
 
+  platforms:
+
+    - name: Fedora
+      versions:
+        - '38'
+        - '39'
+
+    - name: EL
+      versions:
+        - '7'
+        - '8'
+        - '9'
+
+    - name: Debian
+      versions:
+        - bullseye
+        - bookworm
+
+    - name: Ubuntu
+      versions:
+        - focal
+        - jammy
+
 dependencies: []
 
 ...

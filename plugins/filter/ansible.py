@@ -274,7 +274,7 @@ def __ansible_test_packages(version):
         return data['ansible_test_packages'][version]
     except Exception as e:
         raise AnsibleFilterError(
-                "No key in ansible_test_packages: {s}".format(s=str(e)))
+            "No key in ansible_test_packages: {s}".format(s=str(e)))
 
 
 class FilterModule(object):

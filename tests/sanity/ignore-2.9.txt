@@ -1,1 +1,1 @@
-molecule/controlnode/files/install-ansible.sh shellcheck:SC2148
+molecule/controlnode/files/install-ansible.sh shellcheck:SC2148 # noqa sanity[cannot-ignore]

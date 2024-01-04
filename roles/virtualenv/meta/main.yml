@@ -10,28 +10,22 @@ galaxy_info:
   min_ansible_version: '2.10'
 
   platforms:
-
-    - name: Fedora
+    - name: Debian
       versions:
-        - '38'
-        - '39'
-
+        - bullseye
+        - bookworm
+    - name: Ubuntu
+      versions:
+        - focal
+        - jammy
     - name: EL
       versions:
         - '7'
         - '8'
         - '9'
-
-    - name: Debian
+    - name: Fedora
       versions:
-        - bullseye
-        - bookworm
-
-    - name: Ubuntu
-      versions:
-        - focal
-        - jammy
-
+        - '38'
   galaxy_tags:
   - ansible
   - molecule
