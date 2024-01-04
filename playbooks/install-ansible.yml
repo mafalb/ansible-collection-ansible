@@ -11,6 +11,6 @@
       var: mafalb_ansible_virtualenv_command|default(true)
   roles:
     - role: mafalb.ansible.virtualenv
-      packages: "{{ virtualenv_packages }}"
+      virtualenv_packages: "{{ virtualenv_packages }}"
 
 ...
