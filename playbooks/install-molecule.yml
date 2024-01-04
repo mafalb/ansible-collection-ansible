@@ -3,7 +3,8 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-- hosts: localhost
+- name: Install molecule
+  hosts: localhost
   roles:
 
     # this is used if molecule_ansible_version is argument
@@ -27,8 +28,9 @@
       when: molecule_ansible_version is not defined
 
   tasks:
-    - name: docker_container is present
-      command: ansible-galaxy collection install {{ item }}
+    - name: Docker_container is present # noqa no-changed-when
+      ansible.builtin.command:
+        cmd: ansible-galaxy collection install {{ item }}
       loop:
         - community.general
         - community.docker

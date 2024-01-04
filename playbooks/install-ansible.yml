@@ -3,10 +3,11 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-- hosts: localhost
+- name: Install ansible
+  hosts: localhost
   pre_tasks:
-  - name: debug
-    debug:
+  - name: Debug
+    ansible.builtin.debug:
       var: mafalb_ansible_virtualenv_command|default(true)
   roles:
     - role: mafalb.ansible.virtualenv

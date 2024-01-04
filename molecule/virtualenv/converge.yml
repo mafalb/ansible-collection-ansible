@@ -3,10 +3,12 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-- hosts: all
+- name: Converge
+  hosts: all
   pre_tasks:
-    - name: debug targeted ansible version
-      debug: msg="doing {{ arg_ansible_version }} on {{ arg_python_version }}"
+    - name: Debug targeted ansible version
+      ansible.builtin.debug:
+        msg: "doing {{ arg_ansible_version }} on {{ arg_python_version }}"
   roles:
     - role: mafalb.ansible.python
       version: "{{ arg_python_version|default('_default') }}"

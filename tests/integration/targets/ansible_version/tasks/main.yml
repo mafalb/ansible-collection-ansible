@@ -3,18 +3,26 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-- name: ansible version
+- name: Ansible version
   mafalb.ansible.ansible_info:
   register: __ansible_version
-- block:
-    - name: debug
-      debug: var=ansible_version
-    - name: debug
-      debug: var=__ansible_version
-    - name: debug
-      debug: var=__ansible_version.version.major|type_debug
-- name: assertions
-  assert:
+
+- name: Debug
+  block:
+    - name: Debug ansible_version
+      ansible.builtin.debug:
+        var: ansible_version
+
+    - name: Debug __ansible_version
+      ansible.builtin.debug:
+        var: __ansible_version
+
+    - name: Debug __ansible_version.version.major
+      ansible.builtin.debug:
+        var: __ansible_version.version.major|type_debug
+
+- name: Assertions
+  ansible.builtin.assert:
     that:
       - __ansible_version.version.major|type_debug == 'int'
       - __ansible_version.version.major == 2

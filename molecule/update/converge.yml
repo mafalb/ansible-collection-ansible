@@ -3,7 +3,8 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-- hosts: all
+- name: Converge
+  hosts: all
   roles:
     - role: mafalb.ansible.python
       version: "{{ arg_python_version }}"

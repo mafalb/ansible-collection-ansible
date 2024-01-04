@@ -5,7 +5,7 @@
 
 # change this when new version of ansible/ansible-core is released
 # also create constraints in files/constraints/ansible-test/
-latest_version:
+latest_ansible_version:
   '2.9': '2.9.27'
   '2.10': '2.10.17'
   '2.11': '2.11.12'
@@ -61,10 +61,14 @@ ansible_test_packages:
     - voluptuous
     - wrapt
     - yamllint
-  '2.13': []
-  '2.14': []
-  '2.15': []
-  '2.16': []
+  '2.13':
+    - flake8
+  '2.14':
+    - flake8
+  '2.15':
+    - flake8
+  '2.16':
+    - flake8
 
 python_versions:
   '2.9': ['2.7', '3.5', '3.6', '3.7', '3.8']

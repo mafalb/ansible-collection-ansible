@@ -5,65 +5,66 @@
 
 # It may be necessary to specify ANSIBLE_COLLECTIONS_PATHS
 # ANSIBLE_COLLECTIONS_PATHS=../../..
-- hosts: localhost
+- name: Check for unhandled versions of ansible
+  hosts: localhost
   tasks:
 
-    - name: git is present
-      package:
+    - name: Git is present
+      ansible.builtin.package:
         name: git
 
-    - name: get all tags  # noqa command-instead-of-module 303
-      command: git ls-remote --tags https://github.com/ansible/ansible
+    - name: Get all tags  # noqa command-instead-of-module
+      ansible.builtin.command: git ls-remote --tags https://github.com/ansible/ansible
       register: __reg_tags
       changed_when: false
 
-    - name: assert that no new ansible 2.9 version is available
-      assert:
+    - name: Assert that no new ansible 2.9 version is available
+      ansible.builtin.assert:
         that:
-          - not __reg_tags.stdout|regex_search('2.9'|mafalb.ansible.next_version + '\n')
-        fail_msg: "{{ '2.9'|mafalb.ansible.next_version }} is available"
-        success_msg: "{{ '2.9'|mafalb.ansible.next_version }} is not available"
+          - not __reg_tags.stdout | regex_search('2.9' | mafalb.ansible.next_version + '\n')
+        fail_msg: "{{ '2.9' | mafalb.ansible.next_version }} is available"
+        success_msg: "{{ '2.9' | mafalb.ansible.next_version }} is not available"
 
-    - name: assert that no new ansible 2.10 version is available
-      assert:
+    - name: Assert that no new ansible 2.10 version is available
+      ansible.builtin.assert:
         that:
-          - not __reg_tags.stdout|regex_search('2.10'|mafalb.ansible.next_version + '\n')
-        fail_msg: "{{ '2.10'|mafalb.ansible.next_version }} is available"
-        success_msg: "{{ '2.10'|mafalb.ansible.next_version }} is not available"
+          - not __reg_tags.stdout | regex_search('2.10' | mafalb.ansible.next_version + '\n')
+        fail_msg: "{{ '2.10' | mafalb.ansible.next_version }} is available"
+        success_msg: "{{ '2.10' | mafalb.ansible.next_version }} is not available"
 
-    - name: assert that no new ansible 2.11 version is available
-      assert:
+    - name: Assert that no new ansible 2.11 version is available
+      ansible.builtin.assert:
         that:
-          - not __reg_tags.stdout|regex_search('2.11'|mafalb.ansible.next_version + '\n')
-        fail_msg: "{{ '2.11'|mafalb.ansible.next_version }} is available"
-        success_msg: "{{ '2.11'|mafalb.ansible.next_version }} is not available"
+          - not __reg_tags.stdout | regex_search('2.11' | mafalb.ansible.next_version + '\n')
+        fail_msg: "{{ '2.11' | mafalb.ansible.next_version }} is available"
+        success_msg: "{{ '2.11' | mafalb.ansible.next_version }} is not available"
 
-    - name: assert that no new ansible 2.12 version is available
-      assert:
+    - name: Assert that no new ansible 2.12 version is available
+      ansible.builtin.assert:
         that:
-          - not __reg_tags.stdout|regex_search('2.12'|mafalb.ansible.next_version + '\n')
-        fail_msg: "{{ '2.12'|mafalb.ansible.next_version }} is available"
-        success_msg: "{{ '2.12'|mafalb.ansible.next_version }} is not available"
+          - not __reg_tags.stdout | regex_search('2.12' | mafalb.ansible.next_version + '\n')
+        fail_msg: "{{ '2.12' | mafalb.ansible.next_version }} is available"
+        success_msg: "{{ '2.12' | mafalb.ansible.next_version }} is not available"
 
-    - name: assert that no new ansible 2.13 version is available
-      assert:
+    - name: Assert that no new ansible 2.13 version is available
+      ansible.builtin.assert:
         that:
-          - not __reg_tags.stdout|regex_search('2.13'|mafalb.ansible.next_version + '\n')
-        fail_msg: "{{ '2.13'|mafalb.ansible.next_version }} is available"
-        success_msg: "{{ '2.13'|mafalb.ansible.next_version }} is not available"
+          - not __reg_tags.stdout | regex_search('2.13' | mafalb.ansible.next_version + '\n')
+        fail_msg: "{{ '2.13' | mafalb.ansible.next_version }} is available"
+        success_msg: "{{ '2.13' | mafalb.ansible.next_version }} is not available"
 
-    - name: assert that no new ansible 2.14 version is available
-      assert:
+    - name: Assert that no new ansible 2.14 version is available
+      ansible.builtin.assert:
         that:
-          - not __reg_tags.stdout|regex_search('2.14'|mafalb.ansible.next_version + '\n')
-        fail_msg: "{{ '2.14'|mafalb.ansible.next_version }} is available"
-        success_msg: "{{ '2.14'|mafalb.ansible.next_version }} is not available"
+          - not __reg_tags.stdout | regex_search('2.14' | mafalb.ansible.next_version + '\n')
+        fail_msg: "{{ '2.14' | mafalb.ansible.next_version }} is available"
+        success_msg: "{{ '2.14' | mafalb.ansible.next_version }} is not available"
 
-    - name: assert that no new ansible 2.15 version is available
-      assert:
+    - name: Assert that no new ansible 2.15 version is available
+      ansible.builtin.assert:
         that:
-          - not __reg_tags.stdout|regex_search('2.15'|mafalb.ansible.next_version + '\n')
-        fail_msg: "{{ '2.15'|mafalb.ansible.next_version }} is available"
-        success_msg: "{{ '2.15'|mafalb.ansible.next_version }} is not available"
+          - not __reg_tags.stdout | regex_search('2.15' | mafalb.ansible.next_version + '\n')
+        fail_msg: "{{ '2.15' | mafalb.ansible.next_version }} is available"
+        success_msg: "{{ '2.15' | mafalb.ansible.next_version }} is not available"
 
 ...

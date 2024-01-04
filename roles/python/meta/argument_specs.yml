@@ -25,6 +25,6 @@ argument_specs:  # noqa 701
         - Specify the components that you want to install.
         type: list
         elements: str
-        defaults: _default
+        default: _default
 
 ...

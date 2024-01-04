@@ -19,48 +19,57 @@
 
 ---
 
-- name: get OS specific variables
+- name: Get OS specific variables
   with_first_found:
   - "{{ ansible_os_family }}-{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
   - "{{ ansible_os_family }}-{{ ansible_distribution }}.yml"
   - "{{ ansible_os_family }}-{{ ansible_distribution_release }}.yml"
   - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
   - "{{ ansible_os_family }}.yml"
-  include_vars:
+  ansible.builtin.include_vars:
     file: "{{ __file }}"
   loop_control:
     loop_var: __file
 
-- name: debug ansible_packages
-  debug: var=ansible_packages[molecule_ansible_version]
-- name: debug ansible_packages
-  debug: msg={{ molecule_ansible_version.split('.')[0:2]|join('.') }}
+- name: Debug ansible_packages
+  ansible.builtin.debug:
+    var: ansible_packages[molecule_ansible_version]
+- name: Debug ansible_packages
+  ansible.builtin.debug:
+    msg: "{{ molecule_ansible_version.split('.')[0:2] | join('.') }}"
 
-- name: debug
-  debug: var=molecule_version|mafalb.ansible.pipver
-- name: debug
-  debug: var=ansible_lint_version
-- name: debug molecule_ansible_version
-  debug: var=molecule_ansible_version
-- name: debug molecule_ansible_version|mafalb.ansible.semver
-  debug: var=molecule_ansible_version|mafalb.ansible.semver
-- name: debug mafalb.ansible.pipver
-  debug: var=molecule_ansible_version|mafalb.ansible.pipver
-- name: debug molecule_ansible_pip_packages
-  debug: var=molecule_ansible_pip_packages
-- name: debug molecule_pip_packages
-  debug: var=molecule_pip_packages
+- name: Debug
+  ansible.builtin.debug:
+    var: molecule_version | mafalb.ansible.pipver
+- name: Debug
+  ansible.builtin.debug:
+    var: ansible_lint_version
+- name: Debug molecule_ansible_version
+  ansible.builtin.debug:
+    var: molecule_ansible_version
+- name: Debug molecule_ansible_version | mafalb.ansible.semver
+  ansible.builtin.debug:
+    var: molecule_ansible_version | mafalb.ansible.semver
+- name: Debug mafalb.ansible.pipver
+  ansible.builtin.debug:
+    var: molecule_ansible_version | mafalb.ansible.pipver
+- name: Debug molecule_ansible_pip_packages
+  ansible.builtin.debug:
+    var: molecule_ansible_pip_packages
+- name: Debug molecule_pip_packages
+  ansible.builtin.debug:
+    var: molecule_pip_packages
 
-- name: assertions
-  assert:
+- name: Assertions
+  ansible.builtin.assert:
     that:
     - molecule_virtualenv is defined
     - molecule_version is defined
     - molecule_ansible_version is defined
-    - molecule_ansible_pip_packages|type_debug == 'list'
+    - molecule_ansible_pip_packages | type_debug == 'list'
 
-- name: versions
-  debug:
+- name: Versions
+  ansible.builtin.debug:
     msg: "{{ version }}"
   loop:
   - "{{ molecule_version }}"
@@ -75,8 +84,8 @@
 # role dependencies in meta.yml does not work
 # https://github.com/ansible/galaxy/issues/1938
 #
-- name: ansible node dependencies are present
-  include_role:
+- name: Ansible node dependencies are present
+  ansible.builtin.include_role:
     name: mafalb.ansible.node
   vars:
     ansible_node_features:
@@ -84,14 +93,14 @@
 
 # disable cr repo again when CentOS 7.8 is released
 #
-- name: molecules dependencies are present
+- name: Molecules dependencies are present
   become: true
-  package:
+  ansible.builtin.package:
     name: "{{ molecule_system_dependencies }}"
-    enablerepo: "{{ molecule_enablerepo|default(omit) }}"
+    enablerepo: "{{ molecule_enablerepo | default(omit) }}"
 
-- name: virtualenv is present
-  pip:
+- name: Virtualenv is present
+  ansible.builtin.pip:
     name:
     - pip>=20.3,<21.1
     - setuptools>41
@@ -99,8 +108,8 @@
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
 
-- name: constraints file is present
-  copy:
+- name: Constraints file is present
+  ansible.builtin.copy:
     src: "{{ __file }}"
     dest: "{{ molecule_virtualenv }}/.ansible.constraints.txt"
     backup: true
@@ -114,38 +123,39 @@
 # we can not use the system wide tmp dir
 # https://github.com/ansible/ansible/issues/57436
 #
-- name: tmp directory is present
-  file:
+- name: Tmp directory is present
+  ansible.builtin.file:
     path: "{{ molecule_virtualenv }}/../tmp"
     state: directory
     mode: 01777
 
-- block:
-  - name: get installed version of setuptools before molecule is installed
-    command: "{{ molecule_virtualenv }}/bin/pip list --format=columns"
-    changed_when: false
-    register: _pip_list
-  - name: debug
-    debug:
-      var: _pip_list.stdout_lines
-  tags:
-  - never
-  - debug
+- name: Get installed version of setuptools before molecule is installed
+  block:
+    - name: Get installed version of setuptools before molecule is installed
+      ansible.builtin.command: "{{ molecule_virtualenv }}/bin/pip list --format=columns"
+      changed_when: false
+      register: _pip_list
+    - name: Debug
+      ansible.builtin.debug:
+        var: _pip_list.stdout_lines
+      tags:
+        - never
+        - debug
 
-
-- name: get ansible version
-  command: "{{ molecule_virtualenv }}/bin/ansible --version"
+- name: Get ansible version
+  ansible.builtin.command: "{{ molecule_virtualenv }}/bin/ansible --version"
   failed_when: false
   changed_when: false
   register: _ansibles_version
 
-- name: debug _ansibles_version
-  debug: var=_ansibles_version
+- name: Debug _ansibles_version
+  ansible.builtin.debug:
+    var: _ansibles_version
 
 # upgrade from ansible 2.9
 #
-- name: uninstall ansible and ansible-core
-  pip:
+- name: Uninstall ansible and ansible-core
+  ansible.builtin.pip:
     name:
     - ansible
     - ansible-base
@@ -154,13 +164,13 @@
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
   when:
-  - molecule_ansible_version|mafalb.ansible.pipver is not match('2.9')
-  - _ansibles_version.stdout|default('') is match('ansible 2.9')
+  - molecule_ansible_version | mafalb.ansible.pipver is not match('2.9')
+  - _ansibles_version.stdout | default('') is match('ansible 2.9')
 
 # upgrade to ansible 2.11
 #
-- name: uninstall ansible and ansible-core
-  pip:
+- name: Uninstall ansible and ansible-core
+  ansible.builtin.pip:
     name:
     - ansible
     - ansible-base
@@ -169,8 +179,8 @@
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
   when:
-  - molecule_ansible_version|mafalb.ansible.pipver is match('2.11')
-  - _ansibles_version.stdout|default('') is not match('ansible \[core 2.11')
+  - molecule_ansible_version | mafalb.ansible.pipver is match('2.11')
+  - _ansibles_version.stdout | default('') is not match('ansible \[core 2.11')
 
 #  - "'ansible' in _ansibles_version.packages[{{ molecule_virtualenv }}/bin/pip }}]"
 #  - _ansibles_version.packages[{{ molecule_virtualenv }}/bin/pip }}]['ansible'][0].version.split('.')
@@ -186,76 +196,76 @@
 # https://github.com/ansible/ansible/issues/57436
 # it is important to use ansible_user_dir, not ~
 #
-- name: molecule is installed
-  pip:
+- name: Molecule is installed
+  ansible.builtin.pip:
     name: "{{ molecule_ansible_pip_packages + molecule_pip_packages + ansible_test_packages }}"
     extra_args: "{{ '-U eager' if molecule_update is defined else '' }} -c {{ molecule_virtualenv }}/.ansible.constraints.txt"
     virtualenv: "{{ molecule_virtualenv }}"
     virtualenv_command: "{{ molecule_virtualenv_command }}"
 
-- block:
-  - name: get installed version of setuptools after molecule is installed
-    command: "{{ molecule_virtualenv }}/bin/pip list --format=columns"
-    changed_when: false
-    register: _pip_list
-  - name: debug _pip_list
-    debug:
-      var: _pip_list.stdout_lines
-  tags:
-  - never
-  - debug
+- name: Get installed version of setuptools after molecule is installed
+  block:
+    - name: Get installed version of setuptools after molecule is installed
+      ansible.builtin.command: "{{ molecule_virtualenv }}/bin/pip list --format=columns"
+      changed_when: false
+      register: _pip_list
+    - name: Debug _pip_list
+      ansible.builtin.debug:
+        var: _pip_list.stdout_lines
+      tags:
+        - never
+        - debug
 
-- block:
-  - name: get installed version of setuptools after molecule test is installed
-    command: "{{ molecule_virtualenv }}/bin/pip list --format=columns"
-    changed_when: false
-    register: _pip_list
-  - name: debug
-    debug:
-      var: _pip_list.stdout_lines
-  tags:
-  - never
-  - debug
+- name: Get installed version of setuptools after molecule test is installed
+  block:
+    - name: Get installed version of setuptools after molecule test is installed
+      ansible.builtin.command: "{{ molecule_virtualenv }}/bin/pip list --format=columns"
+      changed_when: false
+      register: _pip_list
+    - name: Debug
+      ansible.builtin.debug:
+        var: _pip_list.stdout_lines
+      tags:
+        - never
+        - debug
 
-
-- block:
+- name: Assertions
+  when: molecule_ansible_version is defined
+  block:
 
   # _ansible_version does not work, i use _ansibles_version
   # reserved variable ?
   #
-  - name: get ansible version
-    command: "{{ molecule_virtualenv }}/bin/ansible --version"
+  - name: Get ansible version
+    ansible.builtin.command: "{{ molecule_virtualenv }}/bin/ansible --version"
     changed_when: false
     register: _ansibles_version
 
-  - name: get molecules version
-    shell: |
+  - name: Get molecules version
+    ansible.builtin.shell: |
       . {{ molecule_virtualenv }}/bin/activate
       NO_COLOR=1 molecule --version
     changed_when: false
     register: _molecules_version
 
-  - name: ansible version
-    debug:
+  - name: Ansible version
+    ansible.builtin.debug:
       var: _ansibles_version.stdout
     tags:
     - never
     - debug
 
-  - name: molecules version
-    debug:
+  - name: Molecules version
+    ansible.builtin.debug:
       var: _molecules_version.stdout
     tags:
     - never
     - debug
 
-  - name: assertions
-    assert:
+  - name: Assertions
+    ansible.builtin.assert:
       that:
-      - _ansibles_version.stdout is match('ansible .*{{ molecule_ansible_version|default(molecule_ansible_version) }}')
+      - _ansibles_version.stdout is match('ansible .*{{ molecule_ansible_version | default(molecule_ansible_version) }}')
       - _molecules_version.stdout is match('molecule {{ molecule_version }}')
-
-
-  when: molecule_ansible_version is defined
 
 ...

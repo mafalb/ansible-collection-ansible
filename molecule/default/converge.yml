@@ -24,7 +24,7 @@
 # default2 - 6 / 2.14
 
 - name: Install different variants of molecule
-  hosts: all,!ci-centos6,!ci-ubuntuxenial
+  hosts: all
 
   roles:
 
@@ -35,7 +35,7 @@
       python_version: '3.9'
 
     - role: mafalb.ansible.virtualenv
-      packages:
+      virtualenv_packages:
         - _ansible_test
         - _ansible
         - ansible-lint
@@ -43,32 +43,32 @@
 
   tasks:
 
-  - name: prepare default1 - 6.0.3 / 2.14.3
-    include_role:
+  - name: Prepare default1 - 6.0.3 / 2.14.3
+    ansible.builtin.include_role:
       name: mafalb.ansible.virtualenv
     vars:
-      packages:
+      virtualenv: ~/.virtualenvs/default1
+      virtualenv_python_interpreter: 'python3.9'
+      virtualenv_packages:
         - _ansible_test
         - _ansible==2.14.3
         - ansible-lint
         - molecule
-      python_virtualenv: ~/.virtualenvs/default1
-      python_interpreter: 'python3.9'
 
-  - name: debug
-    debug:
-      var: python_interpreter
+  - name: Debug
+    ansible.builtin.debug:
+      var: virtualenv_python_interpreter
 
-  - name: prepare default2 - 6 / 2.14
-    include_role:
-      name: mafalb.ansible.molecule
+  - name: Prepare default2 - 6 / 2.14
+    ansible.builtin.include_role:
+      name: mafalb.ansible.virtualenv
     vars:
-      packages:
+      virtualenv: ~/.virtualenvs/default2
+      virtualenv_python_interpreter: 'python3.9'
+      virtualenv_packages:
         - _ansible_test
         - _ansible~=2.14.3
         - ansible-lint
-        - molecule~=6.0
-      python_virtualenv: ~/.virtualenvs/default2
-      python_interpreter: 'python3.9'
+        - molecule
 
 ...

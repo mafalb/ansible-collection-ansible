@@ -8,7 +8,7 @@ mafalb_python_package:
   '_default': core/python
   '2.7': extra/python2
   '3.9': core/python
-__mafalb_python_version: "{{ version|default(mafalb_python_version)|default(mafalb_python_default_version) }}"
+__mafalb_python_version: "{{ version | default(mafalb_python_version) | default(mafalb_python_default_version) }}"
 __mafalb_python_extra_packages:
   '2': ['extra/python2-virtualenv']
   '3': []

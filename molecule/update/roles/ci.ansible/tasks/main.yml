@@ -3,27 +3,30 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-- name: debug
-  debug: var=target_version|mandatory
+- name: Debug
+  ansible.builtin.debug:
+    var: target_version | mandatory
 
-- name: ansible virtualenv is present
-  include_role:
+- name: Ansible virtualenv is present
+  ansible.builtin.include_role:
     name: mafalb.ansible.virtualenv
   vars:
     packages:
       - ansible
       - _ansible=={{ target_version }}
       - _ansible_test
-- name: check version of ansible
+- name: Check version of ansible
   block:
-    - name: get ansible version
-      command: "~/.virtualenvs/ansible/bin/ansible --version"
+    - name: Get ansible version
+      ansible.builtin.command:
+        cmd: "~/.virtualenvs/ansible/bin/ansible --version"
       changed_when: false
       register: __reg_ansible_version
-    - name: debug ansible version
-      debug: var=__reg_ansible_version
-    - name: assert that ansible version is correct
-      assert:
+    - name: Debug ansible version
+      ansible.builtin.debug:
+        var: __reg_ansible_version
+    - name: Assert that ansible version is correct
+      ansible.builtin.assert:
         that:
           - (__reg_ansible_version.stdout_lines[0] is search("{{ target_version }}"))
 

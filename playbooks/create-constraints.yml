@@ -3,15 +3,67 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-- hosts: localhost
-  pre_tasks:
-    - name: assert that version is defined
-      assert:
+- name: Create constraints
+  hosts: localhost
+  vars:
+    outputdir: "{{ playbook_dir }}/../roles/virtualenv/files/constraints/ansible-test"
+  tasks:
+    - name: Assert that version is defined
+      ansible.builtin.assert:
         that: version is defined
-  roles:
-    - role: mafalb.ansible.virtualenv
-      do: constraints
-      packages:
-      - _ansible=={{ version }}
+
+    - name: Ansible source code is checked out
+      ansible.builtin.git:
+        repo: https://github.com/ansible/ansible.git
+        dest: /tmp/ansible.git
+        version: v{{ version }}
+        # it's very chatty otherwise:
+      diff: false
+    - name: Get a list of all requirements files
+      when: false
+      ansible.builtin.find:
+        paths: "/tmp/ansible.git/test/lib/ansible_test/_data/requirements"
+        patterns: "*.txt"
+      register: __constraints_files
+    - name: Debug __constraints_files
+      ansible.builtin.debug:
+        var: __constraints_files
+      when: false
+    - name: Get all requirements for ansible 2.9
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          cat *.txt|grep -Ev -e "^git\+" -e "^[^[:space:]]+\\["\
+            -e "^paramiko.*python_version >= '2.7'"
+        args:
+          chdir: /tmp/ansible.git/test/lib/ansible_test/_data/requirements
+      changed_when: false
+      register: __constraints_29
+      when: version is match('2.9')
+    - name: Get all requirements for ansible > 2.9
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          cat *.txt|grep -Ev -e "^git\+" -e "^[^[:space:]]+\\["
+        chdir: /tmp/ansible.git/test/lib/ansible_test/_data/requirements
+      changed_when: false
+      register: __constraints
+      when: version is not match('2.9')
+    - name: Debug __constraints
+      ansible.builtin.debug:
+        var: __constraints
+    # do not replace existing constraints file
+    - name: Constraints file for ansible-test is present
+      ansible.builtin.copy:
+        content: "{{ __constraints.stdout | default(__constraints_29.stdout) }}"
+        dest: "{{ outputdir }}/v{{ version }}.txt"
+        backup: true
+        mode: '0644'
+        force: false
+      register: __reg_constraints_file
+
+    - name: Debug __reg_constraints_file
+      ansible.builtin.debug:
+        var: __reg_constraints_file
 
 ...

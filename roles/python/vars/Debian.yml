@@ -3,9 +3,9 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-__mafalb_python_version: "{{ version|default(mafalb_python_version)|default(mafalb_python_default_version) }}"
+__mafalb_python_version: "{{ version | default(mafalb_python_version) | default(mafalb_python_default_version) }}"
 __mafalb_python_extra_packages:
   '2': ['virtualenv']
-  '3': "{{ [ 'python' + __mafalb_python_version + '-venv' ] }}"
+  '3': "{{ ['python' + __mafalb_python_version + '-venv'] }}"
 
 ...

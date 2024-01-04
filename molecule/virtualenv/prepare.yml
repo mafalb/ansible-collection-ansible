@@ -3,21 +3,24 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-- hosts: all
+- name: Prepare
+  hosts: all
   tasks:
-    - name: necessary tools for CI are present
-      package:
+    - name: Necessary tools for CI are present
+      ansible.builtin.package:
         name:
           - diffutils
           - git
-    - block:
-      - name: locale are present
-        package:
-          name: locales
-      - name: generate locale
-        locale_gen:
-          name: en_US.UTF-8
+    - name: Special treatment for Ubuntu 18
       when:
         - ansible_distribution == 'Ubuntu'
         - ansible_distribution_major_version == '18'
+      block:
+        - name: Locale are present
+          ansible.builtin.package:
+            name: locales
+        - name: Generate locale
+          community.general.locale_gen:
+            name: en_US.UTF-8
+
 ...

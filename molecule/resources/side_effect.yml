@@ -44,8 +44,8 @@
 
   tasks:
 
-  - name: run ansible-test  # noqa no-changed-when 301
-    shell: |
+  - name: Run ansible-test  # noqa no-changed-when
+    ansible.builtin.shell: |
       . ~/.virtualenvs/{{ item.virtualenv }}/bin/activate
       pip freeze >~/{{ item.virtualenv }}.before.txt
       ~/.virtualenvs/{{ item.virtualenv }}/bin/ansible-test sanity --requirements

@@ -116,13 +116,13 @@ def __major_minor_version(arg_req, python_version=None):
     # in all other cases find possible versions
     all_versions = []
     # generate a list of all versions that are theoretically supported
-    for majmin in data['latest_version']:
+    for majmin in data['latest_ansible_version']:
         if (python_version
                 and python_version not in data['python_versions'][majmin]):
             # ansible X.Y is not compatible with requested python
             continue
         for patch in range(
-            0, int(data['latest_version'][majmin].split('.')[-1]) + 1
+            0, int(data['latest_ansible_version'][majmin].split('.')[-1]) + 1
         ):
             all_versions.append(majmin + '.' + str(patch))
     possible_versions = [v for v in all_versions if req_contains(v)]
@@ -141,7 +141,7 @@ def __major_minor_version(arg_req, python_version=None):
 def next_ansible_version(majmin):
     """Return the next version of ansible."""
     try:
-        version = data['latest_version'][majmin]
+        version = data['latest_ansible_version'][majmin]
     except (KeyError, TypeError):
         # majmin is probably in wrong format
         raise AnsibleFilterError(
@@ -161,7 +161,8 @@ def best_version(arg_packages, python_version=None):
     """
 
     if not python_version:
-        python_version =  str(sys.version_info.major) + '.' + str(sys.version_info.minor)
+        python_version = (str(sys.version_info.major) + '.' +
+                          str(sys.version_info.minor))
 
     for s in arg_packages:
         # we are interested in the _ansible pseudo package
@@ -176,7 +177,7 @@ def best_version(arg_packages, python_version=None):
     if specstr.startswith('=='):
         version = specstr.replace('==', '')
         if len(version.split('.')) == 3:  # e.g. 2.11.6
-            majmin='.'.join(version.split('.')[0:2])
+            majmin = '.'.join(version.split('.')[0:2])
             if python_version in data['python_versions'][majmin]:
                 return version
             else:
@@ -186,7 +187,7 @@ def best_version(arg_packages, python_version=None):
         elif len(version.split('.')) == 2:  # e.g. 2.11
             try:
                 if python_version in data['python_versions'][version]:
-                    return data['latest_version'][version]
+                    return data['latest_ansible_version'][version]
             except KeyError:
                 raise AnsibleFilterError(
                     "version not supported: {v}".format(v=version)
@@ -195,13 +196,13 @@ def best_version(arg_packages, python_version=None):
     # in all other cases find possible versions
     all_versions = []
     # generate a list of all versions that are theoretically supported
-    for majmin in data['latest_version']:
+    for majmin in data['latest_ansible_version']:
         if (python_version
                 and python_version not in data['python_versions'][majmin]):
             # ansible X.Y is not compatible with requested python
             continue
         for patch in range(
-            0, int(data['latest_version'][majmin].split('.')[-1]) + 1
+            0, int(data['latest_ansible_version'][majmin].split('.')[-1]) + 1
         ):
             all_versions.append(majmin + '.' + str(patch))
     possible_versions = [v for v in all_versions if req_contains(v)]
@@ -230,7 +231,8 @@ def pip_package_list(arg_packages, python_version=None):
         )
 
     if not python_version:
-        python_version =  str(sys.version_info.major) + '.' + str(sys.version_info.minor)
+        python_version = (str(sys.version_info.major) + '.' +
+                          str(sys.version_info.minor))
 
     packages = [s for s in arg_packages if not s.startswith('_ansible')]
     matching = [s for s in arg_packages if s.startswith('_ansible')]
@@ -247,7 +249,8 @@ def pip_package_list(arg_packages, python_version=None):
                 version = specstr.replace('==', '')
                 if len(version.split('.')) == 2:  # e.g. 2.11
                     try:
-                        specifier = '==' + data['latest_version'][version]
+                        specifier = ('==' +
+                                     data['latest_ansible_version'][version])
                     except KeyError:
                         raise AnsibleFilterError(
                             "version not supported: {v}".format(v=version)
@@ -270,7 +273,9 @@ def __ansible_test_packages(version):
     try:
         return data['ansible_test_packages'][version]
     except Exception as e:
-        raise AnsibleFilterError("No key in ansible_test_packages: {s}".format(s=str(e)))
+        raise AnsibleFilterError(
+                "No key in ansible_test_packages: {s}".format(s=str(e)))
+
 
 class FilterModule(object):
 

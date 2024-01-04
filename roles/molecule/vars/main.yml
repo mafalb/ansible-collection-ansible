@@ -202,7 +202,7 @@ ansible_packages:
   '2.16.*': 'ansible-core~=2.16.0,ansible<10'
 
 
-molecule_ansible_major_minor_version: "{{ molecule_ansible_version.split('.')[0:2]|join('.') }}"
+molecule_ansible_major_minor_version: "{{ molecule_ansible_version.split('.')[0:2] | join('.') }}"
 
 molecule_ansible_pip_packages: >
   {{ [ansible_packages[molecule_ansible_version|mafalb.ansible.pipver]] if
@@ -210,9 +210,9 @@ molecule_ansible_pip_packages: >
      [ansible_packages[molecule_ansible_major_minor_version|
        mafalb.ansible.pipver]] }}
 
-ansible_lint_version: "{{ '<5' if molecule_version|mafalb.ansible.pipver is regex('^3.[012]') else '>=5.0.7' }}"
+ansible_lint_version: "{{ '<5' if molecule_version | mafalb.ansible.pipver is regex('^3.[012]') else '>=5.0.7' }}"
 molecule_pip_packages:
-- molecule[lint,docker,test]=={{ molecule_version|mafalb.ansible.pipver }}
+- molecule[lint,docker,test]=={{ molecule_version | mafalb.ansible.pipver }}
 - ansible-lint{{ ansible_lint_version }}
 - jmespath
 - tox

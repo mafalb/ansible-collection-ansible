@@ -19,11 +19,13 @@ __metaclass__ = type
 
 def test_data_integrity():
     for ansible_version in data['python_versions']:
-        data['ansible_test_packages'][ansible_version]
+        assert data['ansible_test_packages'][ansible_version]
     for ansible_version in data['python_versions']:
-        data['latest_version'][ansible_version]
-    for ansible_version in data['latest_version']:
-        data['ansible_test_packages'][ansible_version]
+        assert data['latest_ansible_version'][ansible_version]
+    for ansible_version in data['latest_ansible_version']:
+        assert data['ansible_test_packages'][ansible_version]
+    for ansible_version in data['python_versions']:
+        assert data['ansible_test_packages'][ansible_version]
 
 
 def test_ansible_test_packages():
@@ -31,6 +33,10 @@ def test_ansible_test_packages():
     p210 = __ansible_test_packages('2.10')
     p211 = __ansible_test_packages('2.11')
     p212 = __ansible_test_packages('2.12')
+#    p213 = __ansible_test_packages('2.13')
+#    p214 = __ansible_test_packages('2.14')
+#    p215 = __ansible_test_packages('2.15')
+#    p216 = __ansible_test_packages('2.16')
 
     assert isinstance(p29, list)
     assert isinstance(p210, list)

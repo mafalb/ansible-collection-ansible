@@ -3,25 +3,33 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-mafalb_ansible_virtualenv_packages:
+
+virtualenv_implicit_packages:
   pip: '>=20.3,<21.1'
   setuptools: '>41'
 
-# I want to write as simple as:
-__mafalb_ansible_majmin_version: "{{ __mafalb_ansible_version.split('.')[0:2]|join('.') }}"
-__mafalb_ansible_packages: "{{ mafalb_ansible_packages|default(packages)|mafalb.ansible.fix_package_list(__reg_targeted_python.version.majmin) }}"
+# use absolute path to virtualenv
+# https://github.com/ansible/ansible/issues/22967
+#
+# and use ansible_user_dir
+# https://github.com/ansible/ansible/issues/57436
+# (~/.virtualenvs/molecule does not work) for
+# setting TMPPATH environment variable for pip
+#
+___virtualenv: "{{
+  virtualenv | default('~/.virtualenvs/ansible')
+}}"
+__virtualenv: "{{ ___virtualenv | regex_replace('^~', ansible_user_dir) }}"
 
-mafalb_ansible:
-  packages: "{{ packages|default(mafalb_ansible_packages)|default(['_ansible']) }}"
-
-ansible_test_packages_not:
-  2:
-    - pytest
-    - pylint
-  3: []
+# the path to the python interpreter
+# relevant for virtualenvs that already exists
+#
+__virtualenv_interpreter: "{{
+  __virtualenv + '/bin/python'
+}}"
 
 # keyed by openssl version
-ansible_cryptography_specifier:
+virtualenv_cryptography_specifier:
   '1.0': '<3.2'
   '1.1': '<3.4'
 

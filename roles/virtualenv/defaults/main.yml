@@ -3,6 +3,9 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
+virtualenv_packages:
+  - _ansible
+
 # use absolute path to virtualenv
 # https://github.com/ansible/ansible/issues/22967
 #
@@ -11,26 +14,16 @@
 # (~/.virtualenvs/molecule does not work) for
 # setting TMPPATH environment variable for pip
 #
-___python_virtualenv: "{{
-  python_virtualenv|default('~/.virtualenvs/ansible'|regex_replace('^~', ansible_user_dir))
+___virtualenv: "{{
+  python_virtualenv | default('~/.virtualenvs/ansible' | regex_replace('^~', ansible_user_dir))
 }}"
-__python_virtualenv: "{{ ___python_virtualenv|regex_replace('^~', ansible_user_dir) }}"
+__virtualenv: "{{ ___python_virtualenv | regex_replace('^~', ansible_user_dir) }}"
 
 # the path to the python interpreter
 # relevant for virtualenvs that already exists
 #
-__python_virtualenv_interpreter: "{{
-  __python_virtualenv + '/bin/python'
-}}"
-
-# we want to create a python3 venv even if we run ansible
-# with python2
-#
-mafalb_ansible_virtualenv_python: "{{
-  python|default('python3'
-                 if ansible_python.version.major == 2
-                 else ansible_python.executable
-                )
+__virtualenv_python_interpreter: "{{
+  __virtualenv + '/bin/python'
 }}"
 
 ...

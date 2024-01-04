@@ -19,8 +19,8 @@
 
 ---
 
-- name: get OS specific variables
-  include_vars:
+- name: Get OS specific variables
+  ansible.builtin.include_vars:
     file: "{{ file }}"
   loop_control:
     loop_var: file
@@ -29,77 +29,78 @@
   - "{{ ansible_os_family }}-{{ ansible_distribution }}.yml"
   - "{{ ansible_os_family }}.yml"
 
-- name: ansible-lint is present
-  package:
+- name: Ansible-lint is present
+  ansible.builtin.package:
     name: "{{ ansible_lint_package }}"
   when: ansible_lint_package is defined
 
-- block:
+- name: Virtualenv_command is defined
+  when: virtualenv_command is defined
+  block:
 
-  - name: virtualenv package is present
-    package:
-      name: "{{ virtualenv_package }}"
-    when: virtualenv_package is defined
+    - name: Virtualenv package is present
+      ansible.builtin.package:
+        name: "{{ virtualenv_package }}"
+      when: virtualenv_package is defined
 
-  - name: epel is present
-    include_role:
-      name: mafalb.epel.release
-    when:
-    - ansible_lint_needs_epel|default(false)|bool
-    - false
+    - name: Epel is present
+      ansible.builtin.include_role:
+        name: mafalb.epel.release
+      when:
+      - ansible_lint_needs_epel|default(false)|bool
+      - false
 
-  - name: dependency packages are present
-    package:
-      name: "{{ ansible_lint_dependency_packages }}"
-    when: ansible_lint_dependency_packages is defined
+    - name: Dependency packages are present
+      ansible.builtin.package:
+        name: "{{ ansible_lint_dependency_packages }}"
+      when: ansible_lint_dependency_packages is defined
 
-  # ansible-base is explicitly mentioned, otherwise it is upgraded to the latest
-  # possibly causing a mismatch between ansible and ansible-base
-  #
-  - name: virtualenv is present
-    pip:
-      name:
-      - pip>=19.1
-      - setuptools>41
-      - wheel
-      virtualenv: "{{ ansible_lint_virtualenv }}"
-      virtualenv_command: "{{ virtualenv_command }}"
-      virtualenv_site_packages: true
-
-  - name: get pip package info
-    command: "{{ ansible_lint_virtualenv }}/bin/pip show ansible"
-    changed_when: false
-    register: _pip_package
-
-  - name: debug
-    debug: var=_pip_package
-    tags:
-    - never
-    - debug
-
-  - name: assert that ansible is present
-    assert:
-      that:
-      - "'Location: /usr/' in _pip_package.stdout"
-
-  - name: ansible-lint is present
-    block:
-
-    # the check for virtualenv is meant as a check for python2
-    # ruamel.yaml drops support for python2 in version 17
-    # ruamel.yaml.clib dropped support for python2 in version 0.2.3
+    # ansible-base is explicitly mentioned, otherwise it is upgraded to the latest
+    # possibly causing a mismatch between ansible and ansible-base
     #
-    - name: ansible-lint is installed
-      pip:
+    - name: Virtualenv is present
+      ansible.builtin.pip:
         name:
-        - ansible-lint<5
-        - ruamel.yaml{{ '<0.17' if virtualenv_command == 'virtualenv' else '' }}
-        - ruamel.yaml.clib{{ '<0.2.3' if virtualenv_command == 'virtualenv' else '' }}
-        extra_args: "{{ '-U eager' if ansible_lint_update is defined else omit }}"
+        - pip>=19.1
+        - setuptools>41
+        - wheel
         virtualenv: "{{ ansible_lint_virtualenv }}"
         virtualenv_command: "{{ virtualenv_command }}"
         virtualenv_site_packages: true
 
-  when: virtualenv_command is defined
+    - name: Get pip package info
+      ansible.builtin.command: "{{ ansible_lint_virtualenv }}/bin/pip show ansible"
+      changed_when: false
+      register: _pip_package
+
+    - name: Debug
+      ansible.builtin.debug:
+        var: _pip_package
+      tags:
+      - never
+      - debug
+
+    - name: Assert that ansible is present
+      ansible.builtin.assert:
+        that:
+        - "'Location: /usr/' in _pip_package.stdout"
+
+    - name: Ansible-lint is present
+      block:
+
+      # the check for virtualenv is meant as a check for python2
+      # ruamel.yaml drops support for python2 in version 17
+      # ruamel.yaml.clib dropped support for python2 in version 0.2.3
+      #
+      - name: Ansible-lint is installed
+        ansible.builtin.pip:
+          name:
+          - ansible-lint<5
+          - ruamel.yaml{{ '<0.17' if virtualenv_command == 'virtualenv' else '' }}
+          - ruamel.yaml.clib{{ '<0.2.3' if virtualenv_command == 'virtualenv' else '' }}
+          extra_args: "{{ '-U eager' if ansible_lint_update is defined else omit }}"
+          virtualenv: "{{ ansible_lint_virtualenv }}"
+          virtualenv_command: "{{ virtualenv_command }}"
+          virtualenv_site_packages: true
 
 ...

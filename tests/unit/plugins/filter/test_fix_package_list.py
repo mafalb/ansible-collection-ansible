@@ -16,12 +16,13 @@ datafile = open('roles/virtualenv/vars/data.yml', 'r')
 data = yaml.load(datafile, Loader=yaml.Loader)
 datafile.close()
 
-latest = sorted(data['latest_version'], key=version2int)[-1]
+latest = sorted(data['latest_ansible_version'], key=version2int)[-1]
 
 TEST_CASES = (
     (['_ansible==2.12.0rc1'], ['ansible-core==2.12.0rc1']),
     (['_ansible==2.12.0rc1', '_ansible_test'], ['ansible-core==2.12.0rc1']),
-    (['_ansible==2.11'], ['ansible-core==' + data['latest_version']['2.11']]),
+    (['_ansible==2.11'],
+     ['ansible-core==' + data['latest_ansible_version']['2.11']]),
     (['_ansible==2.11.6'], ['ansible-core==2.11.6']),
     (['_ansible<2.11.6'], ['ansible-core<2.11.6']),
     (['_ansible'], ['ansible-core']),
@@ -29,6 +30,7 @@ TEST_CASES = (
      ['ansible-core~=2.11.6', 'voluptuous']),
     (["_ansible==2.9", "molecule~=3.3.0", "ansible-lint", "_ansible_test"],
      ['ansible==2.9.27', 'voluptuous']),
+
 )
 
 TEST_CASES_WITH_PYTHON = (
@@ -36,15 +38,19 @@ TEST_CASES_WITH_PYTHON = (
     (['_ansible==2.12.0rc1', '_ansible_test'], '3.8',
      ['ansible-core==2.12.0rc1']),
     (['_ansible==2.11'], '3.8',
-     ['ansible-core==' + data['latest_version']['2.11']]),
+     ['ansible-core==' + data['latest_ansible_version']['2.11']]),
     (['_ansible==2.11'], None,
-     ['ansible-core==' + data['latest_version']['2.11']]),
+     ['ansible-core==' + data['latest_ansible_version']['2.11']]),
     (['_ansible==2.11.6'], '3.8', ['ansible-core==2.11.6']),
     (['_ansible<2.11.6'], '3.8', ['ansible-core<2.11.6']),
     (['_ansible~=2.9.6'], '3.8', ['ansible~=2.9.6']),
     (['_ansible'], '3.6', ['ansible-core']),
     (['_ansible~=2.11.6', '_ansible_test'], '3.8',
      ['ansible-core~=2.11.6', 'voluptuous']),
+    (["_ansible~=2.14.3", "ansible-lint", "molecule"], '3.9',
+     ["ansible-core~=2.14.3", "ansible-lint", "molecule"]),
+    (["_ansible_test", "_ansible~=2.14.3", "ansible-lint", "molecule"], '3.9',
+     ["ansible-core~=2.14.3", "ansible-lint", "molecule"])
 )
 
 

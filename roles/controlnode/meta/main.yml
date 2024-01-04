@@ -5,23 +5,30 @@ galaxy_info:
   author: Markus Falb
   description: Ansible role for ansible
   license: GPL-3.0-or-later
-  min_ansible_version: 2.9
+  min_ansible_version: '2.10'
 
   platforms:
 
-    - name: EL
-      versions:
-      - 7
-      - 8
     - name: Fedora
       versions:
-      - 38
-    - name: Ubuntu
+        - '38'
+        - '39'
+
+    - name: EL
       versions:
-      - focal
+        - '7'
+        - '8'
+        - '9'
+
     - name: Debian
       versions:
-      - bookworm
+        - bullseye
+        - bookworm
+
+    - name: Ubuntu
+      versions:
+        - focal
+        - jammy
 
   galaxy_tags:
     # List tags for your role here, one per line. A tag is a keyword that describes

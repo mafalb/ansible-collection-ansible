@@ -7,33 +7,36 @@ galaxy_info:
   author: Markus Falb <markus.falb@mafalb.at>
   description: Ansible role mafalb.ansible.virtualenv
   license: GPL-3.0-or-later
-  min_ansible_version: 2.14
+  min_ansible_version: '2.10'
 
-  # https://galaxy.ansible.com/api/v1/platforms/
-  #
   platforms:
-  - name: EL
-    versions:
-    - 7
-    - 8
-  - name: Fedora
-    versions:
-    - 38
-  - name: Ubuntu
-    versions:
-    - xenial
-    - bionic
-    - focal
-    - impish
-  - name: Debian
-    versions:
-    - bookworm
+
+    - name: Fedora
+      versions:
+        - '38'
+        - '39'
+
+    - name: EL
+      versions:
+        - '7'
+        - '8'
+        - '9'
+
+    - name: Debian
+      versions:
+        - bullseye
+        - bookworm
+
+    - name: Ubuntu
+      versions:
+        - focal
+        - jammy
 
   galaxy_tags:
   - ansible
   - molecule
   - virtualenv
 
-dependencies: []
+  standalone: false
 
 ...

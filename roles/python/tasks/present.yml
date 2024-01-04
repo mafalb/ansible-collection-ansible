@@ -3,20 +3,20 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-- name: assertions
-  assert:
+- name: Assertions
+  ansible.builtin.assert:
     that:
       - python_package[python_version] is defined
 
-- name: debug
-  debug:
+- name: Debug
+  ansible.builtin.debug:
     msg: "{{
       [python_package[python_version]]
       + __python_extra_packages[python_version[0]]
     }}"
 
-- name: python is present
-  package:
+- name: Python is present
+  ansible.builtin.package:
     name: "{{
       [python_package[python_version]]
       + __python_extra_packages[python_version[0]]

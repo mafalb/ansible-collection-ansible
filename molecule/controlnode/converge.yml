@@ -6,10 +6,11 @@
 - name: Install ansible
   hosts: all
   pre_tasks:
-    - name: debug
-      debug: var=arg_ansible_version
+    - name: Debug
+      ansible.builtin.debug:
+        var: arg_ansible_version
   roles:
   - role: mafalb.ansible.controlnode
-    version: "{{ arg_ansible_version|mandatory }}"
+    version: "{{ arg_ansible_version | mandatory }}"
 
 ...
