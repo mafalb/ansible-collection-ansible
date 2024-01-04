@@ -13,3 +13,9 @@ cryptography{{ virtualenv_cryptography_specifier[virtualenv_default_openssl_vers
 {% if __virtualenv_ansible_version is version('2.11','<') %}
 ansible-lint <6
 {% endif %}
+
+# https://github.com/ansible/ansible-lint/issues/3408
+{% if __virtualenv_ansible_version is version('2.12','=') %}
+ansible-compat<4 ; python_version == '3.9'
+{% endif %}
+
