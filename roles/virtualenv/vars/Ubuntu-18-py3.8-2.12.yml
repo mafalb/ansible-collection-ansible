@@ -10,7 +10,7 @@ virtualenv_system_dependencies:
   - libffi-dev
   - gcc
 
-mafalb_ansible_virtualenv_command: "{{ __reg_targeted_python.executable }} -m venv"
-mafalb_ansible_default_openssl_version: '1.1'
+virtualenv_command: "{{ __reg_targeted_python.executable }} -m venv"
+virtualenv_default_openssl_version: '1.1'
 
 ...
