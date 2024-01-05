@@ -80,6 +80,11 @@ jobs:
         with:
           path: ansible_collections/mafalb/ansible
 
+     - name: setup python
+       uses: actions/setup-python@v5
+       with:
+         python-version: ${{ matrix.python_version }}
+
       - name: install ansible
         run: |
           ansible-playbook -D playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}", "ansible-lint${{ matrix.ansible_lint_specifier }}", "_ansible_test", "flake8"]}' -e virtualenv_interpreter=python${{ matrix.python_version }} -t all,debug
@@ -334,6 +339,11 @@ jobs:
 
     steps:
 
+     - name: setup python
+       uses: actions/setup-python@v5
+       with:
+         python-version: ${{ matrix.python_version }}
+
       - name: checkout collection ansible
         uses: actions/checkout@v3
         with:
@@ -391,6 +401,11 @@ jobs:
 
     steps:
 
+     - name: setup python
+       uses: actions/setup-python@v5
+       with:
+         python-version: ${{ matrix.python_version }}
+
       - name: checkout collection ansible
         uses: actions/checkout@v3
         with:
@@ -399,7 +414,7 @@ jobs:
       - name: install molecule with system ansible (old!)
         run: |
           sudo apt install ansible
-          /usr/bin/ansible-playbook -D playbooks/molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
+          /usr/bin/ansible-playbook -D playbooks/molecule.yml -e molecule_python_version=${{ matrix.python_version }} -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
         env:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
 
