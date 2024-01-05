@@ -18,18 +18,15 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 ---
-
 ansible_node_dependencies:
   selinux:
-  - libselinux-python
-  - libsemanage-python
-  - policycoreutils-python
+    - libselinux-python
+    - libsemanage-python
+    - policycoreutils-python
   crypto:
-  - openssl
-  - python2-cryptography
-  - pyOpenSSL
+    - openssl
+    - python2-cryptography
+    - pyOpenSSL
   pip:
-  - python-setuptools
-  - python-virtualenv
-
-...
+    - python-setuptools
+    - python-virtualenv

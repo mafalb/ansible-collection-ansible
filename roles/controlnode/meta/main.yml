@@ -1,24 +1,22 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
-
 galaxy_info:
   author: Markus Falb
   description: Ansible role for ansible
   license: GPL-3.0-or-later
-  min_ansible_version: '2.10'
+  min_ansible_version: "2.10"
 
   platforms:
-
     - name: Fedora
       versions:
-        - '38'
-        - '39'
+        - "38"
+        - "39"
 
     - name: EL
       versions:
-        - '7'
-        - '8'
-        - '9'
+        - "7"
+        - "8"
+        - "9"
 
     - name: Debian
       versions:
@@ -40,5 +38,3 @@ galaxy_info:
     - ansible
 
 dependencies: []
-
-...

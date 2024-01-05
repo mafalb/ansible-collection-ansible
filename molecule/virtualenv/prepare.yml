@@ -2,7 +2,6 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 - name: Prepare
   hosts: all
   tasks:
@@ -22,5 +21,3 @@
         - name: Generate locale
           community.general.locale_gen:
             name: en_US.UTF-8
-
-...

@@ -18,7 +18,6 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 ---
-
 # molecule - 3.4.* / 2.10.*
 # default1 - 6.0.3 / 2.14.3
 # default2 - 6 / 2.14
@@ -27,12 +26,11 @@
   hosts: all
 
   roles:
+    - role: mafalb.ansible.python
+      python_version: "3.6"
 
     - role: mafalb.ansible.python
-      python_version: '3.6'
-
-    - role: mafalb.ansible.python
-      python_version: '3.9'
+      python_version: "3.9"
 
     - role: mafalb.ansible.virtualenv
       virtualenv_packages:
@@ -42,33 +40,30 @@
         - molecule
 
   tasks:
+    - name: Prepare default1 - 6.0.3 / 2.14.3
+      ansible.builtin.include_role:
+        name: mafalb.ansible.virtualenv
+      vars:
+        virtualenv: ~/.virtualenvs/default1
+        virtualenv_python_interpreter: python3.9
+        virtualenv_packages:
+          - _ansible_test
+          - _ansible==2.14.3
+          - ansible-lint
+          - molecule
 
-  - name: Prepare default1 - 6.0.3 / 2.14.3
-    ansible.builtin.include_role:
-      name: mafalb.ansible.virtualenv
-    vars:
-      virtualenv: ~/.virtualenvs/default1
-      virtualenv_python_interpreter: 'python3.9'
-      virtualenv_packages:
-        - _ansible_test
-        - _ansible==2.14.3
-        - ansible-lint
-        - molecule
+    - name: Debug
+      ansible.builtin.debug:
+        var: virtualenv_python_interpreter
 
-  - name: Debug
-    ansible.builtin.debug:
-      var: virtualenv_python_interpreter
-
-  - name: Prepare default2 - 6 / 2.14
-    ansible.builtin.include_role:
-      name: mafalb.ansible.virtualenv
-    vars:
-      virtualenv: ~/.virtualenvs/default2
-      virtualenv_python_interpreter: 'python3.9'
-      virtualenv_packages:
-        - _ansible_test
-        - _ansible~=2.14.3
-        - ansible-lint
-        - molecule
-
-...
+    - name: Prepare default2 - ansible 2.12
+      ansible.builtin.include_role:
+        name: mafalb.ansible.virtualenv
+      vars:
+        virtualenv: ~/.virtualenvs/default2
+        virtualenv_python_interpreter: python3.9
+        virtualenv_packages:
+          - _ansible_test
+          - _ansible~=2.12.0
+          - ansible-lint
+          - molecule

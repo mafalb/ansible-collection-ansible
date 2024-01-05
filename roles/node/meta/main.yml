@@ -4,20 +4,19 @@ galaxy_info:
   author: Markus Falb
   description: Ansible role for ansible node dependencies
   license: GPL-3.0-or-later
-  min_ansible_version: '2.10'
+  min_ansible_version: "2.10"
 
   platforms:
-
     - name: Fedora
       versions:
-        - '38'
-        - '39'
+        - "38"
+        - "39"
 
     - name: EL
       versions:
-        - '7'
-        - '8'
-        - '9'
+        - "7"
+        - "8"
+        - "9"
 
     - name: Debian
       versions:
@@ -38,7 +37,7 @@ galaxy_info:
   # this branch. If Travis integration is configured, only notifications for this
   # branch will be accepted. Otherwise, in all cases, the repo's default branch
   # (usually master) will be used.
-  #github_branch:
+  # github_branch:
 
   # List tags for your role here, one per line. A tag is a keyword that describes
   # and categorizes the role. Users find roles by searching for tags. Be sure to
@@ -51,5 +50,3 @@ galaxy_info:
     - ansiblenode
 
 dependencies: []
-
-...

@@ -18,15 +18,12 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 ---
-
 #molecule_enablerepo: cr
 molecule_system_dependencies:
-- libselinux-python3
+  - libselinux-python3
 
 # RHEL 7 is a python 2 system, so we will hardcode the
 # python interpreter -> it is not possible to CI with
 # different python interpreters on RHEL 7
 #
-molecule_virtualenv_command: "/usr/bin/python3 -m venv"
-
-...
+molecule_virtualenv_command: /usr/bin/python3 -m venv

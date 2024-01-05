@@ -18,7 +18,6 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 ---
-
 - name: Verify ansible
   hosts: all
 
@@ -27,5 +26,3 @@
       executable: /bin/bash
 
   tasks: []
-
-...

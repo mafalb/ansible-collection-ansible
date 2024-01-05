@@ -2,7 +2,6 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 - name: Debug
   ansible.builtin.debug:
     var: target_version | mandatory
@@ -19,7 +18,7 @@
   block:
     - name: Get ansible version
       ansible.builtin.command:
-        cmd: "~/.virtualenvs/ansible/bin/ansible --version"
+        cmd: ~/.virtualenvs/ansible/bin/ansible --version
       changed_when: false
       register: __reg_ansible_version
     - name: Debug ansible version
@@ -29,5 +28,3 @@
       ansible.builtin.assert:
         that:
           - (__reg_ansible_version.stdout_lines[0] is search("{{ target_version }}"))
-
-...

@@ -2,7 +2,6 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 dependency:
   name: galaxy
   options:
@@ -12,12 +11,12 @@ driver:
   name: ${CI_DRIVER:-docker}
 
 platforms:
-- name: ${CI_HOSTNAME}
-  image: ${CI_IMAGE}
-  #dockerfile: ../resources/${CI_HOSTNAME:-"ci-centos7"}.j2
-  dockerfile: ../resources/Dockerfile.j2
-  volumes:
-  - "${PWD}/../../:/root/collections/ansible_collections:Z"
+  - name: ${CI_HOSTNAME}
+    image: ${CI_IMAGE}
+    #dockerfile: ../resources/${CI_HOSTNAME:-"ci-centos7"}.j2
+    dockerfile: ../resources/Dockerfile.j2
+    volumes:
+      - ${PWD}/../../:/root/collections/ansible_collections:Z
 
 provisioner:
   name: ansible
@@ -34,10 +33,7 @@ provisioner:
 #      stdout_callback: community.general.yaml
 #      bin_ansible_callbacks: true
 
-
 verifier:
   name: ansible
   lint:
     name: ansible-lint
-
-...

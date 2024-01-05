@@ -2,26 +2,23 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 - name: Converge
   hosts: all
   roles:
     - role: mafalb.ansible.python
       version: "{{ arg_python_version }}"
     - role: ci.ansible
-      target_version: '2.9.10'
+      target_version: 2.9.10
     - role: ci.ansible
-      target_version: '2.9.27'
+      target_version: 2.9.27
     - role: ci.ansible
-      target_version: '2.10.15'
+      target_version: 2.10.15
     - role: ci.ansible
-      target_version: '2.11.4'
+      target_version: 2.11.4
     - role: ci.ansible
-      target_version: '2.12.0'
+      target_version: 2.12.0
       when: false
     - role: ci.ansible
-      target_version: '2.10.10'
+      target_version: 2.10.10
     - role: ci.ansible
-      target_version: '2.9.27'
-
-...
+      target_version: 2.9.27

@@ -2,7 +2,6 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 - name: Verify ansible
   hosts: all
   vars:
@@ -30,8 +29,6 @@
       ansible.builtin.copy:
         src: install-ansible.yml
         dest: /root/
-        mode: '644'
+        mode: "644"
     - name: Community.general is present # noqa no-changed-when
       ansible.builtin.command: ansible-galaxy collection install community.general
-
-...

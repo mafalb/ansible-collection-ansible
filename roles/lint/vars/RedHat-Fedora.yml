@@ -18,12 +18,9 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 ---
-
 ansible_lint_dependency_packages:
-- python3-ruamel-yaml
-- python3-ruamel-yaml-clib
-- python3-colorama
-- python3-rich
+  - python3-ruamel-yaml
+  - python3-ruamel-yaml-clib
+  - python3-colorama
+  - python3-rich
 virtualenv_command: "{{ ansible_python.executable }} -m venv"
-
-...

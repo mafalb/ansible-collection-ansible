@@ -18,7 +18,4 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 ---
-
 virtualenv_command: "{{ ansible_python.executable }} -m venv"
-
-...

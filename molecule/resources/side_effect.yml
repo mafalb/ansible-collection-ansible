@@ -18,7 +18,6 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 ---
-
 # molecule - 3.4.* / 2.10.*
 # default1 - 3.1.4 / 2.9.10
 # default2 - 3.1.5 / 2.9.*
@@ -33,26 +32,23 @@
 
   vars:
     virtualenvs:
-    - { index: 0, virtualenv: molecule }
-    - { index: 1, virtualenv: default1 }
-    - { index: 2, virtualenv: default2 }
-    - { index: 3, virtualenv: default3 }
-    - { index: 4, virtualenv: default4 }
-    - { index: 5, virtualenv: default5 }
-    - { index: 6, virtualenv: default6 }
-    - { index: 7, virtualenv: default7 }
+      - { index: 0, virtualenv: molecule }
+      - { index: 1, virtualenv: default1 }
+      - { index: 2, virtualenv: default2 }
+      - { index: 3, virtualenv: default3 }
+      - { index: 4, virtualenv: default4 }
+      - { index: 5, virtualenv: default5 }
+      - { index: 6, virtualenv: default6 }
+      - { index: 7, virtualenv: default7 }
 
   tasks:
-
-  - name: Run ansible-test  # noqa no-changed-when
-    ansible.builtin.shell: |
-      . ~/.virtualenvs/{{ item.virtualenv }}/bin/activate
-      pip freeze >~/{{ item.virtualenv }}.before.txt
-      ~/.virtualenvs/{{ item.virtualenv }}/bin/ansible-test sanity --requirements
-      pip freeze >~/{{ item.virtualenv }}.after.txt
-    loop: "{{ virtualenvs }}"
-    register: _lint_version
-    args:
-      chdir: /ansible_collections/mafalb/ansible
-
-...
+    - name: Run ansible-test # noqa no-changed-when
+      ansible.builtin.shell: |
+        . ~/.virtualenvs/{{ item.virtualenv }}/bin/activate
+        pip freeze >~/{{ item.virtualenv }}.before.txt
+        ~/.virtualenvs/{{ item.virtualenv }}/bin/ansible-test sanity --requirements
+        pip freeze >~/{{ item.virtualenv }}.after.txt
+      loop: "{{ virtualenvs }}"
+      register: _lint_version
+      args:
+        chdir: /ansible_collections/mafalb/ansible

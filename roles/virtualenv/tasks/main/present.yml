@@ -2,7 +2,6 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 - name: Debug
   tags:
     - never
@@ -27,15 +26,15 @@
 
 - name: Get OS specific variables
   with_first_found:
-# the following does not work. it is possible that the virtualenv does already exist.
-# in that case, if no virtualenv_python_interpreter is given as argument, it could be
-# that the used interpreter in the existing virtualenv is different from the ansible python.
-#
-#  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}-py{{ __reg_targeted_python.version.majmin }}-{{ __mafalb_ansible_majmin_version }}.yml"
-#  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}-py{{ __reg_targeted_python.version.majmin }}.yml"
-  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
-  - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
-  - "{{ ansible_os_family }}.yml"
+    # the following does not work. it is possible that the virtualenv does already exist.
+    # in that case, if no virtualenv_python_interpreter is given as argument, it could be
+    # that the used interpreter in the existing virtualenv is different from the ansible python.
+    #
+    #  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}-py{{ __reg_targeted_python.version.majmin }}-{{ __mafalb_ansible_majmin_version }}.yml"
+    #  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}-py{{ __reg_targeted_python.version.majmin }}.yml"
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_os_family }}.yml"
   ansible.builtin.include_vars:
     file: "{{ __vars_file }}"
   loop_control:
@@ -94,19 +93,19 @@
         src: constraints/virtualenv.txt.j2
         dest: "{{ __reg_venv.virtualenv }}/virtualenv.constraints.txt"
         backup: true
-        mode: '0644'
+        mode: "0644"
     - name: Constraints file ansible.constraints.txt is present
       ansible.builtin.template:
         src: constraints/ansible.txt.j2
         dest: "{{ __reg_venv.virtualenv }}/ansible.constraints.txt"
         backup: true
-        mode: '0644'
+        mode: "0644"
     - name: Constraints file for ansible-test is present
       ansible.builtin.copy:
         src: constraints/ansible-test/v{{ __virtualenv_ansible_version }}.txt
         dest: "{{ __reg_venv.virtualenv }}/constraints.txt"
         backup: true
-        mode: '0644'
+        mode: "0644"
 
 - name: Get installed pip packages
   community.general.pip_package_info:
@@ -120,18 +119,16 @@
 - name: Uninstall ansible and ansible-core
   ansible.builtin.pip:
     name:
-    - ansible
-    - ansible-base
-    - ansible-core
+      - ansible
+      - ansible-base
+      - ansible-core
     state: absent
     virtualenv: "{{ __reg_venv.virtualenv }}"
   when:
-  - (('ansible-base' in __reg_pip.packages[__reg_venv.virtualenv + '/bin/pip']) and
-     ('ansible-core' in __reg_pip.packages[__reg_venv.virtualenv + '/bin/pip'])) or
-    ((('ansible-base' in __reg_pip.packages[__reg_venv.virtualenv + '/bin/pip']) or
-      ('ansible-core' in __reg_pip.packages[__reg_venv.virtualenv + '/bin/pip'])) and
-     ('ansible' in __reg_pip.packages[__reg_venv.virtualenv + '/bin/pip']) and
-     (__reg_pip.packages[__reg_venv.virtualenv + '/bin/pip']['ansible'][0]['version']) is match('2.9'))
+    - (('ansible-base' in __reg_pip.packages[__reg_venv.virtualenv + '/bin/pip']) and ('ansible-core' in __reg_pip.packages[__reg_venv.virtualenv + '/bin/pip']))
+      or ((('ansible-base' in __reg_pip.packages[__reg_venv.virtualenv + '/bin/pip']) or ('ansible-core' in __reg_pip.packages[__reg_venv.virtualenv + '/bin/pip']))
+      and ('ansible' in __reg_pip.packages[__reg_venv.virtualenv + '/bin/pip']) and (__reg_pip.packages[__reg_venv.virtualenv + '/bin/pip']['ansible'][0]['version'])
+      is match('2.9'))
 
 - name: Get ansible version
   ansible.builtin.command: "{{ __virtualenv }}/bin/ansible --version"
@@ -149,11 +146,8 @@
     state: absent
     virtualenv: "{{ __virtualenv }}"
   when:
-    - (__virtualenv_ansible_version is match('2.11') and
-       __ansible_version.stdout | default('') is not
-        match('ansible \[core 2.11')) or
-      (__virtualenv_ansible_version is not match('2.9') and
-       __ansible_version.stdout | default('') is match('ansible 2.9'))
+    - (__virtualenv_ansible_version is match('2.11') and __ansible_version.stdout | default('') is not match('ansible \[core 2.11')) or (__virtualenv_ansible_version
+      is not match('2.9') and __ansible_version.stdout | default('') is match('ansible 2.9'))
 
 - name: Debug
   tags:
@@ -171,10 +165,8 @@
 - name: Packages are present
   ansible.builtin.pip:
     name: "{{ __virtualenv_packages }}"
-    extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }}
-       -c {{ __reg_venv.virtualenv }}/virtualenv.constraints.txt
-       -c {{ __reg_venv.virtualenv }}/ansible.constraints.txt
-       -c {{ __reg_venv.virtualenv }}/constraints.txt"
+    extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }} -c {{ __reg_venv.virtualenv }}/virtualenv.constraints.txt -c {{ __reg_venv.virtualenv }}/ansible.constraints.txt
+      -c {{ __reg_venv.virtualenv }}/constraints.txt"
     virtualenv: "{{ __reg_venv.virtualenv }}"
   register: __pip_packages
 
@@ -205,18 +197,15 @@
   # _ansible_version does not work
   # reserved variable ?
   #
-  - name: Get ansible version
-    ansible.builtin.command: "{{ __virtualenv }}/bin/ansible --version"
-    changed_when: false
-    register: __ansible_version
-  - name: Debug __ansible_version
-    ansible.builtin.debug:
-      var: __ansible_version
+    - name: Get ansible version
+      ansible.builtin.command: "{{ __virtualenv }}/bin/ansible --version"
+      changed_when: false
+      register: __ansible_version
+    - name: Debug __ansible_version
+      ansible.builtin.debug:
+        var: __ansible_version
 
-  - name: Assert that the wanted ansible version is present
-    ansible.builtin.assert:
-      that:
-      - __ansible_version.stdout is
-        match('ansible .*{{ __virtualenv_ansible_version }}')
-
-...
+    - name: Assert that the wanted ansible version is present
+      ansible.builtin.assert:
+        that:
+          - __ansible_version.stdout is match('ansible .*{{ __virtualenv_ansible_version }}')

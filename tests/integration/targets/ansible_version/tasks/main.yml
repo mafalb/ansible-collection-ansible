@@ -2,7 +2,6 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 - name: Ansible version
   mafalb.ansible.ansible_info:
   register: __ansible_version
@@ -27,10 +26,5 @@
       - __ansible_version.version.major|type_debug == 'int'
       - __ansible_version.version.major == 2
       - __ansible_version.version.minor|type_debug == 'int'
-      - (ansible_version.major|string
-         + '.'
-         + ansible_version.minor|string
-        ) == __ansible_version.version.majmin
-    fail_msg: "assertions failed for {{ __ansible_version }}"
-
-...
+      - (ansible_version.major|string + '.' + ansible_version.minor|string ) == __ansible_version.version.majmin
+    fail_msg: assertions failed for {{ __ansible_version }}

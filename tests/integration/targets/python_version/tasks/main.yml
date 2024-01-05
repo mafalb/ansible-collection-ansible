@@ -2,7 +2,6 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 - name: Python version
   mafalb.ansible.python_info:
     executable: "{{ ansible_python['executable'].split('/')[-1] }}"
@@ -32,5 +31,3 @@
       - ansible_python.version.minor == __python_version.version.minor
       - __python_version.version.minor|type_debug == 'int'
       - (ansible_python.version.major|string + '.' + ansible_python.version.minor|string) == __python_version.version.majmin
-
-...

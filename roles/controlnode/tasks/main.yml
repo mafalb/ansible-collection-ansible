@@ -2,17 +2,16 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 - name: Get OS specific variables
   ansible.builtin.include_vars:
     file: "{{ file }}"
   loop_control:
     loop_var: file
   with_first_found:
-  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}-{{ ansible_distribution_release }}.yml"
-  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
-  - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
-  - "{{ ansible_os_family }}.yml" # for all others
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}-{{ ansible_distribution_release }}.yml"
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_os_family }}.yml" # for all others
 
 - name: Ansible
   when: "'_ansible' in packages | default(mafalb_ansible_packages)"
@@ -33,5 +32,3 @@
     - name: Ansible-test is present
       ansible.builtin.package:
         name: "{{ mafalb_ansible_test_package[version | default(mafalb_ansible_version) | default(mafalb_ansible_default_version)] }}"
-
-...

@@ -2,29 +2,25 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 argument_specs:
   main:
     short_description: Install python interpreter
     description:
-    - Install python interpreter.
+      - Install python interpreter.
 
     options:
-
       python_state:
         description:
-        - The state of python
+          - The state of python
         type: str
         choices:
-        - absent
-        - present
+          - absent
+          - present
         default: present
 
       python_version:
         description:
-        - Specify the components that you want to install.
+          - Specify the components that you want to install.
         type: list
         elements: str
         default: _default
-
-...

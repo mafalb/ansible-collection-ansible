@@ -18,15 +18,12 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 ---
-
 - name: Install ansible
   hosts: all
 
   roles:
-  - role: mafalb.ansible.node
-    ansible_node_features:
-    - crypto
-    - selinux
-    - pip
-
-...
+    - role: mafalb.ansible.node
+      ansible_node_features:
+        - crypto
+        - selinux
+        - pip

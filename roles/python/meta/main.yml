@@ -2,25 +2,23 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 galaxy_info:
   author: Markus Falb <markus.falb@mafalb.at>
   description: Ansible role mafalb.ansible.virtualenv
   license: GPL-3.0-or-later
-  min_ansible_version: '2.10'
+  min_ansible_version: "2.10"
 
   platforms:
-
     - name: Fedora
       versions:
-        - '38'
-        - '39'
+        - "38"
+        - "39"
 
     - name: EL
       versions:
-        - '7'
-        - '8'
-        - '9'
+        - "7"
+        - "8"
+        - "9"
 
     - name: Debian
       versions:
@@ -34,6 +32,3 @@ galaxy_info:
 
   galaxy_tags:
     - python
-
-
-...

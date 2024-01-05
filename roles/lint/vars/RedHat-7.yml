@@ -18,8 +18,5 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 ---
-
 virtualenv_package: python-virtualenv
-virtualenv_command: 'virtualenv'
-
-...
+virtualenv_command: virtualenv

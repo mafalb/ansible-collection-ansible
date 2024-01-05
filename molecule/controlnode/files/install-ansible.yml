@@ -2,7 +2,6 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 - name: Install ansible
   hosts: localhost
   roles:
@@ -10,5 +9,3 @@
     - role: mafalb.ansible.virtualenv
       packages:
         - _ansible==2.11
-
-...

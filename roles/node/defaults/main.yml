@@ -18,7 +18,4 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 ---
-
 ansible_node_features: []
-
-...

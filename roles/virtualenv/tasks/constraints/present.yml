@@ -2,7 +2,6 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 - name: Debug targeted ansible version
   ansible.builtin.debug:
     var: __virtualenv_ansible_version
@@ -20,7 +19,7 @@
     - name: Get a list of all requirements files
       when: false
       ansible.builtin.find:
-        paths: "/tmp/ansible.git/test/lib/ansible_test/_data/requirements"
+        paths: /tmp/ansible.git/test/lib/ansible_test/_data/requirements
         patterns: "*.txt"
       register: __constraints_files
     - name: Debug __constraints_files
@@ -55,12 +54,8 @@
     - name: Constraints file for ansible-test is present
       ansible.builtin.copy:
         content: "{{ __constraints.stdout | default(__constraints_29.stdout) }}"
-        dest: "{{ role_path }}/files/constraints/ansible-test/v{{
-                  __mafalb_ansible_version }}.txt"
+        dest: "{{ role_path }}/files/constraints/ansible-test/v{{ __mafalb_ansible_version }}.txt"
         backup: true
-        mode: '0644'
+        mode: "0644"
         force: false
       register: __reg_constraints_file
-
-
-...

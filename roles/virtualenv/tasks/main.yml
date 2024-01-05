@@ -2,16 +2,15 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 - name: Debug ansible python interpreter
   ansible.builtin.debug:
     var: ansible_python.executable
 
 - name: Get OS specific variables
   with_first_found:
-  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
-  - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
-  - "{{ ansible_os_family }}.yml"
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_os_family }}.yml"
   ansible.builtin.include_vars:
     file: "{{ __vars_file }}"
   loop_control:
@@ -21,5 +20,3 @@
 - name: Include tasks
   ansible.builtin.include_tasks:
     file: "{{ do | default('main') }}/{{ state | default('present') }}.yml"
-
-...

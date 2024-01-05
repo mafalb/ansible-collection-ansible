@@ -18,32 +18,31 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 ---
-
 - name: CI for custom filters
   hosts: localhost
   tasks:
-  - name: Debug
-    ansible.builtin.debug:
-      msg: "{{ '2.9' | semver }}"
-  - name: Assertions for custom filters
-    ansible.builtin.assert:
-      that:
-      - "'3.1.4'|pipver == '3.1.4'"
-      - "'3.1'|pipver == '3.1.*'"
-      - "'3'|pipver == '3.*'"
-      - "3|pipver == '3.*'"
+    - name: Debug
+      ansible.builtin.debug:
+        msg: "{{ '2.9' | semver }}"
+    - name: Assertions for custom filters
+      ansible.builtin.assert:
+        that:
+          - "'3.1.4'|pipver == '3.1.4'"
+          - "'3.1'|pipver == '3.1.*'"
+          - "'3'|pipver == '3.*'"
+          - 3|pipver == '3.*'
 
-      - "3|semver == '3.0.0'"
-      - "'3'|semver == '3.0.0'"
-      - "'3.1'|semver == '3.1.0'"
-      - "'3.1.4'|semver == '3.1.4'"
+          - 3|semver == '3.0.0'
+          - "'3'|semver == '3.0.0'"
+          - "'3.1'|semver == '3.1.0'"
+          - "'3.1.4'|semver == '3.1.4'"
 
-      - "'2.9'|pipname_core == 'ansible'"
-      - "'2.9.1'|pipname_core == 'ansible'"
-      - "'2.10'|pipname_core == 'ansible-base'"
-      - "'2.10.10'|pipname_core == 'ansible-base'"
-      - "'2.11'|pipname_core == 'ansible-core'"
-      - "'2.11.10'|pipname_core == 'ansible-core'"
+          - "'2.9'|pipname_core == 'ansible'"
+          - "'2.9.1'|pipname_core == 'ansible'"
+          - "'2.10'|pipname_core == 'ansible-base'"
+          - "'2.10.10'|pipname_core == 'ansible-base'"
+          - "'2.11'|pipname_core == 'ansible-core'"
+          - "'2.11.10'|pipname_core == 'ansible-core'"
 
 - name: Verify molecule
   hosts: all,!ci-centos6,!ci-ubuntuxenial
@@ -54,111 +53,105 @@
 
   vars:
     files:
-    - tests/testcollection/galaxy.yml
-    - tests/testcollection/roles/testrole/README.md
-    - tests.testrole/README.md
+      - tests/testcollection/galaxy.yml
+      - tests/testcollection/roles/testrole/README.md
+      - tests.testrole/README.md
     virtualenvs:
-    - { index: 0, virtualenv: molecule }
-    - { index: 1, virtualenv: default1 }
-    - { index: 2, virtualenv: default2 }
+      - { index: 0, virtualenv: molecule }
+      - { index: 1, virtualenv: default1 }
+      - { index: 2, virtualenv: default2 }
 
   tasks:
+    - name: Get locale
+      changed_when: false
+      ansible.builtin.command:
+        cmd: locale
+      register: _locale
 
-  - name: Get locale
-    changed_when: false
-    ansible.builtin.command:
-      cmd: locale
-    register: _locale
+    - name: Debug
+      ansible.builtin.debug:
+        var: _locale
 
-  - name: Debug
-    ansible.builtin.debug:
-      var: _locale
+    - name: Molecule is present - molecule
+      ansible.builtin.shell: |
+        . ~/.virtualenvs/{{ item.virtualenv }}/bin/activate
+        molecule --version
+      changed_when: false
+      loop: "{{ virtualenvs }}"
+      register: _molecules_version
 
-  - name: Molecule is present - molecule
-    ansible.builtin.shell: |
-      . ~/.virtualenvs/{{ item.virtualenv }}/bin/activate
-      molecule --version
-    changed_when: false
-    loop: "{{ virtualenvs }}"
-    register: _molecules_version
+    - name: Debug
+      ansible.builtin.debug:
+        var: _molecules_version
 
-  - name: Debug
-    ansible.builtin.debug:
-      var: _molecules_version
+    # _ansible_lint_version does not work!
+    #
+    - name: Ansible-lint is present
+      ansible.builtin.shell: |
+        . ~/.virtualenvs/{{ item.virtualenv }}/bin/activate
+        ansible-lint --version
+      changed_when: false
+      loop: "{{ virtualenvs }}"
+      register: _lint_version
 
-  # _ansible_lint_version does not work!
-  #
-  - name: Ansible-lint is present
-    ansible.builtin.shell: |
-      . ~/.virtualenvs/{{ item.virtualenv }}/bin/activate
-      ansible-lint --version
-    changed_when: false
-    loop: "{{ virtualenvs }}"
-    register: _lint_version
+    - name: Debug _lint_version
+      ansible.builtin.debug:
+        var: _lint_version
 
-  - name: Debug _lint_version
-    ansible.builtin.debug:
-      var: _lint_version
+    - name: Correct version of ansible/molecule is installed
+      ansible.builtin.assert:
+        that:
+          - _molecules_version.results[0].stdout_lines[1] is match('    ansible:2.14.')
+          - _molecules_version.results[0].stdout_lines[0].split()[1] is match('6.0')
+          - _lint_version.results[0].stdout_lines[0].split()[1] is version('6','>=')
 
-  - name: Correct version of ansible/molecule is installed
-    ansible.builtin.assert:
-      that:
+          - _molecules_version.results[1].stdout_lines[1] is match('    ansible:2.14.3')
+          - _molecules_version.results[1].stdout_lines[0].split()[1] is version('6.0.3','=')
+          - _lint_version.results[1].stdout_lines[0].split()[1] is version('7','<')
 
-      - _molecules_version.results[0].stdout_lines[1] is match('    ansible:2.14.')
-      - _molecules_version.results[0].stdout_lines[0].split()[1] is match('6.0')
-      - _lint_version.results[0].stdout_lines[0].split()[1] is version('6','>=')
+          - _molecules_version.results[2].stdout_lines[1] is match('    ansible:2.14.')
+          - _molecules_version.results[2].stdout_lines[0].split()[1] is match('6.0','=')
+          - _lint_version.results[2].stdout_lines[0].split()[1] is version('7','<')
+          - _lint_version.results[2].stdout_lines[0].split()[1] is version('6','>')
 
-      - _molecules_version.results[1].stdout_lines[1] is match('    ansible:2.14.3')
-      - _molecules_version.results[1].stdout_lines[0].split()[1] is version('6.0.3','=')
-      - _lint_version.results[1].stdout_lines[0].split()[1] is version('7','<')
+    - name: Verify molecule installation
+      ansible.builtin.include_role:
+        name: verify_molecule
+      vars:
+        virtualenv: "{{ item.virtualenv }}"
+      loop: "{{ virtualenvs }}"
 
-      - _molecules_version.results[2].stdout_lines[1] is match('    ansible:2.14.')
-      - _molecules_version.results[2].stdout_lines[0].split()[1] is match('6.0','=')
-      - _lint_version.results[2].stdout_lines[0].split()[1] is version('7','<')
-      - _lint_version.results[2].stdout_lines[0].split()[1] is version('6','>')
+    - name: Assert that we do not use reserved variable names
+      ansible.builtin.assert:
+        that:
+          - collection is not defined
+          - role is not defined
+          - galaxy_namespace is not defined
+          - author is not defined
+          - skeleton_path is not defined
+          - license is not defined
 
+    - name: Diff is present
+      ansible.builtin.package:
+        name: diffutils
 
-  - name: Verify molecule installation
-    ansible.builtin.include_role:
-      name: verify_molecule
-    vars:
-      virtualenv: "{{ item.virtualenv }}"
-    loop: "{{ virtualenvs }}"
+    - name: Ansible-test --requirements did not change anything # noqa command-instead-of-shell
+      ansible.builtin.shell: diff -u ~/{{ item.virtualenv }}.before.txt ~/{{ item.virtualenv }}.after.txt
+      register: _diff
+      changed_when: false
+      loop: "{{ virtualenvs }}"
 
+    - name: Debug
+      ansible.builtin.debug:
+        var: "{{ item.stdout }}"
+      loop: "{{ _diff.results }}"
+      when: item.rc != 0
 
-  - name: Assert that we do not use reserved variable names
-    ansible.builtin.assert:
-      that:
-      - collection is not defined
-      - role is not defined
-      - galaxy_namespace is not defined
-      - author is not defined
-      - skeleton_path is not defined
-      - license is not defined
+    - name: Ansible-test --requirements did not change anything # noqa command-instead-of-shell no-changed-when
+      ansible.builtin.shell: diff -u ~/{{ item.virtualenv }}.before.txt ~/{{ item.virtualenv }}.after.txt
+      register: _diff
+      loop: "{{ virtualenvs }}"
 
-  - name: Diff is present
-    ansible.builtin.package:
-      name: diffutils
-
-  - name: Ansible-test --requirements did not change anything  # noqa command-instead-of-shell
-    ansible.builtin.shell: diff -u ~/{{ item.virtualenv }}.before.txt ~/{{ item.virtualenv }}.after.txt
-    register: _diff
-    changed_when: false
-    loop: "{{ virtualenvs }}"
-
-  - name: Debug
-    ansible.builtin.debug:
-      var: "{{ item.stdout }}"
-    loop: "{{ _diff.results }}"
-    when: item.rc != 0
-
-  - name: Ansible-test --requirements did not change anything  # noqa command-instead-of-shell no-changed-when
-    ansible.builtin.shell: diff -u ~/{{ item.virtualenv }}.before.txt ~/{{ item.virtualenv }}.after.txt
-    register: _diff
-    loop: "{{ virtualenvs }}"
-
-  - name: Debug
-    ansible.builtin.debug:
-      msg: "{{ virtualenvs | map(attribute='virtualenv') | product(files) | list }}"
-
-...
+    - name: Debug
+      ansible.builtin.debug:
+        msg: "{{ virtualenvs | map(attribute='virtualenv') | product(files) | list }}"

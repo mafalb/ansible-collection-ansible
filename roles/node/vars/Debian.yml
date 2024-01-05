@@ -18,18 +18,15 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 ---
-
 ansible_node_dependencies:
   selinux:
-  - python3-selinux
+    - python3-selinux
   crypto:
-  - openssl
-  - python3-openssl
-  - python3-cryptography
-  - python3-setuptools
+    - openssl
+    - python3-openssl
+    - python3-cryptography
+    - python3-setuptools
   pip:
-  - python3-venv
+    - python3-venv
   pkg_mgr:
-  - python3-apt
-
-...
+    - python3-apt

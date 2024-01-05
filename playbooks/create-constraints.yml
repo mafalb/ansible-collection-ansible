@@ -2,7 +2,6 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 - name: Create constraints
   hosts: localhost
   vars:
@@ -22,7 +21,7 @@
     - name: Get a list of all requirements files
       when: false
       ansible.builtin.find:
-        paths: "/tmp/ansible.git/test/lib/ansible_test/_data/requirements"
+        paths: /tmp/ansible.git/test/lib/ansible_test/_data/requirements
         patterns: "*.txt"
       register: __constraints_files
     - name: Debug __constraints_files
@@ -58,12 +57,10 @@
         content: "{{ __constraints.stdout | default(__constraints_29.stdout) }}"
         dest: "{{ outputdir }}/v{{ version }}.txt"
         backup: true
-        mode: '0644'
+        mode: "0644"
         force: false
       register: __reg_constraints_file
 
     - name: Debug __reg_constraints_file
       ansible.builtin.debug:
         var: __reg_constraints_file
-
-...

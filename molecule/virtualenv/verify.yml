@@ -2,7 +2,6 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 - name: Verify
   hosts: all
   vars:
@@ -14,7 +13,6 @@
       executable: /bin/bash
 
   tasks:
-
     - name: Get installed packages for ~/.virtualenvs/ansible
       ansible.builtin.shell: |
         . ~/.virtualenvs/{{ virtualenv_basename }}/bin/activate
@@ -23,20 +21,18 @@
 
     - name: Check major version of targeted python
       block:
-
         - name: Call targeted python
-          ansible.builtin.command: "~/.virtualenvs/{{ virtualenv_basename }}/bin/python --version"
+          ansible.builtin.command: ~/.virtualenvs/{{ virtualenv_basename }}/bin/python --version
           changed_when: false
           register: __reg_virtualenv_python
 
         - name: Assert that targetet version is the requested
           ansible.builtin.assert:
             that:
-              - (__reg_virtualenv_python.stdout is match("Python {{ arg_python_version }}")
-                 or __reg_virtualenv_python.stderr is match("Python {{ arg_python_version }}")
-                )
+              - (__reg_virtualenv_python.stdout is match("Python {{ arg_python_version }}") or __reg_virtualenv_python.stderr is match("Python {{ arg_python_version
+                }}") )
 
-    - name: Install requirements  # noqa no-changed-when
+    - name: Install requirements # noqa no-changed-when
       ansible.builtin.shell: |
         . ~/.virtualenvs/{{ virtualenv_basename }}/bin/activate
         ansible-test sanity --requirements --python {{ arg_python_version }}
@@ -58,5 +54,3 @@
     - name: Diff
       ansible.builtin.debug:
         var: __reg_diff
-
-...

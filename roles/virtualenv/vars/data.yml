@@ -2,21 +2,20 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 # change this when new version of ansible/ansible-core is released
 # also create constraints in files/constraints/ansible-test/
 latest_ansible_version:
-  '2.9': '2.9.27'
-  '2.10': '2.10.17'
-  '2.11': '2.11.12'
-  '2.12': '2.12.10'
-  '2.13': '2.13.13'
-  '2.14': '2.14.13'
-  '2.15': '2.15.8'
-  '2.16': '2.16.2'
+  "2.9": 2.9.27
+  "2.10": 2.10.17
+  "2.11": 2.11.12
+  "2.12": 2.12.10
+  "2.13": 2.13.13
+  "2.14": 2.14.13
+  "2.15": 2.15.8
+  "2.16": 2.16.2
 
 ansible_test_packages:
-  '2.9':
+  "2.9":
     - mock
     - flake8
     - ntlm-auth
@@ -25,11 +24,11 @@ ansible_test_packages:
     - virtualenv
     - voluptuous
     - yamllint
-    - pytest      # not supported for python 2
-    - pylint      # not supported for python 2
+    - pytest # not supported for python 2
+    - pylint # not supported for python 2
     - pytest-mock
     - pytest-xdist
-  '2.10':
+  "2.10":
     - flake8
     - antsibull-changelog
     - pylint
@@ -42,7 +41,7 @@ ansible_test_packages:
     - pytest-xdist
     - pytest-mock
     - mock
-  '2.11':
+  "2.11":
     - flake8
     - antsibull-changelog
     - pylint
@@ -54,30 +53,28 @@ ansible_test_packages:
     - pytest-xdist
     - pytest-mock
     - mock
-  '2.12':
+  "2.12":
     - mock
     - pytest-mock
     - pytest-xdist
     - voluptuous
     - wrapt
     - yamllint
-  '2.13':
+  "2.13":
     - flake8
-  '2.14':
+  "2.14":
     - flake8
-  '2.15':
+  "2.15":
     - flake8
-  '2.16':
+  "2.16":
     - flake8
 
 python_versions:
-  '2.9': ['2.7', '3.5', '3.6', '3.7', '3.8']
-  '2.10': ['2.7', '3.5', '3.6', '3.7', '3.8', '3.9']
-  '2.11': ['2.7', '3.5', '3.6', '3.7', '3.8', '3.9']
-  '2.12': ['3.8', '3.9', '3.10']
-  '2.13': ['3.8', '3.9', '3.10']
-  '2.14': ['3.9', '3.10', '3.11']
-  '2.15': ['3.9', '3.10', '3.11']
-  '2.16': ['3.10', '3.11', '3.12']
-
-...
+  "2.9": ["2.7", "3.5", "3.6", "3.7", "3.8"]
+  "2.10": ["2.7", "3.5", "3.6", "3.7", "3.8", "3.9"]
+  "2.11": ["2.7", "3.5", "3.6", "3.7", "3.8", "3.9"]
+  "2.12": ["3.8", "3.9", "3.10"]
+  "2.13": ["3.8", "3.9", "3.10"]
+  "2.14": ["3.9", "3.10", "3.11"]
+  "2.15": ["3.9", "3.10", "3.11"]
+  "2.16": ["3.10", "3.11", "3.12"]

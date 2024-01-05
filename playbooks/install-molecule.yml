@@ -2,11 +2,9 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 - name: Install molecule
   hosts: localhost
   roles:
-
     # this is used if molecule_ansible_version is argument
     - role: mafalb.ansible.virtualenv
       virtualenv: ~/.virtualenvs/molecule
@@ -36,5 +34,3 @@
         - community.docker
       when:
         - molecule_ansible_version|default('2.11') is not version('2.10', '<')
-
-...

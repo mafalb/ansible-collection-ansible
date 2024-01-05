@@ -1,6 +1,5 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
-
 # This file is part of ansible-collection-epel
 # Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
 #
@@ -19,5 +18,3 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 requires_ansible: ">=2.14.0"
-
-...

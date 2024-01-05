@@ -2,7 +2,6 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 virtualenv_packages:
   - _ansible
 
@@ -14,16 +13,10 @@ virtualenv_packages:
 # (~/.virtualenvs/molecule does not work) for
 # setting TMPPATH environment variable for pip
 #
-___virtualenv: "{{
-  python_virtualenv | default('~/.virtualenvs/ansible' | regex_replace('^~', ansible_user_dir))
-}}"
+___virtualenv: "{{ python_virtualenv | default('~/.virtualenvs/ansible' | regex_replace('^~', ansible_user_dir)) }}"
 __virtualenv: "{{ ___python_virtualenv | regex_replace('^~', ansible_user_dir) }}"
 
 # the path to the python interpreter
 # relevant for virtualenvs that already exists
 #
-__virtualenv_python_interpreter: "{{
-  __virtualenv + '/bin/python'
-}}"
-
-...
+__virtualenv_python_interpreter: "{{ __virtualenv + '/bin/python' }}"

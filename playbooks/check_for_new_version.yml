@@ -2,18 +2,16 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 # It may be necessary to specify ANSIBLE_COLLECTIONS_PATHS
 # ANSIBLE_COLLECTIONS_PATHS=../../..
 - name: Check for unhandled versions of ansible
   hosts: localhost
   tasks:
-
     - name: Git is present
       ansible.builtin.package:
         name: git
 
-    - name: Get all tags  # noqa command-instead-of-module
+    - name: Get all tags # noqa command-instead-of-module
       ansible.builtin.command: git ls-remote --tags https://github.com/ansible/ansible
       register: __reg_tags
       changed_when: false
@@ -66,5 +64,3 @@
           - not __reg_tags.stdout | regex_search('2.15' | mafalb.ansible.next_version + '\n')
         fail_msg: "{{ '2.15' | mafalb.ansible.next_version }} is available"
         success_msg: "{{ '2.15' | mafalb.ansible.next_version }} is not available"
-
-...

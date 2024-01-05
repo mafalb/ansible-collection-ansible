@@ -18,11 +18,8 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 ---
-
 molecule_system_dependencies:
-- python3-selinux
-- python3-setuptools
-- python3-venv
-- python3-cryptography
-
-...
+  - python3-selinux
+  - python3-setuptools
+  - python3-venv
+  - python3-cryptography
