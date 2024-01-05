@@ -119,6 +119,7 @@ jobs:
         run: |
           source ~/.virtualenvs/ansible/bin/activate
           if test "${{ matrix.ansible_version }}" = "2.12"
+          then
             # I dont know how to set collections path for ansible-doc
             # so i skip ansible-doc test
             #
