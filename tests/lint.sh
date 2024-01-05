@@ -48,7 +48,7 @@ then
 elif test "$ANSIBLE_LINT_VERSION" == 686
 then
 	pushd ..
-	ansible-lint -c ansible/.ansible-lint -v ansible	
+	ansible-lint -c ansible/.ansible-lint --project-dir ansible -v ansible	
 	popd
 else
 	ansible-lint -v
