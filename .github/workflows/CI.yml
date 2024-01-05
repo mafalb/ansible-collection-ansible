@@ -22,42 +22,13 @@ jobs:
 
     # don't run on pull request from ourselves
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
 
       matrix:
 
         include:
-
-          - ansible_version: '2.10'
-            python_version: '3.6'
-
-          - ansible_version: '2.10'
-            python_version: '3.7'
-
-          - ansible_version: '2.10'
-            python_version: '3.8'
-
-          - ansible_version: '2.10'
-            python_version: '3.9'
-
-
-          - ansible_version: '2.11'
-            python_version: 3.6
-
-          - ansible_version: '2.11'
-            python_version: 3.7
-
-          - ansible_version: '2.11'
-            python_version: 3.8
-
-          - ansible_version: '2.11'
-            python_version: 3.9
-
-
-          - ansible_version: '2.12'
-            python_version: '3.8'
 
           - ansible_version: '2.12'
             python_version: '3.9'
@@ -74,6 +45,23 @@ jobs:
           - ansible_version: '2.14'
             python_version: '3.11'
 
+          - ansible_version: '2.15'
+            python_version: '3.9'
+
+          - ansible_version: '2.15'
+            python_version: '3.10'
+
+          - ansible_version: '2.15'
+            python_version: '3.11'
+
+          - ansible_version: '2.16'
+            python_version: '3.10'
+
+          - ansible_version: '2.16'
+            python_version: '3.11'
+
+          - ansible_version: '2.16'
+            python_version: '3.12'
 
     env:
       PY_COLORS: 1
@@ -91,11 +79,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: ansible_collections/mafalb/ansible
-
-      - name: setup python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python_version }}
 
       - name: install ansible
         run: |
@@ -149,7 +132,7 @@ jobs:
 
     # don't run on pull request from ourselves
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs:
       - ansible-test
 
@@ -159,9 +142,11 @@ jobs:
       matrix:
 
         os:
-          - fedora38
-          - c8s
           - debian12
+          - ubuntu22
+          - fedora39
+          - rocky9
+          - alma9
 
         ansible_version:
           - '2.14'
@@ -175,84 +160,26 @@ jobs:
           #- os: arch
           #  ansible_version: '2.12'
 
-          - os: fedora33
-            ansible_version: '2.10'
-          - os: fedora33
-            ansible_version: '2.11'
-          - os: fedora33
-            ansible_version: '2.12'
-
-          - os: fedora34
-            ansible_version: '2.10'
-          - os: fedora34
-            ansible_version: '2.12'
-
-          - os: fedora35
-            ansible_version: '2.10'
-          - os: fedora35
-            ansible_version: '2.11'
-
-          - os: c8s
-            ansible_version: '2.9'
-          - os: c8s
-            ansible_version: '2.10'
-          - os: c8s
-            ansible_version: '2.11'
+          - os: fedora39
+            ansible_version: '2.16'
 
           - os: c9s
-            ansible_version: '2.9'
-          - os: c9s
-            ansible_version: '2.10'
-          - os: c9s
-            ansible_version: '2.12'
+            ansible_version: '2.14'
 
-          - os: alma8
-            ansible_version: '2.10'
-          - os: alma8
-            ansible_version: '2.11'
-          - os: alma8
-            ansible_version: '2.12'
+          - os: alma9
+            ansible_version: '2.14'
+          - os: alma9
+            ansible_version: '2.14'
+          - os: alma9
+            ansible_version: '2.14'
 
-          - os: rocky8
-            ansible_version: '2.10'
-          - os: rocky8
-            ansible_version: '2.11'
-          - os: rocky8
-            ansible_version: '2.12'
+          - os: rocky9
+            ansible_version: '2.14'
 
-          - os: centos7
-            ansible_version: '2.10'
-          - os: centos7
-            ansible_version: '2.11'
-          - os: centos7
-            ansible_version: '2.12'
+          - os: debian12
+            ansible_version: '2.14'
 
-          - os: debian11
-            ansible_version: '2.9'
-          - os: debian11
-            ansible_version: '2.11'
-          - os: debian11
-            ansible_version: '2.12'
-
-          - os: ubuntu20
-            ansible_version: '2.10'
-          - os: ubuntu20
-            ansible_version: '2.11'
-          - os: ubuntu20
-            ansible_version: '2.12'
-
-          - os: ubuntu2104
-            ansible_version: '2.9'
-          - os: ubuntu2104
-            ansible_version: '2.11'
-          - os: ubuntu2104
-            ansible_version: '2.12'
-
-          - os: ubuntu2110
-            ansible_version: '2.9'
-          - os: ubuntu2110
-            ansible_version: '2.11'
-          - os: ubuntu2110
+          - os: ubuntu22
             ansible_version: '2.12'
 
     env:
@@ -279,8 +206,9 @@ jobs:
         env:
           ANSIBLE_COLLECTIONS_PATHS: '../../..'
 
+      # why?
+      #
       - name: install community.docker
-        if: matrix.ansible_version != '2.9'
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           ansible-galaxy collection install community.docker
@@ -306,7 +234,7 @@ jobs:
 
   virtualenv:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: ansible-test
 
     strategy:
@@ -317,125 +245,57 @@ jobs:
         os:
           # there are special dependencies for fedora35 that are probably not necessary anymore
           #- arch
-          - fedora33
-          - fedora34
-          - fedora35
-          - c8s
+          - fedora38
+          - fedora39
           - c9s
-          - centos7
-          - rocky8
-          - alma8
-          - debian9
-          - debian10
-          - debian11
-          - ubuntu18
-          - ubuntu20
-          - ubuntu2104
-          - ubuntu2110
+          - rocky9
+          - alma9
+          - debian12
+          - ubuntu22
 
         ansible_version:
-          - '2.9'
-          - '2.10'
-          - '2.11'
           - '2.12'
+          - '2.14'
+          - '2.15'
+          - '2.16'
 
         python_version:
-          - '2.7'
-          - '3.5'
-          - '3.6'
-          - '3.7'
-          - '3.8'
           - '3.9'
           - '3.10'
+          - '3.11'
 
         exclude:
 
           # impossible ansible - python combinations
-          - ansible_version: '2.9'
+          - ansible_version: '2.12'
+            python_version: '3.11'
+          - ansible_version: '2.14'
+            python_version: '3.11'
+          - ansible_version: '2.15'
+            python_version: '3.11'
+          - ansible_version: '2.16'
             python_version: '3.9'
-          - ansible_version: '2.9'
-            python_version: '3.10'
-          - ansible_version: '2.10'
-            python_version: '2.7'
-          - ansible_version: '2.10'
-            python_version: '3.5'
-          - ansible_version: '2.10'
-            python_version: '3.10'
-          - ansible_version: '2.11'
-            python_version: '2.7'
-          - ansible_version: '2.11'
-            python_version: '3.5'
-          - ansible_version: '2.11'
-            python_version: '3.10'
-          - ansible_version: '2.12'
-            python_version: '2.7'
-          - ansible_version: '2.12'
-            python_version: '3.5'
-          - ansible_version: '2.12'
-            python_version: '3.6'
-          - ansible_version: '2.12'
-            python_version: '3.7'
 
-          - os: fedora33
-            python_version: '3.10'
-
-          - os: fedora34
-            python_version: '3.5'
-          - os: fedora34
-            python_version: '3.10'
-
-          - os: fedora35
-            python_version: '3.5'
-
-          # c8s has 2.7, 3.6, 3.8, 3.9
-          - os: c8s
-            python_version: '3.5'
-          - os: c8s
-            python_version: '3.7'
-          - os: c8s
-            python_version: '3.10'
+          - os: fedora38
+            python_version: '3.11'
 
           # c9s has only 3.9 at this point
           - os: c9s
-            python_version: '2.7'
-          - os: c9s
-            python_version: '3.5'
-          - os: c9s
-            python_version: '3.6'
-          - os: c9s
-            python_version: '3.7'
-          - os: c9s
-            python_version: '3.8'
-          - os: c9s
             python_version: '3.10'
+          - os: c9s
+            python_version: '3.11'
 
-          # centos7 has 2.7, 3.6
-          - os: centos7
-            python_version: '3.5'
-          - os: centos7
-            python_version: '3.7'
-          - os: centos7
-            python_version: '3.8'
-          - os: centos7
-            python_version: '3.9'
-          - os: centos7
+          # alma9 has 3.9
+          - os: alma9
             python_version: '3.10'
+          - os: alma9
+            python_version: '3.11'
 
-          # alma8 has 2.7, 3.6, 3.8, 3.9
-          - os: alma8
-            python_version: '3.5'
-          - os: alma8
-            python_version: '3.7'
-          - os: alma8
+          # rocky9 has 3.9
+          - os: rocky9
             python_version: '3.10'
-
-          # rocky8 has 2.7, 3.6, 3.8, 3.9
-          - os: rocky8
-            python_version: '3.5'
-          - os: rocky8
-            python_version: '3.7'
-          - os: rocky8
-            python_version: '3.10'
+          - os: rocky9
+            python_version: '3.11'
 
           # arch has 2.7 and 3.9
           #- os: arch
@@ -449,81 +309,15 @@ jobs:
           #- os: arch
           #  python_version: '3.10'
 
-          # debian9 has 2.7 and 3.5
-          - os: debian9
-            python_version: '3.6'
-          - os: debian9
-            python_version: '3.7'
-          - os: debian9
-            python_version: '3.8'
-          - os: debian9
+          # debian12 has only 3.11
+          - os: debian12
             python_version: '3.9'
-          - os: debian9
+          - os: debian12
             python_version: '3.10'
 
-          # debian 10 has 2.7 and 3.7
-          - os: debian10
-            python_version: '3.5'
-          - os: debian10
-            python_version: '3.6'
-          - os: debian10
-            python_version: '3.8'
-          - os: debian10
-            python_version: '3.9'
-          - os: debian10
-            python_version: '3.10'
-
-          # debian 11 has 2.7 and 3.9
-          - os: debian11
-            python_version: '3.5'
-          - os: debian11
-            python_version: '3.6'
-          - os: debian11
-            python_version: '3.7'
-          - os: debian11
-            python_version: '3.8'
-          - os: debian11
-            python_version: '3.10'
-
-          # ubuntu18 has 2.7, 3.6, 3.7, 3.8
-          - os: ubuntu18
-            python_version: '3.5'
-          - os: ubuntu18
-            python_version: '3.9'
-          - os: ubuntu18
-            python_version: '3.10'
-
-          # ubuntu20 has 2.7, 3.8, 3.9
-          - os: ubuntu20
-            python_version: '3.5'
-          - os: ubuntu20
-            python_version: '3.6'
-          - os: ubuntu20
-            python_version: '3.7'
-          - os: ubuntu20
-            python_version: '3.10'
-
-          # ubuntu2104 has 2.7, 3.9, 3.10
-          - os: ubuntu2104
-            python_version: '3.5'
-          - os: ubuntu2104
-            python_version: '3.6'
-          - os: ubuntu2104
-            python_version: '3.7'
-          - os: ubuntu2104
-            python_version: '3.8'
-          - os: ubuntu2104
-            python_version: '3.10'  # present, but not working properly
-
-          # ubuntu2110 has 2.7, 3.9, 3.10
-          - os: ubuntu2110
-            python_version: '3.5'
-          - os: ubuntu2110
-            python_version: '3.6'
-          - os: ubuntu2110
-            python_version: '3.7'
-          - os: ubuntu2110
-            python_version: '3.8'
+          # ubuntu22 has 3.9, 3.10
+          - os: ubuntu22
+            python_version: '3.11'
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
@@ -541,23 +335,15 @@ jobs:
     steps:
 
       - name: checkout collection ansible
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: ansible_collections/mafalb/ansible
 
       - name: install molecule
         run: |
-          ansible-playbook -D playbooks/install-molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
+          ansible-playbook -D playbooks/install-molecule.yml -e molecule_python_version=${{ matrix.python_version }} -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
         env:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
-
-      - name: install community.docker
-        if: matrix.ansible_version != '2.9'
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          ansible-galaxy collection install community.docker
-          # necessary for molecule and for mafalb.ansible
-          ansible-galaxy collection install community.general
 
       - name: check ansible version
         run: |
@@ -567,17 +353,12 @@ jobs:
       - name: molecule scenario virtualenv
         run: |
           source ~/.virtualenvs/molecule/bin/activate
-          if test "${{ matrix.os }}" != 'debian9'\
-                  -a "${{ matrix.os }}" != 'centos7'\
-                  -a  "${{ matrix.ansible_version }}" = '2.9'
-          then
-              export ANSIBLE_PYTHON_INTERPRETER=python3
-          fi
           molecule -e .env-${{ matrix.os }}.yml test -s virtualenv
+
 
   update:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs:
       - ansible-test
       #- virtualenv
@@ -587,15 +368,14 @@ jobs:
 
       matrix:
         os:
-          - c8s
-          - ubuntu20
+          - debian12
+          - rocky9
+          - c9s
         ansible_version:
-          - '2.12'
+          - '2.14'
         include:
-          - os: c8s
-            python_version: '3.8'
-          - os: ubuntu20
-            python_version: '3.8'
+          - os: debian12
+            python_version: '3.11'
 
     env:
       PYTHON_VERSION: ${{ matrix.python_version }}
@@ -612,7 +392,7 @@ jobs:
     steps:
 
       - name: checkout collection ansible
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: ansible_collections/mafalb/ansible
 
