@@ -123,7 +123,7 @@ jobs:
             # I dont know how to set collections path for ansible-doc
             # so i skip ansible-doc test
             #
-            ansible-test sanity --skip-tests ansible-doc --requirements --python ${{ matrix.python_version }}
+            ansible-test sanity --skip-test ansible-doc --requirements --python ${{ matrix.python_version }}
           else
             ansible-test sanity --requirements --python ${{ matrix.python_version }}
           fi
