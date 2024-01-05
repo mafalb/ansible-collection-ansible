@@ -7,17 +7,21 @@
     - never
     - debug
   block:
-    - name: Debug __python_virtualenv
+    - name: Debug __virtualenv
       ansible.builtin.debug:
-        var: __python_virtualenv
+        var: __virtualenv
 
-    - name: Debug __virtualenv_python_interpreter
+    - name: Debug virtualenv_interpreter
       ansible.builtin.debug:
-        var: __virtualenv_python_interpreter
+        var: virtualenv_interpreter
+
+    - name: Debug __virtualenv__interpreter
+      ansible.builtin.debug:
+        var: __virtualenv_interpreter
 
 - name: Get info about targeted python interpreter
   mafalb.ansible.python_info:
-    executable: "{{ virtualenv_python_interpreter | default(ansible_python.executable) }}"
+    executable: "{{ virtualenv_interpreter | default(ansible_python.executable) }}"
   register: __reg_targeted_python
 
 - name: Debug targeted python interpreter
@@ -63,7 +67,7 @@
 
 - name: Get info about the real python interpreter
   mafalb.ansible.python_info:
-    executable: "{{ __virtualenv_python_interpreter }}"
+    executable: "{{ __virtualenv_interpreter }}"
   register: __reg_targeted_python
 
 - name: Debug
