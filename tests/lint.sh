@@ -45,6 +45,11 @@ echo "ansible-lint..."
 if test "$ANSIBLE_LINT_VERSION" == 4
 then
 	ansible-lint -v -c .ansible-lint-4
+elif test "$ANSIBLE_LINT_VERSION" == 686
+then
+	pushd ..
+	ansible-lint -c ansible/.ansible-lint -v ansible	
+	popd
 else
 	ansible-lint -v
 fi

@@ -32,4 +32,4 @@ molecule_virtualenv: "{{ ansible_user_dir }}/.virtualenvs/molecule"
 #
 molecule_version: "6"
 molecule_ansible_version: "2.14"
-#molecule_ansible_community_version: 3.0.0
+# molecule_ansible_community_version: 3.0.0

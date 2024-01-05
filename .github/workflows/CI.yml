@@ -120,6 +120,10 @@ jobs:
       - name: lint
         run: |
           source ~/.virtualenvs/ansible/bin/activate
+          if ansible-lint --version|grep "^ansible-lint 6.8.6"
+          then
+              ANSIBLE_LINT_VERSION=686
+          fi
           if ansible-lint --version|grep "^ansible-lint 4"
           then
               ANSIBLE_LINT_VERSION=4

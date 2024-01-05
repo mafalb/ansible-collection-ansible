@@ -42,11 +42,10 @@
       when: virtualenv_package is defined
 
     - name: Epel is present
+      when:
+        - ansible_lint_needs_epel | default(false) | bool
       ansible.builtin.include_role:
         name: mafalb.epel.release
-      when:
-        - ansible_lint_needs_epel|default(false)|bool
-        - false
 
     - name: Dependency packages are present
       ansible.builtin.package:

@@ -29,7 +29,7 @@ driver:
 platforms:
   - name: ${CI_HOSTNAME}
     image: ${CI_IMAGE}
-    #dockerfile: ../resources/${CI_HOSTNAME:-"ci-centos7"}.j2
+    # dockerfile: ../resources/${CI_HOSTNAME:-"ci-centos7"}.j2
     dockerfile: ../resources/Dockerfile.j2
     volumes:
       - ${PWD}/../../:/ansible_collections:Z
@@ -64,7 +64,7 @@ scenario:
     - create
     - prepare
     - converge
-    #- idempotence
+    # - idempotence
     - side_effect
     - verify
     - cleanup
