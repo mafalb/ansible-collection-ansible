@@ -75,15 +75,15 @@ jobs:
 
     steps:
 
+      - name: setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python_version }}
+
       - name: checkout collection mafalb.ansible
         uses: actions/checkout@v3
         with:
           path: ansible_collections/mafalb/ansible
-
-     - name: setup python
-       uses: actions/setup-python@v5
-       with:
-         python-version: ${{ matrix.python_version }}
 
       - name: install ansible
         run: |
@@ -339,10 +339,10 @@ jobs:
 
     steps:
 
-     - name: setup python
-       uses: actions/setup-python@v5
-       with:
-         python-version: ${{ matrix.python_version }}
+      - name: setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python_version }}
 
       - name: checkout collection ansible
         uses: actions/checkout@v3
@@ -401,10 +401,10 @@ jobs:
 
     steps:
 
-     - name: setup python
-       uses: actions/setup-python@v5
-       with:
-         python-version: ${{ matrix.python_version }}
+      - name: setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python_version }}
 
       - name: checkout collection ansible
         uses: actions/checkout@v3
