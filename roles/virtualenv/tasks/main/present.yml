@@ -226,4 +226,4 @@
     - name: Assert that the wanted ansible version is present
       ansible.builtin.assert:
         that:
-          - __ansible_version.stdout is match('ansible .*{{ __virtualenv_ansible_version }}')
+          - __ansible_version.stdout is match('ansible .*' + __virtualenv_ansible_version)
