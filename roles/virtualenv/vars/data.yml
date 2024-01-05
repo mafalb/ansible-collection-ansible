@@ -69,6 +69,7 @@ ansible_test_packages:
   "2.16":
     - flake8
 
+# https://docs.ansible.com/ansible/latest/reference_appendices/release_and_maintenance.html#ansible-changelogs
 python_versions:
   "2.9": ["2.7", "3.5", "3.6", "3.7", "3.8"]
   "2.10": ["2.7", "3.5", "3.6", "3.7", "3.8", "3.9"]
