@@ -8,13 +8,14 @@ dependency:
     requirements-file: requirements.yml
 
 driver:
-  name: ${CI_DRIVER:-docker}
+  name: ${CI_DRIVER:-podman}
 
 platforms:
   - name: ${CI_HOSTNAME}
     image: ${CI_IMAGE}
     # dockerfile: ../resources/${CI_HOSTNAME:-"ci-centos7"}.j2
-    dockerfile: ../resources/Dockerfile.j2
+    dockerfile: ../resources/${CI_HOSTNAME:-"ci-centos7"}.j2
+    #dockerfile: ../resources/Dockerfile-ubuntu2110.j2
     volumes:
       - ${PWD}/../../:/root/collections/ansible_collections:Z
 
@@ -35,5 +36,3 @@ provisioner:
 
 verifier:
   name: ansible
-  lint:
-    name: ansible-lint

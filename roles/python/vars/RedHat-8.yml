@@ -9,8 +9,5 @@ python_package:
   "3.6": "@python36"
   "3.8": "@python38"
   "3.9": "@python39"
-
-# RHEL8 does not provide python-virtualenv
-__python_extra_packages:
-  "2": [python2-virtualenv]
-  "3": []
+  "3.11": "python3.11"
+__python_extra_packages: []

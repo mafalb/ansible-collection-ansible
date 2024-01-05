@@ -5,12 +5,13 @@
 - name: Assertions
   ansible.builtin.assert:
     that:
+      - python_version is defined
       - python_package[python_version] is defined
 
 - name: Debug
   ansible.builtin.debug:
-    msg: "{{ [python_package[python_version]] + __python_extra_packages[python_version[0]] }}"
+    msg: "{{ [python_package[python_version]] + __python_extra_packages | default([]) }}"
 
 - name: Python is present
   ansible.builtin.package:
-    name: "{{ [python_package[python_version]] + __python_extra_packages[python_version[0]] }}"
+    name: "{{ [python_package[python_version]] + __python_extra_packages | default([]) }}"

@@ -25,13 +25,12 @@
 - name: Install different variants of molecule
   hosts: all
 
+  module_defaults:
+    ansible.builtin.apt:
+      cache_valid_time: 80400
+
   roles:
     - role: mafalb.ansible.python
-      python_version: "3.6"
-
-    - role: mafalb.ansible.python
-      python_version: "3.9"
-
     - role: mafalb.ansible.virtualenv
       virtualenv_packages:
         - _ansible_test
@@ -40,28 +39,38 @@
         - molecule
 
   tasks:
+    - name: Prepare 2.12 with Python 3.10
+      ansible.builtin.include_role:
+        name: mafalb.ansible.virtualenv
+      vars:
+        virtualenv: ~/.virtualenvs/default0
+        virtualenv_interpreter: python3.10
+        virtualenv_packages:
+          - _ansible_test
+          - _ansible~=2.12.0
+          - ansible-lint
+          - molecule
+
     - name: Prepare default1 - 6.0.3 / 2.14.3
+      when: false
       ansible.builtin.include_role:
         name: mafalb.ansible.virtualenv
       vars:
         virtualenv: ~/.virtualenvs/default1
-        virtualenv_python_interpreter: python3.9
+        virtualenv_interpreter: python3.9
         virtualenv_packages:
           - _ansible_test
           - _ansible==2.14.3
           - ansible-lint
           - molecule
 
-    - name: Debug
-      ansible.builtin.debug:
-        var: virtualenv_python_interpreter
-
     - name: Prepare default2 - ansible 2.12
+      when: false
       ansible.builtin.include_role:
         name: mafalb.ansible.virtualenv
       vars:
         virtualenv: ~/.virtualenvs/default2
-        virtualenv_python_interpreter: python3.9
+        virtualenv_interpreter: python3.9
         virtualenv_packages:
           - _ansible_test
           - _ansible~=2.12.0
