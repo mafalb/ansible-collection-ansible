@@ -2,6 +2,7 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
+
 - name: Verify
   hosts: all
   vars:
@@ -29,8 +30,8 @@
         - name: Assert that targetet version is the requested
           ansible.builtin.assert:
             that:
-              - (__reg_virtualenv_python.stdout is match("Python {{ arg_python_version }}") or
-                 __reg_virtualenv_python.stderr is match("Python {{ arg_python_version }}")
+              - (__reg_virtualenv_python.stdout is match("Python " + arg_python_version) or
+                 __reg_virtualenv_python.stderr is match("Python " + arg_python_version)
                 )
 
     - name: Install requirements # noqa no-changed-when
