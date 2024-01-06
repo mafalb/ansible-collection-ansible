@@ -24,23 +24,21 @@ dependency:
     requirements-file: requirements.yml
 
 driver:
-  name: ${CI_DRIVER:-docker}
+  name: ${CI_DRIVER:-podman}
 
 platforms:
   - name: ${CI_HOSTNAME}
     image: ${CI_IMAGE}
-    dockerfile: ../resources/Dockerfile-${CI_HOSTNAME}.j2
+    dockerfile: ../resources/Dockerfile-${CI_DOCKERFILE}.j2
     volumes:
-      - ${PWD}/../../:/ansible_collections:Z
+      - ${PWD}/../../:/root/collections/ansible_collections:Z
 
 provisioner:
   name: ansible
   ansible_args:
     - --tags=all,debug
     - --diff
-    - -e arg_ansible_version='${ANSIBLE_VERSION}' -e arg_python_version=${PYTHON_VERSION}
-  lint:
-    name: ansible-lint
+    - -e arg_ansible_version='${ANSIBLE_VERSION}' -e arg_python_version='${PYTHON_VERSION}'
   config_options:
     defaults:
       gathering: smart
@@ -50,8 +48,6 @@ provisioner:
 
 verifier:
   name: ansible
-  lint:
-    name: ansible-lint
 
 scenario:
   test_sequence:
