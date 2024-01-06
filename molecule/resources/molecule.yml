@@ -38,7 +38,7 @@ provisioner:
   ansible_args:
     - --tags=all,debug
     - --diff
-    - -e arg_ansible_version='${ANSIBLE_VERSION}' -e arg_python_version=${PYTHON_VERSION}
+    - -e arg_ansible_version='${ANSIBLE_VERSION}' -e arg_python_version='${PYTHON_VERSION}'
   config_options:
     defaults:
       gathering: smart

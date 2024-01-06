@@ -10,10 +10,10 @@
         msg: doing {{ arg_ansible_version }} on {{ arg_python_version }}
   roles:
     - role: mafalb.ansible.python
-      version: "{{ arg_python_version|default('_default') }}"
+      python_version: "{{ arg_python_version|default('_default') }}"
     - role: mafalb.ansible.virtualenv
       virtualenv: ~/.virtualenvs/ansible-{{ arg_ansible_version }}-py{{ arg_python_version }}
-      python: python{{ arg_python_version }}
-      mafalb_ansible_packages:
+      virtualenv_interpreter: python{{ arg_python_version }}
+      virtualenv_packages:
         - _ansible=={{ arg_ansible_version }}
         - _ansible_test

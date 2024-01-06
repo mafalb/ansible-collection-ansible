@@ -2,6 +2,18 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
+- name: Debug
+  tags:
+    - never
+    - debug
+  block:
+    - name: Debug
+      ansible.builtin.debug:
+        var: python_package
+    - name: Debug
+      ansible.builtin.debug:
+        var: python_version
+  
 - name: Assertions
   ansible.builtin.assert:
     that:

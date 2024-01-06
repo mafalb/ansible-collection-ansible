@@ -2,8 +2,8 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-mafalb_python_default_version: "2.7"
-mafalb_python_package:
+python_default_version: "2.7"
+python_package:
   _default: python
   "2.7": python
   "3.5": python3.5
