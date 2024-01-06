@@ -31,7 +31,7 @@ platforms:
     image: ${CI_IMAGE}
     dockerfile: ../resources/Dockerfile-${CI_DOCKERFILE}.j2
     volumes:
-      - ${PWD}/../../:/ansible_collections:Z
+      - ${PWD}/../../:/root/collections/ansible_collections:Z
 
 provisioner:
   name: ansible

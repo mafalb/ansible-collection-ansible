@@ -12,23 +12,29 @@
       executable: /bin/bash
 
   tasks:
+
     - name: Ansible is in the path
       ansible.builtin.command:
         cmd: ansible --version
       changed_when: false
       register: __ansible_version
+
     - name: Debug
       ansible.builtin.debug:
         var: __ansible_version
+
     - name: Assertions
       ansible.builtin.assert:
         that:
           - __ansible_version.stdout is match('ansible')
           - __ansible_version.stdout is search(arg_ansible_version|mandatory)
+
     - name: Playbook is present
       ansible.builtin.copy:
         src: install-ansible.yml
         dest: /root/
         mode: "644"
+
     - name: Community.general is present # noqa no-changed-when
       ansible.builtin.command: ansible-galaxy collection install community.general
+...
