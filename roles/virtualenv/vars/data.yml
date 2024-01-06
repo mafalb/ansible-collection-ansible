@@ -54,20 +54,35 @@ ansible_test_packages:
     - pytest-mock
     - mock
   "2.12":
+    - flake8
     - mock
     - pytest-mock
     - pytest-xdist
+    - pytest-forked
+    - py
     - voluptuous
     - wrapt
     - yamllint
   "2.13":
     - flake8
+    - mock
+    - pytest-mock
+    - pytest-pytest-xdist
   "2.14":
     - flake8
+    - mock
+    - pytest-mock
+    - pytest-pytest-xdist
   "2.15":
     - flake8
+    - mock
+    - pytest-mock
+    - pytest-pytest-xdist
   "2.16":
     - flake8
+    - mock
+    - pytest-mock
+    - pytest-pytest-xdist
 
 # https://docs.ansible.com/ansible/latest/reference_appendices/release_and_maintenance.html#ansible-changelogs
 python_versions:
