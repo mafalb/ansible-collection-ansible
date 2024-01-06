@@ -13,7 +13,7 @@
     - name: Debug
       ansible.builtin.debug:
         var: python_version
-  
+
 - name: Assertions
   ansible.builtin.assert:
     that:
