@@ -316,7 +316,7 @@ jobs:
       PYTHON_VERSION: ${{ matrix.python_version }}
       CI_IMAGE: ${{ matrix.image }}
       CI_HOSTNAME: ci-${{ matrix.os }}
-      CI_DRIVER: docker
+      CI_DRIVER: podman
       PY_COLORS: 1
       ANSIBLE_FORCE_COLOR: 1
 
