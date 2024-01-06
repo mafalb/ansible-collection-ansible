@@ -189,7 +189,7 @@ jobs:
     steps:
 
       - name: checkout collection ansible
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: ansible_collections/mafalb/ansible
 
