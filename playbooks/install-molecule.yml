@@ -13,8 +13,8 @@
         - _ansible=={{ molecule_ansible_version }}
         - ansible-lint
         - molecule
-        - docker
-        - podman
+        - molecule_docker
+        - molecule_podman
       when: molecule_ansible_version is defined
 
     # this is used if molecule_ansible_version is not argument
@@ -25,8 +25,8 @@
         - _ansible
         - ansible-lint
         - molecule
-        - docker
-        - podman
+        - molecule_docker
+        - molecule_podman
       when: molecule_ansible_version is not defined
 
   tasks:
