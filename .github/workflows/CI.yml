@@ -362,7 +362,7 @@ jobs:
 
       - name: install molecule
         run: |
-          ansible-playbook -D playbooks/install-molecule.yml -e molecule_python_version=${{ matrix.python_version }} -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
+          ansible-playbook -D playbooks/install-molecule.yml -e molecule_python_version=python${{ matrix.python_version }} -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
         env:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
 
@@ -425,7 +425,7 @@ jobs:
       - name: install molecule with system ansible (old!)
         run: |
           sudo apt install ansible
-          /usr/bin/ansible-playbook -D playbooks/molecule.yml -e molecule_python_version=${{ matrix.python_version }} -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
+          /usr/bin/ansible-playbook -D playbooks/molecule.yml -e molecule_python_version=python${{ matrix.python_version }} -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
         env:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
 
