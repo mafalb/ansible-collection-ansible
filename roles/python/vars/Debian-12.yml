@@ -2,12 +2,7 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-python_default_version: "3.6"
+python_default_version: "3.11"
 python_package:
-  _default: "@python36"
-  "2.7": "@python27"
-  "3.6": "@python36"
-  "3.8": "@python38"
-  "3.9": "@python39"
-  "3.11": "python3.11"
-...
+  _default: python3
+  "3.11": python3
