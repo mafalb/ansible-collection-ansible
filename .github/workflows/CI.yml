@@ -178,7 +178,7 @@ jobs:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
       CI_IMAGE: ${{ matrix.image }}
       CI_HOSTNAME: ci-${{ matrix.os }}
-      CI_DRIVER: docker
+      CI_DRIVER: podman
       PY_COLORS: 1
       ANSIBLE_FORCE_COLOR: 1
 
@@ -201,6 +201,7 @@ jobs:
       # why?
       #
       - name: install community.docker
+        if: false
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           ansible-galaxy collection install community.docker
@@ -218,11 +219,13 @@ jobs:
           # dont destroy, next task needs it
           molecule -e .env-${{ matrix.os }}.yml test -s controlnode --destroy never
 
+      # why does this exist?
       - name: run install-ansible.sh
+        if: false
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           # this finds some errors when dependendencies differ from ansible-test's
-          docker exec -t ci-${{ matrix.os }} ansible-playbook /root/install-ansible.yml
+          podman exec -t ci-${{ matrix.os }} ansible-playbook /root/install-ansible.yml
 
   virtualenv:
 
@@ -378,7 +381,7 @@ jobs:
       PYTHON_VERSION: ${{ matrix.python_version }}
       CI_IMAGE: ${{ matrix.image }}
       CI_HOSTNAME: ci-${{ matrix.os }}
-      CI_DRIVER: docker
+      CI_DRIVER: podman
       PY_COLORS: 1
       ANSIBLE_FORCE_COLOR: 1
 
@@ -405,7 +408,10 @@ jobs:
         env:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
 
+      # why?
+      #
       - name: install community.docker
+        if: false
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           ansible-galaxy collection install community.docker
