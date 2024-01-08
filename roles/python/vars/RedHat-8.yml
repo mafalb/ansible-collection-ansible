@@ -5,9 +5,20 @@
 python_default_version: "3.6"
 python_package:
   _default: "@python36"
-  "2.7": "@python27"
   "3.6": "@python36"
   "3.8": "@python38"
   "3.9": "@python39"
   "3.11": "python3.11"
+
+python_extra_packages:
+  _default:
+    - python3-libselinux
+    - python3-cryptography
+    - glibc-langpack-en
+    - python3-setuptools
+  '3.6': []
+  '3.8': []
+  '3.9': []
+  '3.10': []
+  '3.11': []
 ...

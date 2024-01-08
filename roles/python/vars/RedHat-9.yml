@@ -13,15 +13,6 @@ python_extra_packages:
     - python3-cryptography
     - glibc-langpack-en
     - python3-setuptools
-  '3.9':
-    - glibc-langpack-en
-    - python3.9-libselinux
-    - python3.9-cryptography
-    - python3.9-setuptools
-  '3.11':
-    - glibc-langpack-en
-    - python3.11-libselinux
-    - python3.11-cryptography
-    - python3.11-setuptools
-
+  '3.9': []
+  '3.11': []
 ...
