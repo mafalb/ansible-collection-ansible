@@ -239,15 +239,14 @@ jobs:
       matrix:
 
         os:
-          # there are special dependencies for fedora35 that are probably not necessary anymore
           #- arch
+          - debian12
+          - ubuntu22
           - fedora38
           - fedora39
           - c9s
           - rocky9
           - alma9
-          - debian12
-          - ubuntu22
 
         ansible_version:
           - '2.12'
@@ -259,30 +258,59 @@ jobs:
           - '3.9'
           - '3.10'
           - '3.11'
+          - '3.12'
 
         exclude:
 
           # impossible ansible - python combinations
           - ansible_version: '2.12'
             python_version: '3.11'
+
+          - ansible_version: '2.12'
+            python_version: '3.12'
+
           - ansible_version: '2.14'
-            python_version: '3.11'
+            python_version: '3.12'
+
           - ansible_version: '2.15'
-            python_version: '3.11'
+            python_version: '3.12'
+
           - ansible_version: '2.16'
             python_version: '3.9'
+
+          # no python3.x-setuptool package
+          # therefore only ansible that support 3.11 are possible
+          #
+          - os: fedora38
+            ansible_version: '2.12'
+
+          # no python3.x-setuptool package
+          # therefore only ansible that support 3.12 are possible
+          #
+          - os: fedora39
+            ansible_version: '2.12'
+          - os: fedora39
+            ansible_version: '2.14'
+          - os: fedora39
+            ansible_version: '2.15'
 
           # c9s has 3.9, 3.11
           - os: c9s
             python_version: '3.10'
+          - os: c9s
+            ansible_version: '2.16'
 
           # alma9 has 3.9, 3.11
           - os: alma9
             python_version: '3.10'
+          - os: alma9
+            ansible_version: '2.16'
 
           # rocky9 has 3.9, 3.11
           - os: rocky9
             python_version: '3.10'
+          - os: alma9
+            ansible_version: '2.16'
 
           # arch has 2.7 and 3.9
           #- os: arch
@@ -301,10 +329,14 @@ jobs:
             python_version: '3.9'
           - os: debian12
             python_version: '3.10'
+          - os: debian12
+            python_version: '3.12'
 
           # ubuntu22 has 3.10, 3.11
           - os: ubuntu22
             python_version: '3.9'
+          - os: ubuntu22
+            python_version: '3.12'
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
@@ -351,73 +383,5 @@ jobs:
         run: |
           source ~/.virtualenvs/molecule/bin/activate
           molecule -e .env-${{ matrix.os }}.yml test -s virtualenv
-
-
-  update:
-
-    runs-on: ubuntu-22.04
-    needs:
-      - ansible-test
-      #- virtualenv
-
-    strategy:
-      fail-fast: false
-
-      matrix:
-        os:
-          - debian12
-          - rocky9
-          - c9s
-        ansible_version:
-          - '2.14'
-        include:
-          - os: debian12
-            python_version: '3.11'
-
-    env:
-      PYTHON_VERSION: ${{ matrix.python_version }}
-      CI_IMAGE: ${{ matrix.image }}
-      CI_HOSTNAME: ci-${{ matrix.os }}
-      CI_DRIVER: podman
-      PY_COLORS: 1
-      ANSIBLE_FORCE_COLOR: 1
-
-    defaults:
-      run:
-        working-directory: ansible_collections/mafalb/ansible
-
-    steps:
-
-      - name: setup python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python_version }}
-
-      - name: checkout collection ansible
-        uses: actions/checkout@v3
-        with:
-          path: ansible_collections/mafalb/ansible
-
-      - name: install molecule with system ansible (old!)
-        run: |
-          sudo apt install ansible
-          /usr/bin/ansible-playbook -D playbooks/molecule.yml -e molecule_python_version=python${{ matrix.python_version }} -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
-        env:
-          ANSIBLE_COLLECTIONS_PATHS: ../../..
-
-      # why?
-      #
-      - name: install community.docker
-        if: false
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          ansible-galaxy collection install community.docker
-          # necessary for molecule and for mafalb.ansible
-          ansible-galaxy collection install community.general
-
-      - name: molecule scenario update
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          molecule -e .env-${{ matrix.os }}.yml test -s update
 
 ...

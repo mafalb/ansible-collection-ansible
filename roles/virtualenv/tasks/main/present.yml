@@ -38,6 +38,7 @@
     #    py{{ __reg_targeted_python.version.majmin }}-{{ __mafalb_ansible_majmin_version }}.yml"
     #  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}-py{{ __reg_targeted_python.version.majmin }}.yml"
     - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}.yml"
     - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
     - "{{ ansible_os_family }}.yml"
   ansible.builtin.include_vars:
@@ -52,7 +53,7 @@
 - name: Dependencies are present
   become: true
   ansible.builtin.package:
-    name: "{{ virtualenv_system_dependencies }}"
+    name: "{{ virtualenv_system_dependencies[virtualenv_interpreter | default(ansible_python.executable)] }}"
 
 - name: Virtualenv is present
   ansible.builtin.pip:
