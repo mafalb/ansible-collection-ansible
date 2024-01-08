@@ -53,7 +53,7 @@
 - name: Dependencies are present
   become: true
   ansible.builtin.package:
-    name: "{{ virtualenv_system_dependencies[virtualenv_interpreter | default(ansible_python.executable)] }}"
+    name: "{{ virtualenv_system_dependencies }}"
 
 - name: Virtualenv is present
   ansible.builtin.pip:
