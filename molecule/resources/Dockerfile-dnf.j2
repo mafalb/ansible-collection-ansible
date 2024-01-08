@@ -16,5 +16,4 @@ ENV {{ var }} {{ value }}
 {% endfor %}
 {% endif %}
 
-RUN dnf makecache && dnf --assumeyes install python3 sudo python3-devel python*-dnf bash iproute && dnf clean all
-
+RUN dnf makecache && dnf --assumeyes install python3 sudo python3-dnf bash iproute which && dnf clean all
