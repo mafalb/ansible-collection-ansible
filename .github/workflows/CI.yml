@@ -159,8 +159,10 @@ jobs:
 
         include:
 
-          - os: ubuntu22
-            ansible_version: '2.12'
+          # The ansible provided by ubuntu is a joke
+          #
+          #- os: ubuntu22
+          #  ansible_version: '2.12'
 
           - os: alma9
             ansible_version: '2.14'
@@ -258,7 +260,8 @@ jobs:
           - '3.9'
           - '3.10'
           - '3.11'
-          - '3.12'
+          # not working on github actions
+          #- '3.12'
 
         exclude:
 
@@ -298,18 +301,24 @@ jobs:
           - os: c9s
             python_version: '3.10'
           - os: c9s
+            python_version: '3.12'
+          - os: c9s
             ansible_version: '2.16'
 
           # alma9 has 3.9, 3.11
           - os: alma9
             python_version: '3.10'
           - os: alma9
+            python_version: '3.12'
+          - os: alma9
             ansible_version: '2.16'
 
           # rocky9 has 3.9, 3.11
           - os: rocky9
             python_version: '3.10'
-          - os: alma9
+          - os: rocky9
+            python_version: '3.12'
+          - os: rocky9
             ansible_version: '2.16'
 
           # arch has 2.7 and 3.9
@@ -382,6 +391,6 @@ jobs:
       - name: molecule scenario virtualenv
         run: |
           source ~/.virtualenvs/molecule/bin/activate
-          molecule -e .env-${{ matrix.os }}.yml test -s virtualenv
+          molecule -e .env-${{ matrix.os }}.yml test -s virtualenv -- -e ansible_python_interpreter=/usr/bin/python3
 
 ...
