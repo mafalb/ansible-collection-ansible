@@ -22,10 +22,10 @@
 
 - name: Debug
   ansible.builtin.debug:
-    msg: "{{ [python_package[python_version]] + python_extra_packages | default([]) }}"
+    msg: "{{ [python_package[python_version]] + python_extra_packages[python_version] | default([]) }}"
 
 - name: Python is present
   ansible.builtin.package:
-    name: "{{ [python_package[python_version]] + python_extra_packages | default([]) }}"
+    name: "{{ [python_package[python_version]] + python_extra_packages[python_version] | default([]) }}"
 
 ...
