@@ -135,7 +135,7 @@ jobs:
         run: |
           source ~/.virtualenvs/ansible/bin/activate
           ansible-test integration --requirements --python ${{ matrix.python_version }}
-  
+
   node:
 
     # don't run on pull request from ourselves
