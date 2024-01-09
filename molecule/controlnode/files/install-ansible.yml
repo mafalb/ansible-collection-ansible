@@ -7,5 +7,5 @@
   roles:
     - role: mafalb.ansible.python
     - role: mafalb.ansible.virtualenv
-      packages:
+      virtualenv_packages:
         - _ansible==2.11

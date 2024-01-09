@@ -1,7 +1,7 @@
 # vim: set ft=yaml ts=2 expandtab:
 
 # This file is part of Ansible Collection mafalb.ansible
-# Copyright (c) 2019-2021 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) 2019-2021, 2024 Markus Falb <markus.falb@mafalb.at>
 #
 # Ansible collection mafalb.ansible is free software: you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -20,10 +20,6 @@
 ---
 - name: Install ansible
   hosts: all
-
   roles:
-    - role: mafalb.ansible.node
-      ansible_node_features:
-        - crypto
-        - selinux
-        - pip
+    - role: mafalb.ansible.python
+...

@@ -9,10 +9,13 @@ python_package:
   "3.11": python3.11
 python_extra_packages:
   _default:
+    - glibc-langpack-en
     - python3-libselinux
     - python3-cryptography
-    - glibc-langpack-en
+    - python3-policycoreutils
     - python3-setuptools
+    - python3-libselinux
+    - python3-libsemanage
   '3.9': []
   '3.11': []
 ...

@@ -135,6 +135,55 @@ jobs:
         run: |
           source ~/.virtualenvs/ansible/bin/activate
           ansible-test integration --requirements --python ${{ matrix.python_version }}
+  
+  node:
+
+    # don't run on pull request from ourselves
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-22.04
+    needs:
+      - ansible-test
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+
+        include:
+
+          - os: debian12
+          - os: centos7
+          - os: c9s
+          - os: fedora39
+
+    env:
+      CI_IMAGE: ${{ matrix.image }}
+      CI_HOSTNAME: ci-${{ matrix.os }}
+      CI_DRIVER: podman
+      PY_COLORS: 1
+      ANSIBLE_FORCE_COLOR: 1
+
+    defaults:
+      run:
+        working-directory: ansible_collections/mafalb/ansible
+
+    steps:
+
+      - name: checkout collection ansible
+        uses: actions/checkout@v3
+        with:
+          path: ansible_collections/mafalb/ansible
+
+      - name: install molecule
+        run: ansible-playbook -D playbooks/install-molecule.yml -t all,debug
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: '../../..'
+
+      - name: molecule node scenario
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          molecule -e .env-${{ matrix.os }}.yml test -s node
+
 
   controlnode:
 

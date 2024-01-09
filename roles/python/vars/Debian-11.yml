@@ -7,3 +7,13 @@ python_package:
   _default: python3
   "2.7": python2
   "3.9": python3
+python_extra_packages:
+  "_default": &PACKAGES
+    - python3-selinux
+    - python3-openssl
+    - python3-cryptography
+    - python3-setuptools
+    - python3-venv
+    - python3-apt
+  "3.9": *PACKAGES
+...

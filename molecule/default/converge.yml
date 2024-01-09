@@ -43,7 +43,7 @@
       ansible.builtin.include_role:
         name: mafalb.ansible.virtualenv
       vars:
-        virtualenv: ~/.virtualenvs/default0
+        virtualenv: ~/.virtualenvs/default0  # noqa var-naming[no-role-prefix]
         virtualenv_interpreter: python3.10
         virtualenv_packages:
           - _ansible_test
@@ -56,7 +56,7 @@
       ansible.builtin.include_role:
         name: mafalb.ansible.virtualenv
       vars:
-        virtualenv: ~/.virtualenvs/default1
+        virtualenv: ~/.virtualenvs/default1  # noqa var-naming[no-role-prefix]
         virtualenv_interpreter: python3.9
         virtualenv_packages:
           - _ansible_test
@@ -69,7 +69,7 @@
       ansible.builtin.include_role:
         name: mafalb.ansible.virtualenv
       vars:
-        virtualenv: ~/.virtualenvs/default2
+        virtualenv: ~/.virtualenvs/default2  # noqa var-naming[no-role-prefix]
         virtualenv_interpreter: python3.9
         virtualenv_packages:
           - _ansible_test

@@ -7,3 +7,13 @@ python_package:
   _default: python
   "2.7": python
   "3.6": python3
+python_extra_packages:
+  "2.7":
+    - libselinux-python
+    - libsemanage-python
+    - policycoreutils-python
+    - python2-cryptography
+    - pyOpenSSL
+    - python-setuptools
+    - python-virtualenv
+  "3.6": []

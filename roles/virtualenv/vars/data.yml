@@ -4,7 +4,7 @@
 ---
 # change this when new version of ansible/ansible-core is released
 # also create constraints in files/constraints/ansible-test/
-latest_ansible_version:
+latest_ansible_version:  # noqa var-naming[no-role-prefix]
   "2.9": 2.9.27
   "2.10": 2.10.17
   "2.11": 2.11.12
@@ -14,7 +14,7 @@ latest_ansible_version:
   "2.15": 2.15.8
   "2.16": 2.16.2
 
-ansible_test_packages:
+ansible_test_packages:  # noqa var-naming[no-role-prefix]
   "2.9":
     - mock
     - flake8
@@ -93,7 +93,7 @@ ansible_test_packages:
     - py
 
 # https://docs.ansible.com/ansible/latest/reference_appendices/release_and_maintenance.html#ansible-changelogs
-python_versions:
+python_versions:  # noqa var-naming[no-role-prefix]
   "2.9": ["2.7", "3.5", "3.6", "3.7", "3.8"]
   "2.10": ["2.7", "3.5", "3.6", "3.7", "3.8", "3.9"]
   "2.11": ["2.7", "3.5", "3.6", "3.7", "3.8", "3.9"]

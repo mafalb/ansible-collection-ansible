@@ -118,7 +118,7 @@
       ansible.builtin.include_role:
         name: verify_molecule
       vars:
-        virtualenv: "{{ item.virtualenv }}"
+        virtualenv: "{{ item.virtualenv }}"  # noqa var-naming[no-role-prefix]
       loop: "{{ virtualenvs }}"
 
     - name: Assert that we do not use reserved variable names
