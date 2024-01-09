@@ -2,12 +2,6 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-- name: Include OS family specific variables
-  ansible.builtin.include_vars: "{{ __file }}"
-  with_first_found:
-    - "{{ ansible_os_family }}.yml"
-  loop_control:
-    loop_var: __file
 
 - name: Include OS specific variables
   ansible.builtin.include_vars: "{{ __file }}"
@@ -24,3 +18,5 @@
 - name: Include tasks
   ansible.builtin.include_tasks:
     file: "{{ python_state | default('present') }}.yml"
+
+...
