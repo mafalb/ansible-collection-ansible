@@ -54,10 +54,10 @@ elif test "${ANSIBLE_LINT_VERSION}" == "6.8.6"
 then
 	echo "ansible-lint ${ANSIBLE_LINT_VERSION}..."
 	ansible-lint -v --offline -c .ansible-lint-6.8.6
-elif test -f .ansible-lint-${ANSIBLE_LINT_VERSION}
+elif test -f .ansible-lint-"${ANSIBLE_LINT_VERSION}"
 then
 	echo "ansible-lint -c .ansible-lint-${ANSIBLE_LINT_VERSION}..."
-	ansible-lint -v -c .ansible-lint-${ANSIBLE_LINT_VERSION}
+	ansible-lint -v -c .ansible-lint-"${ANSIBLE_LINT_VERSION}"
 else
 	echo "ansible-lint ${ANSIBLE_LINT_VERSION}..."
 	ansible-lint -v
