@@ -14,13 +14,13 @@ virtualenv_implicit_packages:
 # (~/.virtualenvs/molecule does not work) for
 # setting TMPPATH environment variable for pip
 #
-___virtualenv: "{{ virtualenv | default('~/.virtualenvs/ansible') }}"
-__virtualenv: "{{ ___virtualenv | regex_replace('^~', ansible_user_dir) }}"
+___virtualenv: "{{ virtualenv | default('~/.virtualenvs/ansible') }}"        # noqa: var-naming[no-role-prefix]
+__virtualenv: "{{ ___virtualenv | regex_replace('^~', ansible_user_dir) }}"  # noqa: var-naming[no-role-prefix]
 
 # the path to the python interpreter
 # relevant for virtualenvs that already exists
 #
-__virtualenv_interpreter: "{{ __virtualenv + '/bin/python' }}"
+__virtualenv_interpreter: "{{ __virtualenv + '/bin/python' }}"               # noqa: var-naming[no-role-prefix]
 
 # keyed by openssl version
 virtualenv_cryptography_specifier:
