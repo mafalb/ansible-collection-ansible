@@ -1,7 +1,7 @@
 # vim: set ts=4 expandtab:
 
 # This file is part of Ansible Collection mafalb.ansible
-# Copyright (c) 2020-2021 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
 #
 # Ansible collection mafalb.ansible is free software: you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as

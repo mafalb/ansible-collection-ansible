@@ -25,6 +25,6 @@ For reference here is the link to the source code for INTERPRETER_PYTHON_DISTRO_
 
 ## License
 
-Copyright (c) 2020,2021 Markus Falb <markus.falb@mafalb.at>
+Copyright (c) Markus Falb <markus.falb@mafalb.at>
 
 GPL-3.0-or-later

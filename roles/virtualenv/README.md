@@ -33,6 +33,6 @@ mafalb_ansible_virtualenv_python: path of python interpreter used for virtualenv
 
 ## License
 
-Copyright (c) 2020,2021,2023 Markus Falb <markus.falb@mafalb.at>
+Copyright (c) Markus Falb <markus.falb@mafalb.at>
 
 GPL-3.0-or-later
