@@ -58,8 +58,8 @@
 - name: Virtualenv is present
   ansible.builtin.pip:
     name:
-      - pip{{ virtualenv_implicit_packages.pip }}
-      - setuptools{{ virtualenv_implicit_packages.setuptools }}
+#      - pip{{ virtualenv_implicit_packages.pip }}
+#      - setuptools{{ virtualenv_implicit_packages.setuptools }}
       - wheel
     virtualenv: "{{ __virtualenv }}"
     virtualenv_command: "{{ virtualenv_command }}"
