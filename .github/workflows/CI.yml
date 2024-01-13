@@ -212,7 +212,7 @@ jobs:
           #
           #- os: ubuntu22
           #  ansible_version: '2.12'
-          
+
           - os: ubuntu24
             ansible_version: '2.14'
 
@@ -406,7 +406,7 @@ jobs:
             python_version: '3.9'
           - os: ubuntu22
             python_version: '3.12'
-          
+
           # ubuntu24 has 3.11, 3.12
           - os: ubuntu22
             python_version: '3.9'
