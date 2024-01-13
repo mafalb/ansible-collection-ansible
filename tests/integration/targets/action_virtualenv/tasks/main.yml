@@ -1,0 +1,29 @@
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+- name: Virtualenv virtualenv-test1 is present
+  mafalb.ansible.virtualenv:
+    virtualenv: ~/.virtualenvs/virtualenv-test1
+    virtualenv_command: python3 -m venv
+    name:
+      - ansible
+  register: _output
+
+- name: Debug _output
+  ansible.builtin.debug:
+    var: _output
+
+- name: Assertions
+  ansible.builtin.assert:
+    that:
+      - not _output.failed
+      - not _output.results[0].changed
+      - not _output.results[2].changed
+      - _output.results[1].changed
+      - _output.results[3].changed
+      - not _output.results[0].failed
+      - not _output.results[1].failed
+      - not _output.results[2].failed
+      - not _output.results[3].failed
+...

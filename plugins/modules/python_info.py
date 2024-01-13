@@ -82,6 +82,7 @@ def main():
     )
     results = dict(
         changed=False,
+        failed=True,
         version={},
     )
     module = AnsibleModule(
@@ -115,6 +116,7 @@ def main():
     results['version']['minor'] = int(version.split('.')[1])
     results['version']['majmin'] = '.'.join(version.split('.')[0:2])
     results['executable'] = executable
+    results['failed'] = False
 
     module.exit_json(**results)
 

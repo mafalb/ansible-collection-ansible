@@ -1,0 +1,19 @@
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+- name: Virtualenv is present
+  hosts: localhost
+  tasks:
+    - name: Virtualenv virtualenv-test1 is present
+      mafalb.ansible.virtualenv:
+        virtualenv: ~/.virtualenvs/virtualenv-test1
+        virtualenv_command: python3 -m venv
+        name:
+          - ansible~=2.10.0
+      register: _output
+    - name: Debug _output
+      when: false
+      ansible.builtin.debug:
+        var: _output
+...
