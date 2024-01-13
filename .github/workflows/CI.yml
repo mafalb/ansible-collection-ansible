@@ -157,6 +157,7 @@ jobs:
           - os: centos7
           - os: c9s
           - os: fedora39
+          - os: fedora40
 
     env:
       CI_IMAGE: ${{ matrix.image }}
@@ -219,6 +220,8 @@ jobs:
           - os: fedora39
             ansible_version: '2.16'
 
+          - os: fedora40
+            ansible_version: '2.16'
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
@@ -289,6 +292,7 @@ jobs:
           - ubuntu22
           - fedora38
           - fedora39
+          - fedora40
           - c9s
           - rocky9
           - alma9
@@ -338,6 +342,13 @@ jobs:
           - os: fedora39
             ansible_version: '2.14'
           - os: fedora39
+            ansible_version: '2.15'
+
+          - os: fedora40
+            ansible_version: '2.12'
+          - os: fedora40
+            ansible_version: '2.14'
+          - os: fedora40
             ansible_version: '2.15'
 
           # c9s has 3.9, 3.11
