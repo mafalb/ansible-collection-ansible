@@ -62,10 +62,8 @@ jobs:
           - ansible_version: '2.16'
             python_version: '3.11'
 
-          # not working for now
-          #
-          #- ansible_version: '2.16'
-          #  python_version: '3.12'
+          - ansible_version: '2.16'
+            python_version: '3.12'
 
     env:
       PY_COLORS: 1
@@ -408,9 +406,9 @@ jobs:
             python_version: '3.12'
 
           # ubuntu24 has 3.11, 3.12
-          - os: ubuntu22
+          - os: ubuntu24
             python_version: '3.9'
-          - os: ubuntu22
+          - os: ubuntu24
             python_version: '3.10'
 
     env:
