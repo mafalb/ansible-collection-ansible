@@ -154,6 +154,8 @@ jobs:
         include:
 
           - os: debian12
+          - os: ubuntu22
+          - os: ubuntu24
           - os: centos7
           - os: c9s
           - os: fedora39
@@ -203,18 +205,21 @@ jobs:
 
         include:
 
-          # The ansible provided by ubuntu is a joke
+          - os: debian12
+            ansible_version: '2.14'
+
+          # The ansible provided by ubuntu 22 is a joke
           #
           #- os: ubuntu22
           #  ansible_version: '2.12'
+          
+          - os: ubuntu24
+            ansible_version: '2.14'
 
           - os: alma9
             ansible_version: '2.14'
 
           - os: rocky9
-            ansible_version: '2.14'
-
-          - os: debian12
             ansible_version: '2.14'
 
           - os: fedora39
@@ -290,6 +295,7 @@ jobs:
           #- arch
           - debian12
           - ubuntu22
+          - ubuntu24
           - fedora38
           - fedora39
           - fedora40
@@ -400,6 +406,12 @@ jobs:
             python_version: '3.9'
           - os: ubuntu22
             python_version: '3.12'
+          
+          # ubuntu24 has 3.11, 3.12
+          - os: ubuntu22
+            python_version: '3.9'
+          - os: ubuntu22
+            python_version: '3.10'
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
