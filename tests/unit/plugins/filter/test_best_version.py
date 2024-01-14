@@ -23,8 +23,8 @@ last_ansible_version_by_python = {
     '3.8': '2.13',
     '3.9': '2.15',
     '3.10': '2.16',
-    '3.11': '2.16'
-    '3.12': '2.18'
+    '3.11': '2.16',
+    '3.12': '2.18',
 }
 
 this_python = str(sys.version_info.major) + '.' + str(sys.version_info.minor)
