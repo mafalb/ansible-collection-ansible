@@ -28,6 +28,8 @@ class ActionModule(ActionBase):
         return module_return
 
     def run(self, tmp=None, task_vars=None):
+
+        self._supports_check_mode = True
         super(ActionModule, self).run(tmp, task_vars)
         module_args = self._task.args.copy()
         module_return = {
@@ -60,6 +62,7 @@ class ActionModule(ActionBase):
         display.debug("Python interpreter %s" % to_json(packages))
         display.debug("Python interpreter %s" % to_json(fixed_packages))
         display.debug("Python interpreter %s" % to_json(best_ansible_version))
+        display.v("Virtualenv %s" % to_json(self._task.args.get('virtualenv')))
 
         # create the virtualenv
         module_args_copy = dict(module_args)
@@ -74,9 +77,15 @@ class ActionModule(ActionBase):
         # if the virtualenv already existed, the virtualenv interpreter could
         # be different from python_version
         #
-        virtualenv = module_return['results'][1]['virtualenv']
-        module_return['results'][2] = self.python_info(executable=virtualenv + '/bin/python',
-                                                       task_vars=task_vars)
+        if module_return['results'][1]['changed']:
+            if self._play_context.check_mode:
+                virtualenv = self._task.args.get('virtualenv')
+            else:
+                # get absolute path (get rid of shellism like ~)
+                virtualenv = module_return['results'][1]['virtualenv']
+            module_return['results'][2] = self.python_info(executable=virtualenv + '/bin/python',
+                                                           task_vars=task_vars)
+        module_return['results'][2] = {}
 
         # install the packages
         module_return['results'][3] = self._execute_module(module_name='pip',
@@ -86,4 +95,5 @@ class ActionModule(ActionBase):
             module_return['results'][3]['failed'] = False
 
         module_return['failed'] = False
+        module_return['changed'] = module_return['results'][3]['changed']
         return dict(module_return)
