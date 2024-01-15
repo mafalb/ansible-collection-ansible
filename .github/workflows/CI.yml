@@ -311,8 +311,7 @@ jobs:
           - '3.9'
           - '3.10'
           - '3.11'
-          # not working on github actions
-          #- '3.12'
+          - '3.12'
 
         exclude:
 
