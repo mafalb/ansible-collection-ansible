@@ -336,6 +336,9 @@ jobs:
           #
           - os: fedora38
             ansible_version: '2.12'
+          - os: fedora38
+            python_version: '3.12'
+
 
           # no python3.x-setuptool package
           # therefore only ansible that support 3.12 are possible
