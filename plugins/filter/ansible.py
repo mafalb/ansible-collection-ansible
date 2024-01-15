@@ -3,16 +3,17 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 
 from __future__ import (absolute_import, division, print_function)
+import sys
+import yaml
+
 try:
-    from pkg_resources import Requirement as Pkgreq
-except ImportError:
+    from packaging.requirements import Requirement as Pkgreq
+except ImportError:  # make ansible-test sanity happy
     Pkgreq = None
 from ansible.module_utils.six import raise_from
 from ansible.errors import (
     AnsibleFilterError,
 )
-import sys
-import yaml
 from os.path import dirname
 __metaclass__ = type
 
@@ -26,28 +27,16 @@ datafile.close()
 def parse_requirement(arg_req):
     try:
         # '_ansible' is not a valid pip name
-        req = Pkgreq.parse(arg_req.replace('_ansible', 'ansible'))
+        req = Pkgreq(arg_req.replace('_ansible', 'ansible'))
     except Exception as e:
         raise_from(AnsibleFilterError(
             "not a valid pip specifier: {s} {ss}".format(s=arg_req,
                                                          ss=str(e))), e
                    )
-    if hasattr(req, 'name'):
-        name = req.name
-        spec = req.specifier
-        specstr = str(req.specifier)
-        contains_function = req.specifier.contains
-    elif hasattr(req, 'key'):
-        name = req.key
-        if req.specs:
-            spec = req.specs[0]
-            specstr = spec[0] + spec[1]
-        else:
-            spec = None
-            specstr = ''
-        contains_function = req.__contains__
-    else:
-        raise AnsibleFilterError("no valid Requirements {x}".format(x=req))
+    name = req.name
+    spec = req.specifier
+    specstr = str(req.specifier)
+    contains_function = req.specifier.contains
     return name, spec, specstr, contains_function
 
 
