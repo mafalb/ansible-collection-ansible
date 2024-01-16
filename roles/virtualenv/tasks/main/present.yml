@@ -11,9 +11,9 @@
       ansible.builtin.debug:
         var: __virtualenv
 
-    - name: Debug virtualenv_interpreter
+    - name: Debug virtualenv_python
       ansible.builtin.debug:
-        var: virtualenv_interpreter
+        var: virtualenv_python
 
     - name: Debug __virtualenv_interpreter
       ansible.builtin.debug:
@@ -21,7 +21,7 @@
 
 - name: Get info about targeted python interpreter
   mafalb.ansible.python_info:
-    executable: "{{ virtualenv_interpreter | default(ansible_python.executable) }}"
+    executable: "{{ virtualenv_python | default(ansible_python.executable) }}"
   register: __reg_targeted_python
 
 - name: Debug targeted python interpreter
@@ -31,7 +31,7 @@
 - name: Get OS specific variables
   with_first_found:
     # the following does not work. it is possible that the virtualenv does already exist.
-    # in that case, if no virtualenv_interpreter is given as argument, it could be
+    # in that case, if no virtualenv_python is given as argument, it could be
     # that the used interpreter in the existing virtualenv is different from the ansible python.
     #
     #  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}-\

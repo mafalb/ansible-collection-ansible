@@ -8,7 +8,7 @@
     # this is used if molecule_ansible_version is argument
     - role: mafalb.ansible.virtualenv
       virtualenv: ~/.virtualenvs/molecule  # noqa var-naming[no-role-prefix]
-      virtualenv_interpreter: "{{ molecule_python_version|default('python3') }}"
+      virtualenv_python: "{{ molecule_python_version|default('python3') }}"
       virtualenv_packages:
         - _ansible=={{ molecule_ansible_version }}
         - ansible-lint
@@ -20,7 +20,7 @@
     # this is used if molecule_ansible_version is not argument
     - role: mafalb.ansible.virtualenv
       virtualenv: ~/.virtualenvs/molecule  # noqa var-naming[no-role-prefix]
-      virtualenv_interpreter: "{{ molecule_python_version|default('python3') }}"
+      virtualenv_python: "{{ molecule_python_version|default('python3') }}"
       virtualenv_packages:
         - _ansible
         - ansible-lint

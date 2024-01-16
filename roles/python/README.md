@@ -9,6 +9,9 @@
 |RHEL 8|python2|python3|python3|
 |Fedora|python2|python3|python3|
 
+https://bugzilla.redhat.com/show_bug.cgi?id=1932650
+https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=2093589
+
 ## Basic Usage
 
 ```yaml
