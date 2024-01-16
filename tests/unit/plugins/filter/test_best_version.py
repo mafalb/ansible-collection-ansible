@@ -64,11 +64,13 @@ T_WITH_PYTHON = (
     (['_ansible'], '3.7', data['latest_ansible_version']['2.11']),
     (['_ansible~=2.11.6', '_ansible_test'], '3.8',
      data['latest_ansible_version']['2.11']),
+    (['ansible'], '3.12', data['latest_ansible_version']['2.16']),
 )
 
 FAIL_CASES = (
     (['_ansible=="2.9"'], AnsibleFilterError),
     (['ansible=="2.9"'], AnsibleFilterError),
+    (['ansible-core', 'selinux'], AnsibleFilterError),
 )
 
 

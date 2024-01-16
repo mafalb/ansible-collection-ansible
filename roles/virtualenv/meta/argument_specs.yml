@@ -43,6 +43,6 @@ argument_specs:
         type: path
         default: ~/.virtualenvs/ansible
 
-      virtualenv_interpreter:
+      virtualenv_python:
         description: The path to the python interpreter
         type: path

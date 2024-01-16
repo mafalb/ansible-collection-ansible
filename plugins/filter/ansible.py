@@ -159,7 +159,7 @@ def best_version(arg_packages, python_version=None):
             break
     name, spec, specstr, req_contains = parse_requirement(s)
     if name != 'ansible':
-        raise AnsibleFilterError("not '_ansible': {str}".format(str=name))
+        raise AnsibleFilterError("There is no '_ansible' in package list: {str}".format(str=name))
 
     # exact version is requested, expand to full version if necessary
     # it could be that that's not compatible with requested python version
