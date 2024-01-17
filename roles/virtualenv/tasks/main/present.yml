@@ -190,7 +190,6 @@
         name: cython<3.0.0
         virtualenv: "{{ __reg_venv.virtualenv }}"
         extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }}
-          -c {{ __reg_venv.virtualenv }}/virtualenv.constraints.txt
           -c {{ __reg_venv.virtualenv }}/ansible.constraints.txt
           -c {{ __reg_venv.virtualenv }}/constraints.txt"
     - name: Install pyyaml with --no-build-isolation
@@ -198,7 +197,6 @@
         name: pyyaml
         virtualenv: "{{ __reg_venv.virtualenv }}"
         extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }}
-          -c {{ __reg_venv.virtualenv }}/virtualenv.constraints.txt
           -c {{ __reg_venv.virtualenv }}/ansible.constraints.txt
           -c {{ __reg_venv.virtualenv }}/constraints.txt --no-build-isolation"
 
