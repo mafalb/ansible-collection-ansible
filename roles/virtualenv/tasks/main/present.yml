@@ -206,7 +206,6 @@
   ansible.builtin.pip:
     name: "{{ __virtualenv_packages }}"
     extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }}
-      -c {{ __reg_venv.virtualenv }}/virtualenv.constraints.txt
       -c {{ __reg_venv.virtualenv }}/ansible.constraints.txt
       -c {{ __reg_venv.virtualenv }}/constraints.txt"
     virtualenv: "{{ __reg_venv.virtualenv }}"
