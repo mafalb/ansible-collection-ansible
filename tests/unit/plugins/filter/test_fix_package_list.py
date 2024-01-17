@@ -5,7 +5,7 @@
 from __future__ import (absolute_import, division, print_function)
 from ansible_collections.mafalb.ansible.plugins.filter.ansible import (
     pip_package_list,
-    version2int,
+    __version2int,
 )
 __metaclass__ = type
 
@@ -16,7 +16,7 @@ datafile = open('roles/virtualenv/vars/data.yml', 'r')
 data = yaml.load(datafile, Loader=yaml.Loader)
 datafile.close()
 
-latest = sorted(data['latest_ansible_version'], key=version2int)[-1]
+latest = sorted(data['latest_ansible_version'], key=__version2int)[-1]
 
 TEST_CASES = (
     (['_ansible'], ['ansible-core']),

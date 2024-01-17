@@ -14,6 +14,10 @@ latest_ansible_version:  # noqa var-naming[no-role-prefix]
   "2.15": 2.15.8
   "2.16": 2.16.2
 
+ansible_rc_versions:
+  "2.12":
+    - 2.12.0rc1
+
 ansible_test_packages:  # noqa var-naming[no-role-prefix]
   "2.9":
     - mock

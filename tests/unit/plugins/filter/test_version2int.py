@@ -5,7 +5,7 @@
 from __future__ import (absolute_import, division, print_function)
 from ansible.errors import AnsibleFilterError
 from ansible_collections.mafalb.ansible.plugins.filter.ansible import (
-    version2int
+    __version2int
 )
 __metaclass__ = type
 
@@ -33,21 +33,21 @@ VERSION2INT_SPECIAL_CASES = (
 
 @pytest.mark.parametrize('version, expected', VERSION2INT_TEST_CASES)
 def test_version2int(version, expected):
-    actual = version2int(version)
+    actual = __version2int(version)
     assert actual == expected, "value was not {x} but {y}".format(
         x=expected, y=actual
     )
 
 
 def test_version2int_relative():
-    assert version2int('2.9.10') < version2int('2.10.0')
-    assert version2int('2.9.99') < version2int('2.10.0')
+    assert __version2int('2.9.10') < __version2int('2.10.0')
+    assert __version2int('2.9.99') < __version2int('2.10.0')
 
 
 @pytest.mark.parametrize('version', VERSION2INT_SPECIAL_CASES)
 def test_version2int_special_cases(version):
     try:
-        x = version2int(version)
+        x = __version2int(version)
     except (AnsibleFilterError):
         pass
     try:
