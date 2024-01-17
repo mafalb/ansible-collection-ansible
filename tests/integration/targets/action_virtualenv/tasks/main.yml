@@ -17,7 +17,7 @@
       mafalb.ansible.virtualenv:
         virtualenv: ~/.virtualenvs/virtualenv-test1
         name:
-          - _ansible
+          - ansible-core
           - selinux
 
     - name: Assertions | check mode
@@ -37,7 +37,7 @@
       mafalb.ansible.virtualenv:
         virtualenv: ~/.virtualenvs/virtualenv-test1
         name:
-          - _ansible
+          - ansible-core
           - selinux
 
     - name: Debug _result
@@ -61,7 +61,7 @@
       mafalb.ansible.virtualenv:
         virtualenv: ~/.virtualenvs/virtualenv-test1
         name:
-          - _ansible
+          - ansible-core
           - selinux
 
     - name: Assertions | Idempotence
