@@ -54,7 +54,7 @@ TEST_CASES_WITH_PYTHON = (
 
 @pytest.mark.parametrize('in_list, out_list', TEST_CASES)
 def test_package_list(in_list, out_list):
-    actual = package_list(in_list)
+    package_list(in_list)
     for req in out_list:
         assert req in in_list, "'{req}' is not in '{res}'".format(req=req, res=in_list)
 
