@@ -95,14 +95,12 @@
 - name: Ensure that packages can't pull in unwanted versions of some packages
   block:
     - name: Constraints file virtualenv.constraints.txt is present
-      ansible.builtin.template:
-        src: constraints/virtualenv.txt.j2
-        dest: "{{ __reg_venv.virtualenv }}/virtualenv.constraints.txt"
-        backup: true
-        mode: "0644"
+      ansible.builtin.file:
+        path: "{{ __reg_venv.virtualenv }}/virtualenv.constraints.txt"
+        state: absent
     - name: Constraints file ansible.constraints.txt is present
       ansible.builtin.template:
-        src: constraints/ansible.txt.j2
+        src: constraints/constraints.txt.j2
         dest: "{{ __reg_venv.virtualenv }}/ansible.constraints.txt"
         backup: true
         mode: "0644"
