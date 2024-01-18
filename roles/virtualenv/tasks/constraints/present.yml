@@ -41,7 +41,10 @@
       ansible.builtin.shell:
         cmd: |
           set -o pipefail
+          echo '# {% raw %}'
           cat *.txt|grep -Ev -e "^git\+" -e "^[^[:space:]]+\\["
+          echo
+          echo -e "# {% endraw %}"
         args:
           chdir: /tmp/ansible.git/test/lib/ansible_test/_data/requirements
       changed_when: false
@@ -54,7 +57,7 @@
     - name: Constraints file for ansible-test is present
       ansible.builtin.copy:
         content: "{{ __constraints.stdout | default(__constraints_29.stdout) }}"
-        dest: "{{ role_path }}/files/constraints/ansible-test/v{{ __mafalb_ansible_version }}.txt"
+        dest: "{{ role_path }}/templates/ansible-test-constraints/v{{ __mafalb_ansible_version }}.txt"
         backup: true
         mode: "0644"
         force: false

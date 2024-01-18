@@ -1,0 +1,40 @@
+# {{ ansible_managed }}
+pip{{ virtualenv_implicit_packages.pip }}
+setuptools{{ virtualenv_implicit_packages.setuptools }}
+
+{% if __virtualenv_ansible_version is version('2.13', '<') %}
+{% if __virtualenv_ansible_version is version('2.12.0', '>=') %}
+# older Pyyaml breaks with cython 3
+# https://github.com/yaml/pyyaml/issues/724 
+cython<3.0.0 ; python_version == '3.10'
+{% endif %}
+{% endif %}
+# {{ ansible_managed }}
+{% if __virtualenv_ansible_version is version('2.10','<') %}
+voluptuous >= 0.11.0, < 0.13 ; python_version == '2.7'
+{% endif %}
+{% if __virtualenv_ansible_version is version('2.10','<') %}
+jinja2<3.1
+{% endif %}
+cryptography<3.1 ; python_version == '3.5'
+{% if virtualenv_default_openssl_version is defined %}
+cryptography{{ virtualenv_cryptography_specifier[virtualenv_default_openssl_version] }}
+{% endif %}
+
+{% if __virtualenv_ansible_version is version('2.11','<') %}
+# ansible-lint 6 is pulling in ansible-core and this is conflicting
+# with ansible 2.9 and ansible 2.10
+ansible-lint <6
+{% endif %}
+
+{% if __virtualenv_ansible_version is version('2.13.0','<') %}
+{% if __virtualenv_ansible_version is version('2.12.0','>=') %}
+# https://github.com/ansible/ansible-lint/issues/3408
+ansible-compat<4 ; python_version == '3.9'
+ansible-compat<4 ; python_version == '3.10'
+{% endif %}
+{% endif %}
+
+selinux <0.3.0
+
+{% include 'ansible-test-constraints/v' + __virtualenv_ansible_version + '.txt' %}

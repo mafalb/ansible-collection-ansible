@@ -111,8 +111,8 @@ class ActionModule(ActionBase):
 
                 new_task.args.update(
                     dict(
-                        src=result_file,
-                        dest=dest,
+                        src=constraints/constraints.txt.j2,
+                        dest=virtualenv + "/" + constraints.txt,
                     ),
                 )
                 copy_action = self._shared_loader_obj.action_loader.get(

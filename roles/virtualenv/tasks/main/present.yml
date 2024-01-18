@@ -99,14 +99,12 @@
         path: "{{ __reg_venv.virtualenv }}/virtualenv.constraints.txt"
         state: absent
     - name: Constraints file ansible.constraints.txt is present
-      ansible.builtin.template:
-        src: constraints/constraints.txt.j2
-        dest: "{{ __reg_venv.virtualenv }}/ansible.constraints.txt"
-        backup: true
-        mode: "0644"
+      ansible.builtin.file:
+        path: "{{ __reg_venv.virtualenv }}/ansible.constraints.txt"
+        state: absent
     - name: Constraints file for ansible-test is present
-      ansible.builtin.copy:
-        src: constraints/ansible-test/v{{ __virtualenv_ansible_version }}.txt
+      ansible.builtin.template:
+        src: constraints.txt.j2
         dest: "{{ __reg_venv.virtualenv }}/constraints.txt"
         backup: true
         mode: "0644"
@@ -190,21 +188,18 @@
         name: cython<3.0.0
         virtualenv: "{{ __reg_venv.virtualenv }}"
         extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }}
-          -c {{ __reg_venv.virtualenv }}/ansible.constraints.txt
           -c {{ __reg_venv.virtualenv }}/constraints.txt"
     - name: Install pyyaml with --no-build-isolation
       ansible.builtin.pip:
         name: pyyaml
         virtualenv: "{{ __reg_venv.virtualenv }}"
         extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }}
-          -c {{ __reg_venv.virtualenv }}/ansible.constraints.txt
           -c {{ __reg_venv.virtualenv }}/constraints.txt --no-build-isolation"
 
 - name: Packages are present
   ansible.builtin.pip:
     name: "{{ __virtualenv_packages }}"
     extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }}
-      -c {{ __reg_venv.virtualenv }}/ansible.constraints.txt
       -c {{ __reg_venv.virtualenv }}/constraints.txt"
     virtualenv: "{{ __reg_venv.virtualenv }}"
   register: __pip_packages
