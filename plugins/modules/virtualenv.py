@@ -32,6 +32,11 @@ options:
       - _ansible
     type: list
     elements: str
+  src:
+    description:
+      - The source of a template for a pip constraints file
+    required: false
+    type: str
 """
 
 EXAMPLES = r"""

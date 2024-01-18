@@ -1,0 +1,120 @@
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+- name: Virtualenv | Test creation of mafalb.ansible.virtualenv
+  # unset PYTHONPATH, it contains ansible-core
+  # The contents would be visible in virtualenv otherwise
+  #
+  environment:
+    PYTHONPATH: ''
+  block:
+
+    - name: Virtualenv | Virtualenv virtualenv-test1 is present | check mode
+      check_mode: true
+      register: _result
+      mafalb.ansible.virtualenv:
+        virtualenv: ~/.virtualenvs/virtualenv-test1
+        name:
+          - ansible-core
+          - selinux
+
+    - name: Virtualenv | Assertions | check mode
+      ansible.builtin.assert:
+        that:
+          - not _result.failed
+          - _result.changed
+          - not _result.results[0].changed
+          - _result.results[1].changed
+          - not _result.results[2]
+          - _result.results[3].changed
+          - not _result.results[0].failed
+          - not _result.results[1].failed
+          - not _result.results[3].failed
+
+    - name: Virtualenv | Virtualenv virtualenv-test1 is present
+      register: _result
+      mafalb.ansible.virtualenv:
+        virtualenv: ~/.virtualenvs/virtualenv-test1
+        name:
+          - ansible-core
+          - selinux
+
+    - name: Virtualenv | Debug _result
+      ansible.builtin.debug:
+        var: _result
+
+    - name: Virtualenv | Assertions
+      ansible.builtin.assert:
+        that:
+          - _result.changed
+          - not _result.failed
+          - not _result.results[0].changed
+          - _result.results[1].changed
+          - not _result.results[2]
+          - _result.results[3].changed
+          - not _result.results[0].failed
+          - not _result.results[1].failed
+          - not _result.results[3].failed
+
+    - name: Virtualenv | Virtualenv virtualenv-test1 is present | Idempotence
+      register: _result
+      mafalb.ansible.virtualenv:
+        virtualenv: ~/.virtualenvs/virtualenv-test1
+        name:
+          - ansible-core
+          - selinux
+
+    - name: Virtualenv | Assertions | Idempotence
+      ansible.builtin.assert:
+        that:
+          - not _result.changed
+          - not _result.failed
+          - not _result.results[0].changed
+          - not _result.results[1].changed
+          - not _result.results[2]
+          - not _result.results[3].changed
+          - not _result.results[0].failed
+          - not _result.results[1].failed
+          - not _result.results[3].failed
+
+    - name: Virtualenv | Get ansible version
+      ansible.builtin.command:
+        cmd: ~/.virtualenvs/virtualenv-test1/bin/ansible --version
+      changed_when: false
+      register: _result
+
+    - name: Virtualenv | Debug ansible
+      ansible.builtin.debug:
+        var: _result
+
+    - name: Virtualenv | cat constraints file
+      register: _result
+      ansible.builtin.command:
+        cmd: cat ~/.virtualenvs/virtualenv-test1/constraints.txt
+      failed_when: _result.rc == 0
+      changed_when: false
+
+    - name: Virtualenv | add a constraints file to existing virtualenv
+      register: _result
+      mafalb.ansible.virtualenv:
+        virtualenv: ~/.virtualenvs/virtualenv-test1
+        src: constraints.txt.j2
+        name:
+          - ansible-core
+          - selinux
+
+    - name: Virtualenv | Assertions
+      ansible.builtin.assert:
+        that:
+          - _result.changed
+          - not _result.failed
+          - not _result.results[0].changed
+          - not _result.results[1].changed
+          - _result.results[2].changed
+          - not _result.results[3].changed
+          - not _result.results[0].failed
+          - not _result.results[1].failed
+          - not _result.results[3].failed
+...

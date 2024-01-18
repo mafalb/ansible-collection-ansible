@@ -36,11 +36,14 @@ class ActionModule(ActionBase):
                                              task_vars=task_vars)
         return module_return
 
-    def constraints(self, task_vars=None):
+    def constraints(self, constraints_src=None, task_vars=None):
+
+        module_return = {}
 
         # assign to local vars for ease of use
-        source = self._task.args.get('src', None)
-        dest = self._task.args.get('dest', None)
+        source = constraints_src
+        virtualenv = self._task.args.get('virtualenv', None)
+        dest = virtualenv + '/constraints.txt'
         state = self._task.args.get('state', None)
         newline_sequence = self._task.args.get('newline_sequence', self.DEFAULT_NEWLINE_SEQUENCE)
         output_encoding = self._task.args.get('output_encoding', 'utf-8') or 'utf-8'
@@ -55,13 +58,18 @@ class ActionModule(ActionBase):
         try:
             if state is not None:
                 raise AnsibleActionFail("'state' cannot be specified on a template")
-            if source is None or dest is None:
-                raise AnsibleActionFail("src and dest are required")
+            if constraints_src is None:
+                raise AnsibleActionFail("src is required")
+            if dest is None:
+                raise AnsibleActionFail("dest is required")
+            if virtualenv is None:
+                raise AnsibleActionFail("virtualenv is required")
             elif newline_sequence not in allowed_sequences:
                 raise AnsibleActionFail("newline_sequence needs to be one of: \n, \r or \r\n")
             else:
                 try:
                     source = self._find_needle('templates', source)
+                    display.debug("template source: {s}".format(s=source))
                 except AnsibleError as e:
                     raise AnsibleActionFail(to_text(e))
             # Get vault decrypted tmp file
@@ -79,13 +87,24 @@ class ActionModule(ActionBase):
                     except UnicodeError:
                         raise AnsibleActionFail("Template source files must be utf-8 encoded")
 
+                # set jinja2 internal search path for includes
                 searchpath = task_vars.get('ansible_search_path', [])
+                searchpath.extend([self._loader._basedir, os.path.dirname(source)])
+
+                # We want to search into the 'templates' subdir of each search path in
+                # addition to our original search paths.
+                newsearchpath = []
+                for p in searchpath:
+                    newsearchpath.append(os.path.join(p, 'templates'))
+                    newsearchpath.append(p)
+                searchpath = newsearchpath
+
                 # add ansible 'template' vars
                 temp_vars = task_vars.copy()
                 # NOTE in the case of ANSIBLE_DEBUG=1 task_vars is VarsWithSources(MutableMapping)
                 # so | operator cannot be used as it can be used only on dicts
                 # https://peps.python.org/pep-0584/#what-about-mapping-and-mutablemapping
-                temp_vars.update(generate_ansible_template_vars(self._task.args.get('src', None), source, dest))
+                temp_vars.update(generate_ansible_template_vars(constraints_src, source, dest))
 
                 # force templar to use AnsibleEnvironment to prevent issues with native types
                 # https://github.com/ansible/ansible/issues/46169
@@ -93,7 +112,8 @@ class ActionModule(ActionBase):
                                                           searchpath=searchpath,
                                                           newline_sequence=newline_sequence,
                                                           available_variables=temp_vars)
-                resultant = templar.do_template(template_data, preserve_trailing_newlines=True, escape_backslashes=False)
+                overrides = dict()
+                resultant = templar.do_template(template_data, preserve_trailing_newlines=True, escape_backslashes=False, overrides=overrides)
             except AnsibleAction:
                 raise
             except Exception as e:
@@ -111,10 +131,13 @@ class ActionModule(ActionBase):
 
                 new_task.args.update(
                     dict(
-                        src=constraints/constraints.txt.j2,
-                        dest=virtualenv + "/" + constraints.txt,
+                        src=result_file,
+                        dest=dest
                     ),
                 )
+                del new_task.args['name']
+                del new_task.args['virtualenv']
+
                 copy_action = self._shared_loader_obj.action_loader.get(
                     'copy',
                     task=new_task,
@@ -124,16 +147,16 @@ class ActionModule(ActionBase):
                     templar=self._templar,
                     shared_loader_obj=self._shared_loader_obj
                 )
-                copy_action.update(copy_action.run(task_vars=task_vars))
+                module_return.update(copy_action.run(task_vars=task_vars))
             finally:
                 shutil.rmtree(to_bytes(local_tempdir, errors='surrogate_or_strict'))
 
         except AnsibleAction as e:
-            copy_action.update(e.result)
+            module_return.update(e.result)
         finally:
             self._remove_tmp_path(self._connection._shell.tmpdir)
 
-        return copy_action
+        return module_return
 
     def run(self, tmp=None, task_vars=None):
 
@@ -144,6 +167,12 @@ class ActionModule(ActionBase):
         # display.debug("Variables %s" % to_json(task_vars))
 
         ansible_python_executable = task_vars.get('ansible_python')['executable']
+        if 'src' in module_args:
+            constraints_src = module_args["src"]
+
+            # pip module is crashing if this is present
+            #
+            del module_args["src"]
 
         # Note that the virtualenv may exist already and could have been created with
         # another interpreter. If the virtualenv already exists override
@@ -185,21 +214,29 @@ class ActionModule(ActionBase):
 
         # template constraints files
         #
-        if 'constraints' in module_args:
-            self.constraints(task_vars=task_vars)
-
-        # install the packages
-        ret2 = self._execute_module(module_name='pip', module_args=module_args, task_vars=task_vars)
-        ret2['item'] = 'install_packages'
-        if 'failed' not in ret2:
+        ret2 = {}
+        if 'constraints_src' in locals():
+            ret2 = self.constraints(constraints_src, task_vars=task_vars)
+            ret2['item'] = "Template constraints file"
+            if 'failed' in ret2 and ret2['failed']:
+                raise AnsibleActionFail("Template constraints file has failed: {e}".format(e=ret2))
             ret2['failed'] = False
 
+        # install the packages
+        ret3 = self._execute_module(module_name='pip', module_args=module_args, task_vars=task_vars)
+        ret3['item'] = 'install_packages'
+        if 'failed' not in ret3:
+            ret3['failed'] = False
+
         module_return = {}
-        module_return['failed'] = ret2['failed']
+        module_return['failed'] = ret3['failed']
         module_return['ansible_version'] = best_ansible_version
         module_return['python_version'] = python_version
         module_return['packages'] = packages
-        if 'changed' in ret2:
-            module_return['changed'] = ret2['changed']
-        module_return['results'] = [ret0, ret1, ret2]
+        for ret in (ret0, ret1, ret2, ret3):
+            if 'changed' in ret:
+                if ret['changed']:
+                    module_return['changed'] = True
+                    break
+        module_return['results'] = [ret0, ret1, ret2, ret3]
         return dict(module_return)
