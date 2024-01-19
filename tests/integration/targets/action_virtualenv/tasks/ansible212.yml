@@ -1,0 +1,108 @@
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+- name: Ansible212 | Test creation of mafalb.ansible.virtualenv with constraints
+  # unset PYTHONPATH, it contains ansible-core
+  # The contents would be visible in virtualenv otherwise
+  #
+  environment:
+    PYTHONPATH: ''
+  when:
+    # Test this only on 3.10
+    - ansible_python.version.major == 3
+    - ansible_python.version.minor == 10
+  block:
+
+    - name: Ansible212 | Virtualenv virtualenv-test3 is present | check mode
+      check_mode: true
+      register: _result
+      mafalb.ansible.virtualenv:
+        virtualenv: ~/.virtualenvs/virtualenv-test3
+        src: constraints.txt.j2
+        name:
+          - ansible-core~=2.12.0
+          - selinux
+
+    - name: Ansible212 | Assertions | check mode
+      ansible.builtin.assert:
+        that:
+          - not _result.failed
+          - _result.changed
+          - not _result.results[0].changed
+          - _result.results[1].changed
+          - _result.results[3].changed
+          - not _result.results[0].failed
+          - not _result.results[1].failed
+          - not _result.results[3].failed
+
+    - name: Ansible212 | Virtualenv virtualenv-test3 is present
+      register: _result
+      mafalb.ansible.virtualenv:
+        virtualenv: ~/.virtualenvs/virtualenv-test3
+        src: constraints.txt.j2
+        name:
+          - ansible-core~=2.12.0
+          - selinux
+
+    - name: Ansible212 | Debug _result
+      ansible.builtin.debug:
+        var: _result
+
+    - name: Ansible212 | Stat constraints file
+      register: _stat
+      ansible.builtin.stat:
+        path: "~/.virtualenvs/virtualenv-test3"
+
+    - name: Ansible212 | grep constraints file
+      ansible.builtin.command:
+        cmd: grep "bla blubb ogo" ~/.virtualenvs/virtualenv-test3/constraints.txt
+      changed_when: false
+
+    - name: Ansible212 | Assertions
+      ansible.builtin.assert:
+        that:
+          - _result.changed
+          - not _result.failed
+          - not _result.results[0].changed
+          - _result.results[1].changed
+          - _result.results[3].changed
+          - not _result.results[0].failed
+          - not _result.results[1].failed
+          - not _result.results[3].failed
+          - _stat.stat.exists
+
+
+    - name: Ansible212 | Virtualenv virtualenv-test3 is present | Idempotence
+      register: _result
+      mafalb.ansible.virtualenv:
+        virtualenv: ~/.virtualenvs/virtualenv-test3
+        src: constraints.txt.j2
+        name:
+          - ansible-core~=2.12.0
+          - selinux
+
+    - name: Ansible212 | Assertions | Idempotence
+      ansible.builtin.assert:
+        that:
+          - not _result.changed
+          - not _result.failed
+          - not _result.results[0].changed
+          - not _result.results[1].changed
+          - not _result.results[3].changed
+          - not _result.results[0].failed
+          - not _result.results[1].failed
+          - not _result.results[3].failed
+
+    - name: Ansible212 | Get ansible version
+      ansible.builtin.command:
+        cmd: ~/.virtualenvs/virtualenv-test3/bin/ansible --version
+      changed_when: false
+      register: _result
+
+    - name: Ansible212 | Debug ansible
+      ansible.builtin.debug:
+        var: _result
+
+...

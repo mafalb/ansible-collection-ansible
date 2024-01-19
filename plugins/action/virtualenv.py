@@ -15,7 +15,7 @@ from ansible.errors import AnsibleError, AnsibleFileNotFound, AnsibleAction, Ans
 from ansible.module_utils.common.text.converters import to_bytes, to_text
 from ansible.plugins.filter.core import to_json
 from ansible.template import generate_ansible_template_vars, AnsibleEnvironment
-from ansible_collections.mafalb.ansible.plugins.filter.ansible import package_list
+from ansible_collections.mafalb.ansible.plugins.filter.ansible import package_list, __majmin as majmin
 from ansible.utils.display import Display
 
 display = Display()
@@ -158,6 +158,24 @@ class ActionModule(ActionBase):
 
         return module_return
 
+    def install_packages(self, packages, extra_args=None, task_vars=None):
+
+        # Sanity checks
+        #
+        if not isinstance(packages, list):
+            raise AnsibleActionFail("Packages not a list {s}".format(s=packages))
+        if extra_args is not None:
+            if not isinstance(extra_args, str):
+                raise AnsibleActionFail("Extra args not a string {s}".format(s=extra_args))
+
+        module_args = self._task.args.copy()
+        module_args['name'] = packages
+        del module_args['src']
+        if extra_args is not None:
+            module_args['extra_args'] = extra_args
+        ret = self._execute_module(module_name='pip', module_args=module_args, task_vars=task_vars)
+        return ret
+
     def run(self, tmp=None, task_vars=None):
 
         self._supports_check_mode = True
@@ -222,7 +240,24 @@ class ActionModule(ActionBase):
                 raise AnsibleActionFail("Template constraints file has failed: {e}".format(e=ret2))
             ret2['failed'] = False
 
+        # Install workarounds for old ansible versions
+        #
+        ret4 = {}
+        ret5 = {}
+        if majmin(best_ansible_version) == '2.12' and python_version == '3.10':
+
+            ret4 = self.install_packages(['cython<3.0.0'], task_vars=task_vars)
+            if ret4.get('failed'):
+                raise AnsibleActionFail("Install has failed: {e}".format(e=ret4))
+            ret4['item'] = "Install cython"
+
+            ret5 = self.install_packages(packages=['pyyaml'], extra_args="--no-build-isolation", task_vars=task_vars)
+            if ret5.get('failed'):
+                raise AnsibleActionFail("Install has failed: {e}".format(e=ret4))
+            ret5['item'] = "Install pyyaml"
+
         # install the packages
+        #
         ret3 = self._execute_module(module_name='pip', module_args=module_args, task_vars=task_vars)
         ret3['item'] = 'install_packages'
         if 'failed' not in ret3:
@@ -238,5 +273,5 @@ class ActionModule(ActionBase):
                 if ret['changed']:
                     module_return['changed'] = True
                     break
-        module_return['results'] = [ret0, ret1, ret2, ret3]
+        module_return['results'] = [ret0, ret1, ret2, ret3, ret4, ret5]
         return dict(module_return)
