@@ -25,13 +25,14 @@
         that:
           - not _result.failed
           - _result.changed
-          - not _result.results[0].changed
-          - _result.results[1].changed
-          - not _result.results[2]
-          - _result.results[3].changed
+          - not _result.results[0].changed  # python info
           - not _result.results[0].failed
-          - not _result.results[1].failed
-          - not _result.results[3].failed
+          - _result.results[1].changed      # virtualenv create
+          - _result.results[1].failed is not defined
+          - not _result.results[2]          # constraints
+          - _result.results[2].failed is not defined
+          - _result.results[3].changed
+          - _result.results[3].failed is not defined
 
     - name: Virtualenv | Virtualenv virtualenv-test1 is present
       register: _result
@@ -48,15 +49,16 @@
     - name: Virtualenv | Assertions
       ansible.builtin.assert:
         that:
-          - _result.changed
           - not _result.failed
-          - not _result.results[0].changed
-          - _result.results[1].changed
-          - not _result.results[2]
-          - _result.results[3].changed
+          - _result.changed
+          - not _result.results[0].changed  # python info
           - not _result.results[0].failed
-          - not _result.results[1].failed
-          - not _result.results[3].failed
+          - _result.results[1].changed      # virtualenv create
+          - _result.results[1].failed is not defined
+          - not _result.results[2]          # constraints
+          - _result.results[2].failed is not defined
+          - _result.results[3].changed
+          - _result.results[3].failed is not defined
 
     - name: Virtualenv | Virtualenv virtualenv-test1 is present | Idempotence
       register: _result
@@ -76,8 +78,9 @@
           - not _result.results[2]
           - not _result.results[3].changed
           - not _result.results[0].failed
-          - not _result.results[1].failed
-          - not _result.results[3].failed
+          - _result.results[1].failed is not defined
+          - _result.results[2].failed is not defined
+          - _result.results[3].failed is not defined
 
     - name: Virtualenv | Get ansible version
       ansible.builtin.command:
@@ -110,11 +113,12 @@
         that:
           - _result.changed
           - not _result.failed
-          - not _result.results[0].changed
-          - not _result.results[1].changed
-          - _result.results[2].changed
-          - not _result.results[3].changed
+          - not _result.results[0].changed  # python info
           - not _result.results[0].failed
-          - not _result.results[1].failed
-          - not _result.results[3].failed
+          - not _result.results[1].changed      # virtualenv create
+          - _result.results[1].failed is not defined
+          - _result.results[2].changed  # constraints
+          - _result.results[2].failed is not defined
+          - not _result.results[3].changed
+          - _result.results[3].failed is not defined
 ...

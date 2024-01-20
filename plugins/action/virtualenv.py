@@ -26,6 +26,28 @@ class ActionModule(ActionBase):
     TRANSFERS_FILES = True
     DEFAULT_NEWLINE_SEQUENCE = "\n"
 
+    def get_python_executable(self, task_vars=None):
+
+        # Note that the virtualenv may exist already and could have been created with
+        # another interpreter. If the virtualenv already exists override
+        # python_executable
+        #
+        virtualenv = self._task.args.get('virtualenv')
+        ansible_python_executable = task_vars.get('ansible_python')['executable']
+        if (os.path.exists(os.path.join(virtualenv, 'bin', 'activate')) and
+                os.path.exists(os.path.join(virtualenv, 'bin', 'python'))):
+            python_executable = os.path.join(virtualenv, 'bin', 'python')
+        else:
+            python_executable = self._task.args.get('virtualenv_python', ansible_python_executable)
+        return python_executable
+
+    def set_virtualenv_command(self, task_vars=None):
+
+        try:
+            self._task.args['virtualenv_command'] = self.get_python_executable(task_vars=task_vars) + " -m venv"
+        except Exception as e:
+            raise AnsibleActionFail("Could not get python interpreter {e}".format(e=e))
+
     def python_info(self, executable, task_vars=None):
         module_args = {}
         module_args['executable'] = executable
@@ -137,6 +159,7 @@ class ActionModule(ActionBase):
                 )
                 del new_task.args['name']
                 del new_task.args['virtualenv']
+                del new_task.args['virtualenv_command']
 
                 copy_action = self._shared_loader_obj.action_loader.get(
                     'copy',
@@ -158,7 +181,11 @@ class ActionModule(ActionBase):
 
         return module_return
 
-    def install_packages(self, packages, extra_args=None, task_vars=None):
+    def install_packages(self, packages, extra_args=None, module_args=None, task_vars=None):
+
+        # We make a copy of module_args
+        #
+        module_args = self._task.args.copy()
 
         # Sanity checks
         #
@@ -167,12 +194,15 @@ class ActionModule(ActionBase):
         if extra_args is not None:
             if not isinstance(extra_args, str):
                 raise AnsibleActionFail("Extra args not a string {s}".format(s=extra_args))
+        if not module_args.get('virtualenv_command'):
+            raise AnsibleActionFail("virtualenv command was not set")
 
-        module_args = self._task.args.copy()
         module_args['name'] = packages
-        del module_args['src']
+        if 'src' in module_args:
+            del module_args['src']
         if extra_args is not None:
             module_args['extra_args'] = extra_args
+        display.v(module_args['virtualenv_command'])
         ret = self._execute_module(module_name='pip', module_args=module_args, task_vars=task_vars)
         return ret
 
@@ -180,45 +210,27 @@ class ActionModule(ActionBase):
 
         self._supports_check_mode = True
         super(ActionModule, self).run(tmp, task_vars)
-        module_args = self._task.args.copy()
 
         # display.debug("Variables %s" % to_json(task_vars))
 
-        ansible_python_executable = task_vars.get('ansible_python')['executable']
-        if 'src' in module_args:
-            constraints_src = module_args["src"]
-
-            # pip module is crashing if this is present
-            #
-            del module_args["src"]
-
-        # Note that the virtualenv may exist already and could have been created with
-        # another interpreter. If the virtualenv already exists override
-        # python_executable
+        # set virtualenv_command
         #
-        virtualenv = self._task.args.get('virtualenv')
-        if (os.path.exists(os.path.join(virtualenv, 'bin', 'activate')) and
-                os.path.exists(os.path.join(virtualenv, 'bin', 'python'))):
-            python_executable = os.path.join(virtualenv, 'bin', 'python')
-        else:
-            python_executable = self._task.args.get('virtualenv_python', ansible_python_executable)
+        self.set_virtualenv_command(task_vars=task_vars)
 
         # Get info about the targeted python interpreter
-        ret0 = self.python_info(executable=python_executable, task_vars=task_vars)
+        ret0 = self.python_info(executable=self.get_python_executable(task_vars=task_vars), task_vars=task_vars)
+        if ret0.get('failed'):
+            raise AnsibleActionFail("Info about python interpreter has failed: {e}".format(e=ret0))
         ret0['item'] = 'python_info1'
 
         display.v("python_info1 %s" % to_json(ret0))
+        display.v("Virtualenv %s" % to_json(self._task.args.get('virtualenv')))
 
         # create the virtualenv
-        display.v("Virtualenv %s" % to_json(self._task.args.get('virtualenv')))
-        module_args['virtualenv_command'] = python_executable + " -m venv"
-        module_args_copy = dict(module_args)
-        module_args_copy['name'] = ['wheel']
-        ret1 = self._execute_module(module_name='pip', module_args=module_args_copy, task_vars=task_vars)
+        ret1 = self.install_packages(['wheel'], task_vars=task_vars)
+        if ret1.get('failed'):
+            raise AnsibleActionFail("Creation of virtualenv has failed: {e}".format(e=ret1))
         ret1['item'] = 'create_virtualenv'
-        del module_args_copy
-        if 'failed' not in ret1:
-            ret1['failed'] = False
         display.v("Create virtualenv %s" % to_json(ret1))
 
         packages = self._task.args.get('name')
@@ -233,12 +245,11 @@ class ActionModule(ActionBase):
         # template constraints files
         #
         ret2 = {}
-        if 'constraints_src' in locals():
-            ret2 = self.constraints(constraints_src, task_vars=task_vars)
+        if self._task.args.get('src'):
+            ret2 = self.constraints(self._task.args.get('src'), task_vars=task_vars)
             ret2['item'] = "Template constraints file"
-            if 'failed' in ret2 and ret2['failed']:
+            if ret2.get('failed'):
                 raise AnsibleActionFail("Template constraints file has failed: {e}".format(e=ret2))
-            ret2['failed'] = False
 
         # Install workarounds for old ansible versions
         #
@@ -258,17 +269,16 @@ class ActionModule(ActionBase):
 
         # install the packages
         #
-        ret3 = self._execute_module(module_name='pip', module_args=module_args, task_vars=task_vars)
-        ret3['item'] = 'install_packages'
-        if 'failed' not in ret3:
-            ret3['failed'] = False
+        ret3 = self.install_packages(packages, task_vars=task_vars)
+        if ret3.get('failed'):
+            raise AnsibleActionFail("Install has failed: {e}".format(e=ret3))
+        ret3['item'] = 'Install_packages'
 
         module_return = {}
-        module_return['failed'] = ret3['failed']
         module_return['ansible_version'] = best_ansible_version
         module_return['python_version'] = python_version
         module_return['packages'] = packages
-        for ret in (ret0, ret1, ret2, ret3):
+        for ret in (ret0, ret1, ret2, ret3, ret4, ret5):
             if 'changed' in ret:
                 if ret['changed']:
                     module_return['changed'] = True
