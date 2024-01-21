@@ -1,0 +1,12 @@
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+- name: Test creation of mafalb.ansible.virtualenv
+  ansible.builtin.import_tasks: virtualenv.yml
+- name: Test creation of mafalb.ansible.virtualenv with constraints
+  ansible.builtin.import_tasks: constraints.yml
+- name: Test creation of mafalb.ansible.virtualenv with ansible 2.12
+  ansible.builtin.import_tasks: ansible212.yml
+...

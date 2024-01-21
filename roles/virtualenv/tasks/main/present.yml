@@ -1,103 +1,116 @@
-# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
-- name: debug
-  block:
-
-    - name: debug __mafalb_ansible_version
-      debug: var=packages|default(mafalb_ansible_packages|default(['_ansible']))
-    - name: debug __mafalb_ansible_majmin_version
-      debug: msg="{{ __mafalb_ansible_version.split('.')[0:2]|join('.') }}"
-    - name: debug __mafalb_ansible_version
-      debug: var=__mafalb_ansible_version
-    - name: debug __mafalb_ansible_packages
-      debug: var=__mafalb_ansible_packages
-    - name: debug mafalb_ansible_virtualenv_command
-      debug: var=mafalb_ansible_virtualenv_command
+- name: Debug
   tags:
     - never
     - debug
+  block:
+    - name: Debug __virtualenv
+      ansible.builtin.debug:
+        var: __virtualenv
 
-- name: get info about targeted python interpreter
+    - name: Debug virtualenv_python
+      ansible.builtin.debug:
+        var: virtualenv_python
+
+    - name: Debug __virtualenv_interpreter
+      ansible.builtin.debug:
+        var: __virtualenv_interpreter
+
+- name: Get info about targeted python interpreter
   mafalb.ansible.python_info:
-    executable: "{{ mafalb_ansible_virtualenv_python }}"
+    executable: "{{ virtualenv_python | default(ansible_python.executable) }}"
   register: __reg_targeted_python
 
-- name: compute the best matching ansible version and fix package list
-  include_vars: runtime_vars.yml
+- name: Debug targeted python interpreter
+  ansible.builtin.debug:
+    var: __reg_targeted_python
 
-- name: get OS specific variables
+- name: Get OS specific variables
   with_first_found:
-  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}-py{{ __reg_targeted_python.version.majmin }}-{{ __mafalb_ansible_majmin_version }}.yml"
-  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}-py{{ __reg_targeted_python.version.majmin }}.yml"
-  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
-  - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
-  - "{{ ansible_os_family }}.yml"
-  include_vars:
+    # the following does not work. it is possible that the virtualenv does already exist.
+    # in that case, if no virtualenv_python is given as argument, it could be
+    # that the used interpreter in the existing virtualenv is different from the ansible python.
+    #
+    #  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}-\
+    #    py{{ __reg_targeted_python.version.majmin }}-{{ __mafalb_ansible_majmin_version }}.yml"
+    #  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}-py{{ __reg_targeted_python.version.majmin }}.yml"
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_os_family }}.yml"
+  ansible.builtin.include_vars:
     file: "{{ __vars_file }}"
   loop_control:
     loop_var: __vars_file
 
-- name: dependencies are present
+- name: Compute the best matching ansible version (if version is not specified) and fix package list
+  ansible.builtin.include_vars:
+    file: runtime_vars.yml
+
+- name: Dependencies are present
   become: true
-  package:
-    name: "{{ mafalb_ansible_system_dependencies }}"
+  ansible.builtin.package:
+    name: "{{ virtualenv_system_dependencies }}"
 
-- name: debug
-  debug: var=__reg_targeted_python.executable
-  tags:
-    - never
-    - debug
-
-- name: virtualenv is present
-  pip:
+- name: Virtualenv is present
+  ansible.builtin.pip:
     name:
-      - pip{{ mafalb_ansible_virtualenv_packages.pip }}
-      - setuptools{{ mafalb_ansible_virtualenv_packages.setuptools }}
+#      - pip{{ virtualenv_implicit_packages.pip }}
+#      - setuptools{{ virtualenv_implicit_packages.setuptools }}
       - wheel
-    virtualenv: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}"
-    virtualenv_python: "{{ mafalb_ansible_virtualenv_python if __reg_targeted_python.version.major == 2 else omit }}"
-    virtualenv_command: "{{
-      mafalb_ansible_virtualenv_command[__reg_targeted_python.version.major]
-    }}"
+    virtualenv: "{{ __virtualenv }}"
+    virtualenv_command: "{{ virtualenv_command }}"
   # register the result and enjoy the absolute path to the virtualenv
   register: __reg_venv
 
-- name: debug virtualenv
-  debug: var=__reg_venv
+- name: Get info about the real python interpreter
+  mafalb.ansible.python_info:
+    executable: "{{ __virtualenv_interpreter }}"
+  register: __reg_targeted_python
+
+- name: Debug
   tags:
     - never
     - debug
-
-# ensure that packages can't pull in other versions of some packages
-- name: constraints file virtualenv.constraints.txt is present
-  template:
-    src: constraints/virtualenv.txt.j2
-    dest: "{{ __reg_venv.virtualenv }}/virtualenv.constraints.txt"
-    backup: true
-    mode: '0644'
-
-# some extra constraints
-- name: constraints file virtualenv.constraints.txt is present
-  template:
-    src: constraints/ansible.txt.j2
-    dest: "{{ __reg_venv.virtualenv }}/ansible.constraints.txt"
-    backup: true
-    mode: '0644'
-
-- name: constraints file constraints.txt is present
   block:
-    - name: constraints file for ansible-test is present
-      copy:
-        src: constraints/ansible-test/v{{ __mafalb_ansible_version }}.txt
+    - name: Debug targeted python interpreter
+      ansible.builtin.debug:
+        var: __reg_targeted_python
+
+    - name: Debug virtualenv
+      ansible.builtin.debug:
+        var: __reg_venv
+
+    - name: Debug __virtualenv_ansible_version
+      ansible.builtin.debug:
+        var: __virtualenv_ansible_version
+
+    - name: Debug __virtualenv_packages
+      ansible.builtin.debug:
+        var: __virtualenv_packages
+
+- name: Ensure that packages can't pull in unwanted versions of some packages
+  block:
+    - name: Constraints file virtualenv.constraints.txt is present
+      ansible.builtin.file:
+        path: "{{ __reg_venv.virtualenv }}/virtualenv.constraints.txt"
+        state: absent
+    - name: Constraints file ansible.constraints.txt is present
+      ansible.builtin.file:
+        path: "{{ __reg_venv.virtualenv }}/ansible.constraints.txt"
+        state: absent
+    - name: Constraints file for ansible-test is present
+      ansible.builtin.template:
+        src: constraints.txt.j2
         dest: "{{ __reg_venv.virtualenv }}/constraints.txt"
         backup: true
-        mode: '0644'
+        mode: "0644"
 
-- name: get installed pip packages
-  pip_package_info:
+- name: Get installed pip packages
+  community.general.pip_package_info:
     clients: ["{{ __reg_venv.virtualenv }}/bin/pip"]
   register: __reg_pip
 
@@ -105,96 +118,128 @@
 # 1. ansible-base and ansible-core
 # 2. ansible-core and ansible==2.9
 # 3. ansible-base and ansible==2.9
-- name: uninstall ansible and ansible-core
-  pip:
+- name: Uninstall ansible and ansible-core
+  ansible.builtin.pip:
     name:
-    - ansible
-    - ansible-base
-    - ansible-core
+      - ansible
+      - ansible-base
+      - ansible-core
+      - ansible-lint
     state: absent
     virtualenv: "{{ __reg_venv.virtualenv }}"
   when:
-  - (('ansible-base' in __reg_pip.packages[__reg_venv.virtualenv +
-                                           '/bin/pip']) and
-     ('ansible-core' in __reg_pip.packages[__reg_venv.virtualenv +
-                                           '/bin/pip'])) or
-    ((('ansible-base' in __reg_pip.packages[__reg_venv.virtualenv +
-                                            '/bin/pip']) or
-      ('ansible-core' in __reg_pip.packages[__reg_venv.virtualenv +
-                                            '/bin/pip'])) and
-     ('ansible' in __reg_pip.packages[__reg_venv.virtualenv + '/bin/pip']) and
-     (__reg_pip.packages[__reg_venv.virtualenv +
-                         '/bin/pip']['ansible'][0]['version']) is match('2.9'))
+    - (('ansible-base' in __reg_pip.packages[__reg_venv.virtualenv + '/bin/pip']) and
+       ('ansible-core' in __reg_pip.packages[__reg_venv.virtualenv + '/bin/pip'])
+      ) or
+      ((('ansible-base' in __reg_pip.packages[__reg_venv.virtualenv + '/bin/pip']) or
+        ('ansible-core' in __reg_pip.packages[__reg_venv.virtualenv + '/bin/pip'])
+       ) and
+       ('ansible' in __reg_pip.packages[__reg_venv.virtualenv + '/bin/pip']) and
+       (__reg_pip.packages[__reg_venv.virtualenv + '/bin/pip']['ansible'][0]['version'])
+       is match('2.9')
+      )
 
-- name: get ansible version
-  command: "{{
-    virtualenv|default(mafalb_ansible_virtualenv) }}/bin/ansible --version"
+- name: Get ansible version
+  ansible.builtin.command: "{{ __virtualenv }}/bin/ansible --version"
   failed_when: false
   changed_when: false
   register: __ansible_version
 
 # preparing to upgrade ansible
-- name: uninstall ansible and ansible-core
-  pip:
+- name: Uninstall ansible and ansible-core
+  ansible.builtin.pip:
     name:
       - ansible
       - ansible-base
       - ansible-core
+      - ansible-lint
     state: absent
-    virtualenv: "{{ virtualenv|default(mafalb_ansible_virtualenv) }}"
+    virtualenv: "{{ __virtualenv }}"
   when:
-    - (__mafalb_ansible_version is match('2.11') and
-       __ansible_version.stdout|default('') is not
-        match('ansible \[core 2.11')) or
-      (__mafalb_ansible_version is not match('2.9') and
-       __ansible_version.stdout|default('') is match('ansible 2.9'))
+    - (__virtualenv_ansible_version is match('2.11') and
+       __ansible_version.stdout | default('') is not
+       match('ansible \[core 2.11')
+      ) or
+      (__virtualenv_ansible_version is not match('2.9') and
+       __ansible_version.stdout | default('') is match('ansible 2.9')
+      )
 
-- name: debug previous installed ansible version
-  debug: var=__ansible_version
+- name: Debug
+  tags:
+    - never
+    - debug
+  block:
+    - name: Debug previous installed ansible version
+      ansible.builtin.debug:
+        var: __ansible_version
 
-- name: packages are present
-  pip:
-    name: "{{ __mafalb_ansible_packages|difference(ansible_test_packages_not[__reg_targeted_python.version.major]) }}"
+    - name: Debug __mafalb_ansible_packages
+      ansible.builtin.debug:
+        var: __virtualenv_packages
+
+- name: Workaround for broken Pyyaml with cython 3
+  when:
+    - __virtualenv_ansible_version is version('2.13.0', '<')
+    - __virtualenv_ansible_version is version('2.12.0', '>=')
+    - __reg_targeted_python.version.majmin is version('3.10')
+  block:
+    - name: Install cython
+      ansible.builtin.pip:
+        name: cython<3.0.0
+        virtualenv: "{{ __reg_venv.virtualenv }}"
+        extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }}
+          -c {{ __reg_venv.virtualenv }}/constraints.txt"
+    - name: Install pyyaml with --no-build-isolation
+      ansible.builtin.pip:
+        name: pyyaml
+        virtualenv: "{{ __reg_venv.virtualenv }}"
+        extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }}
+          -c {{ __reg_venv.virtualenv }}/constraints.txt --no-build-isolation"
+
+- name: Packages are present
+  ansible.builtin.pip:
+    name: "{{ __virtualenv_packages }}"
     extra_args: "{{ '-U eager' if virtualenv_update is defined else '' }}
-       -c {{ __reg_venv.virtualenv }}/virtualenv.constraints.txt
-       -c {{ __reg_venv.virtualenv }}/ansible.constraints.txt
-       -c {{ __reg_venv.virtualenv }}/constraints.txt"
+      -c {{ __reg_venv.virtualenv }}/constraints.txt"
     virtualenv: "{{ __reg_venv.virtualenv }}"
   register: __pip_packages
 
-- name: pip freeze
-  shell: |
-    . {{ virtualenv|default(mafalb_ansible_virtualenv) }}/bin/activate
+- name: Pip freeze
+  ansible.builtin.shell: |
+    . {{ __virtualenv }}/bin/activate
     pip freeze
   changed_when: false
   register: __freeze
 
-- name: debug
-  block:
-    - name: debug installed pip packages
-      debug: var=__pip_packages.name
-    - name: debug installed pip packages
-      debug: var=__pip_packages.stderr
-    - name: debug pip packages
-      debug: var=__freeze
+- name: Debug
   tags:
     - never
     - debug
+  block:
+    - name: Debug installed pip packages
+      ansible.builtin.debug:
+        var: __pip_packages.name
+    - name: Debug installed pip packages
+      ansible.builtin.debug:
+        var: __pip_packages.stderr
+    - name: Debug pip packages
+      ansible.builtin.debug:
+        var: __freeze
 
-- name: assert correct ansible version is present
+- name: Assert correct ansible version is present
   block:
   # _ansible_version does not work
   # reserved variable ?
   #
-  - name: get ansible version
-    command: "{{
-      virtualenv|default(mafalb_ansible_virtualenv) }}/bin/ansible --version"
-    changed_when: false
-    register: __ansible_version
-  - name: assert that the wanted ansible version is present
-    assert:
-      that:
-      - __ansible_version.stdout is
-        match('ansible .*{{ __mafalb_ansible_version }}')
+    - name: Get ansible version
+      ansible.builtin.command: "{{ __virtualenv }}/bin/ansible --version"
+      changed_when: false
+      register: __ansible_version
+    - name: Debug __ansible_version
+      ansible.builtin.debug:
+        var: __ansible_version
 
-...
+    - name: Assert that the wanted ansible version is present
+      ansible.builtin.assert:
+        that:
+          - __ansible_version.stdout is match('ansible .*' + __virtualenv_ansible_version)

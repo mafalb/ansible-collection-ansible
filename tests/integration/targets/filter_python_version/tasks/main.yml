@@ -1,0 +1,33 @@
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+- name: Python version
+  mafalb.ansible.python_info:
+    executable: "{{ ansible_python['executable'].split('/')[-1] }}"
+  register: __python_version
+
+- name: Debug
+  block:
+    - name: Debug ansible_python
+      ansible.builtin.debug:
+        var: ansible_python
+    - name: Debug __python_version
+      ansible.builtin.debug:
+        var: __python_version
+    - name: Debug __python_version.version.major
+      ansible.builtin.debug:
+        var: __python_version.version.major|type_debug
+    - name: Debug ansible_python.version.major
+      ansible.builtin.debug:
+        var: ansible_python.version.major|type_debug
+
+- name: Assertions
+  ansible.builtin.assert:
+    that:
+      - ansible_python.executable == __python_version.executable
+      - ansible_python.version.major == __python_version.version.major
+      - __python_version.version.major|type_debug == 'int'
+      - ansible_python.version.minor == __python_version.version.minor
+      - __python_version.version.minor|type_debug == 'int'
+      - (ansible_python.version.major|string + '.' + ansible_python.version.minor|string) == __python_version.version.majmin

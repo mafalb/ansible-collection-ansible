@@ -1,38 +1,40 @@
-# Copyright (c) 2019-2022 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
-- hosts: localhost
+- name: Install molecule
+  hosts: localhost
   roles:
-
     # this is used if molecule_ansible_version is argument
     - role: mafalb.ansible.virtualenv
-      virtualenv: ~/.virtualenvs/molecule
-      python: "{{ molecule_python_version|default('python3') }}"
-      packages:
+      virtualenv: ~/.virtualenvs/molecule  # noqa var-naming[no-role-prefix]
+      virtualenv_python: "{{ molecule_python_version|default('python3') }}"
+      virtualenv_packages:
         - _ansible=={{ molecule_ansible_version }}
-        - ansible-lint<6
-        - molecule[lint,docker,test]~=3.3.4
+        - ansible-lint
+        - molecule
+        - molecule_docker
+        - molecule_podman
       when: molecule_ansible_version is defined
 
     # this is used if molecule_ansible_version is not argument
     - role: mafalb.ansible.virtualenv
-      virtualenv: ~/.virtualenvs/molecule
-      python: "{{ molecule_python_version|default('python3') }}"
-      packages:
+      virtualenv: ~/.virtualenvs/molecule  # noqa var-naming[no-role-prefix]
+      virtualenv_python: "{{ molecule_python_version|default('python3') }}"
+      virtualenv_packages:
         - _ansible
-        - ansible-lint<6
-        - molecule[lint,docker,test]~=3.3.4
+        - ansible-lint
+        - molecule
+        - molecule_docker
+        - molecule_podman
       when: molecule_ansible_version is not defined
 
   tasks:
-    - name: docker_container is present
-      command: ansible-galaxy collection install {{ item }}
+    - name: Docker_container is present # noqa no-changed-when
+      ansible.builtin.command:
+        cmd: ansible-galaxy collection install {{ item }}
       loop:
         - community.general
         - community.docker
       when:
         - molecule_ansible_version|default('2.11') is not version('2.10', '<')
-
-...

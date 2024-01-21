@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2020 RedHat, 2021 Markus Falb
+# Copyright (c) Markus Falb
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # flake8: noqa: E501
@@ -82,6 +82,7 @@ def main():
     )
     results = dict(
         changed=False,
+        failed=True,
         version={},
     )
     module = AnsibleModule(
@@ -115,6 +116,7 @@ def main():
     results['version']['minor'] = int(version.split('.')[1])
     results['version']['majmin'] = '.'.join(version.split('.')[0:2])
     results['executable'] = executable
+    results['failed'] = False
 
     module.exit_json(**results)
 

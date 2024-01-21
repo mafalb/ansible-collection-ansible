@@ -1,15 +1,14 @@
-# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 - name: Install ansible
   hosts: all
   pre_tasks:
-    - name: debug
-      debug: var=arg_ansible_version
+    - name: Debug
+      ansible.builtin.debug:
+        var: arg_ansible_version
   roles:
-  - role: mafalb.ansible.controlnode
-    version: "{{ arg_ansible_version|mandatory }}"
-
+    - role: mafalb.ansible.controlnode
+      version: "{{ arg_ansible_version | mandatory }}"
 ...

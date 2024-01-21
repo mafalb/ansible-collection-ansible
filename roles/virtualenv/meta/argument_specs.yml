@@ -1,60 +1,48 @@
-# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
-argument_specs:  # noqa 701
+argument_specs:
   main:
     short_description: Install ansible and related packages via pip
     description:
-    - Install ansible and related packages.
-    - Install into a python virtualenv.
-    - Available componen
+      - Install ansible and related packages.
+      - Install into a python virtualenv.
+      - Available componen
 
     options:
-
       do:
         description: Define the wanted action
         type: str
         choices:
-        - 'constraints'
+          - constraints
 
       state:
         description:
-        - The state of ansible
+          - The state of ansible
         type: str
         choices:
-        - absent
-        - present
+          - absent
+          - present
         default: present
 
-      mafalb_ansible_packages:
+      virtualenv_packages:
         description:
-        - Specify the components that you want to install.
-        aliases:
-        - packages
+          - Specify the components that you want to install.
         type: list
         elements: str
         default:
-        - ansible-core
+          - _ansible
 
-      mafalb_ansible_update:
+      virtualenv_update:
         description: Update packages in virtualenv.
-        aliases:
-        - update
         type: bool
 
-      mafalb_ansible_virtualenv:
+      virtualenv:
         description: The path to the virtualenv.
-        aliases:
-        - virtualenv
         type: path
         default: ~/.virtualenvs/ansible
 
-      mafalb_ansible_virtualenv_python:
-        description: The path to the virtualenv.
-        aliases:
-        - python
+      virtualenv_python:
+        description: The path to the python interpreter
         type: path
-
-...

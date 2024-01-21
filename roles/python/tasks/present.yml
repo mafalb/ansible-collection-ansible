@@ -1,25 +1,31 @@
-# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
+- name: Debug
+  tags:
+    - never
+    - debug
+  block:
+    - name: Debug
+      ansible.builtin.debug:
+        var: python_package
+    - name: Debug
+      ansible.builtin.debug:
+        var: python_version
 
-- name: assertions
-  assert:
+- name: Assertions
+  ansible.builtin.assert:
     that:
-      - mafalb_python_package[__mafalb_python_version] is defined
+      - python_version is defined
+      - python_package[python_version] is defined
 
-- name: debug
-  debug:
-    msg: "{{
-      [mafalb_python_package[__mafalb_python_version]]
-      + __mafalb_python_extra_packages[__mafalb_python_version[0]]
-    }}"
+- name: Debug
+  ansible.builtin.debug:
+    msg: "{{ [python_package[python_version]] + python_extra_packages[python_version] | default([]) }}"
 
-- name: python is present
-  package:
-    name: "{{
-      [mafalb_python_package[__mafalb_python_version]]
-      + __mafalb_python_extra_packages[__mafalb_python_version[0]]
-    }}"
+- name: Python is present
+  ansible.builtin.package:
+    name: "{{ [python_package[python_version]] + python_extra_packages[python_version] | default([]) }}"
 
 ...

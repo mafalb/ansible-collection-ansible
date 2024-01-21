@@ -1,20 +1,20 @@
-# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
-- hosts: all
+- name: Converge
+  hosts: all
   pre_tasks:
-    - name: debug targeted ansible version
-      debug: msg="doing {{ arg_ansible_version }} on {{ arg_python_version }}"
+    - name: Debug targeted ansible version
+      ansible.builtin.debug:
+        msg: doing {{ arg_ansible_version }} on {{ arg_python_version }}
   roles:
     - role: mafalb.ansible.python
-      version: "{{ arg_python_version|default('_default') }}"
-    - role: mafalb.ansible.virtualenv
-      virtualenv: ~/.virtualenvs/ansible-{{ arg_ansible_version }}-py{{ arg_python_version }}
-      python: python{{ arg_python_version }}
-      mafalb_ansible_packages:
+      python_version: "{{ arg_python_version|default('_default') }}"
+    - role: mafalb.ansible.virtualenv  # noqa var-naming[no-role-prefix]
+      virtualenv: ~/.virtualenvs/ansible-{{ arg_ansible_version }}-py{{ arg_python_version }}  # noqa var-naming[no-role-prefix]
+      virtualenv_python: python{{ arg_python_version }}
+      virtualenv_packages:
         - _ansible=={{ arg_ansible_version }}
         - _ansible_test
-
 ...

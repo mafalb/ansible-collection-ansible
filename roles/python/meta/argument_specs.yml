@@ -1,32 +1,26 @@
-# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
-argument_specs:  # noqa 701
+argument_specs:
   main:
     short_description: Install python interpreter
     description:
-    - Install python interpreter.
+      - Install python interpreter.
 
     options:
-
-      state:
+      python_state:
         description:
-        - The state of python
+          - The state of python
         type: str
         choices:
-        - absent
-        - present
+          - absent
+          - present
         default: present
 
-      version:
+      python_version:
         description:
-        - Specify the components that you want to install.
-        aliases:
-          - mafalb_python_version
+          - Specify the components that you want to install.
         type: list
         elements: str
-        defaults: _default
-
-...
+        default: _default

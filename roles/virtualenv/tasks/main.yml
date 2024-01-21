@@ -1,42 +1,22 @@
-# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
-- name: debug ansible python interpreter
-  debug:
+- name: Debug ansible python interpreter
+  ansible.builtin.debug:
     var: ansible_python.executable
 
-- name: get OS specific variables
+- name: Get OS specific variables
   with_first_found:
-  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
-  - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
-  - "{{ ansible_os_family }}.yml"
-  include_vars:
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_os_family }}.yml"
+  ansible.builtin.include_vars:
     file: "{{ __vars_file }}"
   loop_control:
     loop_var: __vars_file
 
-- name: assertions
-  assert:
-    that:
-    - virtualenv|default(mafalb_ansible_virtualenv) is defined
-
-# only necessary if ansible does not support argument_spec
-# do not assert for ansible 2.11 and greater
-# to catch possible errors in argument_spec
-- name: assertions only necessary for ansible < 2.11
-  assert:
-    that:
-    - state|default('present') in ['absent','present']
-    - do|default('main') in ['main','constraints']
-  when:
-  # this is the used ansible interpreter version
-  - ansible_version.full is version("2.11", '<')
-
 # we need a default for C(state) in ansible <2.11
-- name: include tasks
-  include_tasks:
-    file: "{{ do|default('main') }}/{{ state|default('present') }}.yml"
-
-...
+- name: Include tasks
+  ansible.builtin.include_tasks:
+    file: "{{ do | default('main') }}/{{ state | default('present') }}.yml"

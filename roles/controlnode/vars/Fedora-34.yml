@@ -1,35 +1,32 @@
-# Copyright (c) 2019-2021 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
-mafalb_ansible_default_version: '2.12'
+mafalb_ansible_default_version: "2.12"
 mafalb_ansible_deps:
-  '2.9': []
-  '2.11': []
-  '2.12': []
+  "2.9": []
+  "2.11": []
+  "2.12": []
 mafalb_ansible_test_deps:
-  '2.9':
+  "2.9":
     - python3-pytest
     - python3-voluptuous
     - python3-pylint
     - python3-pytest-xdist
-  '2.11': []
-  '2.12': []
+  "2.11": []
+  "2.12": []
 mafalb_ansible_package:
-  '2.9':
+  "2.9":
     - ansible
-  '2.11':
+  "2.11":
     - ansible-core
-  '2.12':
+  "2.12":
     - ansible-core
 mafalb_collections_packages:
-  '2.9': []
-  '2.11': []
-  '2.12': []
+  "2.9": []
+  "2.11": []
+  "2.12": []
 mafalb_ansible_test_package:
-  '2.9': ansible-test
-  '2.11': []
-  '2.12': []
-
-...
+  "2.9": ansible-test
+  "2.11": []
+  "2.12": []

@@ -1,8 +1,7 @@
-# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
 - name: Verify ansible
   hosts: all
   vars:
@@ -13,23 +12,29 @@
       executable: /bin/bash
 
   tasks:
-    - name: ansible is in the path
-      command: ansible --version
+
+    - name: Ansible is in the path
+      ansible.builtin.command:
+        cmd: ansible --version
       changed_when: false
       register: __ansible_version
-    - name: debug
-      debug: var=__ansible_version
-    - name: assertions
-      assert:
+
+    - name: Debug
+      ansible.builtin.debug:
+        var: __ansible_version
+
+    - name: Assertions
+      ansible.builtin.assert:
         that:
           - __ansible_version.stdout is match('ansible')
           - __ansible_version.stdout is search(arg_ansible_version|mandatory)
-    - name: playbook is present
-      copy:
+
+    - name: Playbook is present
+      ansible.builtin.copy:
         src: install-ansible.yml
         dest: /root/
-        mode: '644'
-    - name: community.general is present # noqa no-changed-when 301
-      command: ansible-galaxy collection install community.general
+        mode: "644"
 
+    - name: Community.general is present # noqa no-changed-when
+      ansible.builtin.command: ansible-galaxy collection install community.general
 ...

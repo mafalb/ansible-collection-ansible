@@ -1,10 +1,10 @@
 #!/usr/bin/python
-# Copyright (c) 2020 RedHat, 2021 Markus Falb
+# Copyright (c) Markus Falb
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # flake8: noqa: E501
 
-from __future__ import absolute_import, division, print_function
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -59,7 +59,6 @@ ansible_info:
 """
 
 from ansible.module_utils.basic import AnsibleModule  # noqa: E402
-from ansible_collections.mafalb.ansible.plugins.module_utils.python import is_valid_version  # noqa: E402
 from ansible_collections.mafalb.ansible.plugins.module_utils.lib import which  # noqa: E402
 import os
 import re

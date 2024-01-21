@@ -1,0 +1,18 @@
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+python_default_version: "3.11"
+python_package:
+  _default: python3
+  "3.11": python3
+python_extra_packages:
+  "_default": &PACKAGES
+    - python3-selinux
+    - python3-openssl
+    - python3-cryptography
+    - python3-setuptools
+    - python3-venv
+    - python3-apt
+  "3.11": *PACKAGES
+...

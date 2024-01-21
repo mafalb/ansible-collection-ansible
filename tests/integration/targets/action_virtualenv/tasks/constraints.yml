@@ -1,0 +1,126 @@
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+- name: Constraints | Test creation of mafalb.ansible.virtualenv with constraints
+  # unset PYTHONPATH, it contains ansible-core
+  # The contents would be visible in virtualenv otherwise
+  #
+  environment:
+    PYTHONPATH: ''
+  block:
+
+    - name: Constraints | Virtualenv virtualenv-test2 is present | check mode
+      check_mode: true
+      register: _result
+      mafalb.ansible.virtualenv:
+        virtualenv: ~/.virtualenvs/virtualenv-test2
+        src: constraints.txt.j2
+        name:
+          - ansible-core
+          - selinux
+
+    - name: Constraints | Assertions | check mode
+      ansible.builtin.assert:
+        that:
+          - not _result.failed
+          - _result.changed
+          - not _result.results[0].changed  # python info
+          - not _result.results[0].failed
+          - _result.results[1].changed      # virtualenv create
+          - _result.results[1].failed is not defined
+          - _result.results[2].changed      # constraints
+          - _result.results[2].failed is not defined
+          - _result.results[3].changed
+          - _result.results[3].failed is not defined
+
+    - name: Constraints | Virtualenv virtualenv-test2 is present
+      register: _result
+      mafalb.ansible.virtualenv:
+        virtualenv: ~/.virtualenvs/virtualenv-test2
+        src: constraints.txt.j2
+        name:
+          - ansible-core
+          - selinux
+
+    - name: Constraints | Debug _result
+      ansible.builtin.debug:
+        var: _result
+
+    - name: Constraints | Stat constraints file
+      register: _stat
+      ansible.builtin.stat:
+        path: "~/.virtualenvs/virtualenv-test2"
+
+    - name: Constraints | grep constraints file
+      ansible.builtin.command:
+        cmd: grep "bla blubb ogo" ~/.virtualenvs/virtualenv-test2/constraints.txt
+      changed_when: false
+
+    - name: Constraints | Assertions
+      ansible.builtin.assert:
+        that:
+          - _stat.stat.exists
+          - not _result.failed
+          - _result.changed
+          - not _result.results[0].changed  # python info
+          - not _result.results[0].failed
+          - _result.results[1].changed      # virtualenv create
+          - _result.results[1].failed is not defined
+          - _result.results[2].changed          # constraints
+          - _result.results[2].failed is not defined
+          - _result.results[3].changed
+          - _result.results[3].failed is not defined
+
+
+    - name: Constraints | Virtualenv virtualenv-test2 is present | Idempotence
+      register: _result
+      mafalb.ansible.virtualenv:
+        virtualenv: ~/.virtualenvs/virtualenv-test2
+        src: constraints.txt.j2
+        name:
+          - ansible-core
+          - selinux
+
+    - name: Constraints | Assertions | Idempotence
+      ansible.builtin.assert:
+        that:
+          - _stat.stat.exists
+          - not _result.failed
+          - not _result.changed
+          - not _result.results[0].changed  # python info
+          - not _result.results[0].failed
+          - not _result.results[1].changed      # virtualenv create
+          - _result.results[1].failed is not defined
+          - not _result.results[2].changed          # constraints
+          - _result.results[2].failed is not defined
+          - not _result.results[3].changed
+          - _result.results[3].failed is not defined
+
+    - name: Constraints | Get ansible version
+      ansible.builtin.command:
+        cmd: ~/.virtualenvs/virtualenv-test2/bin/ansible --version
+      changed_when: false
+      register: _result
+
+    - name: Constraints | Debug ansible
+      ansible.builtin.debug:
+        var: _result
+
+    - name: Constraints | Pip freeze
+      ansible.builtin.shell: |
+        . ~/.virtualenvs/virtualenv-test2/bin/activate
+        pip freeze
+      changed_when: false
+      register: _result
+
+    - name: Constraints | Debug pip
+      ansible.builtin.debug:
+        var: _result
+
+    - name: Assert that install is constrained
+      ansible.builtin.assert:
+        that:
+          - "'selinux==0.2.1' in _result.stdout_lines"
+...

@@ -1,9 +1,10 @@
-# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-- hosts: all
+- name: Verify
+  hosts: all
   vars:
     collection_dir: /root/collections/ansible_collections/mafalb
     virtualenv_basename: ansible-{{ arg_ansible_version }}-py{{ arg_python_version }}
@@ -13,48 +14,45 @@
       executable: /bin/bash
 
   tasks:
-
-    - name: get installed packages for ~/.virtualenvs/ansible
-      shell: |
+    - name: Get installed packages for ~/.virtualenvs/ansible
+      ansible.builtin.shell: |
         . ~/.virtualenvs/{{ virtualenv_basename }}/bin/activate
         pip freeze >/tmp/{{ virtualenv_basename }}-before.txt
       changed_when: false
 
-    - name: check major version of targeted python
+    - name: Check major version of targeted python
       block:
-
-        - name: call targeted python
-          command: "~/.virtualenvs/{{ virtualenv_basename }}/bin/python --version"
+        - name: Call targeted python
+          ansible.builtin.command: ~/.virtualenvs/{{ virtualenv_basename }}/bin/python --version
           changed_when: false
           register: __reg_virtualenv_python
 
-        - name: assert that targetet version is the requested
-          assert:
+        - name: Assert that targetet version is the requested
+          ansible.builtin.assert:
             that:
-              - (__reg_virtualenv_python.stdout is match("Python {{ arg_python_version }}")
-                 or __reg_virtualenv_python.stderr is match("Python {{ arg_python_version }}")
+              - (__reg_virtualenv_python.stdout is match("Python " + arg_python_version) or
+                 __reg_virtualenv_python.stderr is match("Python " + arg_python_version)
                 )
 
-    - name: install requirements  # noqa no-changed-when 301
-      shell: |
+    - name: Install requirements # noqa no-changed-when
+      ansible.builtin.shell: |
         . ~/.virtualenvs/{{ virtualenv_basename }}/bin/activate
         ansible-test sanity --requirements --python {{ arg_python_version }}
         ansible-test units --requirements --python {{ arg_python_version }}
       args:
         chdir: "{{ collection_dir }}/ansible"
 
-    - name: get installed packages for ~/.virtualenvs/ansible
-      shell: |
+    - name: Get installed packages for ~/.virtualenvs/ansible
+      ansible.builtin.shell: |
         . ~/.virtualenvs/{{ virtualenv_basename }}/bin/activate
         pip freeze >/tmp/{{ virtualenv_basename }}-after.txt
       changed_when: false
 
-    - name: get diff
-      command: diff -u /tmp/{{ virtualenv_basename }}-before.txt /tmp/{{ virtualenv_basename }}-after.txt
+    - name: Get diff
+      ansible.builtin.command: diff -u /tmp/{{ virtualenv_basename }}-before.txt /tmp/{{ virtualenv_basename }}-after.txt
       changed_when: false
       register: __reg_diff
 
-    - name: diff
-      debug: var=__reg_diff
-
-...
+    - name: Diff
+      ansible.builtin.debug:
+        var: __reg_diff

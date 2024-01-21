@@ -13,13 +13,26 @@ Install ansible via pip inside a virtualenv.
         - _ansible_test
 ```
 
-As seen above, I give it a list of pip requirements. Packages with underscores are treated special and are substituted by the role.
+As seen above, I give it a list of pip requirements.
+Packages with underscores are treated special and are substituted by the role as follows:
 
 _ansible gets substituted by ansible or ansible-core or ansible-base depending on the requested version.
-_ansible-test gets substituted by a list of packages that are necessary for running ansible-test in the original virtualenv, i.e. not running ansible-test in a container or venv. In addition version specific constraints are used so that no packages are reinstalled with different version when you call with `ansible-test --requirements`.
+_ansible-test gets substituted by a list of packages that are necessary for running ansible-test in the original virtualenv, i.e. not running ansible-test in a container or venv. Version specific constraints are used so that no packages are reinstalled with different version when you call with `ansible-test --requirements`.
+
+
+## Variables
+
+```yaml
+mafalb_ansible_virtualenv: path to virtualenv
+```
+
+```yaml
+mafalb_ansible_virtualenv_python: path of python interpreter used for virtualenv
+```
+
 
 ## License
 
-Copyright (c) 2020,2021 Markus Falb <markus.falb@mafalb.at>
+Copyright (c) Markus Falb <markus.falb@mafalb.at>
 
 GPL-3.0-or-later

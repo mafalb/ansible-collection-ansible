@@ -1,11 +1,21 @@
-# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-
-mafalb_python_default_version: '3.9'
-mafalb_python_package:
-  '_default': python3
-  '3.9': python3
-
+python_default_version: "3.9"
+python_package:
+  _default: python3
+  "3.9":  python3.9
+  "3.11": python3.11
+python_extra_packages:
+  _default:
+    - glibc-langpack-en
+    - python3-libselinux
+    - python3-cryptography
+    - python3-policycoreutils
+    - python3-setuptools
+    - python3-libselinux
+    - python3-libsemanage
+  '3.9': []
+  '3.11': []
 ...

@@ -1,6 +1,6 @@
 #!/bin/bash -eu
 
-# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -41,11 +41,23 @@ grep -qr "no_log: false\s*$" . && exit 1
 echo "yamllint..."
 yamllint -s .
 
-echo "ansible-lint..."
-if test "$ANSIBLE_LINT_VERSION" == 4
+ls -l .ansible-lint*
+
+ANSIBLE_LINT_VERSION=$(NO_COLOR=1 ansible-lint --version | awk '/^ansible-lint / {print $2}')
+if [[ "$ANSIBLE_LINT_VERSION" =~ ^4 ]]
 then
+	echo "ansible-lint -c .ansible-lint-4 ${ANSIBLE_LINT_VERSION}..."
 	ansible-lint -v -c .ansible-lint-4
+elif test "${ANSIBLE_LINT_VERSION}" == "6.8.6"
+then
+	echo "ansible-lint ${ANSIBLE_LINT_VERSION}..."
+	ansible-lint -v --offline -c .ansible-lint-6.8.6
+elif test -f .ansible-lint-"${ANSIBLE_LINT_VERSION}"
+then
+	echo "ansible-lint -c .ansible-lint-${ANSIBLE_LINT_VERSION}..."
+	ansible-lint -v -c .ansible-lint-"${ANSIBLE_LINT_VERSION}"
 else
+	echo "ansible-lint ${ANSIBLE_LINT_VERSION}..."
 	ansible-lint -v
 fi
 
