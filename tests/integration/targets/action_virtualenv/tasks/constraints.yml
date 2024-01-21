@@ -108,4 +108,19 @@
       ansible.builtin.debug:
         var: _result
 
+    - name: Constraints | Pip freeze
+      ansible.builtin.shell: |
+        . ~/.virtualenvs/virtualenv-test2/bin/activate
+        pip freeze
+      changed_when: false
+      register: _result
+
+    - name: Constraints | Debug pip
+      ansible.builtin.debug:
+        var: _result
+
+    - name: Assert that install is constrained
+      ansible.builtin.assert:
+        that:
+          - "'selinux==0.2.1' in _result.stdout_lines"
 ...
