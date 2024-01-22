@@ -2,18 +2,18 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-mafalb_ansible_default_version: "2.9"
-mafalb_ansible_deps:
+controlnode_default_version: "2.9"
+controlnode_deps:
   "2.9": []
-mafalb_ansible_test_deps:
+controlnode_test_deps:
   "2.9":
     - python3-pytest
     - python3-voluptuous
     - python3-pylint
     - python3-pytest-xdist
-mafalb_ansible_package:
+controlnode_package:
   "2.9": ansible
 mafalb_collections_package:
   "2.9": []
-mafalb_ansible_test_package:
+controlnode_test_package:
   "2.9": ansible-test

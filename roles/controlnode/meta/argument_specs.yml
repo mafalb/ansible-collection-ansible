@@ -1,0 +1,19 @@
+  # Copyright (c) Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+argument_specs:
+  main:
+    short_description: Install and configure a ansible controlnode
+    description:
+      - Install ansible and related packages.
+      - Use the native package manager.
+      - If you want to install via pip, see P(mafalb.ansible.virtualenv#role)
+
+    options:
+
+      controlnode_version:
+        description: >
+          The ansible-core (or ansible-base, or ansible) version to install. This makes sense only for Distributions that provides multiple versions of ansible.
+        type: str
+...

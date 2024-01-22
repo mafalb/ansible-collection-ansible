@@ -14,21 +14,19 @@
     - "{{ ansible_os_family }}.yml" # for all others
 
 - name: Ansible
-  when: "'_ansible' in packages | default(mafalb_ansible_packages)"
   block:
     - name: Ansible dependencies are present
       ansible.builtin.package:
-        name: "{{ mafalb_ansible_deps[version | default(mafalb_ansible_version) | default(mafalb_ansible_default_version)] }}"
+        name: "{{ controlnode_deps[controlnode_version | default(controlnode_default_version)] }}"
     - name: Ansible is present
       ansible.builtin.package:
-        name: "{{ mafalb_ansible_package[version | default(mafalb_ansible_version) | default(mafalb_ansible_default_version)] }}"
+        name: "{{ controlnode_packages[controlnode_version | default(controlnode_default_version)] }}"
 
 - name: Ansible-test
-  when: "'_ansible_test' in packages | default(mafalb_ansible_packages)"
   block:
     - name: Ansible-test dependencies are present
       ansible.builtin.package:
-        name: "{{ mafalb_ansible_test_deps[version | default(mafalb_ansible_version) | default(mafalb_ansible_default_version)] }}"
+        name: "{{ controlnode_test_deps[controlnode_version | default(controlnode_default_version)] }}"
     - name: Ansible-test is present
       ansible.builtin.package:
-        name: "{{ mafalb_ansible_test_package[version | default(mafalb_ansible_version) | default(mafalb_ansible_default_version)] }}"
+        name: "{{ controlnode_test_packages[controlnode_version | default(controlnode_default_version)] }}"
