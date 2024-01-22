@@ -1,27 +1,40 @@
 # Ansible Collection - mafalb.ansible
 
-|||
-|---|---|
-|master|![master branch](https://github.com/mafalb/ansible-collection-ansible/workflows/CI/badge.svg)|
-|dev|![dev branch](https://github.com/mafalb/ansible-collection-ansible/workflows/CI/badge.svg?branch=dev)|
+||||
+|---|---|---|
+|master|![master branch CI](https://github.com/mafalb/ansible-collection-ansible/actions/workflows/CI.yml/badge.svg)|![master branch VERSIONCHECK](https://github.com/mafalb/ansible-collection-ansible/actions/workflows/VERSIONCHECK.yml/badge.svg)
+|dev|![dev branch CI](https://github.com/mafalb/ansible-collection-ansible/actions/workflows/CI.yml/badge.svg?branch=dev)|![dev branch VERSIONCHECK](https://github.com/mafalb/ansible-collection-ansible/actions/workflows/VERSIONCHECK.yml/badge.svg?branch=dev)|
 
 A collection for ansible related things.
 
-We recommend to set [INTERPRETER_PYTHON](https://docs.ansible.com/ansible/latest/reference_appendices/config.html#interpreter-python) to auto to avoid confusion between python 2 and 3.
 
-For reference here is the link to the source code for INTERPRETER_PYTHON_DISTRO_MAP [lib/ansible/config/base.yml](https://raw.githubusercontent.com/ansible/ansible/devel/lib/ansible/config/base.yml)
+## Plugins
+
+### mafalb.ansible.virtualenv
+
+### mafalb.ansible.python_info
+
 
 ## Roles
 
 ### [mafalb.ansible.controlnode](roles/controlnode/README.md)
 
-### [mafalb.ansible.lint](roles/lint/README.md)
-
-### [mafalb.ansible.molecule](roles/molecule/README.md)
+Install ansible and dependencies on an ansible controlnode.
 
 ### [mafalb.ansible.node](roles/node/README.md)
 
+Install dependencies on an ansible node.
+
 ### [mafalb.ansible.virtualenv](roles/virtualenv/README.md)
+
+Install ansible and related tools into a virtualenv.
+It uses constraints from ansible-test, e.g. dependencies installed locally doesn't interfere, use it 
+
+```shell
+(venv) $ ansible-test sanity --local
+(venv) $ ansible-test units --local
+(venv) $ ansible-test integration --local
+```
 
 ## License
 

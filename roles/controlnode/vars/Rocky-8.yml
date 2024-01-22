@@ -1,1 +1,23 @@
-RedHat-8.yml
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+controlnode_default_version: "2.9"
+controlnode_deps:
+  "2.9":
+    - "@python36"
+    - centos-release-ansible-29
+    - glibc-langpack-en
+controlnode_test_deps:
+  "2.9":
+    - epel-release
+    - python3-pytest
+    - python3-voluptuous
+    - python3-pylint
+    - python3-pytest-xdist
+controlnode_package:
+  "2.9": ansible
+mafalb_collections_package:
+  "2.9": []
+controlnode_test_package:
+  "2.9": ansible_test

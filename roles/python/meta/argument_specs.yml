@@ -6,7 +6,8 @@ argument_specs:
   main:
     short_description: Install python interpreter
     description:
-      - Install python interpreter.
+      - Install python interpreter
+      - and dependencies useful for ansible.
 
     options:
       python_state:
@@ -20,7 +21,7 @@ argument_specs:
 
       python_version:
         description:
-          - Specify the components that you want to install.
+          - The major.minor version to install.
         type: list
         elements: str
         default: _default

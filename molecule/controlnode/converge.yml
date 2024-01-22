@@ -10,5 +10,8 @@
         var: arg_ansible_version
   roles:
     - role: mafalb.ansible.controlnode
-      version: "{{ arg_ansible_version | mandatory }}"
+      when: arg_ansible_version
+      controlnode_version: "{{ arg_ansible_version }}"
+    - role: mafalb.ansible.controlnode
+      when: not arg_ansible_version
 ...
