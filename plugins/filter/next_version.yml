@@ -1,0 +1,31 @@
+# vim: set ft=yaml ts=2 expandtab:
+
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+DOCUMENTATION:
+  name: next_version
+  author: Markus Falb <markus.falb@mafalb.at>
+  version_added: historic
+  short_description: Return the next version of ansible.
+  description:
+    - Used to check if we support the latest version of ansible.
+    - Take major.minor version as argument.
+    - Return major.minor.patch version of ansible.
+  options:
+    version:
+      description: A major.minor version of ansible.
+      type: str
+      required: true
+EXAMPLES: |
+
+  # Return 2.16.2
+  {{ "2.16" | mafalb.ansible.next_ansible_version() }}
+
+RETURN:
+  _value:
+    description: The major.minor.patch version of ansible
+    type: str
+...

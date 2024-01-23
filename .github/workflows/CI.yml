@@ -89,7 +89,7 @@ jobs:
 
       - name: install ansible
         run: |
-          ansible-playbook -D playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}", "ansible-lint${{ matrix.ansible_lint_specifier }}", "_ansible_test", "flake8"]}' -e virtualenv_python=python${{ matrix.python_version }} -t all,debug
+          ansible-playbook -D playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}", "ansible-lint${{ matrix.ansible_lint_specifier }}", "_ansible_test", "flake8", "antsibull-docs"]}' -e virtualenv_python=python${{ matrix.python_version }} -t all,debug
         env:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
 
@@ -111,6 +111,11 @@ jobs:
         run: |
           source ~/.virtualenvs/ansible/bin/activate
           . tests/lint.sh requirements ${{ matrix.python_version }}
+
+      - name: docs
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          . tests/docs.sh requirements
 
       - name: sanity
         run: |

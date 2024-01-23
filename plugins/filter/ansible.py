@@ -165,10 +165,7 @@ def __ansible_test_packages(version):
 
 
 def next_ansible_version(majmin):
-    """Return the next version of ansible.
-
-    Do not use. Obsolete.
-    """
+    """Return the next version of ansible."""
     try:
         version = data['latest_ansible_version'][majmin]
     except (KeyError, TypeError):
@@ -448,4 +445,5 @@ class FilterModule(object):
             'package_list': package_list,
             'fix_package_list': pip_package_list,
             'best_version': best_version,
+            'next_version': next_ansible_version,
         }
