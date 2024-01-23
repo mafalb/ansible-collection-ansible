@@ -118,7 +118,7 @@ jobs:
           mkdir /tmp/collections
           ansible-galaxy -vvvv collection list -p /tmp/collections
           ansible-galaxy -vvvv collection install community.general -p /tmp/collections
-          . tests/docs.sh requirements
+          bash tests/docs.sh requirements
 
       - name: sanity
         run: |
