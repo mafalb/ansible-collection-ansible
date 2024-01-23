@@ -22,7 +22,7 @@ ABSPATH=$(cd ../../; dirname "$(pwd)")
 if test -n "${ANSIBLE_COLLECTIONS_PATH}"; then
 	OLD_ANSIBLE_COLLECTIONS_PATH=${ANSIBLE_COLLECTIONS_PATH}
 fi
-export ANSIBLE_COLLECTIONS_PATH="${ABSPATH}"
+export ANSIBLE_COLLECTIONS_PATH="${ABSPATH}:/tmp/collections"
 
 antsibull-docs lint-collection-docs --plugin-docs --no-skip-rstcheck .
 antsibull-docs sphinx-init --use-current --copyright "Markus Falb (c) <markus.falb@mafalb.at> GPL-3.0-or-later" --dest-dir tests/output/doc mafalb.ansible
