@@ -5,6 +5,16 @@ set -e
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 
+if test "$#" -gt 0
+then
+
+        if test "$1" == 'requirements'
+        then
+                args[0]=--requirements
+                shift
+        fi
+fi
+
 mkdir -p "tests/output/doc"
 ABSPATH=$(cd ../../; dirname "$(pwd)")
 if test -n "${ANSIBLE_COLLECTIONS_PATH}"; then
@@ -15,7 +25,9 @@ export ANSIBLE_COLLECTIONS_PATH="${ABSPATH}"
 antsibull-docs lint-collection-docs --plugin-docs --no-skip-rstcheck .
 antsibull-docs sphinx-init --use-current --dest-dir tests/output/doc mafalb.ansible
 cd tests/output/doc
-pip install -r requirements.txt -c ~/.virtualenvs/molecule/constraints.txt
+if test args[0] = "--requirements"; then
+	pip install -r requirements.txt -c ~/.virtualenvs/molecule/constraints.txt
+fi
 ./build.sh
 
 if test -n "${OLD_ANSIBLE_COLLECTIONS_PATH}"; then
