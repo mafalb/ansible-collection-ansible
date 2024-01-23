@@ -112,6 +112,12 @@ jobs:
           source ~/.virtualenvs/ansible/bin/activate
           . tests/lint.sh requirements ${{ matrix.python_version }}
 
+      - name: docs
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          ansible-galaxy -vvvv collection list -p ../../..
+          ansible-galaxy -vvvv collection -p ../../..  install community.general
+          . tests/docs.sh requirements
 
       - name: sanity
         run: |
@@ -135,13 +141,6 @@ jobs:
         run: |
           source ~/.virtualenvs/ansible/bin/activate
           ansible-test integration --requirements --python ${{ matrix.python_version }}
-
-      - name: docs
-        run: |
-          source ~/.virtualenvs/ansible/bin/activate
-          ansible-galaxy -vvvv collection list -p ../../.. 
-          ansible-galaxy -vvvv collection -p ../../..  install community.general
-          . tests/docs.sh requirements
 
   node:
 
