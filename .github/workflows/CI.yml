@@ -115,6 +115,8 @@ jobs:
       - name: docs
         run: |
           source ~/.virtualenvs/ansible/bin/activate
+          ansible-galaxy list
+          ansible-galaxy install community.general
           . tests/docs.sh requirements
 
       - name: sanity
