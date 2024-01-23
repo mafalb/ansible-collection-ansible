@@ -139,8 +139,8 @@ jobs:
       - name: docs
         run: |
           source ~/.virtualenvs/ansible/bin/activate
-          ansible-galaxy -vvvv collection list
-          ansible-galaxy -vvvv collection install community.general
+          ansible-galaxy -vvvv collection list -p ../../.. 
+          ansible-galaxy -vvvv collection -p ../../..  install community.general
           . tests/docs.sh requirements
 
   node:
