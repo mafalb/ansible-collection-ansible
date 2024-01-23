@@ -1,10 +1,12 @@
+# vim: set ft=yaml ts=2 expandtab:
+#
 # Copyright (c) Markus Falb <markus.falb@mafalb.at>
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 argument_specs:
   main:
-    short_description: Install ansible and related packages via pip
+    short_description: Install ansible via pip inside a virtualenv.
     description:
       - Install ansible and related packages.
       - Install into a python virtualenv.

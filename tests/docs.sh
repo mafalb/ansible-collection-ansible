@@ -23,9 +23,9 @@ fi
 export ANSIBLE_COLLECTIONS_PATH="${ABSPATH}"
 
 antsibull-docs lint-collection-docs --plugin-docs --no-skip-rstcheck .
-antsibull-docs sphinx-init --use-current --dest-dir tests/output/doc mafalb.ansible
+antsibull-docs sphinx-init --use-current --copyright "Markus Falb (c) <markus.falb@mafalb.at> GPL-3.0-or-later" --dest-dir tests/output/doc mafalb.ansible
 cd tests/output/doc
-if test args[0] = "--requirements"; then
+if test "${args[0]}" = "--requirements"; then
 	pip install -r requirements.txt -c ~/.virtualenvs/molecule/constraints.txt
 fi
 ./build.sh
