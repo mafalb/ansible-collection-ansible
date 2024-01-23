@@ -33,6 +33,8 @@ datafile.close()
 def __parse_requirement(arg_req):
     """Take a requirement in text representation and
     Return appropiate Specifier Ojects and functions.
+
+    Do not use. Obsolete.
     """
 
     try:
@@ -163,7 +165,10 @@ def __ansible_test_packages(version):
 
 
 def next_ansible_version(majmin):
-    """Return the next version of ansible."""
+    """Return the next version of ansible.
+
+    Do not use. Obsolete.
+    """
     try:
         version = data['latest_ansible_version'][majmin]
     except (KeyError, TypeError):
@@ -182,6 +187,7 @@ def best_version(arg_packages, python_version=None):
     [ '_ansible==2.11.6', 'ansible', '_ansible_test' ]
 
     return a version string in the form of X.Y.Z
+    Do not use. Obsolete.
     """
 
     if not python_version:
@@ -240,6 +246,13 @@ def best_version(arg_packages, python_version=None):
     return best_version
 
 
+# A placeholder to make documentation happy
+#
+def fix_package_list(arg_packages, python_version=None):
+    """Alias for P(pip_package_list#filter)"""
+    pass
+
+
 def pip_package_list(arg_packages, python_version=None):
     """Take a pip requirement and fill in the correct name.
 
@@ -247,6 +260,8 @@ def pip_package_list(arg_packages, python_version=None):
     _ansible==2.11.6
     _ansible~=2.11.6
     etc.
+
+    Do not use. Obsolete.
     """
 
     if not isinstance(arg_packages, list):
@@ -293,6 +308,7 @@ def pip_package_list(arg_packages, python_version=None):
 
 
 def __majmin(version):
+    """Parse the argument and return major.minor version."""
     if not isinstance(version, str):
         raise AnsibleFilterError("Not a string {s}".format(s=version))
     if not version.split('.')[-1]:
@@ -306,7 +322,10 @@ def __majmin(version):
 
 
 def __gen_new_ansible_versions():
-    # generate a list of all versions that are theoretically supported
+    """Return a list of all newer major.minor versions of ansible.
+
+    Newer means that ansible-base or ansible-core already existed.
+    """
     all_versions = []
     for majmin in data['latest_ansible_version']:
         if majmin == '2.9':
@@ -322,7 +341,10 @@ def __gen_new_ansible_versions():
 
 
 def __gen_old_ansible_versions():
-    # generate a list of all versions that are theoretically supported
+    """Return a list of all old major.minor versions of ansible.
+
+    Old means that ansible-base or ansible-core did not exist.
+    """
     all_versions = []
     for majmin in ('2.9', '2.10'):
         for patch in range(0, int(data['latest_ansible_version'][majmin].split('.')[-1]) + 1):
@@ -336,15 +358,21 @@ def __is_old_ansible(arg_spec):
     """Detect if ansible designates an old ansible package
     or the new style ansible collections packages.
 
+    Old means that ansible-base or ansible-core did not exist.
+    New means that ansible-base or ansible-core already existed.
+
+    e.g.
+
+    ==2.9 is an old style package.
+    ==2.10.2 is an old style package.
+    ==2.10.8 is not an old style package.
     """
     new_versions = __gen_new_ansible_versions()
-    old_versions = __gen_old_ansible_versions()
     for version in new_versions:
         if Pkgver(version) in arg_spec:
+            # if we find one new version, we are done
             return False
-    for version in old_versions:
-        if Pkgver(version) in arg_spec:
-            return True
+    # we do not need to search for an old version
     # if nothing matches assume new version
     return True
 
@@ -372,7 +400,8 @@ def __detect_ansible_package(arg_packages):
 
 
 def package_list(arg_packages, python_version=None):
-    """It takes list of pip requirements and inserts an ansible version.
+    """Inject major.minor.patch version of ansible into pip requirement lists.
+
     Return major.minor version of ansible
     """
     if not python_version:
@@ -416,9 +445,7 @@ class FilterModule(object):
 
     def filters(self):
         return {
+            'package_list': package_list,
             'fix_package_list': pip_package_list,
-            'latest_ansible_version': best_version,  # remove
-            'latest_version': best_version,          # remove
             'best_version': best_version,
-            'next_version': next_ansible_version,
         }

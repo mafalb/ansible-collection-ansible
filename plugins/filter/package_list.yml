@@ -1,0 +1,37 @@
+# vim: set ft=yaml ts=2 expandtab:
+
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+DOCUMENTATION:
+  name: package_list
+  author: Markus Falb <markus.falb@mafalb.at>
+  version_added: 6.0.0
+  short_description: Inject major.minor.patch version of ansible into pip requirement lists.
+  description:
+    - Inject major.minor.patch version of ansible into pip requirement lists.
+    - Return major.minor version of ansible.
+  options:
+    package_list:
+      description: A list of pip requirements
+      type: list
+      required: true
+    python_version:
+      description: The major.minor version of the targeted python version.
+      type: str
+      required: false
+EXAMPLES: |
+
+   # modify pkglist to ['ansible-core==2.16.2'] or whatever the latest
+   # possible version is
+   vars:
+     pkglist: ['ansible-core']
+     ansible_majmin: "{{ pkglist | package_list(python_version='3.10' }}"
+
+RETURN:
+  _value:
+    description: The major.minor version of ansible
+    type: str
+...
