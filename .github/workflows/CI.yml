@@ -115,8 +115,9 @@ jobs:
       - name: docs
         run: |
           source ~/.virtualenvs/ansible/bin/activate
-          ansible-galaxy -vvvv collection list -p ../../..
-          ansible-galaxy -vvvv collection -p ../../..  install community.general
+          mkdir /tmp/collections
+          ansible-galaxy -vvvv collection list -p /tmp/collections
+          ansible-galaxy -vvvv collection install community.general -p /tmp/collections
           . tests/docs.sh requirements
 
       - name: sanity
