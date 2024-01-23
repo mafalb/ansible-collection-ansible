@@ -1,0 +1,16 @@
+# vim: set ft=yaml ts=2 expandtab:
+
+# Copyright (c) Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+DOCUMENTATION:
+  name: best_version
+  author: Markus Falb <markus.falb@mafalb.at>
+  version_added: 6.0.0
+  short_description: obsolete
+  description: obsolete
+EXAMPLES:
+RETURN:
+...
