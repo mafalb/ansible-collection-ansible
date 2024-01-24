@@ -115,7 +115,7 @@ jobs:
           . tests/lint.sh requirements ${{ matrix.python_version }}
 
       - name: docs
-        if: not ${{ matrix.nodoc }}
+        if: matrix.nodoc
         run: |
           source ~/.virtualenvs/ansible/bin/activate
           mkdir /tmp/collections
