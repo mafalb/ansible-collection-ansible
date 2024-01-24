@@ -7,7 +7,7 @@ controlnode_deps:
   "2.16": []
 controlnode_test_deps:
   "2.16": []
-controlnode_package:
+controlnode_packages:
   "2.16":
     - ansible-core
 mafalb_collections_packages:
