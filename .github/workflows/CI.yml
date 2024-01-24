@@ -113,7 +113,7 @@ jobs:
           . tests/lint.sh requirements ${{ matrix.python_version }}
 
       - name: docs
-        if: "${{ matrix.ansible_version }}" != "2.12"
+        if: ${{ matrix.ansible_version }} != "2.12"
         run: |
           source ~/.virtualenvs/ansible/bin/activate
           mkdir /tmp/collections
