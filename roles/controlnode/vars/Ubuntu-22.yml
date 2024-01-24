@@ -12,5 +12,5 @@ controlnode_packages:
     - ansible-core
 controlnode_collections_packages:
   "2.12": []
-controlnode_test_package:
+controlnode_test_packages:
   "2.12": []

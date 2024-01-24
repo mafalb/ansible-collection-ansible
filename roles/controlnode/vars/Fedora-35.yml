@@ -26,7 +26,7 @@ mafalb_collections_packages:
   "2.9": []
   "2.11": []
   "2.12": []
-controlnode_test_package:
+controlnode_test_packages:
   "2.9": ansible-test
   "2.11": []
   "2.12": []
