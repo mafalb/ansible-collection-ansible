@@ -15,7 +15,7 @@ controlnode_test_deps:
     - python3-pytest-xdist
   "2.11": []
   "2.12": []
-controlnode_package:
+controlnode_packages:
   "2.9":
     - ansible
   "2.11":

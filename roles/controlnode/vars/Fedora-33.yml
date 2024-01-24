@@ -11,9 +11,9 @@ controlnode_test_deps:
     - python3-voluptuous
     - python3-pylint
     - python3-pytest-xdist
-controlnode_package:
+controlnode_packages:
   "2.9": ansible
-mafalb_collections_package:
+controlnode_collections_packages:
   "2.9": []
 controlnode_test_package:
   "2.9": ansible-test
