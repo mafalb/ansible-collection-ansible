@@ -11,5 +11,5 @@ controlnode_packages:
   "2.9": ansible
 controlnode_collections_packages:
   "2.9": []
-controlnode_test_package:
+controlnode_test_packages:
   "2.9": []
