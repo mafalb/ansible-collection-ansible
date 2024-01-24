@@ -24,13 +24,14 @@ if test -n "${ANSIBLE_COLLECTIONS_PATH}"; then
 fi
 export ANSIBLE_COLLECTIONS_PATH="${ABSPATH}:/tmp/collections"
 
-antsibull-docs lint-collection-docs --plugin-docs --no-skip-rstcheck .
 antsibull-docs sphinx-init --use-current --copyright "Markus Falb (c) <markus.falb@mafalb.at> GPL-3.0-or-later" --dest-dir tests/output/doc mafalb.ansible
+antsibull-docs lint-collection-docs --plugin-docs --no-skip-rstcheck .
 cd tests/output/doc
 if test "${args[0]}" = "--requirements"; then
 	if test -z "${VIRTUAL_ENV}"; then
 		exit 1
 	fi
+	echo pip install
 	pip install -r requirements.txt -c "${VIRTUAL_ENV}"/constraints.txt
 fi
 ./build.sh

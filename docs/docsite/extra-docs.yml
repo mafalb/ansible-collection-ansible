@@ -7,5 +7,7 @@
 sections:
   - title: Role Documentation
     toctree:
+      - mafalb.ansible.controlnode-role
+      - mafalb.ansible.python-role
       - mafalb.ansible.virtualenv-role
 ...
