@@ -20,17 +20,131 @@ on: # yamllint disable-line rule:truthy
 
 jobs:
 
-  PREPARE:
-    uses: mafalb/workflows/.github/workflows/reusable-selectbranch.yml@main
-    with:
-      targeted_branch: ${{ inputs.targeted_branch }}
+  ansible-test:
 
-  ANSIBLECOLLECTION:
-    uses: mafalb/workflows/.github/workflows/reusable-ansiblecollection.yml@main
-    with:
-      ref: ${{ needs.PREPARE.outputs.ref }}
-      mock: true
-    needs: PREPARE
+    # don't run on pull request from ourselves
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+
+      matrix:
+
+        include:
+
+          - ansible_version: '2.12'
+            python_version: '3.9'
+            nodoc: true
+
+          - ansible_version: '2.12'
+            python_version: '3.10'
+            nodoc: true
+
+          - ansible_version: '2.14'
+            python_version: '3.9'
+
+          - ansible_version: '2.14'
+            python_version: '3.10'
+
+          - ansible_version: '2.14'
+            python_version: '3.11'
+
+          - ansible_version: '2.15'
+            python_version: '3.9'
+
+          - ansible_version: '2.15'
+            python_version: '3.10'
+
+          - ansible_version: '2.15'
+            python_version: '3.11'
+
+          - ansible_version: '2.16'
+            python_version: '3.10'
+
+          - ansible_version: '2.16'
+            python_version: '3.11'
+
+          - ansible_version: '2.16'
+            python_version: '3.12'
+
+    env:
+      PY_COLORS: 1
+      ANSIBLE_FORCE_COLOR: 1
+      # necessary ?
+      ANSIBLE_PYTHON_INTERPRETER: python${{ matrix.python_version }}
+
+    defaults:
+      run:
+        working-directory: ansible_collections/mafalb/ansible
+
+    steps:
+
+      - name: setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: checkout collection mafalb.ansible
+        uses: actions/checkout@v3
+        with:
+          path: ansible_collections/mafalb/ansible
+
+      - name: install ansible
+        run: |
+          ansible-playbook -D playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}", "ansible-lint${{ matrix.ansible_lint_specifier }}", "_ansible_test", "flake8", "antsibull-docs", "rstcheck-core"]}' -e virtualenv_python=python${{ matrix.python_version }} -t all,debug
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: ../../..
+
+      - name: install shellcheck
+        run: sudo apt-get install shellcheck
+
+      - name: check ansible version
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          ansible --version
+          ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
+
+      - name: check python version
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          ansible --version | grep "^\s*python.* ${{ matrix.python_version }}"
+
+      - name: lint
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          . tests/lint.sh requirements ${{ matrix.python_version }}
+
+      - name: docs
+        if: matrix.ansible_version != '2.12'
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          mkdir /tmp/collections
+          ansible-galaxy -vvvv collection list -p /tmp/collections
+          ansible-galaxy -vvvv collection install community.general -p /tmp/collections
+          bash tests/docs.sh requirements
+
+      - name: sanity
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          if test "${{ matrix.ansible_version }}" = "2.12"
+          then
+            # I dont know how to set collections path for ansible-doc
+            # so i skip ansible-doc test
+            #
+            ansible-test sanity --skip-test ansible-doc --requirements --python ${{ matrix.python_version }}
+          else
+            ansible-test sanity --requirements --python ${{ matrix.python_version }}
+          fi
+
+      - name: unit tests
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          ansible-test units --coverage --requirements --python ${{ matrix.python_version }}
+
+      - name: integration tests
+        run: |
+          source ~/.virtualenvs/ansible/bin/activate
+          ansible-test integration --requirements --python ${{ matrix.python_version }}
 
   node:
 
@@ -38,7 +152,7 @@ jobs:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-22.04
     needs:
-      - ANSIBLECOLLECTION
+      - ansible-test
 
     strategy:
       fail-fast: false
@@ -90,7 +204,7 @@ jobs:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-22.04
     needs:
-      - ANSIBLECOLLECTION
+      - ansible-test
 
     strategy:
       fail-fast: false
@@ -178,7 +292,7 @@ jobs:
   virtualenv:
 
     runs-on: ubuntu-22.04
-    needs: ANSIBLECOLLECTION
+    needs: ansible-test
 
     strategy:
       fail-fast: false
