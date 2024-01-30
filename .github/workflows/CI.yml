@@ -69,7 +69,7 @@ jobs:
     steps:
 
       - name: checkout collection ansible
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ansible_collections/mafalb/ansible
 
@@ -137,7 +137,7 @@ jobs:
     steps:
 
       - name: checkout collection ansible
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ansible_collections/mafalb/ansible
 
@@ -330,7 +330,7 @@ jobs:
           python-version: ${{ matrix.python_version }}
 
       - name: checkout collection ansible
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ansible_collections/mafalb/ansible
 
