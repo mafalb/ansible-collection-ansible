@@ -10,6 +10,7 @@
   hosts: localhost
   tasks:
     - name: Git is present
+      become: true
       ansible.builtin.package:
         name: git
 
@@ -17,13 +18,6 @@
       ansible.builtin.command: git ls-remote --tags https://github.com/ansible/ansible
       register: __reg_tags
       changed_when: false
-
-    - name: Assert that no new ansible 2.9 version is available
-      ansible.builtin.assert:
-        that:
-          - not __reg_tags.stdout | regex_search('2.9' | mafalb.ansible.next_version + '\n')
-        fail_msg: "{{ '2.9' | mafalb.ansible.next_version }} is available"
-        success_msg: "{{ '2.9' | mafalb.ansible.next_version }} is not available"
 
     - name: Assert that no new ansible 2.10 version is available
       ansible.builtin.assert:
@@ -66,3 +60,11 @@
           - not __reg_tags.stdout | regex_search('2.15' | mafalb.ansible.next_version + '\n')
         fail_msg: "{{ '2.15' | mafalb.ansible.next_version }} is available"
         success_msg: "{{ '2.15' | mafalb.ansible.next_version }} is not available"
+
+    - name: Assert that no new ansible 2.16 version is available
+      ansible.builtin.assert:
+        that:
+          - not __reg_tags.stdout | regex_search('2.16' | mafalb.ansible.next_version + '\n')
+        fail_msg: "{{ '2.16' | mafalb.ansible.next_version }} is available"
+        success_msg: "{{ '2.16' | mafalb.ansible.next_version }} is not available"
+...

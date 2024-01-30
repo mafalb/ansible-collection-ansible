@@ -5,7 +5,7 @@
 - name: Create constraints
   hosts: localhost
   vars:
-    outputdir: "{{ playbook_dir }}/../roles/virtualenv/files/constraints/ansible-test"
+    outputdir: "{{ playbook_dir }}/../roles/virtualenv/templates/ansible-test-constraints"
   tasks:
     - name: Assert that version is defined
       ansible.builtin.assert:
