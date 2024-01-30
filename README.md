@@ -28,7 +28,7 @@ Install dependencies on an ansible node.
 ### [mafalb.ansible.virtualenv](roles/virtualenv/README.md)
 
 Install ansible and related tools into a virtualenv.
-It uses constraints from ansible-test, e.g. dependencies installed locally doesn't interfere, use it 
+It uses constraints from ansible-test, e.g. dependencies installed locally doesn't interfere, use it
 
 ```shell
 (venv) $ ansible-test sanity --local

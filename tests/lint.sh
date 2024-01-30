@@ -66,4 +66,3 @@ ansible-lint -v roles/*/vars/*.yml
 
 echo "flake8..."
 flake8 -v --exclude tests/output
-
