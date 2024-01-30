@@ -38,7 +38,7 @@ jobs:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-22.04
     needs:
-      - ansible-test
+      - ANSIBLECOLLECTION
 
     strategy:
       fail-fast: false
@@ -90,7 +90,7 @@ jobs:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-22.04
     needs:
-      - ansible-test
+      - ANSIBLECOLLECTION
 
     strategy:
       fail-fast: false
@@ -178,7 +178,7 @@ jobs:
   virtualenv:
 
     runs-on: ubuntu-22.04
-    needs: ansible-test
+    needs: ANSIBLECOLLECTION
 
     strategy:
       fail-fast: false
