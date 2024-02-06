@@ -1,5 +1,7 @@
 # Changelog
 
+## v6.0.1
+
 ## v5.0.3 2022-03-31
 
 - constrain ansible-lint <6 for ansible <2.11
