@@ -26,7 +26,7 @@ jobs:
       targeted_branch: ${{ inputs.targeted_branch }}
 
   ANSIBLECOLLECTION:
-    uses: mafalb/workflows/.github/workflows/reusable-ansiblecollection.yml@dev
+    uses: mafalb/workflows/.github/workflows/reusable-ansiblecollection.yml@f-ansiblecollection
     with:
       ref: ${{ needs.PREPARE.outputs.ref }}
       mock: true
