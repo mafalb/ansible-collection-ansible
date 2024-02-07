@@ -11,8 +11,10 @@
   roles:
     - role: mafalb.ansible.virtualenv
       when: python_interpreter is defined
-      virtualenv_packages: "{{ virtualenv_packages }}"
-      virtualenv_python: "{{ python_interpreter }}"
+      vars:
+        virtualenv_packages: "{{ virtualenv_packages }}"
+        virtualenv_python: "{{ python_interpreter }}"
     - role: mafalb.ansible.virtualenv
       when: python_interpreter is not defined
-      virtualenv_packages: "{{ virtualenv_packages }}"
+      vars:
+        virtualenv_packages: "{{ virtualenv_packages }}"
