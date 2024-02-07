@@ -5,16 +5,28 @@
 - name: Install ansible
   hosts: localhost
   pre_tasks:
-    - name: Debug extra variables
-      ansible.builtin.debug:
-        var: virtualenv_packages
+    - name: Debug
+      tags:
+        - never
+        - debug
+      block:
+        - name: Debug virtualenv_packages
+          ansible.builtin.debug:
+            var: virtualenv_packages
+        - name: Debug type of virtualenv_packages
+          ansible.builtin.debug:
+            msg: "{{ virtualenv_packages|type_debug }}"
+
   roles:
+
     - role: mafalb.ansible.virtualenv
       when: python_interpreter is defined
       vars:
         virtualenv_packages: "{{ virtualenv_packages }}"
         virtualenv_python: "{{ python_interpreter }}"
+
     - role: mafalb.ansible.virtualenv
       when: python_interpreter is not defined
       vars:
         virtualenv_packages: "{{ virtualenv_packages }}"
+...
