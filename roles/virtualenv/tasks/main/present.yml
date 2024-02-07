@@ -7,6 +7,11 @@
     - never
     - debug
   block:
+
+    - name: Debug virtualenv_packages
+      ansible.builtin.debug:
+        var: virtualenv_packages
+
     - name: Debug __virtualenv
       ansible.builtin.debug:
         var: __virtualenv
@@ -18,6 +23,10 @@
     - name: Debug __virtualenv_interpreter
       ansible.builtin.debug:
         var: __virtualenv_interpreter
+
+    - name: Debug executable
+      ansible.builtin.debug:
+        msg: "{{ virtualenv_python | default(ansible_python.executable) }}"
 
 - name: Get info about targeted python interpreter
   mafalb.ansible.python_info:

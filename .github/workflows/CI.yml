@@ -20,25 +20,25 @@ on: # yamllint disable-line rule:truthy
 
 jobs:
 
-  PREPARE:
+  selectbranch:
     uses: mafalb/workflows/.github/workflows/reusable-selectbranch.yml@dev
     with:
       targeted_branch: ${{ inputs.targeted_branch }}
 
-  ANSIBLECOLLECTION:
+  ansiblecollection:
     uses: mafalb/workflows/.github/workflows/reusable-ansiblecollection.yml@f-ansiblecollection
     with:
-      ref: ${{ needs.PREPARE.outputs.ref }}
+      ref: ${{ needs.selectbranch.outputs.ref }}
       mock: true
-    needs: PREPARE
+    needs: selectbranch
 
   node:
 
     # don't run on pull request from ourselves
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
-    runs-on: ubuntu-22.04
     needs:
-      - ANSIBLECOLLECTION
+      - selectbranch
+      - ansiblecollection
 
     strategy:
       fail-fast: false
@@ -55,34 +55,11 @@ jobs:
           - os: fedora39
           - os: fedora40
 
-    env:
-      CI_IMAGE: ${{ matrix.image }}
-      CI_HOSTNAME: ci-${{ matrix.os }}
-      CI_DRIVER: podman
-      PY_COLORS: 1
-      ANSIBLE_FORCE_COLOR: 1
-
-    defaults:
-      run:
-        working-directory: ansible_collections/mafalb/ansible
-
-    steps:
-
-      - name: checkout collection ansible
-        uses: actions/checkout@v4
-        with:
-          path: ansible_collections/mafalb/ansible
-
-      - name: install molecule
-        run: ansible-playbook -D playbooks/install-molecule.yml -t all,debug
-        env:
-          ANSIBLE_COLLECTIONS_PATHS: '../../..'
-
-      - name: molecule node scenario
-        run: |
-          source ~/.virtualenvs/molecule/bin/activate
-          molecule -e .env-${{ matrix.os }}.yml test -s node
-
+    uses: mafalb/workflows/.github/workflows/reusable-molecule.yml@dev
+    with:
+      targeted_branch: ${{ needs.selectbranch.outputs.ref }}
+      scenario: node
+      target: ${{ matrix.os }}
 
   controlnode:
 
