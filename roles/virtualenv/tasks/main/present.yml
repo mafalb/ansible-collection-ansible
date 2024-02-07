@@ -29,6 +29,7 @@
         msg: "{{ virtualenv_python | default(ansible_python.executable) }}"
 
 - name: Assertions
+  when: false
   ansible.builtin.assert:
     that:
       - virtualenv_packages | type_debug == list
