@@ -10,7 +10,7 @@
 
     - name: Debug virtualenv_packages
       ansible.builtin.debug:
-        var: virtualenv_packages
+        var: virtualenv_packages | type_debug
 
     - name: Debug __virtualenv
       ansible.builtin.debug:
