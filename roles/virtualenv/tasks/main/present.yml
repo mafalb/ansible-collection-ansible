@@ -29,10 +29,9 @@
         msg: "{{ virtualenv_python | default(ansible_python.executable) }}"
 
 - name: Assertions
-  when: false
   ansible.builtin.assert:
     that:
-      - virtualenv_packages | type_debug == list
+      - virtualenv_packages | type_debug == 'list'
 
 - name: Get info about targeted python interpreter
   mafalb.ansible.python_info:
