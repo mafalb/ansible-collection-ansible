@@ -2,15 +2,15 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-controlnode_default_version: "2.14"
+controlnode_default_version: "2.16"
 controlnode_deps:
-  "2.14": []
+  "2.16": []
 controlnode_test_deps:
-  "2.14": []
+  "2.16": []
 controlnode_packages:
-  "2.14":
+  "2.16":
     - ansible-core
 controlnode_collections_packages:
-  "2.14": []
+  "2.16": []
 controlnode_test_packages:
-  "2.14": []
+  "2.16": []

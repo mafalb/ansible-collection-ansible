@@ -2,16 +2,16 @@
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
-python_default_version: "3.11"
+python_default_version: "3.12"
 python_package:
   _default: python3
-  "3.11": python3
+  "3.11": python3.11
   "3.12": python3.12
 python_extra_packages:
   _default: &default_packages
     - python3-venv
     - python3-setuptools
-  "3.11": *default_packages
-  "3.12":
-    - python3.12-venv
+  "3.11":
+    - python3.11-venv
+  "3.12": *default_packages
 ...

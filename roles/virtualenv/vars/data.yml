@@ -12,7 +12,7 @@ latest_ansible_version:  # noqa var-naming[no-role-prefix]
   "2.13": 2.13.13
   "2.14": 2.14.14
   "2.15": 2.15.9
-  "2.16": 2.16.3
+  "2.16": 2.16.4
 
 ansible_rc_versions:
   "2.12":
