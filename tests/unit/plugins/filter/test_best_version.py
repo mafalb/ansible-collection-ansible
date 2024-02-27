@@ -95,6 +95,7 @@ def test_fail(version, exception):
     with pytest.raises(exception):
         best_version(version)
 
+
 def test_extra():
     virtualenv_packages = [
         "_ansible==2.16",
@@ -104,4 +105,4 @@ def test_extra():
         "antsibull-docs",
         "rstcheck-core"
     ]
-    result = best_version(virtualenv_packages, '3.11')
+    best_version(virtualenv_packages, '3.11')
