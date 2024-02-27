@@ -94,3 +94,14 @@ def test_best_version_with_python(in_list, python_version, expected):
 def test_fail(version, exception):
     with pytest.raises(exception):
         best_version(version)
+
+def test_extra():
+    virtualenv_packages = [
+        "_ansible==2.16",
+        "ansible-lint",
+        "_ansible_test",
+        "flake8",
+        "antsibull-docs",
+        "rstcheck-core"
+    ]
+    result = best_version(virtualenv_packages, '3.11')
