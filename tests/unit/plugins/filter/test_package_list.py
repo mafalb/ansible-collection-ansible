@@ -40,9 +40,9 @@ TEST_CASES_WITH_PYTHON = (
     (['ansible-core~=2.11.6'], '3.8',
      ['ansible-core==2.11.12']),
     (["ansible-core~=2.14.3", "ansible-lint", "molecule"], '3.9',
-     ["ansible-core==2.14.14", "ansible-lint", "molecule"]),
+     ["ansible-core==2.14.15", "ansible-lint", "molecule"]),
     (["ansible-core~=2.14.3", "ansible-lint", "molecule"], '3.9',
-     ["ansible-core==2.14.14", "ansible-lint", "molecule"]),
+     ["ansible-core==2.14.15", "ansible-lint", "molecule"]),
 
     (["ansible==2.9", "molecule~=3.3.0", "ansible-lint"],
      '3.8', ['ansible==2.9.0']),
