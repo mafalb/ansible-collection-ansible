@@ -422,6 +422,9 @@ jobs:
             python_version: '3.9'
           - os: ubuntu24
             python_version: '3.10'
+          # https://bugs.launchpad.net/ubuntu/+source/python3.11/+bug/2058821
+          - os: ubuntu24
+            python_version: '3.11'
 
     env:
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
